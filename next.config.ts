@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+import "@/config/env";
+
 const nextConfig: NextConfig = {
   typedRoutes: true,
   images: {
