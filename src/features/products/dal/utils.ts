@@ -6,7 +6,7 @@ export const WC_STORE_BASE_URL = new URL(
   env.WP_API_URL,
 );
 
-export const PRODUCTS_URL = new URL("products", WC_BASE_URL);
+export const PRODUCTS_URL = new URL("products", WC_STORE_BASE_URL);
 
 export const PRODUCTS_CATEGORIES_URL = new URL(
   "products/categories/",

@@ -1,5 +1,3 @@
-import type { DrizzleQueryError } from "drizzle-orm";
-
 export type DalReturn<T, E extends DalError = DalError> =
   | {
       success: false;
@@ -12,8 +10,8 @@ export type DalReturn<T, E extends DalError = DalError> =
 
 export type DalError =
   | {
-      type: "drizzle-error";
-      error: DrizzleQueryError;
+      type: "fetch-error";
+      status?: number;
     }
   | {
       type: "no-access";

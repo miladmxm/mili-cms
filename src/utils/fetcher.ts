@@ -1,16 +1,20 @@
-type JsonValue = boolean | number | string | JsonArray | JsonObject | null;
+import type { JsonArray, JsonObject } from "@/types/type";
 
-interface JsonObject {
-  [key: string]: JsonValue;
-}
+import { ThrowableDalError } from "@/dal/types";
 
-interface JsonArray extends Array<JsonValue> {}
-
+const isSuccessStatus = (status: number) => {
+  return status >= 200 && status < 300;
+};
 export const fetcher = async (
   url: RequestInfo | URL,
   options?: RequestInit,
 ) => {
   const res = await fetch(url, options);
+
+  if (!isSuccessStatus(res.status)) {
+    throw new ThrowableDalError({ type: "fetch-error", status: res.status });
+  }
+
   const jsonRes = await res.json();
   return jsonRes;
 };

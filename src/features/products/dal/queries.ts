@@ -1,22 +1,43 @@
 import "server-only";
 
+import { dalDbOperation, DTOifIsSuccess } from "@/dal/helpers";
 import { appendSearchParams } from "@/utils/appendSearchParams";
 import { GET } from "@/utils/fetcher";
+import { filterArrayByObjectKeyValue } from "@/utils/filterArrayByObjectKey";
 
-import { generateAuthHeaders, PRODUCTS_CATEGORIES_URL } from "./utils";
+import type { Category, WooProduct } from "../types";
 
-export const getAllParentCategories = async () => {
+import {
+  generateAuthHeaders,
+  PRODUCTS_CATEGORIES_URL,
+  PRODUCTS_URL,
+} from "./utils";
+
+type GetAllParentCategoriesOptions = (keyof Category)[];
+
+export const getAllParentCategories = async (
+  fields?: GetAllParentCategoriesOptions,
+) => {
   const url = appendSearchParams(PRODUCTS_CATEGORIES_URL, {
     parent: "0",
-    per_page: "100",
-    orderby: "name",
-    order: "asc",
     hide_empty: "false",
+    _fields: fields?.join(),
   });
-  console.log(url);
-  const res = await GET(url, {
-    headers: generateAuthHeaders(),
-  });
+  return DTOifIsSuccess(
+    dalDbOperation<Category[]>(() =>
+      GET(url, {
+        headers: generateAuthHeaders(),
+      }),
+    ),
+    (res) => filterArrayByObjectKeyValue(res, "name", "Uncategorized"),
+  );
+};
 
-  return res;
+export const getAllDicountProducts = async () => {
+  const url = appendSearchParams(PRODUCTS_URL, { on_sale: "true" });
+  return dalDbOperation<WooProduct[]>(() =>
+    GET(url, {
+      headers: generateAuthHeaders(),
+    }),
+  );
 };

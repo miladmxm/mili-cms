@@ -1,6 +1,6 @@
 export const appendSearchParams = (
   url: URL,
-  params: Record<string, string>,
+  params: Record<string, string | undefined>,
 ) => {
   Object.entries(params).forEach(([key, value]) => {
     if (value) {
