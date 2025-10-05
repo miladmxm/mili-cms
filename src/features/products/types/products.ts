@@ -1,14 +1,3 @@
-export interface Category {
-  count: number;
-  description: string;
-  id: number;
-  image: string;
-  name: string;
-  parent: number;
-  slug: string;
-}
-
-// قیمت محصول
 interface ProductPrice {
   price: string;
   regular_price: string;
@@ -26,7 +15,6 @@ interface ProductPrice {
   currency_suffix: string;
 }
 
-// تصویر محصول
 interface ProductImage {
   id: number;
   src: string;
@@ -37,7 +25,6 @@ interface ProductImage {
   alt: string;
 }
 
-// دسته‌بندی
 interface ProductCategory {
   id: number;
   name: string;
@@ -45,7 +32,6 @@ interface ProductCategory {
   link: string;
 }
 
-// ویژگی‌ها
 interface ProductAttributeTerm {
   id: number;
   name: string;
@@ -60,7 +46,6 @@ interface ProductAttribute {
   terms: ProductAttributeTerm[];
 }
 
-// وارییشن‌ها
 interface ProductVariation {
   id: number;
   attributes: {
@@ -69,13 +54,11 @@ interface ProductVariation {
   }[];
 }
 
-// وضعیت موجودی
 interface StockAvailability {
   text: string;
   class: string;
 }
 
-// قابلیت افزودن به سبد خرید
 interface AddToCart {
   text: string;
   description: string;
@@ -86,7 +69,6 @@ interface AddToCart {
   multiple_of: number;
 }
 
-// محصول اصلی
 export interface WooProduct {
   id: number;
   name: string;
@@ -120,3 +102,60 @@ export interface WooProduct {
   add_to_cart: AddToCart;
   extensions: Record<string, any>;
 }
+
+interface BaseWooStoreProductQuery {
+  search?: string;
+  slug?: string;
+  after?: string;
+  before?: string;
+  date_column?: "date_gmt" | "date" | "modified_gmt" | "modified";
+  exclude?: number[];
+  include?: number[];
+  page?: number;
+  per_page?: number;
+  order?: "asc" | "desc";
+  orderby?:
+    | "comment_count"
+    | "date"
+    | "id"
+    | "include"
+    | "menu_order"
+    | "modified"
+    | "popularity"
+    | "price"
+    | "rating"
+    | "slug"
+    | "title";
+
+  parent?: number[];
+  parent_exclude?: number[];
+  type?: string;
+  sku?: string;
+  featured?: boolean;
+  category?: string;
+  category_operator?: "and" | "in" | "not_in";
+  brand?: string;
+  brand_operator?: "and" | "in" | "not_in";
+  tag?: string;
+  tag_operator?: "and" | "in" | "not_in";
+  on_sale?: boolean;
+  min_price?: string;
+  max_price?: string;
+  stock_status?: ("instock" | "onbackorder" | "outofstock")[];
+  attributes?: {
+    attribute: string;
+    term_id?: number;
+    slug?: string;
+    operator?: "and" | "in" | "not_in";
+  }[];
+  attribute_relation?: "AND" | "OR";
+  catalog_visibility?: "any" | "catalog" | "hidden" | "search" | "visible";
+  rating?: number;
+}
+
+export type WooStoreProductQuery = BaseWooStoreProductQuery &
+  Record<
+    `_unstable_tax_${string}_operator`,
+    "and" | "in" | "not_in" | undefined
+  > &
+  Record<`_unstable_tax_${string}`, string | undefined>;

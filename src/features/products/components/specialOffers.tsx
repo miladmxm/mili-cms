@@ -1,7 +1,8 @@
-import { getAllDicountProducts } from "../dal/queries";
+import { getDicountedProducts } from "../dal/queries";
 
 const SpecialOffers = async () => {
-  const products = await getAllDicountProducts();
+  const products = await getDicountedProducts({ offset: 3 });
+
   if (!products.success) return null;
   return (
     <div>
