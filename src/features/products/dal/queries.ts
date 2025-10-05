@@ -37,9 +37,16 @@ export const getAllParentCategories = async (
   );
 };
 
-export const getProductsByFilter = async (filter: WooStoreProductQuery) => {
-  const url = toWooQueryParams(PRODUCTS_URL(), filter);
-
+interface GetProductsOptions {
+  filter?: WooStoreProductQuery;
+  fields?: (keyof WooProduct)[];
+}
+export const getProducts = async (options?: GetProductsOptions) => {
+  const url = toWooQueryParams(PRODUCTS_URL(), {
+    ...options?.filter,
+    _fields: options?.fields?.join(),
+  });
+  console.log(url);
   return dalDbOperation<WooProduct[]>(() =>
     GET(url, {
       headers: generateAuthHeaders(),
@@ -49,13 +56,19 @@ export const getProductsByFilter = async (filter: WooStoreProductQuery) => {
 
 type NormalFilters = Record<"offset", number>;
 
-export const getDicountedProducts = async (filter?: NormalFilters) => {
-  return getProductsByFilter({ on_sale: true, per_page: filter?.offset });
+export const getDicountedProducts = (filter?: NormalFilters) => {
+  return getProducts({
+    filter: { on_sale: true, per_page: filter?.offset },
+    fields: ["id", "name", "prices"],
+  });
 };
-export const getProductsAtLowPrices = async (filter?: NormalFilters) => {
-  return getProductsByFilter({
-    order: "asc",
-    orderby: "price",
-    per_page: filter?.offset,
+export const getProductsAtLowPrices = (filter?: NormalFilters) => {
+  return getProducts({
+    filter: {
+      order: "asc",
+      orderby: "price",
+      per_page: filter?.offset,
+    },
+    fields: ["name", "price_html", "id", "images", "slug"],
   });
 };

@@ -4,10 +4,9 @@ import { getProductsAtLowPrices } from "../dal/queries";
 
 const LowPrices = async () => {
   const products = await getProductsAtLowPrices({ offset: 4 });
-  console.log(products);
   if (!products.success) return null;
   return (
-    <div className="grid auto-cols-auto">
+    <div className="grid grid-cols-4 grid-rows-1">
       {products.data.map(({ id, name, price_html: price, images }) => {
         return (
           <article className="p-4 border" key={id}>
