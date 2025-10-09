@@ -42,3 +42,8 @@ export function createErrorReturn<E extends DalError>(
 ): DalReturn<never> {
   return { success: false, error };
 }
+
+export interface QueryOptions<T, Q> {
+  fields?: (keyof T)[];
+  filter?: Q;
+}

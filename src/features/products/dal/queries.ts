@@ -1,14 +1,13 @@
 import "server-only";
 
-import { dalDbOperation, DTOifIsSuccess } from "@/dal/helpers";
-import {
-  appendSearchParams,
-  toWooQueryParams,
-} from "@/utils/appendSearchParams";
+import type { QueryOptions } from "@/dal/types";
+
+import { dalOperation, DTOifIsSuccess } from "@/dal/helpers";
+import { toWooQueryParams } from "@/utils/appendSearchParams";
 import { GET } from "@/utils/fetcher";
 import { filterArrayByObjectKeyValue } from "@/utils/filterArrayByObjectKey";
 
-import type { Category } from "../types/category";
+import type { WooCategory, WooCategoryQueryParams } from "../types/category";
 import type { WooProduct, WooStoreProductQuery } from "../types/products";
 
 import {
@@ -17,37 +16,38 @@ import {
   PRODUCTS_URL,
 } from "./utils";
 
-type GetAllParentCategoriesOptions = (keyof Category)[];
+type GetCategoriesOptions = QueryOptions<WooCategory, WooCategoryQueryParams>;
 
-export const getAllParentCategories = async (
-  fields?: GetAllParentCategoriesOptions,
-) => {
-  const url = appendSearchParams(PRODUCTS_CATEGORIES_URL(), {
-    parent: "0",
-    hide_empty: "false",
-    _fields: fields?.join(),
+export const getCategories = (options: GetCategoriesOptions) => {
+  const url = toWooQueryParams(PRODUCTS_CATEGORIES_URL(), {
+    ...options?.filter,
+    _fields: options?.fields?.join(),
   });
+
+  return dalOperation<WooCategory[]>(() =>
+    GET(url, {
+      headers: generateAuthHeaders(),
+    }),
+  );
+};
+export const getAllParentCategories = async () => {
   return DTOifIsSuccess(
-    dalDbOperation<Category[]>(() =>
-      GET(url, {
-        headers: generateAuthHeaders(),
-      }),
-    ),
+    getCategories({
+      filter: { parent: 0, hide_empty: false },
+      fields: ["name", "id", "image", "slug"],
+    }),
     (res) => filterArrayByObjectKeyValue(res, "name", "Uncategorized"),
   );
 };
 
-interface GetProductsOptions {
-  filter?: WooStoreProductQuery;
-  fields?: (keyof WooProduct)[];
-}
+type GetProductsOptions = QueryOptions<WooProduct, WooStoreProductQuery>;
+
 export const getProducts = async (options?: GetProductsOptions) => {
   const url = toWooQueryParams(PRODUCTS_URL(), {
     ...options?.filter,
     _fields: options?.fields?.join(),
   });
-  console.log(url);
-  return dalDbOperation<WooProduct[]>(() =>
+  return dalOperation<WooProduct[]>(() =>
     GET(url, {
       headers: generateAuthHeaders(),
     }),

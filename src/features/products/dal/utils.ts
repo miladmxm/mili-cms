@@ -9,6 +9,9 @@ export const PRODUCTS_URL = () => new URL("products", WC_STORE_BASE_URL());
 export const PRODUCTS_CATEGORIES_URL = () =>
   new URL("products/categories/", WC_BASE_URL());
 
+export const PRODUCTS_REVIEWS_URL = () =>
+  new URL("products/reviews/", WC_BASE_URL());
+
 export const getAuthorizationToken = () => {
   return `Basic ${Buffer.from(
     `${process.env.WP_TOKEN_NAME}:${process.env.WP_TOKEN_SECRET}`,

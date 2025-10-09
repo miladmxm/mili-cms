@@ -74,7 +74,7 @@ export async function DTOifIsSuccess<T, E extends DalError>(
   }
   return res;
 }
-export async function dalDbOperation<T>(operation: () => Promise<T>) {
+export async function dalOperation<T>(operation: () => Promise<T>) {
   try {
     const data = await operation();
     return createSuccessReturn(data);
