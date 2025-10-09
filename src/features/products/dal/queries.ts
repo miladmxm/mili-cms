@@ -19,6 +19,9 @@ import {
 type GetCategoriesOptions = QueryOptions<WooCategory, WooCategoryQueryParams>;
 
 export const getCategories = (options: GetCategoriesOptions) => {
+  if (!options?.fields) {
+    return Promise.reject(new Error("fields is required"));
+  }
   const url = toWooQueryParams(PRODUCTS_CATEGORIES_URL(), {
     ...options?.filter,
     _fields: options?.fields?.join(),
@@ -30,6 +33,7 @@ export const getCategories = (options: GetCategoriesOptions) => {
     }),
   );
 };
+
 export const getAllParentCategories = async () => {
   return DTOifIsSuccess(
     getCategories({
@@ -60,6 +64,13 @@ export const getDicountedProducts = (filter?: NormalFilters) => {
   return getProducts({
     filter: { on_sale: true, per_page: filter?.offset },
     fields: ["id", "name", "prices"],
+  });
+};
+
+export const getNewProducts = (filter?: NormalFilters) => {
+  return getProducts({
+    filter: { per_page: filter?.offset || 12, order: "desc", orderby: "date" },
+    fields: ["id", "name", "prices", "price_html", "images", "slug"],
   });
 };
 export const getProductsAtLowPrices = (filter?: NormalFilters) => {
