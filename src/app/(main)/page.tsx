@@ -1,3 +1,4 @@
+import PostsCarousel from "@/features/posts/components/postsCarousel";
 import Categories from "@/features/products/components/categories";
 import LowPrices from "@/features/products/components/lowPrices";
 import NewProducts from "@/features/products/components/newProducts";
@@ -12,6 +13,7 @@ export default async function Home() {
       <LowPrices />
       <Reviews />
       <NewProducts />
+      <PostsCarousel />
     </main>
   );
 }

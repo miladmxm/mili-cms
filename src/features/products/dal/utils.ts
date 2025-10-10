@@ -14,7 +14,7 @@ export const PRODUCTS_REVIEWS_URL = () =>
 
 export const getAuthorizationToken = () => {
   return `Basic ${Buffer.from(
-    `${process.env.WP_TOKEN_NAME}:${process.env.WP_TOKEN_SECRET}`,
+    `${env.WP_TOKEN_NAME}:${env.WP_TOKEN_SECRET}`,
   ).toString("base64")}`;
 };
 

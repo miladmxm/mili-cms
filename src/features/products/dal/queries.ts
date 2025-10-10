@@ -19,9 +19,6 @@ import {
 type GetCategoriesOptions = QueryOptions<WooCategory, WooCategoryQueryParams>;
 
 export const getCategories = (options: GetCategoriesOptions) => {
-  if (!options?.fields) {
-    return Promise.reject(new Error("fields is required"));
-  }
   const url = toWooQueryParams(PRODUCTS_CATEGORIES_URL(), {
     ...options?.filter,
     _fields: options?.fields?.join(),

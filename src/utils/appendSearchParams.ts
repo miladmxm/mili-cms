@@ -17,7 +17,7 @@ export function toWooQueryParams(url: URL, query: Record<string, any>): URL {
   const params = url.searchParams;
 
   const appendParam = (key: string, value: any) => {
-    if (value === undefined || value === null || value === "") return;
+    if (value === undefined || value === null) return;
     if (Array.isArray(value)) {
       params.append(key, value.join(","));
     } else if (typeof value === "object") {
