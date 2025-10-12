@@ -44,7 +44,7 @@ export function createErrorReturn<E extends DalError>(
 }
 
 export interface QueryOptions<T, Q> {
-  fields?: (keyof T)[];
+  fields?: T;
   filter?: Q;
   embed?: boolean;
 }

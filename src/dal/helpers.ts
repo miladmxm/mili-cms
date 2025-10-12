@@ -64,13 +64,13 @@ export function dalThrowError<T, E extends DalError>(
 
 //   return operation(user);
 // }
-export async function DTOifIsSuccess<T, E extends DalError>(
-  dalReturn: Promise<DalReturn<T, E>>,
-  dtoCB: (data: T) => T,
-): Promise<DalReturn<T, E>> {
+export async function DTOifIsSuccess<T, R>(
+  dalReturn: Promise<DalReturn<T>>,
+  dtoCB: (data: T) => R,
+): Promise<DalReturn<R>> {
   const res = await dalReturn;
   if (res.success) {
-    res.data = dtoCB(res.data);
+    return { ...res, data: dtoCB(res.data) };
   }
   return res;
 }

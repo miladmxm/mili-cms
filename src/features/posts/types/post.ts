@@ -46,7 +46,63 @@ export interface WPPostsQuery {
   search_columns?: string[];
   [key: string]: any;
 }
-
+interface WPAttachment {
+  id: number;
+  date: string;
+  slug: string;
+  type: "attachment";
+  link: string;
+  title: {
+    rendered: string;
+  };
+  author: number;
+  featured_media: number;
+  caption: {
+    rendered: string;
+  };
+  alt_text: string;
+  media_type: "audio" | "file" | "image" | "video";
+  mime_type: string;
+  media_details: {
+    width: number;
+    height: number;
+    file: string;
+    filesize?: number;
+    sizes: {
+      [key: string]: {
+        file: string;
+        width: number;
+        height: number;
+        filesize?: number;
+        mime_type: string;
+        source_url: string;
+        uncropped?: boolean;
+      };
+    };
+    image_meta: {
+      aperture: string;
+      credit: string;
+      camera: string;
+      caption: string;
+      created_timestamp: string;
+      copyright: string;
+      focal_length: string;
+      iso: string;
+      shutter_speed: string;
+      title: string;
+      orientation: string;
+      keywords: string[];
+    };
+  };
+  source_url: string;
+}
+export interface WPCategory {
+  id: number;
+  link: string;
+  name: string;
+  slug: string;
+  taxonomy: string;
+}
 export interface WPPost {
   id: number;
   date: string;
@@ -91,12 +147,8 @@ export interface WPPost {
       slug: string;
       avatar_urls: Record<string, string>;
     }[];
-    "wp:featuredmedia"?: {
-      id: number;
-      source_url: string;
-      alt_text: string;
-      media_type: string;
-    }[];
+    "wp:featuredmedia"?: WPAttachment[];
+    "wp:term": WPCategory[];
   };
   _links: {
     self: { href: string }[];
@@ -110,5 +162,34 @@ export interface WPPost {
     "wp:attachment"?: { href: string }[];
     "wp:term"?: { taxonomy: string; embeddable: boolean; href: string }[];
     curies?: { name: string; href: string; templated: boolean }[];
+  };
+}
+
+export interface Post {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  slug: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  comment_status: "closed" | "open";
+  categories?: {
+    id: number;
+    name: string;
+    slug: string;
+  }[];
+  author?: {
+    id: number;
+    name: string;
+    description: string;
+    slug: string;
+    avatar: string;
+  };
+  image?: {
+    id: number;
+    src: string;
+    thumbnail: string;
+    alt: string;
   };
 }
