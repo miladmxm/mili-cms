@@ -16,15 +16,15 @@ import {
   PRODUCTS_URL,
 } from "./utils";
 
-type GetCategoriesOptions = QueryOptions<WooCategory, WooCategoryQueryParams>;
-
-export const getCategories = (options: GetCategoriesOptions) => {
+export const getCategories = <T extends (keyof WooCategory)[]>(
+  options: QueryOptions<T, WooCategoryQueryParams>,
+) => {
   const url = toWooQueryParams(PRODUCTS_CATEGORIES_URL(), {
     ...options?.filter,
     _fields: options?.fields?.join(),
   });
 
-  return dalOperation<WooCategory[]>(() =>
+  return dalOperation<Pick<WooCategory, T[number]>[]>(() =>
     GET(url, {
       headers: generateAuthHeaders(),
     }),
@@ -41,14 +41,14 @@ export const getAllParentCategories = async () => {
   );
 };
 
-type GetProductsOptions = QueryOptions<WooProduct, WooStoreProductQuery>;
-
-export const getProducts = async (options?: GetProductsOptions) => {
+export const getProducts = <T extends (keyof WooProduct)[]>(
+  options?: QueryOptions<T, WooStoreProductQuery>,
+) => {
   const url = toWooQueryParams(PRODUCTS_URL(), {
     ...options?.filter,
     _fields: options?.fields?.join(),
   });
-  return dalOperation<WooProduct[]>(() =>
+  return dalOperation<Pick<WooProduct, T[number]>[]>(() =>
     GET(url, {
       headers: generateAuthHeaders(),
     }),
