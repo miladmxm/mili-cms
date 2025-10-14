@@ -26,7 +26,7 @@ export interface WooCategory {
   parent: number;
   description: string;
   display: string;
-  image: WooCategoryImage | [] | null;
+  image: WooCategoryImage | null;
   menu_order: number;
   count: number;
   _links: WooCategoryLinks;
@@ -58,4 +58,19 @@ export interface WooCategoryQueryParams {
   parent?: number;
   product?: number;
   slug?: string;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  parent: number;
+  description: string;
+  image?: {
+    name: string;
+    src: string;
+    id: number;
+    alt: string;
+  };
+  countOfProducts: number;
 }

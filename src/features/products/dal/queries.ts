@@ -6,11 +6,13 @@ import { dalOperation, DTOifIsSuccess } from "@/dal/helpers";
 import { toWooQueryParams } from "@/utils/appendSearchParams";
 import { GET } from "@/utils/fetcher";
 import { filterArrayByObjectKeyValue } from "@/utils/filterArrayByObjectKey";
+import { filterObjectByKeys } from "@/utils/filterObject";
 
 import type { WooCategory, WooCategoryQueryParams } from "../types/category";
 import type { WooProduct, WooStoreProductQuery } from "../types/products";
 
 import {
+  convertWooCategoryToCategory,
   generateAuthHeaders,
   PRODUCTS_CATEGORIES_URL,
   PRODUCTS_URL,
@@ -30,15 +32,29 @@ export const getCategories = <T extends (keyof WooCategory)[]>(
     }),
   );
 };
-
-export const getAllParentCategories = async () => {
+export const getAllParentCategories = () => {
   return DTOifIsSuccess(
     getCategories({
       filter: { parent: 0, hide_empty: false },
-      fields: ["name", "id", "image", "slug"],
+      fields: ["name", "id", "image", "slug", "count", "description"],
     }),
-    (res) => filterArrayByObjectKeyValue(res, "name", "Uncategorized"),
+    (wooCategories) =>
+      filterArrayByObjectKeyValue(
+        wooCategories.map((wooCategory) =>
+          filterObjectByKeys(convertWooCategoryToCategory(wooCategory), [
+            "id",
+            "name",
+            "slug",
+          ]),
+        ),
+        "name",
+        "Uncategorized",
+      ),
   );
+};
+
+export const getAllCategories = () => {
+  return getCategories({ filter: { hide_empty: false } });
 };
 
 export const getProducts = <T extends (keyof WooProduct)[]>(
