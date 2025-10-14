@@ -3,6 +3,7 @@ import type { QueryOptions } from "@/dal/types";
 import { dalOperation, DTOifIsSuccess } from "@/dal/helpers";
 import { toWooQueryParams } from "@/utils/appendSearchParams";
 import { GET } from "@/utils/fetcher";
+import { filterObjectByKeys } from "@/utils/filterObject";
 
 import type { WPPost, WPPostsQuery } from "../types/post";
 
@@ -31,6 +32,14 @@ export const getNewPosts = () => {
       fields: ["_embedded", "title", "slug", "excerpt", "id", "_links", "date"],
     }),
     // todo add selector
-    (wpPosts) => wpPosts.map(convertWPPostToPost),
+    (wpPosts) =>
+      wpPosts.map((wpPost) =>
+        filterObjectByKeys(convertWPPostToPost(wpPost), [
+          "id",
+          "title",
+          "image",
+          "excerpt",
+        ]),
+      ),
   );
 };

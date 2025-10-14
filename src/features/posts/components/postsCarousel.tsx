@@ -7,7 +7,6 @@ import { getNewPosts } from "../dal/queries";
 const PostsCarousel = async () => {
   const posts = await getNewPosts();
   if (!posts.success) return null;
-  console.log(posts.data);
   return (
     <div>
       {posts.data.map((post) => {

@@ -65,3 +65,9 @@ export const convertWPPostToPost = <W extends Partial<WPPost>>(
 
   return allItemsPost;
 };
+
+const selectFromObject = () => {
+  const obj = {};
+  console.log(obj);
+};
+selectFromObject();
