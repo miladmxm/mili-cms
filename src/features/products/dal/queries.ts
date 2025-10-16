@@ -44,6 +44,7 @@ export const getAllParentCategories = () => {
           filterObjectByKeys(convertWooCategoryToCategory(wooCategory), [
             "id",
             "name",
+            "image",
             "slug",
           ]),
         ),
@@ -55,6 +56,21 @@ export const getAllParentCategories = () => {
 
 export const getAllCategories = () => {
   return getCategories({ filter: { hide_empty: false } });
+};
+
+export const getProduct = <T extends (keyof WooProduct)[]>(
+  id: string,
+  options?: QueryOptions<T, WooStoreProductQuery>,
+) => {
+  const url = toWooQueryParams(PRODUCTS_URL(`/${id}`), {
+    ...options?.filter,
+    _fields: options?.fields?.join(),
+  });
+  return dalOperation<Pick<WooProduct, T[number]>>(() =>
+    GET(url, {
+      headers: generateAuthHeaders(),
+    }),
+  );
 };
 
 export const getProducts = <T extends (keyof WooProduct)[]>(
@@ -69,6 +85,10 @@ export const getProducts = <T extends (keyof WooProduct)[]>(
       headers: generateAuthHeaders(),
     }),
   );
+};
+
+export const getPr = () => {
+  return getProducts();
 };
 
 type NormalFilters = Record<"offset", number>;

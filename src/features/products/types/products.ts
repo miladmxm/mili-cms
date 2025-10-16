@@ -1,4 +1,4 @@
-interface ProductPrice {
+interface WooProductPrice {
   price: string;
   regular_price: string;
   sale_price: string;
@@ -15,7 +15,7 @@ interface ProductPrice {
   currency_suffix: string;
 }
 
-interface ProductImage {
+interface WooProductImage {
   id: number;
   src: string;
   thumbnail: string;
@@ -25,7 +25,7 @@ interface ProductImage {
   alt: string;
 }
 
-interface ProductCategory {
+interface WooProductCategory {
   id: number;
   name: string;
   slug: string;
@@ -75,21 +75,21 @@ export interface WooProduct {
   slug: string;
   parent: number;
   type: "external" | "grouped" | "simple" | "variable";
-  variation: string;
   permalink: string;
   sku: string;
   short_description: string;
   description: string;
   on_sale: boolean;
-  prices: ProductPrice;
+  prices: WooProductPrice;
   price_html: string;
   average_rating: string;
   review_count: number;
-  images: ProductImage[];
-  categories: ProductCategory[];
+  images: WooProductImage[];
+  categories: WooProductCategory[];
   tags: any[];
   brands: any[];
   attributes: ProductAttribute[];
+  variation: string;
   variations: ProductVariation[];
   grouped_products: any[];
   has_options: boolean;
@@ -159,3 +159,46 @@ export type WooStoreProductQuery = BaseWooStoreProductQuery &
     "and" | "in" | "not_in" | undefined
   > &
   Record<`_unstable_tax_${string}`, string | undefined>;
+
+interface ProductPrice {
+  price: string;
+  regularPrice: string;
+  salePrice: string;
+  priceRange: {
+    minAmount: string;
+    maxAmount: string;
+  } | null;
+  currencyCode: string;
+  currencySymbol: string;
+  currencyMinorUnit: number;
+  currencyDecimalSeparator: string;
+  currencyThousandSeparator: string;
+  currencyPrefix: string;
+  currencySuffix: string;
+}
+
+interface ProductImage {
+  id: number;
+  src: string;
+  thumbnail: string;
+  name: string;
+  alt: string;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  slug: string;
+  type: "grouped" | "simple" | "variable";
+  shortDescription: string;
+  description: string;
+  prices: ProductPrice;
+  reviewCount: number;
+  images: ProductImage[];
+  categories: Omit<WooProductCategory, "link">[];
+  attributes: Omit<ProductAttribute, "taxonomy">[];
+  variations: ProductVariation[];
+  isPurchasable: boolean;
+  isInStock: boolean;
+  stock?: number;
+}

@@ -3,10 +3,12 @@ import React from "react";
 
 import purify from "@/utils/purify";
 
-import { getNewProducts } from "../dal/queries";
+import { getNewProducts, getPr } from "../dal/queries";
 
 const NewProducts = async () => {
   const products = await getNewProducts();
+  const pr = await getPr();
+  if (pr.success) console.log(pr.data);
   if (!products.success) return null;
   return (
     <div className="my-10 p-5">
