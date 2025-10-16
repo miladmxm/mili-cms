@@ -4,8 +4,8 @@ export type JsonValue =
   | string
   | JsonArray
   | JsonObject
-  | null;
-
+  | null
+  | undefined;
 export interface JsonObject {
   [key: string]: JsonValue;
 }

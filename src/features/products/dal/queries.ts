@@ -9,10 +9,15 @@ import { filterArrayByObjectKeyValue } from "@/utils/filterArrayByObjectKey";
 import { filterObjectByKeys } from "@/utils/filterObject";
 
 import type { WooCategory, WooCategoryQueryParams } from "../types/category";
-import type { WooProduct, WooStoreProductQuery } from "../types/products";
+import type {
+  Product,
+  WooProduct,
+  WooStoreProductQuery,
+} from "../types/products";
 
 import {
   convertWooCategoryToCategory,
+  convertWooProductToProduct,
   generateAuthHeaders,
   PRODUCTS_CATEGORIES_URL,
   PRODUCTS_URL,
@@ -58,21 +63,6 @@ export const getAllCategories = () => {
   return getCategories({ filter: { hide_empty: false } });
 };
 
-export const getProduct = <T extends (keyof WooProduct)[]>(
-  id: string,
-  options?: QueryOptions<T, WooStoreProductQuery>,
-) => {
-  const url = toWooQueryParams(PRODUCTS_URL(`/${id}`), {
-    ...options?.filter,
-    _fields: options?.fields?.join(),
-  });
-  return dalOperation<Pick<WooProduct, T[number]>>(() =>
-    GET(url, {
-      headers: generateAuthHeaders(),
-    }),
-  );
-};
-
 export const getProducts = <T extends (keyof WooProduct)[]>(
   options?: QueryOptions<T, WooStoreProductQuery>,
 ) => {
@@ -87,32 +77,77 @@ export const getProducts = <T extends (keyof WooProduct)[]>(
   );
 };
 
-export const getPr = () => {
-  return getProducts();
-};
-
 type NormalFilters = Record<"offset", number>;
 
 export const getDicountedProducts = (filter?: NormalFilters) => {
-  return getProducts({
-    filter: { on_sale: true, per_page: filter?.offset },
-    fields: ["id", "name", "prices"],
-  });
+  return DTOifIsSuccess(
+    getProducts({
+      filter: { on_sale: true, per_page: filter?.offset },
+      fields: ["id", "name", "images", "prices"],
+    }),
+    (wooProducts) =>
+      wooProducts.map((wooProduct) =>
+        filterObjectByKeys(convertWooProductToProduct(wooProduct), [
+          "id",
+          "name",
+          "images",
+          "prices",
+        ]),
+      ),
+  );
 };
 
 export const getNewProducts = (filter?: NormalFilters) => {
-  return getProducts({
-    filter: { per_page: filter?.offset || 12, order: "desc", orderby: "date" },
-    fields: ["id", "name", "prices", "price_html", "images", "slug"],
-  });
+  return DTOifIsSuccess(
+    getProducts({
+      filter: {
+        per_page: filter?.offset || 12,
+        order: "desc",
+        orderby: "date",
+      },
+      fields: ["id", "name", "prices", "images", "slug"],
+    }),
+    (wooProducts) =>
+      wooProducts.map((wooProduct) =>
+        filterObjectByKeys(convertWooProductToProduct(wooProduct), [
+          "id",
+          "name",
+          "slug",
+          "prices",
+          "images",
+        ]),
+      ),
+  );
 };
 export const getProductsAtLowPrices = (filter?: NormalFilters) => {
-  return getProducts({
-    filter: {
-      order: "asc",
-      orderby: "price",
-      per_page: filter?.offset,
-    },
-    fields: ["name", "price_html", "id", "images", "slug"],
-  });
+  return DTOifIsSuccess(
+    getProducts({
+      filter: {
+        order: "asc",
+        orderby: "price",
+        per_page: filter?.offset,
+      },
+      fields: ["name", "id", "prices", "images", "slug"],
+    }),
+    (wooProducts) =>
+      wooProducts.map((wooProduct) =>
+        filterObjectByKeys(convertWooProductToProduct(wooProduct), [
+          "name",
+          "id",
+          "images",
+          "prices",
+          "slug",
+        ]),
+      ),
+  );
+};
+
+export const getProductBySlug = (slug: Product["slug"]) => {
+  return DTOifIsSuccess(
+    getProducts({
+      filter: { slug },
+    }),
+    (wooProduct) =>
+      wooProduct[0] ? convertWooProductToProduct(wooProduct[0]) : undefined,
+  );
 };

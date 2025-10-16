@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { getDicountedProducts } from "../dal/queries";
 
 const SpecialOffers = async () => {
@@ -6,15 +8,24 @@ const SpecialOffers = async () => {
   if (!products.success) return null;
   return (
     <div>
-      {products.data.map((prod) => {
+      {products.data.map(({ id, images, name, prices }) => {
         return (
-          <div key={prod.id}>
-            {prod.name}
+          <div key={id}>
+            {name}
             <br />
-            <span>{prod.prices.regular_price}</span>
+            {images[0] && (
+              <Image
+                height={100}
+                width={100}
+                alt={images[0].alt}
+                src={images[0].src}
+              />
+            )}
             <br />
-            <span>{prod.prices.price}</span>
-            <span>{prod.prices.currency_symbol}</span>
+            <span>{prices.regularPrice}</span>
+            <br />
+            <span>{prices.price}</span>
+            <span>{prices.currencySymbol}</span>
           </div>
         );
       })}
