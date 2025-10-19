@@ -10,6 +10,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "type-check": "tsc --noEmit",
+    "next:route-type": "next typegen",
     "prepare": "husky"
   },
   "lint-staged": {

@@ -8,10 +8,10 @@ import Post from "./post";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
-  if (posts.success)
-    return posts.data.map((post) => ({
-      slug: post.slug,
-    }));
+  if (!posts.success) return [];
+  return posts.data.map((post) => ({
+    slug: post.slug,
+  }));
 }
 
 export async function generateMetadata(

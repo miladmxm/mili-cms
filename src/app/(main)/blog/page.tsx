@@ -9,7 +9,6 @@ const Blog = async ({
 }: {
   searchParams?: Promise<{ page: string }>;
 }) => {
-  // console.log(params);
   const search = await searchParams;
   const page = search?.page || "1";
   const pageNumbaer = parseInt(page, 10);
