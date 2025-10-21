@@ -43,7 +43,7 @@ export const getAllPosts = () => {
   );
 };
 
-export const getAllPostsLimit = (filter?: {
+export const getPostsByLimit = (filter?: {
   offset?: number;
   page?: number;
 }) => {

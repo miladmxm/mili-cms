@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 
-import { getAllPostsLimit } from "@/features/posts/dal/queries";
+import { getPostsByLimit } from "@/features/posts/dal/queries";
 
-import PostsWrapper from "./cs";
+import PostsWrapper from "./postsWrapper";
 
 const Blog = async ({
   searchParams,
@@ -13,7 +13,7 @@ const Blog = async ({
   const page = search?.page || "1";
   const pageNumbaer = parseInt(page, 10);
   const offset = 10 * pageNumbaer;
-  const posts = getAllPostsLimit({ offset, page: 1 });
+  const posts = getPostsByLimit({ offset, page: 1 });
   return (
     <Suspense fallback={<div>Loading posts...</div>}>
       <PostsWrapper posts={posts} />

@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 
 import type { QueryOptions } from "@/dal/types";
 
@@ -23,20 +24,22 @@ import {
   PRODUCTS_URL,
 } from "./utils";
 
-export const getCategories = <T extends (keyof WooCategory)[]>(
-  options: QueryOptions<T, WooCategoryQueryParams>,
-) => {
-  const url = toWooQueryParams(PRODUCTS_CATEGORIES_URL(), {
-    ...options?.filter,
-    _fields: options?.fields?.join(),
-  });
+export const getCategories = cache(
+  <T extends (keyof WooCategory)[]>(
+    options: QueryOptions<T, WooCategoryQueryParams>,
+  ) => {
+    const url = toWooQueryParams(PRODUCTS_CATEGORIES_URL(), {
+      ...options?.filter,
+      _fields: options?.fields?.join(),
+    });
 
-  return dalOperation<Pick<WooCategory, T[number]>[]>(() =>
-    GET(url, {
-      headers: generateAuthHeaders(),
-    }),
-  );
-};
+    return dalOperation<Pick<WooCategory, T[number]>[]>(() =>
+      GET(url, {
+        headers: generateAuthHeaders(),
+      }),
+    );
+  },
+);
 export const getAllParentCategories = () => {
   return DTOifIsSuccess(
     getCategories({
@@ -74,6 +77,44 @@ export const getProducts = <T extends (keyof WooProduct)[]>(
     GET(url, {
       headers: generateAuthHeaders(),
     }),
+  );
+};
+
+export const getProductsByLimit = (filter?: {
+  offset?: number;
+  page?: number;
+}) => {
+  const defaultFilter = { offset: 10, page: 1, ...filter };
+  return DTOifIsSuccess(
+    getProducts({
+      fields: [
+        "name",
+        "prices",
+        "slug",
+        "id",
+        "short_description",
+        "categories",
+        "images",
+      ],
+      filter: {
+        order: "desc",
+        orderby: "date",
+        per_page: defaultFilter.offset,
+        page: defaultFilter.page,
+      },
+    }),
+    (wooProducts) =>
+      wooProducts.map((wooProduct) =>
+        filterObjectByKeys(convertWooProductToProduct(wooProduct), [
+          "id",
+          "name",
+          "images",
+          "slug",
+          "shortDescription",
+          "prices",
+          "categories",
+        ]),
+      ),
   );
 };
 

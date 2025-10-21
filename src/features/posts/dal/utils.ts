@@ -2,8 +2,7 @@ import env from "@/config/env";
 
 import type { Post, WPPost } from "../types/post";
 
-export const WP_BASE_URL = () =>
-  new URL("wp-json/wp/v2/", "https://tanilchoob.com");
+export const WP_BASE_URL = () => new URL("wp-json/wp/v2/", env.WP_API_URL);
 
 export const POSTS_URL = () => new URL("posts", WP_BASE_URL());
 
