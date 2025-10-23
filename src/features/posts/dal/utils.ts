@@ -1,10 +1,12 @@
 import env from "@/config/env";
 
+import type { PostCategory, WpCategory } from "../types/category";
 import type { Post, WPPost } from "../types/post";
 
 export const WP_BASE_URL = () => new URL("wp-json/wp/v2/", env.WP_API_URL);
 
 export const POSTS_URL = () => new URL("posts", WP_BASE_URL());
+export const POSTS_CATEGORY_URL = () => new URL("categories", WP_BASE_URL());
 
 export const getAuthorizationToken = () => {
   return `Basic ${Buffer.from(
@@ -46,7 +48,18 @@ const convertOrCreateDate = (dateString?: string) => {
   if (isNaN(date.getTime())) return new Date();
   return date;
 };
-
+const exportCategoriesFromWPPost = (
+  wpPost: Partial<WPPost>,
+): Post["categories"] => {
+  const categories: Post["categories"] = [];
+  for (const category of wpPost._embedded?.["wp:term"].flat() ?? []) {
+    if (category.taxonomy === "category") {
+      const { name, slug, id } = category;
+      categories.push({ name, slug, id });
+    }
+  }
+  return categories;
+};
 export const convertWPPostToPost = <W extends Partial<WPPost>>(
   wpPost: W,
 ): Post => {
@@ -61,13 +74,22 @@ export const convertWPPostToPost = <W extends Partial<WPPost>>(
     updatedAt: convertOrCreateDate(wpPost.modified),
     comment_status: wpPost.comment_status ?? "closed",
     author: exportAuthorFromWPPost(wpPost),
+    categories: exportCategoriesFromWPPost(wpPost),
   };
 
   return allItemsPost;
 };
 
-const selectFromObject = () => {
-  const obj = {};
-  console.log(obj);
+export const convertWPCategoryToPostCategory = (
+  wpCategory: Partial<WpCategory>,
+): PostCategory => {
+  const postCategory: PostCategory = {
+    count: wpCategory.count ?? 0,
+    description: wpCategory.description ?? "",
+    id: wpCategory.id ?? 0,
+    name: wpCategory.name ?? "",
+    parent: wpCategory.parent,
+    slug: wpCategory.slug ?? "",
+  };
+  return postCategory;
 };
-selectFromObject();

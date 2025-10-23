@@ -1,18 +1,13 @@
 import { Suspense } from "react";
 
 import { getPostsByLimit } from "@/features/posts/dal/queries";
+import { getPageRenderItemCounterByOffsetInSearchParams } from "@/utils/getFromSearchParams";
 
 import PostsWrapper from "./postsWrapper";
 
-const Blog = async ({
-  searchParams,
-}: {
-  searchParams?: Promise<{ page: string }>;
-}) => {
-  const search = await searchParams;
-  const page = search?.page || "1";
-  const pageNumbaer = parseInt(page, 10);
-  const offset = 10 * pageNumbaer;
+const Blog = async ({ searchParams }: PageProps<"/blog">) => {
+  const offset =
+    await getPageRenderItemCounterByOffsetInSearchParams(searchParams);
   const posts = getPostsByLimit({ offset, page: 1 });
   return (
     <Suspense fallback={<div>Loading posts...</div>}>

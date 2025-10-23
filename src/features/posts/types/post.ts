@@ -96,13 +96,13 @@ interface WPAttachment {
   };
   source_url: string;
 }
-export interface WPCategory {
+type WPCategory = {
   id: number;
   link: string;
   name: string;
   slug: string;
   taxonomy: string;
-}
+}[];
 export interface WPPost {
   id: number;
   date: string;

@@ -7,9 +7,16 @@ import { toWooQueryParams } from "@/utils/appendSearchParams";
 import { GET } from "@/utils/fetcher";
 import { filterObjectByKeys } from "@/utils/filterObject";
 
+import type { WpCategoriesQueryParams, WpCategory } from "../types/category";
 import type { WPPost, WPPostsQuery } from "../types/post";
 
-import { convertWPPostToPost, generateAuthHeaders, POSTS_URL } from "./utils";
+import {
+  convertWPCategoryToPostCategory,
+  convertWPPostToPost,
+  generateAuthHeaders,
+  POSTS_CATEGORY_URL,
+  POSTS_URL,
+} from "./utils";
 
 export const getPosts = cache(
   <T extends (keyof WPPost)[]>(options: QueryOptions<T, WPPostsQuery>) => {
@@ -25,6 +32,46 @@ export const getPosts = cache(
     );
   },
 );
+export const getCategories = cache(
+  <T extends (keyof WpCategory)[]>(
+    options: QueryOptions<T, WpCategoriesQueryParams>,
+  ) => {
+    const url = toWooQueryParams(POSTS_CATEGORY_URL(), {
+      ...options?.filter,
+      _fields: options.fields?.join(),
+    });
+    return dalOperation<Pick<WpCategory, T[number]>[]>(() =>
+      GET(url, {
+        headers: generateAuthHeaders(),
+      }),
+    );
+  },
+);
+export const getAllCategories = () => {
+  return DTOifIsSuccess(
+    getCategories({ fields: ["count", "slug", "id", "name", "description"] }),
+    (wpCategories) =>
+      wpCategories.map((wpCategory) =>
+        filterObjectByKeys(convertWPCategoryToPostCategory(wpCategory), [
+          "count",
+          "slug",
+          "description",
+          "id",
+          "name",
+        ]),
+      ),
+  );
+};
+
+export const getCategoryIdBySlug = (slug: string) => {
+  return DTOifIsSuccess(
+    getCategories({
+      fields: ["id"],
+      filter: { slug },
+    }),
+    (wpCategory) => wpCategory[0]?.id,
+  );
+};
 
 export const getAllPosts = () => {
   return DTOifIsSuccess(
@@ -45,14 +92,24 @@ export const getAllPosts = () => {
 
 export const getPostsByLimit = (filter?: {
   offset?: number;
+  categories?: number | number[];
   page?: number;
 }) => {
   const defaultFilter = { offset: 10, page: 1, ...filter };
   return DTOifIsSuccess(
     getPosts({
-      fields: ["title", "_embedded", "slug", "id", "_links", "date"],
+      fields: [
+        "title",
+        "_embedded",
+        "slug",
+        "id",
+        "_links",
+        "date",
+        "categories",
+      ],
       embed: true,
       filter: {
+        categories: defaultFilter.categories,
         order: "desc",
         orderby: "date",
         per_page: defaultFilter.offset,
@@ -66,6 +123,7 @@ export const getPostsByLimit = (filter?: {
           "title",
           "image",
           "slug",
+          "categories",
         ]),
       ),
   );
@@ -85,6 +143,7 @@ export const getNewPosts = () => {
           "title",
           "image",
           "excerpt",
+          "slug",
         ]),
       ),
   );

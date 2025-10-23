@@ -1,6 +1,6 @@
 import env from "@/config/env";
 
-import type { Category, WooCategory } from "../types/category";
+import type { ProductCategory, WooCategory } from "../types/category";
 import type { Product, WooProduct } from "../types/products";
 
 export const WC_BASE_URL = () => new URL("wp-json/wc/v3/", env.WP_API_URL);
@@ -29,7 +29,7 @@ export const generateAuthHeaders = () => {
 
 export const getThumbnailFromWooCategory = (
   image: WooCategory["image"] | undefined,
-): Category["image"] | undefined => {
+): ProductCategory["image"] | undefined => {
   if (!image) {
     return;
   }
@@ -42,7 +42,7 @@ export const getThumbnailFromWooCategory = (
 };
 export const convertWooCategoryToCategory = <W extends Partial<WooCategory>>(
   wooCategory: W,
-): Category => {
+): ProductCategory => {
   return {
     countOfProducts: wooCategory.count ?? 0,
     description: wooCategory.description ?? "",

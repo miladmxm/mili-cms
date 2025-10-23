@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { getProductsAtLowPrices } from "../dal/queries";
 
@@ -8,10 +9,12 @@ const LowPrices = async () => {
   return (
     <div className="grid border-y grid-cols-4 grid-rows-1">
       <h5>low price</h5>
-      {products.data.map(({ id, name, prices, images }) => {
+      {products.data.map(({ id, slug, name, prices, images }) => {
         return (
           <article className="p-4 border" key={id}>
-            <h4>{name}</h4>
+            <h4>
+              <Link href={`/product/${slug}`}>{name}</Link>
+            </h4>
             <div>
               {prices.priceRange ? (
                 <span>

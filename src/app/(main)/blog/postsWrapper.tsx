@@ -11,7 +11,9 @@ import type { DalReturn } from "@/dal/types";
 import type { Post } from "@/features/posts/types/post";
 
 const PostsWrapper: FC<{
-  posts: Promise<DalReturn<Pick<Post, "id" | "image" | "slug" | "title">[]>>;
+  posts: Promise<
+    DalReturn<Pick<Post, "categories" | "id" | "image" | "slug" | "title">[]>
+  >;
 }> = ({ posts }) => {
   const postsQuery = use(posts);
   const router = useRouter();
@@ -20,7 +22,7 @@ const PostsWrapper: FC<{
   const loadMore = () => {
     const search = new URLSearchParams(searchParams);
     search.set("page", ((Number(search.get("page")) || 1) + 1).toString());
-    router.replace(`/blog?${search.toString()}`, { scroll: false });
+    router.replace(`?${search.toString()}`, { scroll: false });
     router.refresh();
   };
   return (
@@ -37,6 +39,13 @@ const PostsWrapper: FC<{
               placeholder="blur"
             />
           )}
+          <div className="py-5 flex gap-1">
+            {post.categories?.map((category) => (
+              <Link href={`/blog/${category.slug}`} key={category.id}>
+                {category.name}
+              </Link>
+            ))}
+          </div>
           <Link href={`/article/${post.slug}`}>{post.title}</Link>
         </article>
       ))}

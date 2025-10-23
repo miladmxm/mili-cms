@@ -40,6 +40,21 @@ export const getCategories = cache(
     );
   },
 );
+
+export const getProducts = <T extends (keyof WooProduct)[]>(
+  options?: QueryOptions<T, WooStoreProductQuery>,
+) => {
+  const url = toWooQueryParams(PRODUCTS_URL(), {
+    ...options?.filter,
+    _fields: options?.fields?.join(),
+  });
+  return dalOperation<Pick<WooProduct, T[number]>[]>(() =>
+    GET(url, {
+      headers: generateAuthHeaders(),
+    }),
+  );
+};
+
 export const getAllParentCategories = () => {
   return DTOifIsSuccess(
     getCategories({
@@ -65,21 +80,6 @@ export const getAllParentCategories = () => {
 export const getAllCategories = () => {
   return getCategories({ filter: { hide_empty: false } });
 };
-
-export const getProducts = <T extends (keyof WooProduct)[]>(
-  options?: QueryOptions<T, WooStoreProductQuery>,
-) => {
-  const url = toWooQueryParams(PRODUCTS_URL(), {
-    ...options?.filter,
-    _fields: options?.fields?.join(),
-  });
-  return dalOperation<Pick<WooProduct, T[number]>[]>(() =>
-    GET(url, {
-      headers: generateAuthHeaders(),
-    }),
-  );
-};
-
 export const getProductsByLimit = (filter?: {
   offset?: number;
   page?: number;

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import purify from "@/utils/purify";
 
@@ -12,16 +13,20 @@ const PostsCarousel = async () => {
       {posts.data.map((post) => {
         return (
           <div key={post.id}>
-            <h2>{post.title}</h2>
+            <h2>
+              <Link href={`/article/${post.slug}`}>{post.title}</Link>
+            </h2>
             {post.image && (
-              <Image
-                height={400}
-                width={400}
-                alt={post.image.alt}
-                blurDataURL={post.image.thumbnail}
-                src={post.image.src}
-                placeholder="blur"
-              />
+              <Link href={`/article/${post.slug}`}>
+                <Image
+                  height={400}
+                  width={400}
+                  alt={post.image.alt}
+                  blurDataURL={post.image.thumbnail}
+                  src={post.image.src}
+                  placeholder="blur"
+                />
+              </Link>
             )}
             <div dangerouslySetInnerHTML={{ __html: purify(post.excerpt) }} />
           </div>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { getAllParentCategories } from "../dal/queries";
 
@@ -17,7 +18,7 @@ const Categories = async () => {
               src={category.image?.src}
             />
           )}
-          {category.name}
+          <Link href={`/shop/${category.slug}`}>{category.name}</Link>
         </div>
       ))}
     </div>

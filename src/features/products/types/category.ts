@@ -60,7 +60,7 @@ export interface WooCategoryQueryParams {
   slug?: string;
 }
 
-export interface Category {
+export interface ProductCategory {
   id: number;
   name: string;
   slug: string;
