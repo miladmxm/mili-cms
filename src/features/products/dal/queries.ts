@@ -78,11 +78,26 @@ export const getAllParentCategories = () => {
 };
 
 export const getAllCategories = () => {
-  return getCategories({ filter: { hide_empty: false } });
+  return DTOifIsSuccess(
+    getCategories({ filter: { hide_empty: false } }),
+    (wooCategories) =>
+      wooCategories.map((wooCategory) =>
+        convertWooCategoryToCategory(wooCategory),
+      ),
+  );
+};
+
+export const getCategoryIdBySlug = (slug: string) => {
+  return DTOifIsSuccess(
+    getCategories({ fields: ["id"], filter: { slug } }),
+    (wooCategory) =>
+      filterObjectByKeys(convertWooCategoryToCategory(wooCategory[0]), ["id"]),
+  );
 };
 export const getProductsByLimit = (filter?: {
   offset?: number;
   page?: number;
+  category?: string;
 }) => {
   const defaultFilter = { offset: 10, page: 1, ...filter };
   return DTOifIsSuccess(
@@ -99,6 +114,7 @@ export const getProductsByLimit = (filter?: {
       filter: {
         order: "desc",
         orderby: "date",
+        category: defaultFilter.category,
         per_page: defaultFilter.offset,
         page: defaultFilter.page,
       },

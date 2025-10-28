@@ -33,7 +33,7 @@ const ProductsWrapper: FC<{
   const loadMore = () => {
     const search = new URLSearchParams(searchParams);
     search.set("page", ((Number(search.get("page")) || 1) + 1).toString());
-    router.replace(`/blog?${search.toString()}`, { scroll: false });
+    router.replace(`?${search.toString()}`, { scroll: false });
     router.refresh();
   };
   return (
@@ -51,6 +51,13 @@ const ProductsWrapper: FC<{
             />
           )}
           <Link href={`/product/${product.slug}`}>{product.name}</Link>
+          <div className="flex gap-2 ring-2 my-2">
+            {product.categories.map((category) => (
+              <Link href={`/shop/${category.slug}`} key={category.id}>
+                {category.name}
+              </Link>
+            ))}
+          </div>
           <p>{product.shortDescription}</p>
         </div>
       ))}
