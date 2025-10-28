@@ -11,3 +11,5 @@ export interface JsonObject {
 }
 
 export interface JsonArray extends Array<JsonValue> {}
+
+export type SearchParams = Record<string, string | string[] | undefined>;

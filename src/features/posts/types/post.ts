@@ -167,8 +167,8 @@ export interface WPPost {
 
 export interface Post {
   id: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: number;
+  updatedAt: number;
   slug: string;
   title: string;
   content: string;

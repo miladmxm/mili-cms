@@ -12,6 +12,7 @@ const ShopCategory = async ({
   params,
   searchParams,
 }: PageProps<"/shop/[slug]">) => {
+  "use cache";
   const { slug } = await params;
   const categoryId = await getCategoryIdBySlug(slug);
   if (!categoryId.success) return null;
@@ -22,11 +23,18 @@ const ShopCategory = async ({
     page: 1,
     category: String(categoryId.data.id),
   });
+  return <ProductsWrapper products={products} />;
+};
+
+const ShopCategoryCacheWrapper = ({
+  searchParams,
+  params,
+}: PageProps<"/shop/[slug]">) => {
   return (
-    <Suspense fallback={<div>loading...</div>}>
-      <ProductsWrapper products={products} />;
+    <Suspense fallback="loading">
+      <ShopCategory params={params} searchParams={searchParams} />
     </Suspense>
   );
 };
 
-export default ShopCategory;
+export default ShopCategoryCacheWrapper;

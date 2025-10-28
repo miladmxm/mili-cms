@@ -1,27 +1,33 @@
 import { Suspense } from "react";
 
+import type { SearchParams } from "@/types/type";
+
 import { getProductsByLimit } from "@/features/products/dal/queries";
+import { getPageRenderItemCounterByOffsetInSearchParams } from "@/utils/getFromSearchParams";
 
 import ProductsWrapper from "./productsWrapper";
 
 const Shop = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ page: string }>;
+  searchParams: Promise<SearchParams>;
 }) => {
-  const search = await searchParams;
-  const page = search?.page || "1";
-  const pageNumbaer = parseInt(page, 10);
-  const offset = 10 * pageNumbaer;
+  const offset =
+    await getPageRenderItemCounterByOffsetInSearchParams(searchParams);
   const products = getProductsByLimit({
     offset,
     page: 1,
   });
+  return <ProductsWrapper products={products} />;
+};
+
+const ShopWrapper = async ({ searchParams }: PageProps<"/shop">) => {
+  const search = searchParams;
   return (
-    <Suspense fallback={<div>loading...</div>}>
-      <ProductsWrapper products={products} />
+    <Suspense>
+      <Shop searchParams={search} />;
     </Suspense>
   );
 };
 
-export default Shop;
+export default ShopWrapper;

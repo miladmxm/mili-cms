@@ -148,7 +148,7 @@ export const convertWooProductToProduct = <W extends Partial<WooProduct>>(
   wooProduct: W,
 ): Product => {
   return {
-    id: wooProduct.id ?? 0,
+    id: wooProduct.id ?? NaN,
     name: wooProduct.name ?? "",
     slug: wooProduct.slug ?? "",
     type: getTypeFromWooProduct(wooProduct.type),

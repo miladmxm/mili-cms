@@ -43,10 +43,10 @@ const exportAuthorFromWPPost = (wpPost: Partial<WPPost>) => {
 };
 
 const convertOrCreateDate = (dateString?: string) => {
-  if (!dateString) return new Date();
+  if (!dateString) return performance.now();
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return new Date();
-  return date;
+  if (isNaN(date.getTime())) return performance.now();
+  return date.getTime();
 };
 const exportCategoriesFromWPPost = (
   wpPost: Partial<WPPost>,
@@ -64,7 +64,7 @@ export const convertWPPostToPost = <W extends Partial<WPPost>>(
   wpPost: W,
 ): Post => {
   const allItemsPost: Post = {
-    id: wpPost.id ?? 1,
+    id: wpPost.id ?? NaN,
     createdAt: convertOrCreateDate(wpPost.date),
     slug: wpPost.slug ?? "",
     title: wpPost.title?.rendered ?? "",

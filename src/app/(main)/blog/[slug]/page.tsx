@@ -24,11 +24,15 @@ const BlogCategory = async ({
     page: 1,
     categories: categoryId.data,
   });
+  return <PostsWrapper posts={posts} />;
+};
+
+const BlogCategoryWrapper = (props: PageProps<"/blog/[slug]">) => {
   return (
-    <Suspense fallback={<div>loading...</div>}>
-      <PostsWrapper posts={posts} />
+    <Suspense fallback="loading">
+      <BlogCategory {...props} />
     </Suspense>
   );
 };
 
-export default BlogCategory;
+export default BlogCategoryWrapper;

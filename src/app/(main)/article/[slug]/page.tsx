@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next";
 
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
 import { getAllPosts, getPostBySlug } from "@/features/posts/dal/queries";
 
@@ -27,6 +27,7 @@ export async function generateMetadata(
 
 const Article = async ({ params }: PageProps<"/article/[slug]">) => {
   const { slug } = await params;
+
   const post = getPostBySlug(slug);
 
   return (

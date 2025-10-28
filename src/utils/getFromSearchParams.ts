@@ -1,4 +1,4 @@
-type SearchParams = Record<string, string | string[] | undefined>;
+import type { SearchParams } from "@/types/type";
 
 const getItemFromSearchParam = ({
   selectorKey,

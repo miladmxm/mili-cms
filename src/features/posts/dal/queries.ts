@@ -1,3 +1,4 @@
+import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
 
 import type { QueryOptions } from "@/dal/types";
@@ -19,12 +20,18 @@ import {
 } from "./utils";
 
 export const getPosts = cache(
-  <T extends (keyof WPPost)[]>(options: QueryOptions<T, WPPostsQuery>) => {
+  async <T extends (keyof WPPost)[]>(
+    options: QueryOptions<T, WPPostsQuery>,
+  ) => {
+    "use cache";
+    cacheTag("posts");
+    cacheLife("hours");
     const url = toWooQueryParams(POSTS_URL(), {
       _embed: options?.embed,
       ...options?.filter,
       _fields: options.fields?.join(),
     });
+    console.log(url);
     return dalOperation<Pick<WPPost, T[number]>[]>(() =>
       GET(url, {
         headers: generateAuthHeaders(),
@@ -33,9 +40,12 @@ export const getPosts = cache(
   },
 );
 export const getCategories = cache(
-  <T extends (keyof WpCategory)[]>(
+  async <T extends (keyof WpCategory)[]>(
     options: QueryOptions<T, WpCategoriesQueryParams>,
   ) => {
+    "use cache";
+    cacheTag("postcategory");
+    cacheLife("hours");
     const url = toWooQueryParams(POSTS_CATEGORY_URL(), {
       ...options?.filter,
       _fields: options.fields?.join(),
@@ -150,6 +160,7 @@ export const getNewPosts = () => {
 };
 
 export const getPostBySlug = (slug: string) => {
+  // todo fix if is empty array
   return DTOifIsSuccess(
     getPosts({ embed: true, filter: { slug } }),
     (wpPosts) => convertWPPostToPost(wpPosts[0]),

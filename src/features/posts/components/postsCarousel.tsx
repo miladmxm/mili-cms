@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import purify from "@/utils/purify";
-
 import { getNewPosts } from "../dal/queries";
 
 const PostsCarousel = async () => {
@@ -28,7 +26,7 @@ const PostsCarousel = async () => {
                 />
               </Link>
             )}
-            <div dangerouslySetInnerHTML={{ __html: purify(post.excerpt) }} />
+            <div dangerouslySetInnerHTML={{ __html: post.excerpt }} />
           </div>
         );
       })}

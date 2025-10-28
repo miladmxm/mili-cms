@@ -1,8 +1,4 @@
-import React from "react";
-
-const Product = async ({ params }: PageProps<"/product/[slug]">) => {
-  const { slug } = await params;
-  console.log(slug);
+const Product = () => {
   return <div>product</div>;
 };
 
