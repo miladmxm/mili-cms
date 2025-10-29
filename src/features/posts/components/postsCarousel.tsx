@@ -1,9 +1,13 @@
+import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 
 import { getNewPosts } from "../dal/queries";
 
 const PostsCarousel = async () => {
+  "use cache";
+  cacheTag("posts");
+  cacheLife("hours");
   const posts = await getNewPosts();
   if (!posts.success) return null;
   return (

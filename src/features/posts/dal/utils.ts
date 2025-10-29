@@ -43,10 +43,12 @@ const exportAuthorFromWPPost = (wpPost: Partial<WPPost>) => {
 };
 
 const convertOrCreateDate = (dateString?: string) => {
-  if (!dateString) return performance.now();
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return performance.now();
-  return date.getTime();
+  let date = new Date();
+  if (dateString) {
+    date = new Date(dateString);
+  }
+  if (isNaN(date.getTime())) date = new Date();
+  return date;
 };
 const exportCategoriesFromWPPost = (
   wpPost: Partial<WPPost>,

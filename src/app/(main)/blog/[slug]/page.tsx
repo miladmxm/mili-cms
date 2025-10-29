@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -13,6 +14,8 @@ const BlogCategory = async ({
   params,
   searchParams,
 }: PageProps<"/blog/[slug]">) => {
+  "use cache: private";
+  cacheLife("hours");
   const { slug } = await params;
   const categoryId = await getCategoryIdBySlug(slug);
   if (!categoryId.success || !categoryId.data) return redirect("/blog");

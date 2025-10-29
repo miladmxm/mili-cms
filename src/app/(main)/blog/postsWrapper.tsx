@@ -5,7 +5,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { use } from "react";
+import { use } from "react";
 
 import type { DalReturn } from "@/dal/types";
 import type { Post } from "@/features/posts/types/post";

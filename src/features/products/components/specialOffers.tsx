@@ -1,8 +1,11 @@
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 
 import { getDicountedProducts } from "../dal/queries";
 
 const SpecialOffers = async () => {
+  "use cache";
+  cacheLife("hours");
   const products = await getDicountedProducts({ offset: 3 });
 
   if (!products.success) return null;

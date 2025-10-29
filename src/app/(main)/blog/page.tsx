@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 
 import type { SearchParams } from "@/types/type";
@@ -12,6 +13,8 @@ const Blog = async ({
 }: {
   searchParams: Promise<SearchParams>;
 }) => {
+  "use cache: private";
+  cacheLife("hours");
   const offset =
     await getPageRenderItemCounterByOffsetInSearchParams(searchParams);
   const posts = getPostsByLimit({ offset, page: 1 });
@@ -20,7 +23,7 @@ const Blog = async ({
 const BlogWrapper = ({ searchParams }: PageProps<"/blog">) => {
   return (
     <Suspense fallback="loading">
-      <Blog searchParams={searchParams} />;
+      <Blog searchParams={searchParams} />
     </Suspense>
   );
 };

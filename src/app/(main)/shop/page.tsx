@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 
 import type { SearchParams } from "@/types/type";
@@ -12,6 +13,8 @@ const Shop = async ({
 }: {
   searchParams: Promise<SearchParams>;
 }) => {
+  "use cache: private";
+  cacheLife("hours");
   const offset =
     await getPageRenderItemCounterByOffsetInSearchParams(searchParams);
   const products = getProductsByLimit({
@@ -25,7 +28,7 @@ const ShopWrapper = async ({ searchParams }: PageProps<"/shop">) => {
   const search = searchParams;
   return (
     <Suspense>
-      <Shop searchParams={search} />;
+      <Shop searchParams={search} />
     </Suspense>
   );
 };

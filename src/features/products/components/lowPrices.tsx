@@ -1,9 +1,12 @@
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 
 import { getProductsAtLowPrices } from "../dal/queries";
 
 const LowPrices = async () => {
+  "use cache";
+  cacheLife("hours");
   const products = await getProductsAtLowPrices({ offset: 4 });
   if (!products.success) return null;
   return (

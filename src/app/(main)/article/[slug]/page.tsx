@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next";
 
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 
 import { getAllPosts, getPostBySlug } from "@/features/posts/dal/queries";
@@ -26,6 +27,8 @@ export async function generateMetadata(
 }
 
 const Article = async ({ params }: PageProps<"/article/[slug]">) => {
+  "use cache";
+  cacheLife("hours");
   const { slug } = await params;
 
   const post = getPostBySlug(slug);

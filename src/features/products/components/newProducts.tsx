@@ -1,13 +1,14 @@
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { getNewProducts, getProductBySlug } from "../dal/queries";
+import { getNewProducts } from "../dal/queries";
 
 const NewProducts = async () => {
+  "use cache";
+  cacheLife("hours");
   const products = await getNewProducts();
-  const pr = await getProductBySlug("double-bed-set-natural-wood-acacia-mulch");
-  if (pr.success) console.log(pr.data);
   if (!products.success) return null;
   return (
     <div className="my-10 p-5">

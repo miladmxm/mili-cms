@@ -1,9 +1,12 @@
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 
 import { getAllParentCategories } from "../dal/queries";
 
 const Categories = async () => {
+  "use cache";
+  cacheLife("hours");
   const allCategories = await getAllParentCategories();
   if (!allCategories.success) return null;
   return (

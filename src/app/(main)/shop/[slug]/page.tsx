@@ -12,7 +12,7 @@ const ShopCategory = async ({
   params,
   searchParams,
 }: PageProps<"/shop/[slug]">) => {
-  "use cache";
+  "use cache: private";
   const { slug } = await params;
   const categoryId = await getCategoryIdBySlug(slug);
   if (!categoryId.success) return null;

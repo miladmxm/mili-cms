@@ -1,11 +1,11 @@
 import "server-only";
-import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
 
 import type { QueryOptions } from "@/dal/types";
 
 import { dalOperation, DTOifIsSuccess } from "@/dal/helpers";
 import { toWooQueryParams } from "@/utils/appendSearchParams";
+import { delay } from "@/utils/delay";
 import { GET } from "@/utils/fetcher";
 import { filterArrayByObjectKeyValue } from "@/utils/filterArrayByObjectKey";
 import { filterObjectByKeys } from "@/utils/filterObject";
@@ -29,9 +29,6 @@ export const getCategories = cache(
   async <T extends (keyof WooCategory)[]>(
     options: QueryOptions<T, WooCategoryQueryParams>,
   ) => {
-    "use cache";
-    cacheTag("productcategory");
-    cacheLife("hours");
     const url = toWooQueryParams(PRODUCTS_CATEGORIES_URL(), {
       ...options?.filter,
       _fields: options?.fields?.join(),
@@ -48,9 +45,6 @@ export const getCategories = cache(
 export const getProducts = async <T extends (keyof WooProduct)[]>(
   options?: QueryOptions<T, WooStoreProductQuery>,
 ) => {
-  "use cache";
-  cacheTag("products");
-  cacheLife("hours");
   const url = toWooQueryParams(PRODUCTS_URL(), {
     ...options?.filter,
     _fields: options?.fields?.join(),
@@ -142,10 +136,6 @@ export const getProductsByLimit = (filter?: {
 };
 
 type NormalFilters = Record<"offset", number>;
-const delay = (ms: number) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
 
 export const getDicountedProducts = async (filter?: NormalFilters) => {
   await delay(2000);
