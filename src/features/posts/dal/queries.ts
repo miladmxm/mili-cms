@@ -3,8 +3,8 @@ import { cache } from "react";
 import type { QueryOptions } from "@/dal/types";
 
 import { dalOperation, DTOifIsSuccess } from "@/dal/helpers";
+import { ThrowableDalError } from "@/dal/types";
 import { toWooQueryParams } from "@/utils/appendSearchParams";
-import { delay } from "@/utils/delay";
 import { GET } from "@/utils/fetcher";
 import { filterObjectByKeys } from "@/utils/filterObject";
 
@@ -153,9 +153,12 @@ export const getNewPosts = () => {
 };
 
 export const getPostBySlug = async (slug: string) => {
-  // todo fix if is empty array
   return DTOifIsSuccess(
     getPosts({ embed: true, filter: { slug } }),
-    (wpPosts) => convertWPPostToPost(wpPosts[0]),
+    (wpPosts) => {
+      if (!wpPosts[0])
+        throw new ThrowableDalError({ type: "fetch-error", status: 404 });
+      return convertWPPostToPost(wpPosts[0]);
+    },
   );
 };

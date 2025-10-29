@@ -4,6 +4,7 @@ import { cache } from "react";
 import type { QueryOptions } from "@/dal/types";
 
 import { dalOperation, DTOifIsSuccess } from "@/dal/helpers";
+import { ThrowableDalError } from "@/dal/types";
 import { toWooQueryParams } from "@/utils/appendSearchParams";
 import { delay } from "@/utils/delay";
 import { GET } from "@/utils/fetcher";
@@ -45,10 +46,13 @@ export const getCategories = cache(
 export const getProducts = async <T extends (keyof WooProduct)[]>(
   options?: QueryOptions<T, WooStoreProductQuery>,
 ) => {
+  console.log(options?.filter);
   const url = toWooQueryParams(PRODUCTS_URL(), {
     ...options?.filter,
     _fields: options?.fields?.join(),
   });
+
+  console.log(url.search);
   return dalOperation<Pick<WooProduct, T[number]>[]>(() =>
     GET(url, {
       headers: generateAuthHeaders(),
@@ -206,7 +210,10 @@ export const getProductBySlug = (slug: Product["slug"]) => {
     getProducts({
       filter: { slug },
     }),
-    (wooProduct) =>
-      wooProduct[0] ? convertWooProductToProduct(wooProduct[0]) : undefined,
+    (wooProduct) => {
+      if (!wooProduct[0])
+        throw new ThrowableDalError({ type: "fetch-error", status: 404 });
+      return convertWooProductToProduct(wooProduct[0]);
+    },
   );
 };

@@ -70,7 +70,8 @@ export async function DTOifIsSuccess<T, R>(
 ): Promise<DalReturn<R>> {
   const res = await dalReturn;
   if (res.success) {
-    return { ...res, data: dtoCB(res.data) };
+    return dalOperation<R>(async () => dtoCB(res.data));
+    // return { ...res, data: dtoCB(res.data) };
   }
   return res;
 }
