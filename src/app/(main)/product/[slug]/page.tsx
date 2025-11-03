@@ -1,4 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
+import { Suspense } from "react";
 
 import { getProductBySlug } from "@/features/products/dal/queries";
 
@@ -13,5 +14,9 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
   const product = getProductBySlug(slug);
   return <RenderProduct product={product} />;
 };
-
-export default Product;
+export const PRWrapper = (props: PageProps<"/product/[slug]">) => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <Product {...props} />
+  </Suspense>
+);
+export default PRWrapper;
