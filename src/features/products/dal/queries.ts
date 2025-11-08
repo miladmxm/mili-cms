@@ -1,4 +1,5 @@
 import "server-only";
+import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
 
 import type { QueryOptions } from "@/dal/types";
@@ -7,7 +8,7 @@ import { dalOperation, DTOifIsSuccess } from "@/dal/helpers";
 import { ThrowableDalError } from "@/dal/types";
 import { toWooQueryParams } from "@/utils/appendSearchParams";
 import { delay } from "@/utils/delay";
-import { GET } from "@/utils/fetcher";
+import { fetcher, GET } from "@/utils/fetcher";
 import { filterArrayByObjectKeyValue } from "@/utils/filterArrayByObjectKey";
 import { filterObjectByKeys } from "@/utils/filterObject";
 
@@ -46,13 +47,11 @@ export const getCategories = cache(
 export const getProducts = async <T extends (keyof WooProduct)[]>(
   options?: QueryOptions<T, WooStoreProductQuery>,
 ) => {
-  console.log(options?.filter);
   const url = toWooQueryParams(PRODUCTS_URL(), {
     ...options?.filter,
     _fields: options?.fields?.join(),
   });
 
-  console.log(url.search);
   return dalOperation<Pick<WooProduct, T[number]>[]>(() =>
     GET(url, {
       headers: generateAuthHeaders(),
@@ -216,4 +215,37 @@ export const getProductBySlug = (slug: Product["slug"]) => {
       return convertWooProductToProduct(wooProduct[0]);
     },
   );
+};
+export const getNonce = async () => {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("nonce");
+  try {
+    await delay(3000);
+    const nonceRes = await fetch(
+      "http://localhost:8080/wp-json/wc/store/v1/checkout",
+      {
+        headers: {
+          Nonce: "12345",
+        },
+      },
+    );
+    return nonceRes.headers.get("nonce");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCartToken = async (cacheId: string) => {
+  "use cache";
+  cacheTag(`cart-token-${cacheId}`);
+  const toketRes = await fetch(
+    "http://localhost:8080/wp-json/wc/store/v1/cart",
+    {
+      headers: {
+        "Cart-Token": "12345",
+      },
+    },
+  );
+  return toketRes.headers.get("Cart-Token");
 };

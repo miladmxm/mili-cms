@@ -1,6 +1,14 @@
 import * as v from "valibot";
 
 const EnvSchema = v.object({
+  NODE_ENV: v.pipe(
+    v.string(),
+    v.nonEmpty("Please enter your APP_MODE."),
+    v.union(
+      [v.literal("development"), v.literal("production")],
+      "APP_MODE must be either 'development' or 'production'.",
+    ),
+  ),
   WP_API_URL: v.pipe(
     v.string(),
     v.nonEmpty("Please enter your WP_API_URL."),
@@ -34,4 +42,10 @@ const ENV = (): Env => {
     process.exit(1);
   }
 };
+
+export const isProduction = () => {
+  const env = ENV();
+  return env.NODE_ENV === "production";
+};
+
 export default ENV();

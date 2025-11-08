@@ -12,7 +12,10 @@ export const fetcher = async (
   const res = await fetch(url, options);
 
   if (!isSuccessStatus(res.status)) {
-    throw new ThrowableDalError({ type: "fetch-error", status: res.status });
+    throw new ThrowableDalError({
+      type: "fetch-error",
+      status: res.status,
+    });
   }
 
   const jsonRes = await res.json();

@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<LayoutProps<"/">>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html dir="rtl" lang="en">
+      <body className="container mx-auto py-6">{children}</body>
     </html>
   );
 }

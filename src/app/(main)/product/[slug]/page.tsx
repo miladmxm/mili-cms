@@ -9,7 +9,6 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
   "use cache";
   cacheLife("days");
   const { slug } = await params;
-  console.log(decodeURI(slug));
   cacheTag(`product-${slug}`);
   const product = getProductBySlug(slug);
   return <RenderProduct product={product} />;
