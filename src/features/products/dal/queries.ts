@@ -216,6 +216,7 @@ export const getProductBySlug = (slug: Product["slug"]) => {
     },
   );
 };
+
 export const getNonce = async () => {
   "use cache";
   cacheLife("hours");
@@ -234,18 +235,4 @@ export const getNonce = async () => {
   } catch (error) {
     console.log(error);
   }
-};
-
-export const getCartToken = async (cacheId: string) => {
-  "use cache";
-  cacheTag(`cart-token-${cacheId}`);
-  const toketRes = await fetch(
-    "http://localhost:8080/wp-json/wc/store/v1/cart",
-    {
-      headers: {
-        "Cart-Token": "12345",
-      },
-    },
-  );
-  return toketRes.headers.get("Cart-Token");
 };

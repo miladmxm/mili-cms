@@ -7,7 +7,7 @@ import { use } from "react";
 import type { DalReturn } from "@/dal/types";
 import type { Product } from "@/features/products/types/products";
 
-import AddToCart from "@/features/products/components/attToCart";
+import AddToCart from "@/features/cart/components/addToCart";
 import purify from "@/utils/purify";
 
 const RenderProduct: FC<{ product: Promise<DalReturn<Product>> }> = ({

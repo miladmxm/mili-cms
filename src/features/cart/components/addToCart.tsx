@@ -2,7 +2,7 @@
 
 import { addToCart } from "../actions/addToCart";
 
-const AddToCart = ({ id }: { id: number | string }) => {
+const AddToCart = ({ id }: { id: number }) => {
   return (
     <button
       className="my-5 cursor-pointer text-blue-600 ring-1"

@@ -12,6 +12,7 @@ export const fetcher = async (
   const res = await fetch(url, options);
 
   if (!isSuccessStatus(res.status)) {
+    console.log(await res.text());
     throw new ThrowableDalError({
       type: "fetch-error",
       status: res.status,
@@ -24,11 +25,22 @@ export const fetcher = async (
 export const GET = (url: RequestInfo | URL, options?: RequestInit) =>
   fetcher(url, { ...options, method: "GET" });
 
-export const POST = <T extends JsonArray | JsonObject>(
+export const POST = <T>(
   url: RequestInfo | URL,
   data: T,
   options?: RequestInit,
-) => fetcher(url, { ...options, method: "POST", body: JSON.stringify(data) });
+) => {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options?.headers || {}),
+  };
+  return fetcher(url, {
+    ...options,
+    ...headers,
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+};
 
 export const DELETE = (url: RequestInfo | URL, options?: RequestInit) =>
   fetcher(url, { ...options, method: "DELETE" });
