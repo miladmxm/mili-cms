@@ -9,26 +9,15 @@ const EnvSchema = v.object({
       "APP_MODE must be either 'development' or 'production'.",
     ),
   ),
-  WP_API_URL: v.pipe(
+  DB_URL: v.pipe(v.string(), v.nonEmpty()),
+  // BETTER_AUTH_SECRET: v.pipe(v.string(), v.minLength(10), v.nonEmpty()),
+  PORT: v.pipe(
     v.string(),
-    v.nonEmpty("Please enter your WP_API_URL."),
-    v.url("The WP_API_URL is badly formatted."),
-  ),
-  WP_TOKEN_NAME: v.pipe(
-    v.string(),
-    v.nonEmpty("Please enter your WP_TOKEN_NAME."),
-  ),
-  WP_TOKEN_SECRET: v.pipe(
-    v.string(),
-    v.nonEmpty("Please enter your WP_TOKEN_SECRET."),
-  ),
-  WC_TOKEN_SECRET_KEY: v.pipe(
-    v.string(),
-    v.nonEmpty("Please enter your WC_TOKEN_SECRET_KEY."),
-  ),
-  WC_TOKEN_SECRET_VALUE: v.pipe(
-    v.string(),
-    v.nonEmpty("Please enter your WC_TOKEN_SECRET_VALUE."),
+    v.nonEmpty(),
+    v.transform((value) => parseInt(value, 10)),
+    v.number(),
+    v.integer(),
+    v.minValue(3000),
   ),
 });
 type Env = v.InferOutput<typeof EnvSchema>;
