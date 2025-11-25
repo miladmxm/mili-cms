@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -9,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<LayoutProps<"/">>) {
   return (
-    <html dir="rtl" lang="en">
-      <body className="container mx-auto py-6">{children}</body>
+    <html dir="ltr" lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider attribute="class">{children}</ThemeProvider>
+      </body>
     </html>
   );
 }
