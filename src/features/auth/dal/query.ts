@@ -1,9 +1,22 @@
 import { headers } from "next/headers";
 import "server-only";
 
-import { auth } from "@/lib/auth"; // path to your Better Auth server instance
+import type { Permissions } from "@/lib/permisions";
+
+import { auth } from "@/lib/auth";
 
 export const getSession = async () =>
   await auth.api.getSession({
-    headers: await headers(), // you need to pass the headers object.
+    headers: await headers(),
+  });
+
+export const hasAccess = (
+  userId: (typeof auth.$Infer)["Session"]["user"]["id"],
+  permissions: Partial<Permissions>,
+) =>
+  auth.api.userHasPermission({
+    body: {
+      userId,
+      permissions,
+    },
   });

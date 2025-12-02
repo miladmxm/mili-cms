@@ -1,7 +1,5 @@
 import type { DrizzleQueryError } from "drizzle-orm";
 
-export type UserRole = "admin" | "customer";
-
 export type DalReturn<T, E extends DalError = DalError> =
   | {
       success: false;

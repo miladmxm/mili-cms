@@ -1,6 +1,6 @@
 import { createAccessControl } from "better-auth/plugins/access";
 
-const statements = {
+export const statements = {
   customer: ["create", "read", "update", "delete", "ban"],
   product: ["create", "read", "update", "delete"],
   blog: ["create", "read", "update", "delete"],
@@ -8,7 +8,11 @@ const statements = {
   settings: ["read", "update"],
 } as const;
 
-const ac = createAccessControl(statements);
+export type KeyStatements = keyof typeof statements;
+export type Permissions = {
+  [K in KeyStatements]: (typeof statements)[K][number][];
+};
+export const ac = createAccessControl(statements);
 
 export const roles = {
   customer: ac.newRole({
@@ -33,5 +37,3 @@ export const roles = {
     settings: ["read", "update"],
   }),
 };
-
-export { ac };

@@ -2,11 +2,12 @@ import { DrizzleQueryError } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import "server-only";
 
-import type { user as userTable } from "@/db/drizzle/schemas";
+import type { auth } from "@/lib/auth";
+import type { Permissions } from "@/lib/permisions";
 
-import { getSession } from "@/features/auth/dal/query";
+import { getSession, hasAccess } from "@/features/auth/dal/query";
 
-import type { DalError, DalReturn, UserRole } from "./types";
+import type { DalError, DalReturn } from "./types";
 
 import {
   createErrorReturn,
@@ -14,39 +15,39 @@ import {
   ThrowableDalError,
 } from "./types";
 
-export function dalLoginRedirect<T, E extends DalError>(
+export const dalLoginRedirect = <T, E extends DalError>(
   dalReturn: DalReturn<T, E>,
-) {
+) => {
   if (dalReturn.success) return dalReturn;
   if (dalReturn.error.type === "no-user") return redirect("/admin/login");
 
   return dalReturn as DalReturn<T, Exclude<E, { type: "no-user" }>>;
-}
+};
 
-export function dalUnauthorizedRedirect<T, E extends DalError>(
+export const dalUnauthorizedRedirect = <T, E extends DalError>(
   dalReturn: DalReturn<T, E>,
   redirectPath: Parameters<typeof redirect>[0] = "/",
-) {
+) => {
   if (dalReturn.success) return dalReturn;
   if (dalReturn.error.type === "no-access") return redirect(redirectPath);
 
   return dalReturn as DalReturn<T, Exclude<E, { type: "no-access" }>>;
-}
+};
 
-export function dalThrowError<T, E extends DalError>(
+export const dalThrowError = <T, E extends DalError>(
   dalReturn: DalReturn<T, E>,
-) {
+) => {
   if (dalReturn.success) return dalReturn;
 
   throw dalReturn.error;
-}
+};
 
-export function dalVerifySuccess<T, E extends DalError>(
+export const dalVerifySuccess = <T, E extends DalError>(
   dalReturn: DalReturn<T, E>,
   {
     unauthorizedRedirectPath,
   }: { unauthorizedRedirectPath?: Parameters<typeof redirect>[0] } = {},
-): T {
+): T => {
   const res = dalThrowError(
     dalUnauthorizedRedirect(
       dalLoginRedirect(dalReturn),
@@ -54,25 +55,28 @@ export function dalVerifySuccess<T, E extends DalError>(
     ),
   );
   return res.data;
-}
+};
 
-export async function dalRequireAuth<T, E extends DalError>(
-  operation: (user: typeof userTable.$inferSelect) => Promise<DalReturn<T, E>>,
-  { allowedRoles }: { allowedRoles?: UserRole[] } = {},
-) {
+export const dalRequireAuth = async <T, E extends DalError>(
+  operation: (
+    user: typeof auth.$Infer.Session.user,
+  ) => Promise<DalReturn<T, E>>,
+  permissions: Partial<Permissions>,
+) => {
   const session = await getSession();
 
   if (!session) {
     return createErrorReturn({ type: "no-user" });
   }
-  if (allowedRoles && !allowedRoles.includes(session.user.role)) {
+  const { success } = await hasAccess(session.user.id, permissions);
+  if (!success) {
     return createErrorReturn({ type: "no-access" });
   }
 
   return operation(session.user);
-}
+};
 
-export async function dalDbOperation<T>(operation: () => Promise<T>) {
+export const dalDbOperation = async <T>(operation: () => Promise<T>) => {
   try {
     const data = await operation();
     return createSuccessReturn(data);
@@ -85,9 +89,9 @@ export async function dalDbOperation<T>(operation: () => Promise<T>) {
     }
     return createErrorReturn({ type: "unknown-error", error: e });
   }
-}
+};
 
-export function dalFormatErrorMessage(error: DalError) {
+export const dalFormatErrorMessage = (error: DalError) => {
   const type = error.type;
 
   switch (error.type) {
@@ -102,4 +106,4 @@ export function dalFormatErrorMessage(error: DalError) {
     default:
       throw new Error(`Unhandled error type: ${type as never}`);
   }
-}
+};
