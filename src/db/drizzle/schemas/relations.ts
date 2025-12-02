@@ -6,7 +6,7 @@ import {
   articleComments,
   articleRate,
 } from "./article";
-import { user } from "./auth";
+import { account, session, user } from "./auth";
 import { category } from "./category";
 import { comment } from "./comment";
 import { media } from "./media";
@@ -64,12 +64,6 @@ export const articleRelations = relations(article, ({ many, one }) => ({
   rates: many(articleRate),
 }));
 
-export const userRelations = relations(user, ({ many }) => ({
-  articles: many(article),
-  comments: many(comment),
-  rates: many(rate),
-}));
-
 export const categoryRelations = relations(category, ({ many, one }) => ({
   thumbnail: one(media, {
     fields: [category.thumbnail],
@@ -105,5 +99,29 @@ export const rateRelations = relations(rate, ({ one }) => ({
   article: one(articleRate, {
     fields: [rate.id],
     references: [articleRate.rateId],
+  }),
+}));
+
+// * Better auth relations
+
+export const userRelations = relations(user, ({ many }) => ({
+  sessions: many(session),
+  accounts: many(account),
+  articles: many(article),
+  comments: many(comment),
+  rates: many(rate),
+}));
+
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
+  }),
+}));
+
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
   }),
 }));

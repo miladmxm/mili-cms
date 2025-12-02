@@ -1,6 +1,12 @@
-// import { redirect } from "next/navigation";
+import { DrizzleQueryError } from "drizzle-orm";
+import { redirect } from "next/navigation";
+import "server-only";
 
-import type { DalError, DalReturn } from "./types";
+import type { user as userTable } from "@/db/drizzle/schemas";
+
+import { getSession } from "@/features/auth/dal/query";
+
+import type { DalError, DalReturn, UserRole } from "./types";
 
 import {
   createErrorReturn,
@@ -8,24 +14,24 @@ import {
   ThrowableDalError,
 } from "./types";
 
-// export function dalLoginRedirect<T, E extends DalError>(
-//   dalReturn: DalReturn<T, E>
-// ) {
-//   if (dalReturn.success) return dalReturn;
-//   if (dalReturn.error.type === "no-user") return redirect("/login");
+export function dalLoginRedirect<T, E extends DalError>(
+  dalReturn: DalReturn<T, E>,
+) {
+  if (dalReturn.success) return dalReturn;
+  if (dalReturn.error.type === "no-user") return redirect("/admin/login");
 
-//   return dalReturn as DalReturn<T, Exclude<E, { type: "no-user" }>>;
-// }
+  return dalReturn as DalReturn<T, Exclude<E, { type: "no-user" }>>;
+}
 
-// export function dalUnauthorizedRedirect<T, E extends DalError>(
-//   dalReturn: DalReturn<T, E>,
-//   redirectPath = "/"
-// ) {
-//   if (dalReturn.success) return dalReturn;
-//   if (dalReturn.error.type === "no-access") return redirect(redirectPath);
+export function dalUnauthorizedRedirect<T, E extends DalError>(
+  dalReturn: DalReturn<T, E>,
+  redirectPath: Parameters<typeof redirect>[0] = "/",
+) {
+  if (dalReturn.success) return dalReturn;
+  if (dalReturn.error.type === "no-access") return redirect(redirectPath);
 
-//   return dalReturn as DalReturn<T, Exclude<E, { type: "no-access" }>>;
-// }
+  return dalReturn as DalReturn<T, Exclude<E, { type: "no-access" }>>;
+}
 
 export function dalThrowError<T, E extends DalError>(
   dalReturn: DalReturn<T, E>,
@@ -35,53 +41,47 @@ export function dalThrowError<T, E extends DalError>(
   throw dalReturn.error;
 }
 
-// export function dalVerifySuccess<T, E extends DalError>(
-//   dalReturn: DalReturn<T, E>,
-//   { unauthorizedRedirectPath }: { unauthorizedRedirectPath?: string } = {}
-// ): T {
-//   const res = dalThrowError(
-//     dalUnauthorizedRedirect(
-//       dalLoginRedirect(dalReturn),
-//       unauthorizedRedirectPath
-//     )
-//   );
-//   return res.data;
-// }
-
-// export async function dalRequireAuth<T, E extends DalError>(
-//   operation: (user: typeof UserTable.$inferSelect) => Promise<DalReturn<T, E>>,
-//   { allowedRoles }: { allowedRoles?: UserRole[] } = {}
-// ) {
-//   const user = await getCurrentUser();
-
-//   if (user == null) {
-//     return createErrorReturn({ type: "no-user" });
-//   }
-
-//   if (allowedRoles && !allowedRoles.includes(user.role)) {
-//     return createErrorReturn({ type: "no-access" });
-//   }
-
-//   return operation(user);
-// }
-export async function DTOifIsSuccess<T, R>(
-  dalReturn: Promise<DalReturn<T>>,
-  dtoCB: (data: T) => R,
-): Promise<DalReturn<R>> {
-  const res = await dalReturn;
-  if (res.success) {
-    return dalOperation<R>(async () => dtoCB(res.data));
-    // return { ...res, data: dtoCB(res.data) };
-  }
-  return res;
+export function dalVerifySuccess<T, E extends DalError>(
+  dalReturn: DalReturn<T, E>,
+  {
+    unauthorizedRedirectPath,
+  }: { unauthorizedRedirectPath?: Parameters<typeof redirect>[0] } = {},
+): T {
+  const res = dalThrowError(
+    dalUnauthorizedRedirect(
+      dalLoginRedirect(dalReturn),
+      unauthorizedRedirectPath,
+    ),
+  );
+  return res.data;
 }
-export async function dalOperation<T>(operation: () => Promise<T>) {
+
+export async function dalRequireAuth<T, E extends DalError>(
+  operation: (user: typeof userTable.$inferSelect) => Promise<DalReturn<T, E>>,
+  { allowedRoles }: { allowedRoles?: UserRole[] } = {},
+) {
+  const session = await getSession();
+
+  if (!session) {
+    return createErrorReturn({ type: "no-user" });
+  }
+  if (allowedRoles && !allowedRoles.includes(session.user.role)) {
+    return createErrorReturn({ type: "no-access" });
+  }
+
+  return operation(session.user);
+}
+
+export async function dalDbOperation<T>(operation: () => Promise<T>) {
   try {
     const data = await operation();
     return createSuccessReturn(data);
   } catch (e) {
     if (e instanceof ThrowableDalError) {
       return createErrorReturn(e.dalError);
+    }
+    if (e instanceof DrizzleQueryError) {
+      return createErrorReturn({ type: "drizzle-error", error: e });
     }
     return createErrorReturn({ type: "unknown-error", error: e });
   }
@@ -95,8 +95,8 @@ export function dalFormatErrorMessage(error: DalError) {
       return "You must be logged in to perform this action.";
     case "no-access":
       return "You do not have permission to perform this action.";
-    case "fetch-error":
-      return "A network error occurred. Please try again.";
+    case "drizzle-error":
+      return `A database error occurred`;
     case "unknown-error":
       return `An unknown error occurred`;
     default:

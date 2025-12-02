@@ -1,3 +1,7 @@
+import type { DrizzleQueryError } from "drizzle-orm";
+
+export type UserRole = "admin" | "customer";
+
 export type DalReturn<T, E extends DalError = DalError> =
   | {
       success: false;
@@ -10,8 +14,8 @@ export type DalReturn<T, E extends DalError = DalError> =
 
 export type DalError =
   | {
-      type: "fetch-error";
-      status?: number;
+      type: "drizzle-error";
+      error: DrizzleQueryError;
     }
   | {
       type: "no-access";
@@ -41,10 +45,4 @@ export function createErrorReturn<E extends DalError>(
   error: E,
 ): DalReturn<never> {
   return { success: false, error };
-}
-
-export interface QueryOptions<T, Q> {
-  fields?: T;
-  filter?: Q;
-  embed?: boolean;
 }
