@@ -1,5 +1,3 @@
-import type { JsonArray, JsonObject } from "@/types/type";
-
 import { ThrowableDalError } from "@/dal/types";
 
 const isSuccessStatus = (status: number) => {
@@ -12,7 +10,6 @@ export const fetcher = async (
   const res = await fetch(url, options);
 
   if (!isSuccessStatus(res.status)) {
-    console.log(await res.text());
     throw new ThrowableDalError({
       type: "fetch-error",
       status: res.status,

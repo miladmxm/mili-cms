@@ -16,6 +16,10 @@ export type DalError =
       error: DrizzleQueryError;
     }
   | {
+      type: "fetch-error";
+      status: number;
+    }
+  | {
       type: "no-access";
     }
   | {
