@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<LayoutProps<"/">>) {
   return (
-    <html dir="ltr" lang="en" suppressHydrationWarning>
+    <html dir="rtl" lang="fa" suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="class">{children}</ThemeProvider>
       </body>
