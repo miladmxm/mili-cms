@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/dashboard/ui/card";
+import { Checkbox } from "@/components/dashboard/ui/checkbox";
 import {
   Field,
   FieldError,
@@ -85,9 +86,36 @@ export function LoginForm({
                   </Field>
                 )}
               />
-
+              <Controller
+                name="rememberMe"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <div className="flex items-center gap-2">
+                      <FieldLabel htmlFor="rememberMe">
+                        مرا بخاطر بسپار
+                      </FieldLabel>
+                      <Checkbox
+                        dir="ltr"
+                        aria-invalid={fieldState.invalid}
+                        checked={field.value}
+                        id="rememberMe"
+                        name={field.name}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
               <Field>
-                <Button disabled={isPending} type="submit">
+                <Button
+                  className="cursor-pointer"
+                  disabled={isPending}
+                  type="submit"
+                >
                   <Activity mode={isPending ? "visible" : "hidden"}>
                     <Spinner />
                   </Activity>

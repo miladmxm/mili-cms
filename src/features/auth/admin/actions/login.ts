@@ -1,5 +1,4 @@
 "use server";
-import { headers } from "next/headers";
 
 import type { ActionResult } from "@/types/actions";
 
@@ -17,20 +16,18 @@ export const login = async (
   if (!success) {
     return { success, errors, message: "Validation Error" };
   }
-  console.log(output);
   try {
-    const res = await auth.api.signInEmail({
-      headers: await headers(),
-      body: { ...output, rememberMe: true },
+    await auth.api.signInEmail({
+      body: output,
     });
-    console.log(res);
     return { success: true };
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      return { success: false, message: error.message };
+    }
     return {
       success: false,
-      message: "نام کاربری یا رمز عبور اشتباه است",
-      errors: {},
+      message: "خطا در احراز هویت",
     };
   }
 };

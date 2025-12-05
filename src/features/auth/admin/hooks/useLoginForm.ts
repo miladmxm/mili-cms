@@ -16,18 +16,21 @@ export const useLoginForm = () => {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: true,
     },
   });
   const [isPending, startTransition] = useTransition();
-  const handleSubmit = ({ email, password }: LoginInput) => {
+  const handleSubmit = ({ email, password, rememberMe }: LoginInput) => {
     startTransition(async () => {
-      const { success, errors, message } = await login({ email, password });
-      console.log(success);
+      const { success, message } = await login({
+        email,
+        password,
+        rememberMe,
+      });
       if (success) {
         toast.success("با موفقیت وارد شدید");
         router.replace("/admin");
-      }
-      if (errors) {
+      } else {
         toast.error(message);
       }
     });

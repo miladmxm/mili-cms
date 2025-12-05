@@ -7,7 +7,7 @@ const adminLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <main className="w-full">
       {children}
-      <Toaster />
+      <Toaster position="top-center" />
     </main>
   );
 };

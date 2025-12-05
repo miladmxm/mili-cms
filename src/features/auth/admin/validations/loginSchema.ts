@@ -6,6 +6,7 @@ export const LoginInputSchema = v.object({
     v.email("فرمت ایمیل صحیح نیست"),
     v.nonEmpty("نباید خالی باشد"),
   ),
+  rememberMe: v.pipe(v.boolean()),
   password: v.pipe(
     v.string("باید بصورت رشته باشد"),
     v.trim(),
