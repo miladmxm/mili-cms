@@ -33,6 +33,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/dashboard/ui/sidebar";
+import { useDirection } from "@/hooks/useDirection";
 
 const data = {
   user: {
@@ -152,8 +153,13 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const dir = useDirection();
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar
+      side={dir === "rtl" ? "right" : "left"}
+      collapsible="offcanvas"
+      {...props}
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

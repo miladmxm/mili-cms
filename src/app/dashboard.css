@@ -41,6 +41,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --font-display: var(--font-display)
 }
 :root {
   --radius: 0.65rem;
@@ -116,6 +117,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-display;
+  }
+  button:not(:disabled){
+    cursor: pointer;
   }
 }

@@ -461,6 +461,7 @@ export function DataTable({
                 <IconChevronDown />
               </Button>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent align="end" className="w-56">
               {table
                 .getAllColumns()
