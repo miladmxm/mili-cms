@@ -5,7 +5,7 @@ import "server-only";
 import type { auth } from "@/lib/auth";
 import type { Permissions } from "@/lib/permisions";
 
-import { getSession, hasAccess } from "@/features/auth/admin/dal/query";
+import { getSession, hasAccess } from "@/lib/auth";
 
 import type { DalError, DalReturn } from "./types";
 

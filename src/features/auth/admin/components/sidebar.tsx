@@ -6,7 +6,7 @@ import {
   SidebarProvider,
 } from "@/components/dashboard/ui/sidebar";
 
-const SidebarWrapper: FC<PropsWithChildren> = ({ children }) => {
+const SidebarWrapper: FC<PropsWithChildren> = async ({ children }) => {
   return (
     <SidebarProvider
       style={
