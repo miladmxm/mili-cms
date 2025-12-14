@@ -38,7 +38,7 @@ function PasswordInput({
         {...props}
       />
       <button
-        className="absolute start-3 top-1.5 cursor-pointer"
+        className="absolute right-3 top-1.5 cursor-pointer"
         type="button"
         onClick={() => setShowPassword((prev) => !prev)}
       >

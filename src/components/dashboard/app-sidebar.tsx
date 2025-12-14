@@ -11,7 +11,7 @@ import {
   SidebarContent,
   SidebarFooter,
 } from "@/components/dashboard/ui/sidebar";
-import { AdminNavLinks } from "@/constant/adminNavLinks";
+import { AdminNavLinks, navMain } from "@/constant/adminNavLinks";
 import { useDirection } from "@/hooks/useDirection";
 
 import SidebarHeader from "./app-sidebar-header";
@@ -28,12 +28,12 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
       <SidebarHeader />
 
       <SidebarContent>
-        <NavMain items={AdminNavLinks.navMain} />
+        <NavMain items={navMain} />
         <NavDocuments items={AdminNavLinks.documents} />
         <NavSecondary className="mt-auto" items={AdminNavLinks.navSecondary} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={AdminNavLinks.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

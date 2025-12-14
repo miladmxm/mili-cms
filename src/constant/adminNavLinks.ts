@@ -15,39 +15,41 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 
-export const AdminNavLinks = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+import type { AdminNavMain } from "@/types/adminNavs";
+
+export const navMain: AdminNavMain[] = [
+  {
+    title: "Dashboard",
+    url: "#",
+    icon: IconDashboard,
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
-    },
-    {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
+  {
+    title: "وبلاگ",
+    icon: IconListDetails,
+    items: [
+      {
+        title: "مشاهده همه",
+        url: "/admin/blog",
+      },
+    ],
+  },
+  {
+    title: "Analytics",
+    url: "#",
+    icon: IconChartBar,
+  },
+  {
+    title: "Projects",
+    url: "#",
+    icon: IconFolder,
+  },
+  {
+    title: "Team",
+    url: "#",
+    icon: IconUsers,
+  },
+];
+export const AdminNavLinks = {
   navClouds: [
     {
       title: "Capture",

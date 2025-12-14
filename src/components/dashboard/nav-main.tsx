@@ -1,8 +1,14 @@
 "use client";
 
-import type { Icon } from "@tabler/icons-react";
-
 import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+
+import type {
+  AdminNavItem,
+  AdminNavItemWithSubMenu,
+  AdminNavMain,
+} from "@/types/adminNavs";
 
 import { Button } from "@/components/dashboard/ui/button";
 import {
@@ -11,20 +17,81 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/dashboard/ui/sidebar";
+import { useDirection } from "@/hooks/useDirection";
+import { cn } from "@/lib/utils";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: Icon;
-  }[];
-}) {
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
+
+const SubMenuItem = ({ title, url }: AdminNavItemWithSubMenu["items"][0]) => {
+  return (
+    <SidebarMenuSubItem>
+      <SidebarMenuSubButton asChild>
+        <Link href={url}>
+          <span>{title}</span>
+        </Link>
+      </SidebarMenuSubButton>
+    </SidebarMenuSubItem>
+  );
+};
+
+const NavItemWithSubMenu = (item: AdminNavItemWithSubMenu) => {
+  const dir = useDirection();
+  const { icon, items, title } = item;
+  return (
+    <Collapsible asChild className="group/collapsible">
+      <SidebarMenuItem>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton className="text-lg" tooltip={title}>
+            {icon && <item.icon />}
+            <span>{title}</span>
+            <ChevronRight
+              className={cn(
+                "ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90",
+                {
+                  "rotate-180": dir === "rtl",
+                },
+              )}
+            />
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            {items.map((subItem) => (
+              <SubMenuItem key={subItem.url} {...subItem} />
+            ))}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
+    </Collapsible>
+  );
+};
+
+const NavItemWithoutSubMenu = (item: AdminNavItem) => {
+  const { icon, title, url } = item;
+  return (
+    <SidebarMenuItem key={title}>
+      <SidebarMenuButton asChild tooltip={title}>
+        <Link href={url}>
+          {icon && <item.icon />}
+          <span>{title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+};
+
+export function NavMain({ items }: { items: AdminNavMain[] }) {
   return (
     <SidebarGroup>
-      <SidebarGroupContent className="flex flex-col gap-2">
+      <SidebarGroupContent className="flex flex-col gap-4">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
@@ -32,7 +99,7 @@ export function NavMain({
               tooltip="Quick Create"
             >
               <IconCirclePlusFilled />
-              <span>Quick Create</span>
+              <span>مدیریت و دسترسی</span>
             </SidebarMenuButton>
             <Button
               size="icon"
@@ -44,15 +111,15 @@ export function NavMain({
             </Button>
           </SidebarMenuItem>
         </SidebarMenu>
-        <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+        <SidebarMenu className="gap-3">
+          {items.map((item) => {
+            if (item.items)
+              return <NavItemWithSubMenu key={item.title} {...item} />;
+            else
+              return (
+                <NavItemWithoutSubMenu key={item.title + item.url} {...item} />
+              );
+          })}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
