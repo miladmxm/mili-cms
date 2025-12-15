@@ -1,7 +1,7 @@
 "use client";
 
-import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react";
-import { ChevronRight } from "lucide-react";
+import { IconMail } from "@tabler/icons-react";
+import { ChevronRight, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 
 import type {
@@ -21,9 +21,11 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/dashboard/ui/sidebar";
+import { useActiveChildRoute, useActiveRoute } from "@/hooks/useActiveRoute";
 import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 
+import LinkLoading from "./link-loading";
 import {
   Collapsible,
   CollapsibleContent,
@@ -31,11 +33,17 @@ import {
 } from "./ui/collapsible";
 
 const SubMenuItem = ({ title, url }: AdminNavItemWithSubMenu["items"][0]) => {
+  const isActiveRoute = useActiveRoute(url);
   return (
     <SidebarMenuSubItem>
       <SidebarMenuSubButton asChild>
         <Link href={url}>
-          <span>{title}</span>
+          <span
+            className={cn("link-indicator", { "active-link": isActiveRoute })}
+          >
+            {title}
+          </span>
+          <LinkLoading />
         </Link>
       </SidebarMenuSubButton>
     </SidebarMenuSubItem>
@@ -44,13 +52,22 @@ const SubMenuItem = ({ title, url }: AdminNavItemWithSubMenu["items"][0]) => {
 
 const NavItemWithSubMenu = (item: AdminNavItemWithSubMenu) => {
   const dir = useDirection();
-  const { icon, items, title } = item;
+  const { icon: Icon, items, title, base } = item;
+  const isThisChildPathActived = useActiveChildRoute(base);
   return (
-    <Collapsible asChild className="group/collapsible">
+    <Collapsible
+      asChild
+      className="group/collapsible"
+      defaultOpen={isThisChildPathActived}
+    >
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
           <SidebarMenuButton className="text-lg" tooltip={title}>
-            {icon && <item.icon />}
+            {Icon && (
+              <Icon
+                className={cn({ "text-primary": isThisChildPathActived })}
+              />
+            )}
             <span>{title}</span>
             <ChevronRight
               className={cn(
@@ -75,13 +92,15 @@ const NavItemWithSubMenu = (item: AdminNavItemWithSubMenu) => {
 };
 
 const NavItemWithoutSubMenu = (item: AdminNavItem) => {
-  const { icon, title, url } = item;
+  const { icon: Icon, title, url } = item;
+  const isActiveRoute = useActiveRoute(url);
   return (
     <SidebarMenuItem key={title}>
       <SidebarMenuButton asChild tooltip={title}>
         <Link href={url}>
-          {icon && <item.icon />}
+          {Icon && <Icon className={cn({ "text-primary": isActiveRoute })} />}
           <span>{title}</span>
+          <LinkLoading />
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
@@ -98,7 +117,7 @@ export function NavMain({ items }: { items: AdminNavMain[] }) {
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
               tooltip="Quick Create"
             >
-              <IconCirclePlusFilled />
+              <LayoutDashboard />
               <span>مدیریت و دسترسی</span>
             </SidebarMenuButton>
             <Button

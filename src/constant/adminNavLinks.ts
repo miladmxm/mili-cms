@@ -19,13 +19,14 @@ import type { AdminNavMain } from "@/types/adminNavs";
 
 export const navMain: AdminNavMain[] = [
   {
-    title: "Dashboard",
-    url: "#",
+    title: "داشبورد",
+    url: "/admin",
     icon: IconDashboard,
   },
   {
     title: "وبلاگ",
     icon: IconListDetails,
+    base: "/admin/blog",
     items: [
       {
         title: "مشاهده همه",

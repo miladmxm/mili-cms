@@ -123,3 +123,14 @@
     cursor: pointer;
   }
 }
+@layer components{
+  .link-indicator{
+    @apply before:w-0 before:bg-primary before:z-10 relative before:h-full before:absolute before:start-0 before:rounded-e-full transition-all before:transition-all;
+    &.active-link{
+      @apply before:w-1 ps-2
+    }
+  }
+  :has(.link-loader-spinner){
+    @apply relative;
+  }
+}
