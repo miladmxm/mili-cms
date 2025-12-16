@@ -1,6 +1,5 @@
 import {
   IconCamera,
-  IconChartBar,
   IconDashboard,
   IconDatabase,
   IconFileAi,
@@ -14,6 +13,7 @@ import {
   IconSettings,
   IconUsers,
 } from "@tabler/icons-react";
+import { Image } from "lucide-react";
 
 import type { AdminNavMain } from "@/types/adminNavs";
 
@@ -32,12 +32,16 @@ export const navMain: AdminNavMain[] = [
         title: "مشاهده همه",
         url: "/admin/blog",
       },
+      {
+        title: "افزودن",
+        url: "/admin/blog/add",
+      },
     ],
   },
   {
-    title: "Analytics",
-    url: "#",
-    icon: IconChartBar,
+    title: "مدیا",
+    url: "/admin/media",
+    icon: Image,
   },
   {
     title: "Projects",
