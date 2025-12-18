@@ -6,9 +6,10 @@ const BASE_DIR = pathJoin(process.cwd(), "src", "uploads");
 const mergeWitBaseDir = (...paths: string[]) => pathJoin(BASE_DIR, ...paths);
 
 export const makeDir = async (...paths: string[]) => {
-  const path = mergeWitBaseDir(...paths);
+  const relativePath = pathJoin(...paths);
+  const path = mergeWitBaseDir(relativePath);
   await fs.mkdir(path, { recursive: true });
-  return path;
+  return { path, relativePath };
 };
 
 export const fileToBuffer = async (f: File) => {
@@ -30,8 +31,8 @@ export const writeFile = async ({
   type,
   name,
 }: WriteFileParameters) => {
-  const makedDir = await makeDir(dir, type);
-  const fullPath = pathJoin(makedDir, name);
+  const { path, relativePath } = await makeDir(dir, type);
+  const fullPath = pathJoin(path, name);
   await fs.writeFile(fullPath, await fileToBuffer(file));
-  return fullPath;
+  return pathJoin(relativePath, name);
 };

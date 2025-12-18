@@ -1,4 +1,4 @@
-import { text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { integer, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import type { MediaTypes } from "@/features/type";
 
@@ -15,7 +15,7 @@ export const media = MainSchema.table("media", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   url: text("url").notNull(),
   type: mediaTypes("type").$type<MediaTypes>().notNull(),
-  size: text("size"),
+  size: integer("size").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => /* @__PURE__ */ new Date())
