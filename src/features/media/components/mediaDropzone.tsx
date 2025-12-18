@@ -9,24 +9,17 @@ import {
   CardTitle,
 } from "@/components/dashboard/ui/card";
 import { Separator } from "@/components/dashboard/ui/separator";
+import { fetchToUploadWithProgress } from "@/lib/uploadWithProgress";
 
 const MediaDropzone = () => {
-  const fetchToUpload = (file: File) => {
-    const form = new FormData();
-    form.append("file", file);
-    const req = new XMLHttpRequest();
-    req.addEventListener("progress", (ev) => {
-      console.log(ev);
-    });
-    req.addEventListener("loadend", () => {
-      console.log(req.response, req.status);
-    });
-    req.open("POST", "/api/media/upload");
-    req.send(form);
-  };
   const onDrop = (acceptedFiles: File[]) => {
     acceptedFiles.forEach(async (file) => {
-      fetchToUpload(file);
+      const { abort, send } = fetchToUploadWithProgress({
+        data: { file },
+        endPoint: "/api/media/upload",
+        progressCb: console.log,
+      });
+      await send();
     });
   };
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
