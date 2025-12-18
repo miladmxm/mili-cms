@@ -19,5 +19,10 @@ export const saveFile = async ({
     name: crypto.randomUUID() + file.name,
     type,
   });
-  return await mediaRepo.createMedia({ type, url: path, size: file.size });
+  return await mediaRepo.createMedia({
+    type,
+    url: path,
+    size: file.size,
+    meta: { alt: file.name, name: file.name, title: file.name },
+  });
 };

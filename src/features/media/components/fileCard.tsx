@@ -8,7 +8,9 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
+import type { FileMeta, MediaTypes } from "@/features/type";
 import type { UploadingFileData } from "@/store/media.store";
 
 import { Button } from "@/components/dashboard/ui/button";
@@ -70,7 +72,28 @@ export const FileCardForUpload: FC<PropsWithChildren & UploadingFileData> = ({
     </Card>
   );
 };
-const FileCard = () => {
-  return <div></div>;
+interface FileData {
+  id: string;
+  url: string;
+  meta: FileMeta;
+  type: MediaTypes;
+}
+const FileCard: FC<FileData> = ({ id, type, url, meta }) => {
+  return (
+    <Link href={`/admin/media/${id}`}>
+      <Card>
+        <CardHeader>
+          <CardTitle>{meta.name || meta.alt}</CardTitle>
+        </CardHeader>
+        <Separator />
+
+        <CardContent>
+          <div className="max-sm:w-0-full max-sm:h-36 sm:size-44 *:size-full p-4 center">
+            {FileIconFromType[type]}
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
 };
 export default FileCard;

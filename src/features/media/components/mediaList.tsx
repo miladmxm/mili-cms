@@ -1,7 +1,9 @@
 "use client";
 import { use } from "react";
 
-import type { MediaTypes } from "@/features/type";
+import type { FileMeta, MediaTypes } from "@/features/type";
+
+import FileCard from "./fileCard";
 
 interface MediaListParameters {
   medias: Promise<
@@ -10,6 +12,7 @@ interface MediaListParameters {
       id: string;
       url: string;
       size: number;
+      meta: FileMeta;
       createdAt: Date;
       updatedAt: Date;
     }[]
@@ -18,8 +21,14 @@ interface MediaListParameters {
 
 const MediaList = ({ medias: mediasRequest }: MediaListParameters) => {
   const medias = use(mediasRequest);
-  console.table(medias);
-  return <div></div>;
+  console.log(medias);
+  return (
+    <div>
+      {medias.map((item) => (
+        <FileCard key={item.id} {...item} />
+      ))}
+    </div>
+  );
 };
 
 export default MediaList;
