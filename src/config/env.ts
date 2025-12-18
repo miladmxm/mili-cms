@@ -24,6 +24,8 @@ const EnvSchema = v.object({
   ADMIN_EMAIL: v.pipe(v.string(), v.email(), v.nonEmpty()),
   ADMIN_PASSWORD: v.pipe(v.string(), v.nonEmpty(), v.minLength(8)),
   ADMIN_NAME: v.pipe(v.optional(v.string())),
+
+  DB_NAME: v.pipe(v.string(), v.nonEmpty()),
 });
 type Env = v.InferOutput<typeof EnvSchema>;
 

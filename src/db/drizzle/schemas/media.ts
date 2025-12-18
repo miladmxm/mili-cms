@@ -1,16 +1,20 @@
-import { pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-export const mediaTypes = pgEnum("media_types", [
+import type { MediaTypes } from "@/features/type";
+
+import { MainSchema } from "./main";
+
+export const mediaTypes = MainSchema.enum("media_types", [
   "image",
   "video",
   "audio",
   "document",
 ]);
 
-export const media = pgTable("media", {
+export const media = MainSchema.table("media", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   url: text("url").notNull(),
-  type: mediaTypes("type").notNull(),
+  type: mediaTypes("type").$type<MediaTypes>().notNull(),
   size: text("size"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")

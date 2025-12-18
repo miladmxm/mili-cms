@@ -1,10 +1,11 @@
 import type { AnyPgColumn } from "drizzle-orm/pg-core";
 
-import { pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
+import { text, uuid, varchar } from "drizzle-orm/pg-core";
 
+import { MainSchema } from "./main";
 import { media } from "./media";
 
-export const category = pgTable("category", {
+export const category = MainSchema.table("category", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
   slug: varchar("slug", { length: 255 }).notNull().unique(),

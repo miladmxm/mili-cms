@@ -9,4 +9,7 @@ export default defineConfig({
   dbCredentials: {
     url: env.DB_URL,
   },
+  migrations: {
+    schema: env.DB_NAME,
+  },
 });

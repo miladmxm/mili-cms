@@ -1,5 +1,4 @@
 "use client";
-import { useDropzone } from "react-dropzone";
 
 import {
   Card,
@@ -9,23 +8,19 @@ import {
   CardTitle,
 } from "@/components/dashboard/ui/card";
 import { Separator } from "@/components/dashboard/ui/separator";
-import { fetchToUploadWithProgress } from "@/lib/uploadWithProgress";
+import { cn } from "@/lib/utils";
+
+import { useUpload } from "../hooks/useUpload";
 
 const MediaDropzone = () => {
-  const onDrop = (acceptedFiles: File[]) => {
-    acceptedFiles.forEach(async (file) => {
-      const { abort, send } = fetchToUploadWithProgress({
-        data: { file },
-        endPoint: "/api/media/upload",
-        progressCb: console.log,
-      });
-      await send();
-    });
-  };
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
+  const { getInputProps, getRootProps, fileRejections } = useUpload();
   return (
-    <Card className="border-dashed text-center" {...getRootProps()}>
+    <Card
+      className={cn("border-dashed text-center", {
+        "border-destructive": fileRejections.length > 0,
+      })}
+      {...getRootProps()}
+    >
       <CardContent>
         <input {...getInputProps()} />
         <CardHeader>
@@ -36,6 +31,16 @@ const MediaDropzone = () => {
           <CardDescription>
             برای بارگذاری فایل کلیک کنید یا بکشید و رها کنید
           </CardDescription>
+          {fileRejections.map(({ errors }) => {
+            return (
+              <CardDescription
+                className="text-destructive mt-6"
+                key={errors[0].code + errors[0].message}
+              >
+                {errors[0].code}: {errors[0].message}
+              </CardDescription>
+            );
+          })}
         </CardContent>
       </CardContent>
     </Card>

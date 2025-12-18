@@ -1,9 +1,9 @@
-import MediaDropzone from "@/features/media/components/mediaDropzone";
+import AllMedias from "@/features/media/components/allMedias";
 
 const Media = () => {
   return (
     <div>
-      <MediaDropzone />
+      <AllMedias />
     </div>
   );
 };

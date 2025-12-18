@@ -1,4 +1,4 @@
-import type { GenericSchema, InferInput } from "valibot";
+import type { GenericSchema, InferOutput } from "valibot";
 
 import { safeParse } from "valibot";
 
@@ -25,13 +25,15 @@ const normalizeErrors = <T>(
     if (issue.path) {
       const fieldName = issue.path[0].key as keyof T;
       const messages = errors[fieldName] ?? [""];
-      errors[fieldName] = [...messages, issue.message];
+      errors[fieldName] = [...messages, issue.message].filter(
+        (item) => !!item.trim(),
+      );
     }
   });
   return errors;
 };
 
-export const validator = <T extends GenericSchema, D extends InferInput<T>>(
+export const validator = <T extends GenericSchema, D extends InferOutput<T>>(
   schema: T,
   input: unknown,
 ): Validator<D> => {

@@ -1,8 +1,9 @@
-import { pgTable, smallint, text, uuid } from "drizzle-orm/pg-core";
+import { smallint, text, uuid } from "drizzle-orm/pg-core";
 
 import { user } from "./auth";
+import { MainSchema } from "./main";
 
-export const rate = pgTable("rate", {
+export const rate = MainSchema.table("rate", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   ratign: smallint("rating").notNull(),
   userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),

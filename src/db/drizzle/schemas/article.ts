@@ -2,8 +2,6 @@ import { sql } from "drizzle-orm";
 import {
   integer,
   jsonb,
-  pgEnum,
-  pgTable,
   primaryKey,
   text,
   uuid,
@@ -13,16 +11,17 @@ import {
 import { user } from "./auth";
 import { category } from "./category";
 import { comment } from "./comment";
+import { MainSchema } from "./main";
 import { media } from "./media";
 import { rate } from "./rate";
 
-export const articleStatus = pgEnum("article_status", [
+export const articleStatus = MainSchema.enum("article_status", [
   "draft",
   "published",
   "archived",
 ]);
 
-export const article = pgTable("article", {
+export const article = MainSchema.table("article", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   title: varchar("title", { length: 255 }).notNull(),
   content: text("content").notNull(),
@@ -44,7 +43,7 @@ export const article = pgTable("article", {
   views: integer("vires").default(0).notNull(),
 });
 
-export const articleComments = pgTable(
+export const articleComments = MainSchema.table(
   "article_comments",
   {
     articleId: uuid("article_id")
@@ -57,7 +56,7 @@ export const articleComments = pgTable(
   (table) => [primaryKey({ columns: [table.articleId, table.commentId] })],
 );
 
-export const articleCategory = pgTable(
+export const articleCategory = MainSchema.table(
   "article_category",
   {
     articleId: uuid("article_id")
@@ -70,7 +69,7 @@ export const articleCategory = pgTable(
   (table) => [primaryKey({ columns: [table.articleId, table.categoryId] })],
 );
 
-export const articleRate = pgTable(
+export const articleRate = MainSchema.table(
   "article_rate",
   {
     articleId: uuid("article_id")

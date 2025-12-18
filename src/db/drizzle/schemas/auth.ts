@@ -1,6 +1,8 @@
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, text, timestamp } from "drizzle-orm/pg-core";
 
-export const user = pgTable("user", {
+import { MainSchema } from "./main";
+
+export const user = MainSchema.table("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
@@ -17,7 +19,7 @@ export const user = pgTable("user", {
   banExpires: timestamp("ban_expires"),
 });
 
-export const session = pgTable(
+export const session = MainSchema.table(
   "session",
   {
     id: text("id").primaryKey(),
@@ -37,7 +39,7 @@ export const session = pgTable(
   (table) => [index("session_userId_idx").on(table.userId)],
 );
 
-export const account = pgTable(
+export const account = MainSchema.table(
   "account",
   {
     id: text("id").primaryKey(),
@@ -61,7 +63,7 @@ export const account = pgTable(
   (table) => [index("account_userId_idx").on(table.userId)],
 );
 
-export const verification = pgTable(
+export const verification = MainSchema.table(
   "verification",
   {
     id: text("id").primaryKey(),

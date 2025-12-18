@@ -3,7 +3,7 @@
 import type { ActionResult } from "@/types/actions";
 
 import { auth } from "@/lib/auth";
-import { validator } from "@/validations/serverActionValidator";
+import { validator } from "@/validations";
 
 import type { LoginInput } from "../validations/loginSchema";
 

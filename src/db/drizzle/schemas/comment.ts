@@ -1,8 +1,9 @@
 import type { AnyPgColumn } from "drizzle-orm/pg-core";
 
-import { pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { pgEnum, text, uuid } from "drizzle-orm/pg-core";
 
 import { user } from "./auth";
+import { MainSchema } from "./main";
 
 export const commentStatus = pgEnum("comment_status", [
   "approved",
@@ -10,7 +11,7 @@ export const commentStatus = pgEnum("comment_status", [
   "spam",
 ]);
 
-export const comment = pgTable("comment", {
+export const comment = MainSchema.table("comment", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   content: text("content").notNull(),
   status: commentStatus("status").notNull().default("pending"),
