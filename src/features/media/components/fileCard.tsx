@@ -80,7 +80,7 @@ interface FileData {
 }
 const FileCard: FC<FileData> = ({ id, type, url, meta }) => {
   return (
-    <Link href={`/admin/media/${id}`}>
+    <Link href={`/admin/media/edit/${id}`}>
       <Card>
         <CardHeader>
           <CardTitle>{meta.name || meta.alt}</CardTitle>
