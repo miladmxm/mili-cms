@@ -1,38 +1,70 @@
-import fs from "fs/promises";
+import {
+  CreateBucketCommand,
+  HeadBucketCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { join as pathJoin } from "node:path";
 
-const BASE_DIR = pathJoin(process.cwd(), "src", "uploads");
+import type { MediaTypes } from "@/features/type";
 
-const mergeWitBaseDir = (...paths: string[]) => pathJoin(BASE_DIR, ...paths);
+import env from "@/config/env";
 
-export const makeDir = async (...paths: string[]) => {
-  const relativePath = pathJoin(...paths);
-  const path = mergeWitBaseDir(relativePath);
-  await fs.mkdir(path, { recursive: true });
-  return { path, relativePath };
-};
-
-export const fileToBuffer = async (f: File) => {
-  const arrbuf = await f.arrayBuffer();
-  const buffer = Buffer.from(arrbuf);
-  return buffer;
-};
-
+const s3 = new S3Client({
+  region: env.S3_REGION,
+  endpoint: env.S3_ENDPOINT,
+  credentials: {
+    accessKeyId: env.S3_USER,
+    secretAccessKey: env.S3_PASSWORD,
+  },
+  forcePathStyle: true,
+});
 interface WriteFileParameters {
-  dir: string;
-  name: string;
   file: File;
-  type: string;
+  dir: string;
+  type: MediaTypes;
+  name: string;
 }
+export const ensureBucket = async () => {
+  try {
+    await s3.send(new HeadBucketCommand({ Bucket: env.S3_BUCKET }));
+  } catch (err) {
+    if (
+      err instanceof Error &&
+      "$metadata" in err &&
+      err.$metadata &&
+      typeof err.$metadata === "object" &&
+      "httpStatusCode" in err.$metadata &&
+      err.$metadata?.httpStatusCode === 404
+    ) {
+      await s3.send(
+        new CreateBucketCommand({
+          Bucket: env.S3_BUCKET,
+        }),
+      );
+    } else {
+      throw err;
+    }
+  }
+};
 
 export const writeFile = async ({
   dir,
   file,
-  type,
   name,
+  type,
 }: WriteFileParameters) => {
-  const { path, relativePath } = await makeDir(dir, type);
-  const fullPath = pathJoin(path, name);
-  await fs.writeFile(fullPath, await fileToBuffer(file));
-  return pathJoin(relativePath, name);
+  const pathKey = pathJoin(dir, type, name);
+
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: env.S3_BUCKET,
+      Key: pathKey,
+      Body: buffer,
+      ContentType: file.type,
+    }),
+  );
+  return pathKey;
 };

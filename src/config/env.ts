@@ -26,6 +26,12 @@ const EnvSchema = v.object({
   ADMIN_NAME: v.pipe(v.optional(v.string())),
 
   DB_NAME: v.pipe(v.string(), v.nonEmpty()),
+
+  S3_USER: v.pipe(v.string(), v.nonEmpty()),
+  S3_PASSWORD: v.pipe(v.string(), v.nonEmpty()),
+  S3_ENDPOINT: v.pipe(v.string(), v.nonEmpty(), v.url()),
+  S3_REGION: v.pipe(v.string(), v.nonEmpty()),
+  S3_BUCKET: v.pipe(v.string(), v.nonEmpty()),
 });
 type Env = v.InferOutput<typeof EnvSchema>;
 
