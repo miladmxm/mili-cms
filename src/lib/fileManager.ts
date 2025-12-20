@@ -1,8 +1,11 @@
 import {
+  BucketAlreadyExists,
+  BucketAlreadyOwnedByYou,
   CreateBucketCommand,
-  HeadBucketCommand,
+  PutBucketPolicyCommand,
   PutObjectCommand,
   S3Client,
+  waitUntilBucketExists,
 } from "@aws-sdk/client-s3";
 import { join as pathJoin } from "node:path";
 
@@ -25,25 +28,55 @@ interface WriteFileParameters {
   type: MediaTypes;
   name: string;
 }
+
 export const ensureBucket = async () => {
+  const bucketName = env.S3_BUCKET;
   try {
-    await s3.send(new HeadBucketCommand({ Bucket: env.S3_BUCKET }));
-  } catch (err) {
-    if (
-      err instanceof Error &&
-      "$metadata" in err &&
-      err.$metadata &&
-      typeof err.$metadata === "object" &&
-      "httpStatusCode" in err.$metadata &&
-      err.$metadata?.httpStatusCode === 404
-    ) {
-      await s3.send(
-        new CreateBucketCommand({
-          Bucket: env.S3_BUCKET,
-        }),
+    const { Location } = await s3.send(
+      new CreateBucketCommand({
+        ACL: "public-read",
+        Bucket: bucketName,
+      }),
+    );
+
+    const bucketPolicy = {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Sid: "PublicRead",
+          Effect: "Allow",
+          Principal: "*",
+          Action: ["s3:GetObject"],
+          Resource: [`arn:aws:s3:::${env.S3_BUCKET}/*`],
+        },
+      ],
+    };
+
+    await s3.send(
+      new PutBucketPolicyCommand({
+        Bucket: bucketName,
+        Policy: JSON.stringify(bucketPolicy),
+      }),
+    );
+    await waitUntilBucketExists(
+      {
+        client: s3,
+        maxWaitTime: 0,
+      },
+      { Bucket: bucketName },
+    );
+    console.log(`Bucket created with location ${Location}`);
+  } catch (caught) {
+    if (caught instanceof BucketAlreadyExists) {
+      console.error(
+        `The bucket "${bucketName}" already exists in another AWS account. Bucket names must be globally unique.`,
+      );
+    } else if (caught instanceof BucketAlreadyOwnedByYou) {
+      console.error(
+        `The bucket "${bucketName}" already exists in this AWS account.`,
       );
     } else {
-      throw err;
+      throw caught;
     }
   }
 };
@@ -64,6 +97,7 @@ export const writeFile = async ({
       Key: pathKey,
       Body: buffer,
       ContentType: file.type,
+      ACL: "public-read",
     }),
   );
   return pathKey;

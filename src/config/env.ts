@@ -32,6 +32,7 @@ const EnvSchema = v.object({
   S3_ENDPOINT: v.pipe(v.string(), v.nonEmpty(), v.url()),
   S3_REGION: v.pipe(v.string(), v.nonEmpty()),
   S3_BUCKET: v.pipe(v.string(), v.nonEmpty()),
+  S3_PORT: v.pipe(v.string(), v.nonEmpty()),
 });
 type Env = v.InferOutput<typeof EnvSchema>;
 

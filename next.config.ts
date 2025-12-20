@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-import "@/config/env";
+import env from "@/config/env";
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
@@ -11,13 +11,9 @@ const nextConfig: NextConfig = {
     dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "tanilchoob.com",
-      },
-      {
         protocol: "http",
         hostname: "localhost",
-        port: "8080",
+        port: env.S3_PORT,
       },
     ],
   },
