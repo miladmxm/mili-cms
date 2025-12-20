@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         { status: 401 },
       );
     await saveFile(output);
-    revalidateTag("media", "max");
+    revalidateTag("media", "");
     return Response.json({ success }, { status: 201 });
   } catch (error) {
     console.log(error);

@@ -1,14 +1,8 @@
 import type { FC, PropsWithChildren } from "react";
 
-import {
-  Clapperboard,
-  File,
-  Image as ImageIcon,
-  Music4,
-  X,
-} from "lucide-react";
-import Image from "next/image";
+import { Download, X } from "lucide-react";
 import Link from "next/link";
+import { ViewTransition } from "react";
 
 import type { FileMeta, MediaTypes } from "@/features/type";
 import type { UploadingFileData } from "@/store/media.store";
@@ -16,6 +10,7 @@ import type { UploadingFileData } from "@/store/media.store";
 import { Button } from "@/components/dashboard/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
@@ -23,12 +18,8 @@ import {
 } from "@/components/dashboard/ui/card";
 import { Separator } from "@/components/dashboard/ui/separator";
 
-const FileIconFromType = {
-  image: <ImageIcon />,
-  audio: <Music4 />,
-  video: <Clapperboard />,
-  document: <File />,
-} as const;
+import DeleteFile from "./deleteButton";
+import FilePreview from "./filePreview";
 
 export const FileCardForUpload: FC<PropsWithChildren & UploadingFileData> = ({
   abort,
@@ -46,15 +37,7 @@ export const FileCardForUpload: FC<PropsWithChildren & UploadingFileData> = ({
 
       <CardContent>
         <div className="max-sm:w-0-full max-sm:h-36 sm:size-44 *:size-full p-4 center">
-          {type === "image" && uri ? (
-            <Image
-              alt="preview"
-              className="rounded-lg object-contain"
-              src={{ src: uri, width: 168, height: 168 }}
-            />
-          ) : (
-            FileIconFromType[type]
-          )}
+          <FilePreview type={type} url={uri} />
         </div>
       </CardContent>
       <CardFooter className="flex gap-4 items-center">
@@ -80,20 +63,39 @@ interface FileData {
 }
 const FileCard: FC<FileData> = ({ id, type, url, meta }) => {
   return (
-    <Link href={`/admin/media/edit/${id}`}>
-      <Card>
+    <Card>
+      <Link href={`/admin/media/edit/${id}`}>
         <CardHeader>
-          <CardTitle>{meta.name || meta.alt}</CardTitle>
+          <CardTitle className="truncate">{meta.name || meta.alt}</CardTitle>
         </CardHeader>
         <Separator />
 
         <CardContent>
-          <div className="max-sm:w-0-full max-sm:h-36 sm:size-44 *:size-full p-4 center">
-            {FileIconFromType[type]}
+          <div className="py-2 h-52 center">
+            <ViewTransition name={id}>
+              <FilePreview type={type} url={url} />
+            </ViewTransition>
           </div>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+      <CardFooter className="gap-2 flex mt-auto">
+        <CardAction>
+          <DeleteFile id={id} />
+        </CardAction>
+        <CardAction>
+          <Button asChild size="icon-sm" variant="outline">
+            <a
+              href={url}
+              rel="noopener noreferrer"
+              target="_blank"
+              download={meta.name}
+            >
+              <Download />
+            </a>
+          </Button>
+        </CardAction>
+      </CardFooter>
+    </Card>
   );
 };
 export default FileCard;

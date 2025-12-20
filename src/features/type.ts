@@ -6,3 +6,13 @@ export interface FileMeta {
   alt: string;
   title?: string;
 }
+
+export interface Media {
+  type: MediaTypes;
+  url: string;
+  id: string;
+  size: number;
+  meta: FileMeta;
+  createdAt: Date;
+  updatedAt: Date;
+}

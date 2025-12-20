@@ -1,5 +1,6 @@
 import type { FileError } from "react-dropzone";
 
+import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 
 import { fetchToUploadWithProgress } from "@/lib/uploadWithProgress";
@@ -25,7 +26,7 @@ const createDataUrl = (file: File) => URL.createObjectURL(file);
 export const useUpload = () => {
   const { addToUploadingMedias, setProgressById, removeFromUploadingMedias } =
     useMediaStore();
-
+  const router = useRouter();
   const onDrop = (acceptedFiles: File[]) => {
     acceptedFiles.forEach(async (file) => {
       const inputsData = { file };
@@ -55,6 +56,7 @@ export const useUpload = () => {
       addToUploadingMedias(storData);
       try {
         await send();
+        router.refresh();
       } catch (error) {
         console.log(error);
       } finally {

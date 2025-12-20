@@ -1,10 +1,30 @@
 import { cacheTag } from "next/cache";
-
-import { findMedias } from "@/repositories/media.repo";
+import { redirect } from "next/navigation";
 import "server-only";
+
+import type { Media } from "@/features/type";
+
+import env from "@/config/env";
+import * as mediaRepo from "@/repositories/media.repo";
+
+export const DTOconvertMediaPathToRealUrl = (medias: Media[]) => {
+  return medias.map((media) => {
+    media.url = `${env.S3_ENDPOINT}/${env.S3_BUCKET}/${media.url}`;
+    return media;
+  });
+};
 
 export const getMedias = async () => {
   "use cache";
   cacheTag("media");
-  return findMedias();
+  const medias = await mediaRepo.findMedias();
+
+  return DTOconvertMediaPathToRealUrl(medias);
+};
+export const getMedia = async (id: string) => {
+  "use cache";
+  cacheTag("media", id);
+  const media = await mediaRepo.findMedia(id);
+  if (!media) redirect("/admin/media");
+  return DTOconvertMediaPathToRealUrl([media])[0];
 };

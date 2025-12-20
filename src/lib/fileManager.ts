@@ -2,6 +2,7 @@ import {
   BucketAlreadyExists,
   BucketAlreadyOwnedByYou,
   CreateBucketCommand,
+  DeleteObjectCommand,
   PutBucketPolicyCommand,
   PutObjectCommand,
   S3Client,
@@ -101,4 +102,7 @@ export const writeFile = async ({
     }),
   );
   return pathKey;
+};
+export const deleteFile = async (url: string) => {
+  await s3.send(new DeleteObjectCommand({ Bucket: env.S3_BUCKET, Key: url }));
 };
