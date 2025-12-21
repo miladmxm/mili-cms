@@ -33,11 +33,27 @@ import { useSession } from "@/hooks/useSession";
 
 import { Skeleton } from "./ui/skeleton";
 
+const NavUserSkeleton = () => {
+  return (
+    <div className="flex justify-between gap-3 p-2 items-center">
+      <Skeleton className="size-8 rounded-lg" />
+      <div className="flex flex-col flex-auto items-end gap-1.5 py-1">
+        <Skeleton className="w-1/2 h-2" />
+        <Skeleton className="w-1/3 h-1.5" />
+      </div>
+      <Skeleton className="size-4 my-auto" />
+    </div>
+  );
+};
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { data, isPending } = useSession();
   const dir = useDirection();
-  const hasUser = !!data?.user && !isPending;
+  if (isPending || !data?.user) {
+    return <NavUserSkeleton />;
+  }
+  const { name, email, image } = data.user;
+  const userImageCallBack = name.slice(0, 2);
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -47,35 +63,20 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              {!hasUser ? (
-                <Skeleton className="size-8 rounded-lg" />
-              ) : (
-                <Avatar className="size-8 rounded-lg grayscale">
-                  <AvatarImage
-                    alt={data.user.name ?? "user image"}
-                    src={data.user.image ?? undefined}
-                  />
-                  <AvatarFallback className="rounded-lg uppercase">
-                    {data.user.name.slice(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-              )}
+              <Avatar className="size-8 rounded-lg grayscale">
+                <AvatarImage
+                  alt={name || "user image"}
+                  src={image || undefined}
+                />
+                <AvatarFallback className="rounded-lg uppercase">
+                  {userImageCallBack}
+                </AvatarFallback>
+              </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                {!hasUser ? (
-                  <>
-                    <Skeleton className="h-3 w-4/5 ms-auto mb-2" />
-                    <Skeleton className="w-2/3 h-2 ms-auto" />
-                  </>
-                ) : (
-                  <>
-                    <span className="truncate font-medium">
-                      {data.user.name}
-                    </span>
-                    <span className="text-muted-foreground truncate text-xs">
-                      {data.user.email}
-                    </span>
-                  </>
-                )}
+                <span className="truncate font-medium">{name}</span>
+                <span className="text-muted-foreground truncate text-xs">
+                  {email}
+                </span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -87,24 +88,20 @@ export function NavUser() {
             sideOffset={4}
           >
             <DropdownMenuLabel dir={dir} className="p-0 font-normal">
-              {hasUser && (
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage alt={data.user.name} src="user image" />
-                    <AvatarFallback className="rounded-lg uppercase">
-                      {data.user.name.slice(0, 2)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-start text-sm leading-tight">
-                    <span className="truncate font-medium">
-                      {data.user.name}
-                    </span>
-                    <span className="text-muted-foreground truncate text-xs">
-                      {data.user.email}
-                    </span>
-                  </div>
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage alt={name} src={image || undefined} />
+                  <AvatarFallback className="rounded-lg uppercase">
+                    {userImageCallBack}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-start text-sm leading-tight">
+                  <span className="truncate font-medium">{name}</span>
+                  <span className="text-muted-foreground truncate text-xs">
+                    {email}
+                  </span>
                 </div>
-              )}
+              </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup dir={dir}>

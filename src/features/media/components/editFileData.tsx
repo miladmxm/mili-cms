@@ -1,5 +1,3 @@
-import { ViewTransition } from "react";
-
 import { getMedia } from "../dal/queries";
 import FilePreview from "./filePreview";
 
@@ -8,9 +6,7 @@ const EditFileData = async ({ id }: { id: string }) => {
   return (
     <div className="flex">
       <div className="w-1/3">
-        <ViewTransition name={id}>
-          <FilePreview type={type} url={url} />
-        </ViewTransition>
+        <FilePreview type={type} url={url} />
       </div>
       <div></div>
     </div>
