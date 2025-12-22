@@ -28,7 +28,7 @@ const Modal: FC<ModalProps & PropsWithChildren> = ({
         type="button"
         onClick={onClose}
       ></button>
-      <Card className="h-4/5 overflow-auto w-4/6">
+      <Card className="md:h-4/5 overflow-auto md:w-4/6 sm:size-5/6 size-11/12 max-w-6xl max-h-max">
         <CardHeader>
           {title && (
             <CardTitle className="my-auto row-span-2">{title}</CardTitle>

@@ -2,11 +2,11 @@ import type { FC, PropsWithChildren } from "react";
 
 import { Download, X } from "lucide-react";
 import Link from "next/link";
-import { ViewTransition } from "react";
 
 import type { FileMeta, MediaTypes } from "@/features/type";
 import type { UploadingFileData } from "@/store/media.store";
 
+import CopyToClipboard from "@/components/dashboard/copy-to-clipboard";
 import { Button } from "@/components/dashboard/ui/button";
 import {
   Card,
@@ -71,10 +71,12 @@ const FileCard: FC<FileData> = ({ id, type, url, meta }) => {
         <Separator />
 
         <CardContent>
-          <div className="py-2 h-52 center">
-            <ViewTransition name={id}>
-              <FilePreview type={type} url={url} />
-            </ViewTransition>
+          <div className="py-2 center">
+            <FilePreview
+              className="size-full max-h-32 max-w-64"
+              type={type}
+              url={url}
+            />
           </div>
         </CardContent>
       </Link>
@@ -94,6 +96,7 @@ const FileCard: FC<FileData> = ({ id, type, url, meta }) => {
             </a>
           </Button>
         </CardAction>
+        <CopyToClipboard value={url} />
       </CardFooter>
     </Card>
   );

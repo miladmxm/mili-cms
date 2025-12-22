@@ -3,19 +3,25 @@ import Image from "next/image";
 
 import type { MediaTypes } from "@/features/type";
 
+import { cn } from "@/lib/utils";
+
 const FileIconFromType = {
   image: <ImageIcon />,
   audio: <Music4 />,
   video: <Clapperboard />,
   document: <File />,
 } as const;
-
-const FilePreview = ({ type, url }: { type: MediaTypes; url?: string }) => {
+interface FilePreviewProps {
+  type: MediaTypes;
+  url?: string;
+  className?: string;
+}
+const FilePreview = ({ type, url, className }: FilePreviewProps) => {
   if (type === "image" && url)
     return (
       <Image
         alt="preview"
-        className="rounded-lg object-contain size-full"
+        className={cn("rounded-lg object-contain size-full", className)}
         src={{ src: url, width: 168, height: 168 }}
       />
     );

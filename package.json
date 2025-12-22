@@ -55,6 +55,7 @@
     "dompurify": "^3.2.7",
     "drizzle-orm": "^0.44.7",
     "drizzle-valibot": "^0.4.2",
+    "filesize": "^11.0.13",
     "jsdom": "^27.0.0",
     "lucide-react": "^0.554.0",
     "next": "^16.1.0",

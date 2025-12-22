@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 import type { ActionResult } from "@/types/actions";
 
@@ -12,7 +12,7 @@ export const deleteFile = async (
   // todo access check
   try {
     await removeFile(id);
-    revalidateTag("media", "");
+    updateTag("media");
     return { success: true };
   } catch (error) {
     if (error instanceof Error)

@@ -111,11 +111,7 @@ export function LoginForm({
                 )}
               />
               <Field>
-                <Button
-                  className="cursor-pointer"
-                  disabled={isPending}
-                  type="submit"
-                >
+                <Button disabled={isPending} type="submit">
                   <Activity mode={isPending ? "visible" : "hidden"}>
                     <Spinner />
                   </Activity>

@@ -1,4 +1,4 @@
-import type { MediaTypes } from "@/features/type";
+import type { FileMeta, MediaTypes } from "@/features/type";
 
 import { deleteFile, writeFile } from "@/lib/fileManager";
 import * as mediaRepo from "@/repositories/media.repo";
@@ -28,6 +28,12 @@ export const saveFile = async ({
 };
 
 export const removeFile = async (id: string) => {
+  // todo has access
   const { url } = await mediaRepo.deleteMedia(id);
   await deleteFile(url);
+};
+
+export const updateFileData = async (id: string, data: FileMeta) => {
+  // todo has access
+  await mediaRepo.updateMediaMeta(id, data);
 };

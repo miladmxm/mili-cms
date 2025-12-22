@@ -61,3 +61,10 @@ export const UploadMediaSchema = v.pipe(
 );
 
 export type UploadMediaData = v.InferOutput<typeof UploadMediaSchema>;
+
+export const EditFileDataSchema = v.object({
+  alt: v.pipe(v.string(), v.nonEmpty("مقدار alt نباید خالی باشد")),
+  name: v.optional(v.pipe(v.string(), v.nonEmpty())),
+  title: v.optional(v.pipe(v.string(), v.nonEmpty())),
+});
+export type EditFileData = v.InferInput<typeof EditFileDataSchema>;

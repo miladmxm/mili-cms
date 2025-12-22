@@ -1,5 +1,7 @@
 import { desc, eq } from "drizzle-orm";
 
+import type { FileMeta } from "@/features/type";
+
 import { db } from "@/db/drizzle/db";
 import { media } from "@/db/drizzle/schemas";
 
@@ -13,3 +15,6 @@ export const deleteMedia = async (id: string) => {
 };
 export const findMedia = (id: string) =>
   db.query.media.findFirst({ where: eq(media.id, id) });
+
+export const updateMediaMeta = (id: string, data: FileMeta) =>
+  db.update(media).set({ meta: data }).where(eq(media.id, id));

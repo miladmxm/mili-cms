@@ -16,7 +16,7 @@ const SidebarWrapper: FC<PropsWithChildren> = async ({ children }) => {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset" collapsible="icon" />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );

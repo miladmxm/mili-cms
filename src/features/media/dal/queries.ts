@@ -23,7 +23,7 @@ export const getMedias = async () => {
 };
 export const getMedia = async (id: string) => {
   "use cache";
-  cacheTag("media", id);
+  cacheTag(`media-${id}`);
   const media = await mediaRepo.findMedia(id);
   if (!media) redirect("/admin/media");
   return DTOconvertMediaPathToRealUrl([media])[0];

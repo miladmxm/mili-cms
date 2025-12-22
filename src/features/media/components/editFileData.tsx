@@ -1,16 +1,10 @@
 import { getMedia } from "../dal/queries";
-import FilePreview from "./filePreview";
+import EditFileForm from "./editFileForm";
 
 const EditFileData = async ({ id }: { id: string }) => {
-  const { meta, url, size, type } = await getMedia(id);
-  return (
-    <div className="flex">
-      <div className="w-1/3">
-        <FilePreview type={type} url={url} />
-      </div>
-      <div></div>
-    </div>
-  );
+  const media = await getMedia(id);
+
+  return <EditFileForm {...media} />;
 };
 
 export default EditFileData;
