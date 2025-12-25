@@ -1,7 +1,7 @@
-import { Card } from "@/components/dashboard/ui/card";
+import EmptyPosts from "@/features/posts/components/emptyPosts";
 
 const page = () => {
-  return <Card>blog</Card>;
+  return <EmptyPosts />;
 };
 
 export default page;
