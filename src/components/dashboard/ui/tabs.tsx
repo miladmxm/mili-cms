@@ -3,16 +3,19 @@
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as React from "react";
 
+import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 
 function Tabs({
   className,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Root>) {
+  const dir = useDirection();
   return (
     <TabsPrimitive.Root
       className={cn("flex flex-col gap-2", className)}
       data-slot="tabs"
+      dir={dir}
       {...props}
     />
   );
