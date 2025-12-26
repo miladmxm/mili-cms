@@ -7,7 +7,6 @@ import type {
 import type { JSX } from "react";
 
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
-import { useCollaborationContext } from "@lexical/react/LexicalCollaborationContext";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
@@ -137,18 +136,17 @@ export default function ImageComponent({
   width: number | "inherit";
   captionsEnabled: boolean;
 }): JSX.Element {
+  console.log(src);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey);
   const [isResizing, setIsResizing] = useState<boolean>(false);
-  const { isCollabActive } = useCollaborationContext();
   const [editor] = useLexicalComposerContext();
   const [selection, setSelection] = useState<BaseSelection | null>(null);
   const activeEditorRef = useRef<LexicalEditor | null>(null);
   const [isLoadError, setIsLoadError] = useState<boolean>(false);
   const isEditable = useLexicalEditable();
-
   const $onDelete = useCallback(
     (payload: KeyboardEvent) => {
       const deleteSelection = $getSelection();
@@ -396,7 +394,7 @@ export default function ImageComponent({
         </div>
 
         {showCaption && (
-          <div className="image-caption-container absolute right-0 bottom-1 left-0 m-0 block min-w-[100px] overflow-hidden border-t bg-white/90 p-0">
+          <div className="image-caption-container absolute bottom-1 start-0 m-0 block w-full min-w-[100px] overflow-hidden border-t bg-accent/90 p-0 text-accent-foreground">
             <LexicalNestedComposer
               initialEditor={caption}
               initialNodes={[RootNode, TextNode, ParagraphNode]}
@@ -407,8 +405,8 @@ export default function ImageComponent({
                 contentEditable={
                   <ContentEditable
                     className="ImageNode__contentEditable user-select-text word-break-break-word caret-primary relative block min-h-5 w-[calc(100%-20px)] cursor-text resize-none border-0 p-2.5 text-sm whitespace-pre-wrap outline-none"
-                    placeholder="Enter a caption..."
-                    placeholderClassName="ImageNode__placeholder text-sm text-muted-foreground overflow-hidden absolute top-2.5 left-2.5 pointer-events-none text-ellipsis user-select-none whitespace-nowrap inline-block"
+                    placeholder="ایجاد عنوان"
+                    placeholderClassName="ImageNode__placeholder text-sm text-muted-foreground overflow-hidden absolute top-2.5 start-2.5 pointer-events-none text-ellipsis user-select-none whitespace-nowrap inline-block"
                   />
                 }
                 ErrorBoundary={LexicalErrorBoundary}

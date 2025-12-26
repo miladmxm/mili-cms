@@ -1,4 +1,3 @@
-/* eslint-disable @eslint-react/web-api/no-leaked-event-listener */
 "use client";
 
 import type { LexicalCommand, LexicalEditor, RangeSelection } from "lexical";

@@ -16,8 +16,8 @@ const CreatePost = () => {
   const form = useForm();
   return (
     <form>
-      <div className="grid grid-cols-8 gap-4">
-        <Card className="col-span-3">
+      <div className="grid grid-cols-1 auto-rows-auto md:grid-cols-8 gap-4">
+        <Card className="md:col-span-3">
           <CardHeader>
             <CardTitle>ایجاد پست جدید</CardTitle>
           </CardHeader>
@@ -36,7 +36,9 @@ const CreatePost = () => {
             </FieldGroup>
           </CardContent>
         </Card>
-        <RichEditor className="col-span-5" />
+        <div className="md:col-span-5">
+          <RichEditor />
+        </div>
       </div>
     </form>
   );

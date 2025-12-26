@@ -257,7 +257,7 @@ export function ImageResizer({
             setShowCaption(!showCaption);
           }}
         >
-          Add Caption
+          افزودن عنوان
         </Button>
       )}
       <div
