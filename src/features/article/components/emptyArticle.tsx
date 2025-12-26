@@ -12,14 +12,14 @@ import {
   EmptyTitle,
 } from "@/components/dashboard/ui/empty";
 
-const EmptyPosts = () => {
+const EmptyArticle = () => {
   return (
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <IconList />
         </EmptyMedia>
-        <EmptyTitle>هیچ پستی وجود ندارد</EmptyTitle>
+        <EmptyTitle>هیچ مقاله ای وجود ندارد</EmptyTitle>
         <EmptyDescription>هیچ موردی در پایگاه داده یافت نشد</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
@@ -33,4 +33,4 @@ const EmptyPosts = () => {
   );
 };
 
-export default EmptyPosts;
+export default EmptyArticle;

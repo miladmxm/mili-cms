@@ -1,7 +1,13 @@
 "use client";
 
 import type { InitialConfigType } from "@lexical/react/LexicalComposer";
-import type { EditorState, SerializedEditorState } from "lexical";
+import {
+  $insertNodes,
+  CLEAR_EDITOR_COMMAND,
+  LexicalEditor,
+  type EditorState,
+  type SerializedEditorState,
+} from "lexical";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
@@ -10,7 +16,8 @@ import { editorTheme } from "@/components/dashboard/editor/themes/editor-theme";
 import { TooltipProvider } from "@/components/dashboard/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-import { $generateHtmlFromNodes } from "@lexical/html";
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
+import { useEffect, useRef } from "react";
 import { nodes } from "./nodes";
 import { Plugins } from "./plugins";
 
@@ -25,19 +32,28 @@ const editorConfig: InitialConfigType = {
 
 function Editor({
   editorState,
-  editorSerializedState,
   onChange,
   onSerializedChange,
   className,
   onHtmlChange,
+  defaultHtmlValue,
 }: {
   editorState?: EditorState;
-  editorSerializedState?: SerializedEditorState;
   onChange?: (editorState: EditorState) => void;
   onSerializedChange?: (editorSerializedState: SerializedEditorState) => void;
   className?: string;
   onHtmlChange?: (value: string) => void;
+  defaultHtmlValue?: string;
 }) {
+  const parser = new DOMParser();
+  const dom = parser.parseFromString(defaultHtmlValue || "", "text/html");
+  const editoRef = useRef<LexicalEditor>(null);
+  useEffect(() => {
+    return () => {
+      console.log("return");
+      editoRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+    };
+  }, [editoRef.current]);
   return (
     <div
       className={cn(
@@ -49,8 +65,16 @@ function Editor({
         initialConfig={{
           ...editorConfig,
           ...(editorState ? { editorState } : {}),
-          ...(editorSerializedState
-            ? { editorState: JSON.stringify(editorSerializedState) }
+          ...(defaultHtmlValue
+            ? {
+                editorState: (editor) => {
+                  editoRef.current = editor;
+                  editor.update(() => {
+                    const nodes = $generateNodesFromDOM(editor, dom);
+                    $insertNodes(nodes);
+                  });
+                },
+              }
             : {}),
         }}
       >

@@ -1,9 +1,6 @@
 "use client";
 
-import type { SerializedEditorState } from "lexical";
-
 import dynamic from "next/dynamic";
-import { useState } from "react";
 
 import { Skeleton } from "@/components/dashboard/ui/skeleton";
 
@@ -43,35 +40,6 @@ const Editor = dynamic(
   () => import("@/components/dashboard/blocks/editor-x/editor"),
   { ssr: false, loading: RichEditorSkeleton },
 );
-export const initialValue = {
-  root: {
-    children: [
-      {
-        children: [
-          {
-            detail: 0,
-            format: 0,
-            mode: "normal",
-            style: "",
-            text: "",
-            type: "text",
-            version: 1,
-          },
-        ],
-        direction: "rtl",
-        format: "right",
-        indent: 0,
-        type: "paragraph",
-        version: 1,
-      },
-    ],
-    direction: "rtl",
-    format: "right",
-    indent: 0,
-    type: "root",
-    version: 1,
-  },
-} as unknown as SerializedEditorState;
 
 export default function RichEditor({
   className,
@@ -79,18 +47,14 @@ export default function RichEditor({
   onChange,
 }: {
   className?: string;
-  defaultValue?: SerializedEditorState;
+  defaultValue?: string;
   onChange: (value: string) => void;
 }) {
-  const [editorState, setEditorState] = useState<
-    SerializedEditorState | undefined
-  >(defaultValue || initialValue);
   return (
     <Editor
       className={className}
-      editorSerializedState={editorState}
+      defaultHtmlValue={defaultValue}
       onHtmlChange={onChange}
-      onSerializedChange={(value) => setEditorState(value)}
     />
   );
 }

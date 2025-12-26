@@ -17,6 +17,6 @@ export const deleteFile = async (
   } catch (error) {
     if (error instanceof Error)
       return { success: false, message: error.message };
-    return { success: false, message: "unkown error " };
+    return { success: false, message: "unkown error" };
   }
 };

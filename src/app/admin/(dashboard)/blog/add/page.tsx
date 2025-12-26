@@ -1,7 +1,7 @@
-import CreatePost from "@/features/posts/components/createPost";
+import CreateArticleForm from "@/features/article/components/createArticleForm";
 
 const AddNewArticle = () => {
-  return <CreatePost />;
+  return <CreateArticleForm />;
 };
 
 export default AddNewArticle;

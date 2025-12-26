@@ -11,7 +11,7 @@ import {
 import { user } from "./auth";
 import { category } from "./category";
 import { comment } from "./comment";
-import { MainSchema } from "./main";
+import { MainSchema, RelationSchema } from "./main";
 import { media } from "./media";
 import { rate } from "./rate";
 
@@ -25,7 +25,7 @@ export const article = MainSchema.table("article", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   title: varchar("title", { length: 255 }).notNull(),
   content: text("content").notNull(),
-  slug: varchar("slug", { length: 255 }).unique(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
   excerpt: text("excerpt").notNull(),
   thumbnail: uuid("thumbnail").references(() => media.id, {
     onDelete: "set null",
@@ -35,15 +35,14 @@ export const article = MainSchema.table("article", {
     .notNull()
     .default(sql`'[]'`),
   authorId: text("author_id")
-    .default("00000000")
-    .references(() => user.id, { onDelete: "set default" })
+    .references(() => user.id)
     .notNull(),
   status: articleStatus("status").notNull().default("draft"),
   readingTime: integer("reading_time"),
   views: integer("vires").default(0).notNull(),
 });
 
-export const articleComments = MainSchema.table(
+export const articleComments = RelationSchema.table(
   "article_comments",
   {
     articleId: uuid("article_id")
@@ -56,7 +55,7 @@ export const articleComments = MainSchema.table(
   (table) => [primaryKey({ columns: [table.articleId, table.commentId] })],
 );
 
-export const articleCategory = MainSchema.table(
+export const articleCategory = RelationSchema.table(
   "article_category",
   {
     articleId: uuid("article_id")
@@ -69,7 +68,7 @@ export const articleCategory = MainSchema.table(
   (table) => [primaryKey({ columns: [table.articleId, table.categoryId] })],
 );
 
-export const articleRate = MainSchema.table(
+export const articleRate = RelationSchema.table(
   "article_rate",
   {
     articleId: uuid("article_id")
