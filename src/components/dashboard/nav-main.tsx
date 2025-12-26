@@ -22,7 +22,6 @@ import {
   SidebarMenuSubItem,
 } from "@/components/dashboard/ui/sidebar";
 import { useActiveChildRoute, useActiveRoute } from "@/hooks/useActiveRoute";
-import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 
 import LinkLoading from "./link-loading";
@@ -51,7 +50,6 @@ const SubMenuItem = ({ title, url }: AdminNavItemWithSubMenu["items"][0]) => {
 };
 
 const NavItemWithSubMenu = (item: AdminNavItemWithSubMenu) => {
-  const dir = useDirection();
   const { icon: Icon, items, title, base } = item;
   const isThisChildPathActived = useActiveChildRoute(base);
   return (
@@ -71,10 +69,7 @@ const NavItemWithSubMenu = (item: AdminNavItemWithSubMenu) => {
             <span>{title}</span>
             <ChevronRight
               className={cn(
-                "ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90",
-                {
-                  "rotate-180": dir === "rtl",
-                },
+                "ml-auto transition-transform rtl:rotate-180 duration-200 group-data-[state=open]/collapsible:rotate-90",
               )}
             />
           </SidebarMenuButton>

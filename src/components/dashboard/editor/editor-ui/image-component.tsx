@@ -136,7 +136,6 @@ export default function ImageComponent({
   width: number | "inherit";
   captionsEnabled: boolean;
 }): JSX.Element {
-  console.log(src);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const [isSelected, setSelected, clearSelection] =

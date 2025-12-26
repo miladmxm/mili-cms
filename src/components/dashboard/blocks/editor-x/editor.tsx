@@ -8,9 +8,9 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 
 import { editorTheme } from "@/components/dashboard/editor/themes/editor-theme";
 import { TooltipProvider } from "@/components/dashboard/ui/tooltip";
-import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 
+import { $generateHtmlFromNodes } from "@lexical/html";
 import { nodes } from "./nodes";
 import { Plugins } from "./plugins";
 
@@ -29,19 +29,19 @@ function Editor({
   onChange,
   onSerializedChange,
   className,
+  onHtmlChange,
 }: {
   editorState?: EditorState;
   editorSerializedState?: SerializedEditorState;
   onChange?: (editorState: EditorState) => void;
   onSerializedChange?: (editorSerializedState: SerializedEditorState) => void;
   className?: string;
+  onHtmlChange?: (value: string) => void;
 }) {
-  const dir = useDirection();
   return (
     <div
       className={cn(
-        "bg-background overflow-hidden p-2 rounded-lg border shadow",
-        { "**:dir-rtl": dir === "rtl" },
+        "bg-background overflow-hidden p-2  rounded-lg border shadow",
         className,
       )}
     >
@@ -59,9 +59,11 @@ function Editor({
 
           <OnChangePlugin
             ignoreSelectionChange
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            onChange={(editorState) => {
+            onChange={(editorState, editor) => {
               onChange?.(editorState);
+              editor.read(() => {
+                onHtmlChange?.($generateHtmlFromNodes(editor));
+              });
               onSerializedChange?.(editorState.toJSON());
             }}
           />

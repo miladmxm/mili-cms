@@ -58,28 +58,38 @@ export const initialValue = {
             version: 1,
           },
         ],
-        direction: "ltr",
-        format: "",
+        direction: "rtl",
+        format: "right",
         indent: 0,
         type: "paragraph",
         version: 1,
       },
     ],
-    direction: "ltr",
-    format: "",
+    direction: "rtl",
+    format: "right",
     indent: 0,
     type: "root",
     version: 1,
   },
 } as unknown as SerializedEditorState;
 
-export default function RichEditor({ className }: { className?: string }) {
-  const [editorState, setEditorState] =
-    useState<SerializedEditorState>(initialValue);
+export default function RichEditor({
+  className,
+  defaultValue,
+  onChange,
+}: {
+  className?: string;
+  defaultValue?: SerializedEditorState;
+  onChange: (value: string) => void;
+}) {
+  const [editorState, setEditorState] = useState<
+    SerializedEditorState | undefined
+  >(defaultValue || initialValue);
   return (
     <Editor
       className={className}
       editorSerializedState={editorState}
+      onHtmlChange={onChange}
       onSerializedChange={(value) => setEditorState(value)}
     />
   );

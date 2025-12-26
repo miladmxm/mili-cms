@@ -7,7 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/dashboard/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@/components/dashboard/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/dashboard/ui/field";
 import { Input } from "@/components/dashboard/ui/input";
 
 import RichEditor from "./richEditor";
@@ -16,8 +21,8 @@ const CreatePost = () => {
   const form = useForm();
   return (
     <form>
-      <div className="grid grid-cols-1 auto-rows-auto md:grid-cols-8 gap-4">
-        <Card className="md:col-span-3">
+      <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-12 gap-4">
+        <Card className="lg:col-span-4">
           <CardHeader>
             <CardTitle>ایجاد پست جدید</CardTitle>
           </CardHeader>
@@ -30,15 +35,34 @@ const CreatePost = () => {
                   <Field aria-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="title">عنوان پست</FieldLabel>
                     <Input id="title" placeholder="مقاله در مورد" {...field} />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
             </FieldGroup>
           </CardContent>
         </Card>
-        <div className="md:col-span-5">
-          <RichEditor />
-        </div>
+        <Controller
+          name="content"
+          control={form.control}
+          render={({ fieldState }) => {
+            return (
+              <div className="lg:col-span-8">
+                <Field aria-invalid={fieldState.invalid}>
+                  <FieldLabel>محتوا</FieldLabel>
+                  <RichEditor
+                    onChange={(value) => form.setValue("content", value)}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              </div>
+            );
+          }}
+        />
       </div>
     </form>
   );

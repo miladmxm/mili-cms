@@ -69,7 +69,7 @@ export function CounterCharacterPlugin({
 
   return (
     <div className="flex gap-2 text-xs whitespace-nowrap text-gray-500">
-      <p>{stats.characters} واژ</p>|<p>{stats.words} کلمه</p>
+      <p>{stats.characters} واژ</p>|<p>{stats.words} واژه</p>
     </div>
   );
 }

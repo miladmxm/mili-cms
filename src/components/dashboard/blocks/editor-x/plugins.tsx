@@ -101,6 +101,7 @@ import { IMAGE } from "@/components/dashboard/editor/transformers/markdown-image
 import { TABLE } from "@/components/dashboard/editor/transformers/markdown-table-transformer";
 import { TWEET } from "@/components/dashboard/editor/transformers/markdown-tweet-transformer";
 import { Separator } from "@/components/dashboard/ui/separator";
+import { DirectionButtons } from "../../editor/plugins/toolbar/set-direction";
 
 const placeholder = "از / برای دسترسی سریع و از : برای شکلک ها استفاده کنید";
 const maxLength = 10000;
@@ -118,51 +119,55 @@ export function Plugins() {
   };
 
   return (
-    <div className="relative">
-      <ToolbarPlugin>
-        {({ blockType }) => (
-          <div className="vertical-align-middle sticky top-0 z-10 flex items-center gap-2 overflow-auto border-b p-1">
-            <HistoryToolbarPlugin />
-            <Separator className="!h-7" orientation="vertical" />
-            <BlockFormatDropDown>
-              <FormatParagraph />
-              <FormatHeading levels={["h1", "h2", "h3"]} />
-              <FormatNumberedList />
-              <FormatBulletedList />
-              <FormatCheckList />
-              <FormatCodeBlock />
-              <FormatQuote />
-            </BlockFormatDropDown>
-            {blockType === "code" ? (
-              <CodeLanguageToolbarPlugin />
-            ) : (
-              <>
-                <FontSizeToolbarPlugin />
-                <Separator className="!h-7" orientation="vertical" />
-                <FontFormatToolbarPlugin />
-                <Separator className="!h-7" orientation="vertical" />
-                <SubSuperToolbarPlugin />
-                <LinkToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
-                <Separator className="!h-7" orientation="vertical" />
-                <ClearFormattingToolbarPlugin />
-                <Separator className="!h-7" orientation="vertical" />
-                <FontColorToolbarPlugin />
-                <FontBackgroundToolbarPlugin />
-                <Separator className="!h-7" orientation="vertical" />
-                <ElementFormatToolbarPlugin />
-                <Separator className="!h-7" orientation="vertical" />
-                <BlockInsertPlugin>
-                  <InsertHorizontalRule />
-                  <InsertImage />
-                  <InsertTable />
-                  <InsertColumnsLayout />
-                  <InsertEmbeds />
-                </BlockInsertPlugin>
-              </>
-            )}
-          </div>
-        )}
-      </ToolbarPlugin>
+    <div className="relative ">
+      <div className="rtl:**:dir-rtl">
+        <ToolbarPlugin>
+          {({ blockType }) => (
+            <div className="vertical-align-middle sticky top-0 z-10 flex items-center gap-2 overflow-auto border-b p-1">
+              <HistoryToolbarPlugin />
+              <Separator className="!h-7" orientation="vertical" />
+              <DirectionButtons />
+              <Separator className="!h-7" orientation="vertical" />
+              <BlockFormatDropDown>
+                <FormatParagraph />
+                <FormatHeading levels={["h1", "h2", "h3"]} />
+                <FormatNumberedList />
+                <FormatBulletedList />
+                <FormatCheckList />
+                <FormatCodeBlock />
+                <FormatQuote />
+              </BlockFormatDropDown>
+              {blockType === "code" ? (
+                <CodeLanguageToolbarPlugin />
+              ) : (
+                <>
+                  <FontSizeToolbarPlugin />
+                  <Separator className="!h-7" orientation="vertical" />
+                  <FontFormatToolbarPlugin />
+                  <Separator className="!h-7" orientation="vertical" />
+                  <SubSuperToolbarPlugin />
+                  <LinkToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+                  <Separator className="!h-7" orientation="vertical" />
+                  <ClearFormattingToolbarPlugin />
+                  <Separator className="!h-7" orientation="vertical" />
+                  <FontColorToolbarPlugin />
+                  <FontBackgroundToolbarPlugin />
+                  <Separator className="!h-7" orientation="vertical" />
+                  <ElementFormatToolbarPlugin />
+                  <Separator className="!h-7" orientation="vertical" />
+                  <BlockInsertPlugin>
+                    <InsertHorizontalRule />
+                    <InsertImage />
+                    <InsertTable />
+                    <InsertColumnsLayout />
+                    <InsertEmbeds />
+                  </BlockInsertPlugin>
+                </>
+              )}
+            </div>
+          )}
+        </ToolbarPlugin>
+      </div>
       <div className="relative">
         <AutoFocusPlugin />
         <RichTextPlugin
