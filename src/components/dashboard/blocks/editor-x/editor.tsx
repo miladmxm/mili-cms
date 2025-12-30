@@ -3,13 +3,13 @@
 import type { InitialConfigType } from "@lexical/react/LexicalComposer";
 import {
   $insertNodes,
-  CLEAR_EDITOR_COMMAND,
   LexicalEditor,
   type EditorState,
   type SerializedEditorState,
 } from "lexical";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { EditorRefPlugin } from "@lexical/react/LexicalEditorRefPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 
 import { editorTheme } from "@/components/dashboard/editor/themes/editor-theme";
@@ -17,7 +17,7 @@ import { TooltipProvider } from "@/components/dashboard/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
-import { useEffect, useRef } from "react";
+import { RefObject, useRef } from "react";
 import { nodes } from "./nodes";
 import { Plugins } from "./plugins";
 
@@ -37,6 +37,7 @@ function Editor({
   className,
   onHtmlChange,
   defaultHtmlValue,
+  editorRef,
 }: {
   editorState?: EditorState;
   onChange?: (editorState: EditorState) => void;
@@ -44,16 +45,12 @@ function Editor({
   className?: string;
   onHtmlChange?: (value: string) => void;
   defaultHtmlValue?: string;
+  editorRef: RefObject<LexicalEditor | null>;
 }) {
   const parser = new DOMParser();
   const dom = parser.parseFromString(defaultHtmlValue || "", "text/html");
   const editoRef = useRef<LexicalEditor>(null);
-  useEffect(() => {
-    return () => {
-      console.log("return");
-      editoRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-    };
-  }, [editoRef.current]);
+
   return (
     <div
       className={cn(
@@ -80,7 +77,7 @@ function Editor({
       >
         <TooltipProvider>
           <Plugins />
-
+          <EditorRefPlugin editorRef={editorRef} />
           <OnChangePlugin
             ignoreSelectionChange
             onChange={(editorState, editor) => {

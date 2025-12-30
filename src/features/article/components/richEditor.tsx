@@ -1,6 +1,11 @@
 "use client";
 
+import type { LexicalEditor } from "lexical";
+import type { Ref } from "react";
+
+import { CLEAR_EDITOR_COMMAND } from "lexical";
 import dynamic from "next/dynamic";
+import { useImperativeHandle, useRef } from "react";
 
 import { Skeleton } from "@/components/dashboard/ui/skeleton";
 
@@ -45,15 +50,37 @@ export default function RichEditor({
   className,
   defaultValue,
   onChange,
+  handlerRef,
 }: {
   className?: string;
   defaultValue?: string;
   onChange: (value: string) => void;
+  handlerRef?: Ref<{ clear: () => void }>;
 }) {
+  const ref = useRef<LexicalEditor>(null);
+
+  const cleanUpEditor = () => {
+    const editor = ref.current;
+    if (editor) {
+      editor.update(() => {
+        editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+      });
+    }
+  };
+
+  useImperativeHandle(handlerRef, () => {
+    return {
+      clear: () => {
+        cleanUpEditor();
+      },
+    };
+  }, []);
+
   return (
     <Editor
       className={className}
       defaultHtmlValue={defaultValue}
+      editorRef={ref}
       onHtmlChange={onChange}
     />
   );

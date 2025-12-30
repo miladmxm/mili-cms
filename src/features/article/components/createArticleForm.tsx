@@ -77,6 +77,21 @@ const CreateArticleForm = () => {
                   </Field>
                 )}
               />
+              <Controller
+                name="thumbnail"
+                control={control}
+                render={() => (
+                  <Field>
+                    <FieldLabel htmlFor="thumbnail">
+                      انتخاب تصویر شاخص
+                    </FieldLabel>
+                    <input className="sr-only" type="hidden" />
+                    <div className="border p-2 border-dashed border-accent w-full h-32 rounded-xl">
+                      <div className="size-full rounded-lg bg-secondary"></div>
+                    </div>
+                  </Field>
+                )}
+              />
               <Field>
                 <Button disabled={isPending} type="submit">
                   ذخیره

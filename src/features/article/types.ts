@@ -4,4 +4,5 @@ export interface CreateArticle {
   title: string;
   slug: string;
   authorId: string;
+  thumbnail?: string | null;
 }

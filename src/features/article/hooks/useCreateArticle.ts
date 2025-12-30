@@ -12,13 +12,14 @@ import { CreateArticleSchema } from "../validations/createSchema";
 export const useCreateArticle = () => {
   const router = useRouter();
   const [defaultContentValue, setdefaultContentValue] = useState(
-    `<div dir="rtl">helo</div>`,
+    `<div dir="rtl" style="text-align: right;"><p dir="rtl"></p></div>`,
   );
   const form = useForm<CreateArticleInput>({
     resolver: valibotResolver(CreateArticleSchema),
     defaultValues: { content: "", excerpt: "", title: "", slug: "" },
   });
   const [isPending, startTransition] = useTransition();
+
   const handleSubmit = (data: CreateArticleInput) => {
     startTransition(async () => {
       const { success, message } = await createArticleAction(data);
