@@ -1,4 +1,4 @@
-import EditFileData from "@/features/media/components/editFileData";
+import EditFileData from "@/features/media/containers/editFileData";
 
 const EditMediaPage = async ({
   params,

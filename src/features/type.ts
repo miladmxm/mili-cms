@@ -6,6 +6,13 @@ export interface FileMeta {
   alt: string;
   title?: string;
 }
+export interface MinimumMediaProps {
+  name: string;
+  id: string;
+  url: string;
+  type: MediaTypes;
+  onSelectHandler: (id: string) => void;
+}
 
 export interface Media {
   type: MediaTypes;

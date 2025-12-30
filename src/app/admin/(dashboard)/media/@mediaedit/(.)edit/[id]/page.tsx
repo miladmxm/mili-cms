@@ -1,4 +1,4 @@
-import EditFileData from "@/features/media/components/editFileData";
+import EditFileData from "@/features/media/containers/editFileData";
 
 import EditMediaInModal from "./EditMediaInModal";
 

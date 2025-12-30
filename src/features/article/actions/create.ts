@@ -24,7 +24,10 @@ export const createArticleAction = async (
   }
 
   try {
-    await createArticle({ ...output, authorId: session.user.id });
+    await createArticle({
+      ...output,
+      authorId: session.user.id,
+    });
     updateTag("articles");
     return { success, message: "مثاله با موفقیت ایجاد شد" };
   } catch (error) {

@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 
+import MediaDropzone from "../components/mediaDropzone";
+import MediaList from "../components/mediaList";
+import DisplayUploadingFiles from "../components/uploadingFiles";
 import { getMedias } from "../dal/queries";
-import MediaDropzone from "./mediaDropzone";
-import MediaList from "./mediaList";
-import DisplayUploadingFiles from "./uploadingFiles";
 
 const AllMedias = () => {
   const medias = getMedias();

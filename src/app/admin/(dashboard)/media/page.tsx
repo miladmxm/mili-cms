@@ -1,4 +1,4 @@
-import AllMedias from "@/features/media/components/allMedias";
+import AllMedias from "@/features/media/containers/allMedias";
 
 const Media = () => {
   return (

@@ -9,6 +9,16 @@ import type { CreateArticleInput } from "../validations/createSchema";
 import { createArticleAction } from "../actions/create";
 import { CreateArticleSchema } from "../validations/createSchema";
 
+export const useHandleImagePicker = () => {
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
+  const [previewImageUrl, setPreviewImageUrl] = useState("");
+  return {
+    showMediaPicker,
+    previewImageUrl,
+    setPreviewImageUrl,
+    setShowMediaPicker,
+  };
+};
 export const useCreateArticle = () => {
   const router = useRouter();
   const [defaultContentValue, setdefaultContentValue] = useState(
@@ -16,7 +26,13 @@ export const useCreateArticle = () => {
   );
   const form = useForm<CreateArticleInput>({
     resolver: valibotResolver(CreateArticleSchema),
-    defaultValues: { content: "", excerpt: "", title: "", slug: "" },
+    defaultValues: {
+      content: "",
+      excerpt: "",
+      title: "",
+      slug: "",
+      thumbnail: "",
+    },
   });
   const [isPending, startTransition] = useTransition();
 

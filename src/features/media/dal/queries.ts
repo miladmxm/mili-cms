@@ -2,7 +2,7 @@ import { cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
 import "server-only";
 
-import type { Media } from "@/features/type";
+import type { Media, MediaTypes } from "@/features/type";
 
 import env from "@/config/env";
 import * as mediaRepo from "@/repositories/media.repo";
@@ -13,7 +13,13 @@ export const DTOconvertMediaPathToRealUrl = (medias: Media[]) => {
     return media;
   });
 };
+export const getMediasByType = async (types: MediaTypes[]) => {
+  "use cache";
+  cacheTag("media", ...types.map((t) => `media-type-${t}`));
 
+  const medias = await mediaRepo.findMediasByTypes(types);
+  return DTOconvertMediaPathToRealUrl(medias);
+};
 export const getMedias = async () => {
   "use cache";
   cacheTag("media");

@@ -1,6 +1,6 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 
-import type { FileMeta } from "@/features/type";
+import type { FileMeta, MediaTypes } from "@/features/type";
 
 import { db } from "@/db/drizzle/db";
 import { media } from "@/db/drizzle/schemas";
@@ -9,6 +9,10 @@ export const createMedia = (data: typeof media.$inferInsert) =>
   db.insert(media).values(data).returning();
 export const findMedias = () =>
   db.query.media.findMany({ orderBy: [desc(media.createdAt)] });
+export const findMediasByTypes = (types: MediaTypes[]) =>
+  db.query.media.findMany({
+    where: inArray(media.type, types),
+  });
 export const deleteMedia = async (id: string) => {
   const result = await db.delete(media).where(eq(media.id, id)).returning();
   return result[0];

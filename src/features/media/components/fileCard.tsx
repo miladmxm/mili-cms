@@ -1,9 +1,10 @@
+"use client";
 import type { FC, PropsWithChildren } from "react";
 
 import { Download, X } from "lucide-react";
 import Link from "next/link";
 
-import type { FileMeta, MediaTypes } from "@/features/type";
+import type { FileMeta, MediaTypes, MinimumMediaProps } from "@/features/type";
 import type { UploadingFileData } from "@/store/media.store";
 
 import CopyToClipboard from "@/components/dashboard/copy-to-clipboard";
@@ -12,14 +13,36 @@ import {
   Card,
   CardAction,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/dashboard/ui/card";
 import { Separator } from "@/components/dashboard/ui/separator";
+import { cn } from "@/lib/utils";
 
 import DeleteFile from "./deleteButton";
 import FilePreview from "./filePreview";
+
+export const MinimalFileCard: FC<
+  MinimumMediaProps & { className?: string }
+> = ({ id, name, url, type, onSelectHandler, className }) => {
+  return (
+    <Card
+      className={cn("cursor-pointer", className)}
+      rel="button"
+      title="name"
+      onClick={() => onSelectHandler(id)}
+    >
+      <CardContent>
+        <FilePreview type={type} url={url} />
+      </CardContent>
+      <CardFooter className="mt-auto">
+        <CardDescription className="truncate">{name}</CardDescription>
+      </CardFooter>
+    </Card>
+  );
+};
 
 export const FileCardForUpload: FC<PropsWithChildren & UploadingFileData> = ({
   abort,
