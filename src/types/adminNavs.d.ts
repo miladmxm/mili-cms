@@ -1,7 +1,7 @@
 import type { ClassValue } from "clsx";
 import type { Route } from "next";
 
-type Icon = FC<{ className?: ClassValue }>;
+export type Icon = FC<{ className?: ClassValue }>;
 export interface AdminNavItemWithSubMenu {
   title: string;
   icon: Icon;

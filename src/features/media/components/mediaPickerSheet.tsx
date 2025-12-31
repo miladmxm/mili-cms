@@ -12,6 +12,8 @@ import {
 
 import EmptyMedias from "../containers/emptyMedias";
 import { MinimalFileCard } from "./fileCard";
+import MediaDropzone from "./mediaDropzone";
+import DisplayUploadingFiles from "./uploadingFiles";
 
 const MediaPickerSheet = ({
   medias,
@@ -33,9 +35,11 @@ const MediaPickerSheet = ({
           <SheetTitle>با کلیک بر روی هر کدام انتخاب کنید</SheetTitle>
         </SheetHeader>
 
-        <div className="overflow-y-auto h-full p-6">
+        <div className="overflow-y-auto h-full p-6 container gap-6 flex flex-col">
+          <MediaDropzone />
+          <DisplayUploadingFiles />
           {mediasData ? (
-            <div className="h-max flex flex-wrap gap-4">
+            <div className="h-max flex flex-wrap max-sm:justify-center gap-4">
               {mediasData.map(({ id, meta, url, type }) => (
                 <MinimalFileCard
                   className="size-80"

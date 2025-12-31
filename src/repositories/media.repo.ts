@@ -12,6 +12,7 @@ export const findMedias = () =>
 export const findMediasByTypes = (types: MediaTypes[]) =>
   db.query.media.findMany({
     where: inArray(media.type, types),
+    orderBy: [desc(media.createdAt)],
   });
 export const deleteMedia = async (id: string) => {
   const result = await db.delete(media).where(eq(media.id, id)).returning();

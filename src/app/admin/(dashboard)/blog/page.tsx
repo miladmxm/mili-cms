@@ -1,7 +1,7 @@
-import EmptyArticle from "@/features/article/components/emptyArticle";
+import AllArticles from "@/features/article/components/allArticles";
 
-const page = () => {
-  return <EmptyArticle />;
+const BlogPage = () => {
+  return <AllArticles />;
 };
 
-export default page;
+export default BlogPage;

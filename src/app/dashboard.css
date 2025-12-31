@@ -147,3 +147,7 @@
 @utility dir-ltr {
   direction: ltr;
 }
+
+@utility container {
+  @apply mx-auto
+}
