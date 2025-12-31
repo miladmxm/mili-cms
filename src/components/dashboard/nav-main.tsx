@@ -21,7 +21,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/dashboard/ui/sidebar";
-import { useActiveChildRoute, useActiveRoute } from "@/hooks/useActiveRoute";
+import { useActiveRoute } from "@/hooks/useActiveRoute";
 import { cn } from "@/lib/utils";
 
 import LinkLoading from "./link-loading";
@@ -50,8 +50,8 @@ const SubMenuItem = ({ title, url }: AdminNavItemWithSubMenu["items"][0]) => {
 };
 
 const NavItemWithSubMenu = (item: AdminNavItemWithSubMenu) => {
-  const { icon: Icon, items, title, base } = item;
-  const isThisChildPathActived = useActiveChildRoute(base);
+  const { icon: Icon, items, title, base, haveChild } = item;
+  const isThisChildPathActived = useActiveRoute(base, haveChild);
   return (
     <Collapsible
       asChild
@@ -87,8 +87,8 @@ const NavItemWithSubMenu = (item: AdminNavItemWithSubMenu) => {
 };
 
 const NavItemWithoutSubMenu = (item: AdminNavItem) => {
-  const { icon: Icon, title, url } = item;
-  const isActiveRoute = useActiveRoute(url);
+  const { icon: Icon, title, url, haveChild } = item;
+  const isActiveRoute = useActiveRoute(url, haveChild);
   return (
     <SidebarMenuItem key={title}>
       <SidebarMenuButton asChild className="text-lg" tooltip={title}>
@@ -109,7 +109,7 @@ export function NavMain({ items }: { items: AdminNavMain[] }) {
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
-              className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+              className="bg-secondary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
               tooltip="Quick Create"
             >
               <LayoutDashboard />

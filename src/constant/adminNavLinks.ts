@@ -17,16 +17,25 @@ import { Image } from "lucide-react";
 
 import type { AdminNavMain } from "@/types/adminNavs";
 
+export const NavDictionary: Record<string, string> = {
+  admin: "داشبورد",
+  blog: "مقالات",
+  media: "مدیا",
+  add: "افزودن",
+  edit: "ویرایش",
+};
 export const navMain: AdminNavMain[] = [
   {
     title: "داشبورد",
     url: "/admin",
     icon: IconDashboard,
+    haveChild: false,
   },
   {
     title: "وبلاگ",
     icon: IconListDetails,
     base: "/admin/blog",
+    haveChild: true,
     items: [
       {
         title: "مشاهده همه",
@@ -39,16 +48,19 @@ export const navMain: AdminNavMain[] = [
     ],
   },
   {
+    haveChild: true,
     title: "مدیا",
     url: "/admin/media",
     icon: Image,
   },
   {
+    haveChild: false,
     title: "Projects",
     url: "#",
     icon: IconFolder,
   },
   {
+    haveChild: false,
     title: "Team",
     url: "#",
     icon: IconUsers,

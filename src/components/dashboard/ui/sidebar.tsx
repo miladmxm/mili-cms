@@ -28,13 +28,14 @@ import {
 } from "@/components/dashboard/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { Kbd, KbdGroup } from "./kbd";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "16rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
-const SIDEBAR_KEYBOARD_SHORTCUT = "b";
+export const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
 interface SidebarContextProps {
   state: "collapsed" | "expanded";
@@ -268,21 +269,32 @@ function SidebarTrigger({
   const { toggleSidebar } = useSidebar();
 
   return (
-    <Button
-      size="icon"
-      className={cn("size-7", className)}
-      data-sidebar="trigger"
-      variant="ghost"
-      data-slot="sidebar-trigger"
-      onClick={(event) => {
-        onClick?.(event);
-        toggleSidebar();
-      }}
-      {...props}
-    >
-      <PanelLeftIcon />
-      <span className="sr-only">Toggle Sidebar</span>
-    </Button>
+    <Tooltip>
+      <TooltipContent>
+        <KbdGroup dir="ltr">
+          <Kbd>CTRL</Kbd>
+          <span>+</span>
+          <Kbd className="uppercase">{SIDEBAR_KEYBOARD_SHORTCUT}</Kbd>
+        </KbdGroup>
+      </TooltipContent>
+      <TooltipTrigger asChild>
+        <Button
+          size="icon"
+          className={cn("size-7", className)}
+          data-sidebar="trigger"
+          variant="ghost"
+          data-slot="sidebar-trigger"
+          onClick={(event) => {
+            onClick?.(event);
+            toggleSidebar();
+          }}
+          {...props}
+        >
+          <PanelLeftIcon />
+          <span className="sr-only">Toggle Sidebar</span>
+        </Button>
+      </TooltipTrigger>
+    </Tooltip>
   );
 }
 
