@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import type { CreateArticleInput } from "../validations/createSchema";
+import type { CreateArticleOutput } from "../validations/createSchema";
 
 import { createArticleAction } from "../actions/create";
 import { CreateArticleSchema } from "../validations/createSchema";
@@ -24,7 +24,7 @@ export const useCreateArticle = () => {
   const [defaultContentValue, setdefaultContentValue] = useState(
     `<div dir="rtl" style="text-align: right;"><p dir="rtl"></p></div>`,
   );
-  const form = useForm<CreateArticleInput>({
+  const form = useForm<CreateArticleOutput>({
     resolver: valibotResolver(CreateArticleSchema),
     defaultValues: {
       content: "",
@@ -32,11 +32,12 @@ export const useCreateArticle = () => {
       title: "",
       slug: "",
       thumbnail: "",
+      status: "draft",
     },
   });
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = (data: CreateArticleInput) => {
+  const handleSubmit = (data: CreateArticleOutput) => {
     startTransition(async () => {
       const { success, message } = await createArticleAction(data);
       if (!success) toast.error(message);
@@ -53,6 +54,7 @@ export const useCreateArticle = () => {
     control: form.control,
     submit: form.handleSubmit(handleSubmit),
     setValue: form.setValue,
+    getValue: form.getValues,
     defaultContentValue,
   };
 };

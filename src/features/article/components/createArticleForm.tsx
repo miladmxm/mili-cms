@@ -1,4 +1,5 @@
 "use client";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { Suspense } from "react";
 import { Controller } from "react-hook-form";
@@ -27,11 +28,20 @@ import {
   useCreateArticle,
   useHandleImagePicker,
 } from "../hooks/useCreateArticle";
+import { StatusDictionary } from "../types";
 import RichEditor from "./richEditor";
+import StatusDropdown from "./statusDropdown";
 
+// eslint-disable-next-line max-lines-per-function
 const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
-  const { control, isPending, submit, setValue, defaultContentValue } =
-    useCreateArticle();
+  const {
+    control,
+    getValue,
+    isPending,
+    submit,
+    setValue,
+    defaultContentValue,
+  } = useCreateArticle();
   const {
     previewImageUrl,
     setPreviewImageUrl,
@@ -100,7 +110,7 @@ const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
                   name="thumbnail"
                   control={control}
                   render={({ field, fieldState }) => (
-                    <Field>
+                    <Field aria-invalid={fieldState.invalid}>
                       <FieldLabel htmlFor="thumbnail">
                         انتخاب تصویر شاخص
                       </FieldLabel>
@@ -140,12 +150,44 @@ const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
                     </Field>
                   )}
                 />
-                <Field>
-                  <Button disabled={isPending} type="submit">
-                    ذخیره
-                    {isPending && <Spinner />}
-                  </Button>
-                </Field>
+                <div className="flex gap-2">
+                  <Controller
+                    name="status"
+                    control={control}
+                    render={({ fieldState }) => {
+                      const status = getValue("status");
+                      return (
+                        <Field
+                          aria-invalid={fieldState.invalid}
+                          className="w-max"
+                        >
+                          <StatusDropdown
+                            value={status}
+                            onChange={(v) => setValue("status", v)}
+                          >
+                            <Button disabled={isPending} variant="outline">
+                              <span>{StatusDictionary[status]}</span>
+                              <ChevronDown />
+                            </Button>
+                          </StatusDropdown>
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
+                      );
+                    }}
+                  />
+                  <Field>
+                    <Button
+                      className="flex-auto"
+                      disabled={isPending}
+                      type="submit"
+                    >
+                      ذخیره
+                      {isPending && <Spinner />}
+                    </Button>
+                  </Field>
+                </div>
               </FieldGroup>
             </CardContent>
           </Card>

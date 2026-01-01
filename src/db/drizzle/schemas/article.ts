@@ -4,9 +4,12 @@ import {
   jsonb,
   primaryKey,
   text,
+  timestamp,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+
+import type { ArticleStatus } from "@/features/article/types";
 
 import { user } from "./auth";
 import { category } from "./category";
@@ -27,6 +30,11 @@ export const article = MainSchema.table("article", {
   content: text("content").notNull(),
   slug: varchar("slug", { length: 255 }).notNull().unique(),
   excerpt: text("excerpt").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
   thumbnail: uuid("thumbnail").references(() => media.id, {
     onDelete: "set null",
   }),
@@ -37,7 +45,10 @@ export const article = MainSchema.table("article", {
   authorId: text("author_id")
     .references(() => user.id)
     .notNull(),
-  status: articleStatus("status").notNull().default("draft"),
+  status: articleStatus("status")
+    .notNull()
+    .$type<ArticleStatus>()
+    .default("draft"),
   readingTime: integer("reading_time"),
   views: integer("vires").default(0).notNull(),
 });
