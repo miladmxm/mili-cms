@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 
-import { MoreHorizontal } from "lucide-react";
+import { Eye, MoreHorizontal, Pen } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/dashboard/ui/button";
@@ -17,6 +17,7 @@ import {
 import type { Article } from "./type";
 
 import ChangeStatusDropdown from "../changeStatusDropdown";
+import DeleteArticle from "../deleteArticle";
 import { ArticleDictionary } from "./type";
 
 export const columns: ColumnDef<Article>[] = [
@@ -74,18 +75,32 @@ export const columns: ColumnDef<Article>[] = [
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="rtl:dir-rtl">
+          <DropdownMenuContent
+            align="start"
+            className="rtl:dir-rtl *:justify-between"
+          >
             <DropdownMenuLabel>عملیات</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/" target="_blank">
                 مشاهده
+                <Eye />
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href="/admin/blog">ویرایش</Link>
+            <DropdownMenuItem asChild>
+              <Link href="/admin/blog">
+                ویرایش
+                <Pen />
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>حذف</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <DeleteArticle
+                className="w-full text-destructive hover:text-destructive"
+                id={id}
+              >
+                حذف
+              </DeleteArticle>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

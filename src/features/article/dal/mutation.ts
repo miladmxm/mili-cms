@@ -9,5 +9,9 @@ export const createArticle = (data: CreateArticle) => {
 };
 export const updateStatus = (id: string, status: ArticleStatus) => {
   //todo has access
-  return articleRepo.updateArticle(id, { status });
+  return articleRepo.updateArticleById(id, { status });
+};
+export const deleteArticle = (id: string) => {
+  //todo has access
+  return articleRepo.deleteArticleById(id);
 };

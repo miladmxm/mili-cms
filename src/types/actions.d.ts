@@ -1,4 +1,4 @@
-export type ActionResult<T extends Record<string, unknown>> =
+export type ActionResult<T extends unknown | Record<string, unknown>> =
   | {
       success: false;
       message: string;

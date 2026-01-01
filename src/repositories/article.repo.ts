@@ -14,7 +14,10 @@ export const findArticlesByLimitAndOffset = (options?: OffsetLimit) =>
     limit: options?.limit,
     offset: options?.offset,
   });
-export const updateArticle = (
+export const updateArticleById = (
   id: string,
   value: Partial<typeof article.$inferSelect>,
 ) => db.update(article).set(value).where(eq(article.id, id));
+
+export const deleteArticleById = (id: string) =>
+  db.delete(article).where(eq(article.id, id));
