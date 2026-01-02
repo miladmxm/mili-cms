@@ -1,4 +1,4 @@
-import AllArticles from "@/features/article/components/allArticles";
+import AllArticles from "@/features/article/containers/allArticles";
 
 const BlogPage = () => {
   return <AllArticles />;

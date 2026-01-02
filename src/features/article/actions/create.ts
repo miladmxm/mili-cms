@@ -9,8 +9,10 @@ import { getSession } from "@/lib/auth";
 import { validator } from "@/validations";
 
 import type { CreateArticle } from "../types";
+import type { CreateCategoryOutput } from "../validations/createCategory";
 
 import { createArticle } from "../dal/mutation";
+import { CreateCategorySchema } from "../validations/createCategory";
 import { CreateArticleSchema } from "../validations/createSchema";
 
 export const createArticleAction = async (
@@ -22,7 +24,6 @@ export const createArticleAction = async (
   if (!success) {
     return { success, message: "خطای اعتبارسنجی", errors };
   }
-
   try {
     await createArticle({
       ...output,
@@ -33,5 +34,25 @@ export const createArticleAction = async (
   } catch (error) {
     console.log(error);
     return { success: false, message: "خطا در ایجاد مقاله" };
+  }
+};
+
+export const createCategoryAction = async (
+  inputData: unknown,
+): Promise<ActionResult<CreateCategoryOutput>> => {
+  const { errors, output, success } = validator(
+    CreateCategorySchema,
+    inputData,
+  );
+  if (!success) {
+    return { success, errors, message: "خطای اعتبارسنجی" };
+  }
+  try {
+    // await createCategory(output);
+    // updateTag("categories");
+    return { success, message: "دسته بندی با موفقیت ایجاد شد" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "خطا در ایجاد دسته بندی" };
   }
 };

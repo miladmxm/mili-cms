@@ -18,7 +18,7 @@ export const deleteMedia = async (id: string) => {
   const result = await db.delete(media).where(eq(media.id, id)).returning();
   return result[0];
 };
-export const findMedia = (id: string) =>
+export const findMediaById = (id: string) =>
   db.query.media.findFirst({ where: eq(media.id, id) });
 
 export const updateMediaMeta = (id: string, data: FileMeta) =>

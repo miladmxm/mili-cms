@@ -23,6 +23,7 @@ export const NavDictionary: Record<string, string> = {
   media: "مدیا",
   add: "افزودن",
   edit: "ویرایش",
+  categories: "دسته بندی ها",
 };
 export const navMain: AdminNavMain[] = [
   {
@@ -44,6 +45,10 @@ export const navMain: AdminNavMain[] = [
       {
         title: "افزودن",
         url: "/admin/blog/add",
+      },
+      {
+        title: "دسته بندی ها",
+        url: "/admin/blog/categories",
       },
     ],
   },

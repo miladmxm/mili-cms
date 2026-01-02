@@ -2,8 +2,8 @@ import { IconListDetails } from "@tabler/icons-react";
 
 import EmptyPlaceholder from "@/components/dashboard/empty";
 
+import { ArticleTable } from "../components/articleTable";
 import { getArticles } from "../dal/query";
-import { ArticleTable } from "./articleTable";
 
 const AllArticles = async () => {
   const articles = await getArticles();

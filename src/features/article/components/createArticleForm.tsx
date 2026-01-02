@@ -23,6 +23,7 @@ import { Input } from "@/components/dashboard/ui/input";
 import { Spinner } from "@/components/dashboard/ui/spinner";
 import { Textarea } from "@/components/dashboard/ui/textarea";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
+import { convertToSlug } from "@/lib/slug";
 
 import {
   useCreateArticle,
@@ -80,10 +81,15 @@ const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field aria-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="title">Slug</FieldLabel>
+                      <FieldLabel htmlFor="slug">Slug</FieldLabel>
                       <Input
                         dir="ltr"
-                        id="title"
+                        id="slug"
+                        onFocus={(e) => {
+                          if (!e.target.value) {
+                            setValue("slug", convertToSlug(getValue("title")));
+                          }
+                        }}
                         placeholder="article-about"
                         {...field}
                       />
@@ -99,7 +105,7 @@ const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
                   render={({ field, fieldState }) => (
                     <Field aria-invalid={fieldState.invalid}>
                       <FieldLabel htmlFor="excerpt">خلاصه از مقاله</FieldLabel>
-                      <Textarea {...field} />
+                      <Textarea id="excerpt" {...field} />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                       )}

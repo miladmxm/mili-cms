@@ -2,7 +2,7 @@ import CreateArticleForm from "@/features/article/components/createArticleForm";
 import { getMediasByType } from "@/features/media/dal/queries";
 
 const AddNewArticle = () => {
-  const medias = getMediasByType(["video", "image"]);
+  const medias = getMediasByType(["image"]);
   return <CreateArticleForm medias={medias} />;
 };
 

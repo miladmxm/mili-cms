@@ -1,6 +1,6 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useEffectEvent, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -12,6 +12,14 @@ import { CreateArticleSchema } from "../validations/createSchema";
 export const useHandleImagePicker = () => {
   const [showMediaPicker, setShowMediaPicker] = useState(false);
   const [previewImageUrl, setPreviewImageUrl] = useState("");
+  const reset = useEffectEvent(() => {
+    setPreviewImageUrl("");
+  });
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, []);
   return {
     showMediaPicker,
     previewImageUrl,
