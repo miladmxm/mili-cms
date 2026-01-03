@@ -6,6 +6,7 @@ import { getCategories } from "../dal/query";
 const Categories = async () => {
   const categories = await getCategories();
   const medias = getMediasByType(["image"]);
+  console.log(categories);
   return (
     <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-8">
       <CreateCategory

@@ -1,20 +1,19 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import type { CreateCategoryOutput } from "../validations/createCategory";
 
+import { createCategoryAction } from "../actions/create";
 import { CreateCategorySchema } from "../validations/createCategory";
 
 export const useCreateCategory = () => {
   const form = useForm<CreateCategoryOutput>({
     resolver: valibotResolver(CreateCategorySchema),
     defaultValues: {
-      description: "",
       name: "",
-      parentId: "",
       slug: "",
-      thumbnail: "",
     },
   });
   const [isPending, startTransition] = useTransition();
@@ -22,13 +21,12 @@ export const useCreateCategory = () => {
   const handleSubmit = (data: CreateCategoryOutput) => {
     startTransition(async () => {
       console.log(data);
-      // const { success, message } = await createArticleAction(data);
-      // if (!success) toast.error(message);
-      // else {
-      //   form.reset();
-      //   setdefaultContentValue(`<p dir="rtl">helo</p>`);
-      //   router.replace("/admin/blog");
-      // }
+      const { success, message } = await createCategoryAction(data);
+      if (!success) toast.error(message);
+      else {
+        toast.success(message);
+        form.reset();
+      }
     });
   };
 

@@ -26,6 +26,9 @@ export type DalError =
       type: "no-user";
     }
   | {
+      type: "not-found";
+    }
+  | {
       type: "unknown-error";
       error: unknown;
     };

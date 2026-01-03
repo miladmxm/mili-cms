@@ -11,7 +11,7 @@ import { validator } from "@/validations";
 import type { CreateArticle } from "../types";
 import type { CreateCategoryOutput } from "../validations/createCategory";
 
-import { createArticle } from "../dal/mutation";
+import { createArticle, createCategory } from "../dal/mutation";
 import { CreateCategorySchema } from "../validations/createCategory";
 import { CreateArticleSchema } from "../validations/createSchema";
 
@@ -48,8 +48,8 @@ export const createCategoryAction = async (
     return { success, errors, message: "خطای اعتبارسنجی" };
   }
   try {
-    // await createCategory(output);
-    // updateTag("categories");
+    await createCategory(output);
+    updateTag("article-categories");
     return { success, message: "دسته بندی با موفقیت ایجاد شد" };
   } catch (error) {
     console.log(error);

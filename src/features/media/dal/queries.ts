@@ -5,6 +5,7 @@ import "server-only";
 import type { Media, MediaTypes } from "@/features/type";
 
 import env from "@/config/env";
+import { ThrowableDalError } from "@/dal/types";
 import * as mediaRepo from "@/repositories/media.repo";
 
 export const DTOconvertMediaPathToRealUrl = (medias: Media[]) => {
@@ -26,6 +27,12 @@ export const getMedias = async () => {
   const medias = await mediaRepo.findMedias();
 
   return DTOconvertMediaPathToRealUrl(medias);
+};
+export const checkMediaType = async (id: string, type: MediaTypes) => {
+  "use cache";
+  cacheTag(`media-${id}`);
+  const media = await mediaRepo.findMediaByIdAndType(id, type);
+  if (!media) throw new ThrowableDalError({ type: "not-found" });
 };
 export const getMedia = async (id: string) => {
   "use cache";

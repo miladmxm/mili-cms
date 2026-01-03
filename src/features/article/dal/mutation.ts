@@ -1,18 +1,15 @@
-import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import "server-only";
 
+import { checkMediaType } from "@/features/media/dal/queries";
+import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import * as articleRepo from "@/repositories/article.repo";
-import * as mediaRepo from "@/repositories/media.repo";
 
 import type { ArticleStatus, Category, CreateArticle } from "../types";
 
 export const createArticle = async (data: CreateArticle) => {
   //todo has access
   if (data.thumbnail) {
-    const media = await mediaRepo.findMediaById(data.thumbnail);
-    if (!media || media.type !== "image") {
-      throw new Error("تصویر شاخص نامعتبر است");
-    }
+    await checkMediaType(data.thumbnail, "image");
   }
   let slug: string = convertToSlug(data.slug);
   const existing = await articleRepo.findArticleByStartedSlugWith(slug);
@@ -33,6 +30,10 @@ export const deleteArticle = (id: string) => {
 
 export const createCategory = async (categoryData: Category) => {
   //todo has access
-  // const category = (await categoryRepo.createCategory(categoryData))[0];
-  // articleRepo.createArticleCategory()
+  console.log(categoryData);
+  if (categoryData.thumbnail) {
+    await checkMediaType(categoryData.thumbnail, "image");
+  }
+  const category = (await articleRepo.createArticleCategory(categoryData))[0];
+  return category;
 };

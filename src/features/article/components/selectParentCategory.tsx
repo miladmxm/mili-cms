@@ -1,3 +1,5 @@
+import type { FC, PropsWithChildren } from "react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,23 +11,25 @@ import {
 } from "@/components/dashboard/ui/dropdown-menu";
 import { useDirection } from "@/hooks/useDirection";
 
-const SelectParentCategory = ({
-  value,
-  onChange,
-  allCategories,
-}: {
-  value?: string;
-  onChange: (value: string) => void;
-  allCategories: { name: string; id: string }[];
-}) => {
+const SelectParentCategory: FC<
+  PropsWithChildren & {
+    value?: string;
+    onChange: (value: string) => void;
+    allCategories: { name: string; id: string }[];
+  }
+> = ({ value, onChange, allCategories, children }) => {
   const dir = useDirection();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>{}</DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="rtl:dir-rtl">
         <DropdownMenuLabel>انتخاب والد</DropdownMenuLabel>
         <DropdownMenuSeparator />
+
         <DropdownMenuRadioGroup value={value} onValueChange={onChange}>
+          <DropdownMenuRadioItem dir={dir} value="">
+            هیج کدام
+          </DropdownMenuRadioItem>
           {allCategories.map(({ id, name }) => {
             return (
               <DropdownMenuRadioItem dir={dir} key={id} value={id}>

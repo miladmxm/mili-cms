@@ -5,8 +5,8 @@ import { text, uniqueIndex, uuid, varchar } from "drizzle-orm/pg-core";
 import { MainSchema } from "./main";
 import { media } from "./media";
 
-export const category = MainSchema.table(
-  "category",
+export const articleCategory = MainSchema.table(
+  "article_category",
   {
     id: uuid("id").primaryKey().notNull().defaultRandom(),
     name: varchar("name", { length: 255 }).notNull(),
@@ -15,9 +15,12 @@ export const category = MainSchema.table(
     thumbnail: uuid("thumbnail").references(() => media.id, {
       onDelete: "set null",
     }),
-    parentId: uuid("parent_id").references((): AnyPgColumn => category.id, {
-      onDelete: "cascade",
-    }),
+    parentId: uuid("parent_id").references(
+      (): AnyPgColumn => articleCategory.id,
+      {
+        onDelete: "cascade",
+      },
+    ),
   },
   (table) => ({
     slugUnique: uniqueIndex("category_slug_unique").on(table.slug),

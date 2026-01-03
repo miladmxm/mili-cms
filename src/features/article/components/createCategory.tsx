@@ -1,6 +1,7 @@
 "use client";
 import type { FC } from "react";
 
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { Suspense } from "react";
 import { Controller } from "react-hook-form";
@@ -36,6 +37,7 @@ interface CreateCategoryProps {
   categories: { name: string; id: string }[];
   medias: Promise<Media[]>;
 }
+// eslint-disable-next-line max-lines-per-function
 const CreateCategory: FC<CreateCategoryProps> = ({
   className,
   categories,
@@ -99,12 +101,25 @@ const CreateCategory: FC<CreateCategoryProps> = ({
                 control={control}
                 render={({ fieldState }) => (
                   <Field aria-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="parentId">slug</FieldLabel>
+                    <FieldLabel htmlFor="parentId">دسته‌بندی والد</FieldLabel>
                     <SelectParentCategory
                       value={getValue("parentId")}
                       allCategories={categories}
-                      onChange={(id) => setValue("parentId", id)}
-                    />
+                      onChange={(id) => setValue("parentId", id || undefined)}
+                    >
+                      <Button
+                        className="text-start"
+                        disabled={isPending}
+                        variant="outline"
+                      >
+                        <span className="w-full">
+                          {categories.find(
+                            ({ id }) => id === getValue("parentId"),
+                          )?.name || "هیچ کدام"}
+                        </span>
+                        <ChevronDown />
+                      </Button>
+                    </SelectParentCategory>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -132,10 +147,9 @@ const CreateCategory: FC<CreateCategoryProps> = ({
             <Controller
               name="thumbnail"
               control={control}
-              render={({ field, fieldState }) => (
+              render={({ fieldState }) => (
                 <Field aria-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
-                  <input {...field} className="sr-only" type="hidden" />
                   <Suspense fallback={null}>
                     <MediaPickerSheet
                       medias={medias}

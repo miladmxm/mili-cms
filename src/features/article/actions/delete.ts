@@ -11,7 +11,7 @@ export const deleteArticleAction = async (
 ): Promise<ActionResult<unknown>> => {
   try {
     await deleteArticle(id);
-    updateTag("articles");
+    updateTag("article-categories");
     return { success: true, message: "با موفقیت حذف شد" };
   } catch (error) {
     console.log(error);

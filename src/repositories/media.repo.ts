@@ -1,4 +1,4 @@
-import { desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 
 import type { FileMeta, MediaTypes } from "@/features/type";
 
@@ -9,6 +9,10 @@ export const createMedia = (data: typeof media.$inferInsert) =>
   db.insert(media).values(data).returning();
 export const findMedias = () =>
   db.query.media.findMany({ orderBy: [desc(media.createdAt)] });
+export const findMediaByIdAndType = (id: string, type: MediaTypes) =>
+  db.query.media.findFirst({
+    where: and(eq(media.id, id), eq(media.type, type)),
+  });
 export const findMediasByTypes = (types: MediaTypes[]) =>
   db.query.media.findMany({
     where: inArray(media.type, types),

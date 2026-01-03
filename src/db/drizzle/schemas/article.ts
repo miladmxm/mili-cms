@@ -12,8 +12,8 @@ import {
 
 import type { ArticleStatus } from "@/features/article/types";
 
+import { articleCategory } from "./articleCategory";
 import { user } from "./auth";
-import { category } from "./category";
 import { comment } from "./comment";
 import { MainSchema, RelationSchema } from "./main";
 import { media } from "./media";
@@ -60,8 +60,8 @@ export const article = MainSchema.table(
   }),
 );
 
-export const articleComments = RelationSchema.table(
-  "article_comments",
+export const articleToComments = RelationSchema.table(
+  "article_to_comments",
   {
     articleId: uuid("article_id")
       .notNull()
@@ -73,21 +73,21 @@ export const articleComments = RelationSchema.table(
   (table) => [primaryKey({ columns: [table.articleId, table.commentId] })],
 );
 
-export const articleCategory = RelationSchema.table(
-  "article_category",
+export const articleToCategory = RelationSchema.table(
+  "article_to_category",
   {
     articleId: uuid("article_id")
       .references(() => article.id, { onDelete: "cascade" })
       .notNull(),
     categoryId: uuid("category_id")
-      .references(() => category.id, { onDelete: "cascade" })
+      .references(() => articleCategory.id, { onDelete: "cascade" })
       .notNull(),
   },
   (table) => [primaryKey({ columns: [table.articleId, table.categoryId] })],
 );
 
-export const articleRate = RelationSchema.table(
-  "article_rate",
+export const articleToRate = RelationSchema.table(
+  "article_to_rate",
   {
     articleId: uuid("article_id")
       .references(() => article.id, { onDelete: "cascade" })
