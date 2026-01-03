@@ -28,7 +28,6 @@ import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 import { cn } from "@/lib/utils";
 
-import { useHandleImagePicker } from "../hooks/useCreateArticle";
 import { useCreateCategory } from "../hooks/useCreateCategory";
 import SelectParentCategory from "./selectParentCategory";
 
@@ -43,14 +42,19 @@ const CreateCategory: FC<CreateCategoryProps> = ({
   categories,
   medias,
 }) => {
-  const { control, isPending, submit, getValue, setValue } =
-    useCreateCategory();
   const {
-    previewImageUrl,
-    setPreviewImageUrl,
-    setShowMediaPicker,
-    showMediaPicker,
-  } = useHandleImagePicker();
+    control,
+    isPending,
+    submit,
+    getValue,
+    setValue,
+    mediaPicker: {
+      previewImageUrl,
+      setPreviewImageUrl,
+      setShowMediaPicker,
+      showMediaPicker,
+    },
+  } = useCreateCategory();
   return (
     <form className={cn(className)} onSubmit={submit}>
       <Card>

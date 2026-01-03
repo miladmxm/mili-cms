@@ -1,6 +1,6 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useRouter } from "next/navigation";
-import { useEffect, useEffectEvent, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -9,26 +9,11 @@ import type { CreateArticleOutput } from "../validations/createSchema";
 import { createArticleAction } from "../actions/create";
 import { CreateArticleSchema } from "../validations/createSchema";
 
-export const useHandleImagePicker = () => {
-  const [showMediaPicker, setShowMediaPicker] = useState(false);
-  const [previewImageUrl, setPreviewImageUrl] = useState("");
-  const reset = useEffectEvent(() => {
-    setPreviewImageUrl("");
-  });
-  useEffect(() => {
-    return () => {
-      reset();
-    };
-  }, []);
-  return {
-    showMediaPicker,
-    previewImageUrl,
-    setPreviewImageUrl,
-    setShowMediaPicker,
-  };
-};
 export const useCreateArticle = () => {
   const router = useRouter();
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
+  const [previewImageUrl, setPreviewImageUrl] = useState("");
+
   const [defaultContentValue, setdefaultContentValue] = useState(
     `<div dir="rtl" style="text-align: right;"><p dir="rtl"></p></div>`,
   );
@@ -52,6 +37,7 @@ export const useCreateArticle = () => {
       else {
         form.reset();
         setdefaultContentValue(`<p dir="rtl">helo</p>`);
+        setPreviewImageUrl("");
         router.replace("/admin/blog");
       }
     });
@@ -64,5 +50,11 @@ export const useCreateArticle = () => {
     setValue: form.setValue,
     getValue: form.getValues,
     defaultContentValue,
+    mediaPicker: {
+      showMediaPicker,
+      setShowMediaPicker,
+      previewImageUrl,
+      setPreviewImageUrl,
+    },
   };
 };

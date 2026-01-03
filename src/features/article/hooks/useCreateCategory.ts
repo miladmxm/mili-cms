@@ -1,5 +1,5 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -9,6 +9,9 @@ import { createCategoryAction } from "../actions/create";
 import { CreateCategorySchema } from "../validations/createCategory";
 
 export const useCreateCategory = () => {
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
+  const [previewImageUrl, setPreviewImageUrl] = useState("");
+
   const form = useForm<CreateCategoryOutput>({
     resolver: valibotResolver(CreateCategorySchema),
     defaultValues: {
@@ -25,6 +28,7 @@ export const useCreateCategory = () => {
       if (!success) toast.error(message);
       else {
         toast.success(message);
+        setPreviewImageUrl("");
         form.reset();
       }
     });
@@ -36,5 +40,11 @@ export const useCreateCategory = () => {
     submit: form.handleSubmit(handleSubmit),
     getValue: form.getValues,
     setValue: form.setValue,
+    mediaPicker: {
+      showMediaPicker,
+      setShowMediaPicker,
+      previewImageUrl,
+      setPreviewImageUrl,
+    },
   };
 };

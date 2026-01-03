@@ -25,10 +25,7 @@ import { Textarea } from "@/components/dashboard/ui/textarea";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 
-import {
-  useCreateArticle,
-  useHandleImagePicker,
-} from "../hooks/useCreateArticle";
+import { useCreateArticle } from "../hooks/useCreateArticle";
 import { StatusDictionary } from "../types";
 import RichEditor from "./richEditor";
 import StatusDropdown from "./statusDropdown";
@@ -42,13 +39,13 @@ const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
     submit,
     setValue,
     defaultContentValue,
+    mediaPicker: {
+      previewImageUrl,
+      setPreviewImageUrl,
+      setShowMediaPicker,
+      showMediaPicker,
+    },
   } = useCreateArticle();
-  const {
-    previewImageUrl,
-    setPreviewImageUrl,
-    setShowMediaPicker,
-    showMediaPicker,
-  } = useHandleImagePicker();
   return (
     <form onSubmit={submit}>
       <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-12 gap-4">
