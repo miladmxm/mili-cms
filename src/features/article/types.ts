@@ -8,13 +8,25 @@ export interface CreateArticle {
   status?: ArticleStatus;
   thumbnail?: string | null;
 }
-export interface Category {
+export interface CreateCategory {
   name: string;
   slug: string;
-  thumbnail?: string | null;
+  thumbnail?: string;
   parentId?: string;
   description?: string;
 }
+export interface Category {
+  name: string;
+  id: string;
+  slug: string;
+  thumbnail?: { url: string; alt: string } | null;
+  parentId?: string | null;
+  description?: string | null;
+}
+export interface CategoryTree extends Category {
+  children?: CategoryTree[];
+}
+
 export const StatusDictionary: Record<ArticleStatus, string> = {
   archived: "آرشیو",
   draft: "پیش‌نویس",

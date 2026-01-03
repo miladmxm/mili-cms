@@ -115,12 +115,11 @@ const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
                 <Controller
                   name="thumbnail"
                   control={control}
-                  render={({ field, fieldState }) => (
+                  render={({ fieldState }) => (
                     <Field aria-invalid={fieldState.invalid}>
                       <FieldLabel htmlFor="thumbnail">
                         انتخاب تصویر شاخص
                       </FieldLabel>
-                      <input {...field} className="sr-only" type="hidden" />
                       <Suspense fallback={null}>
                         <MediaPickerSheet
                           medias={medias}

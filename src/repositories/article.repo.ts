@@ -18,7 +18,7 @@ export const findArticleByStartedSlugWith = async (slug: string) =>
   });
 export const findCategories = async () => {
   const categories = await db.query.articleCategory.findMany({
-    with: { thumbnail: { columns: { url: true } } },
+    with: { thumbnail: { columns: { url: true, meta: true } } },
   });
   return categories;
 };
@@ -39,3 +39,5 @@ export const deleteArticleById = (id: string) =>
 export const createArticleCategory = (
   data: typeof articleCategory.$inferInsert,
 ) => db.insert(articleCategory).values(data).returning();
+export const deleteArticleCategoryById = (id: string) =>
+  db.delete(articleCategory).where(eq(articleCategory.id, id));

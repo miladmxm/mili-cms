@@ -8,9 +8,12 @@ import env from "@/config/env";
 import { ThrowableDalError } from "@/dal/types";
 import * as mediaRepo from "@/repositories/media.repo";
 
-export const DTOconvertMediaPathToRealUrl = (medias: Media[]) => {
+export const DTOconvertMediaPathToRealUrl = (mediaPath: string) => {
+  return `${env.S3_ENDPOINT}/${env.S3_BUCKET}/${mediaPath}`;
+};
+export const DTOconvertMediaToRealUrlMedia = (medias: Media[]) => {
   return medias.map((media) => {
-    media.url = `${env.S3_ENDPOINT}/${env.S3_BUCKET}/${media.url}`;
+    media.url = DTOconvertMediaPathToRealUrl(media.url);
     return media;
   });
 };
@@ -19,14 +22,14 @@ export const getMediasByType = async (types: MediaTypes[]) => {
   cacheTag("media", ...types.map((t) => `media-type-${t}`));
 
   const medias = await mediaRepo.findMediasByTypes(types);
-  return DTOconvertMediaPathToRealUrl(medias);
+  return DTOconvertMediaToRealUrlMedia(medias);
 };
 export const getMedias = async () => {
   "use cache";
   cacheTag("media");
   const medias = await mediaRepo.findMedias();
 
-  return DTOconvertMediaPathToRealUrl(medias);
+  return DTOconvertMediaToRealUrlMedia(medias);
 };
 export const checkMediaType = async (id: string, type: MediaTypes) => {
   "use cache";
@@ -39,5 +42,5 @@ export const getMedia = async (id: string) => {
   cacheTag(`media-${id}`);
   const media = await mediaRepo.findMediaById(id);
   if (!media) redirect("/admin/media");
-  return DTOconvertMediaPathToRealUrl([media])[0];
+  return DTOconvertMediaToRealUrlMedia([media])[0];
 };
