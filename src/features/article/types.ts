@@ -6,6 +6,7 @@ export interface CreateArticle {
   slug: string;
   authorId: string;
   status?: ArticleStatus;
+  categoryIds: string[];
   thumbnail?: string | null;
 }
 export interface CreateCategory {

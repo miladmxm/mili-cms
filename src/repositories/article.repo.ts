@@ -1,12 +1,16 @@
-import { desc, eq, like } from "drizzle-orm";
+import { desc, eq, inArray, like } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
 import { db } from "@/db/drizzle/db";
-import { article, articleCategory } from "@/db/drizzle/schemas";
+import {
+  article,
+  articleCategory,
+  articleToCategory,
+} from "@/db/drizzle/schemas";
 
 export const createArticle = (value: typeof article.$inferInsert) =>
-  db.insert(article).values(value);
+  db.insert(article).values(value).returning({ id: article.id });
 
 export const findArticleBySlug = async (slug: string) =>
   db.query.article.findFirst({
@@ -21,6 +25,11 @@ export const findCategories = async () => {
     with: { thumbnail: { columns: { url: true, meta: true } } },
   });
   return categories;
+};
+export const findCategoriesByIds = async (ids: string[]) => {
+  return await db.query.articleCategory.findMany({
+    where: inArray(articleCategory.id, ids),
+  });
 };
 export const findArticlesByLimitAndOffset = (options?: OffsetLimit) =>
   db.query.article.findMany({
@@ -41,3 +50,7 @@ export const createArticleCategory = (
 ) => db.insert(articleCategory).values(data).returning();
 export const deleteArticleCategoryById = (id: string) =>
   db.delete(articleCategory).where(eq(articleCategory.id, id));
+
+export const addArticleToCategories = (
+  articleToCategories: (typeof articleToCategory.$inferInsert)[],
+) => db.insert(articleToCategory).values(articleToCategories);

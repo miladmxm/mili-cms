@@ -1,5 +1,6 @@
 import "server-only";
 
+import { ThrowableDalError } from "@/dal/types";
 import { checkMediaType } from "@/features/media/dal/queries";
 import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import * as articleRepo from "@/repositories/article.repo";
@@ -11,13 +12,21 @@ export const createArticle = async (data: CreateArticle) => {
   if (data.thumbnail) {
     await checkMediaType(data.thumbnail, "image");
   }
+  const categories = await articleRepo.findCategoriesByIds(data.categoryIds);
+
   let slug: string = convertToSlug(data.slug);
   const existing = await articleRepo.findArticleByStartedSlugWith(slug);
   slug = generateUniqueSlug(
     slug,
     existing.map((a) => a.slug),
   );
-  return articleRepo.createArticle({ ...data, slug });
+  const article = (await articleRepo.createArticle({ ...data, slug }))[0];
+
+  if (!article) throw new ThrowableDalError({ type: "no-access" });
+
+  await articleRepo.addArticleToCategories(
+    categories.map(({ id }) => ({ categoryId: id, articleId: article.id })),
+  );
 };
 export const updateStatus = (id: string, status: ArticleStatus) => {
   //todo has access

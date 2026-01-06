@@ -26,6 +26,7 @@ export const useCreateArticle = () => {
       slug: "",
       thumbnail: "",
       status: "draft",
+      categoryIds: [],
     },
   });
   const [isPending, startTransition] = useTransition();

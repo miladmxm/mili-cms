@@ -1,9 +1,7 @@
-import CreateArticleForm from "@/features/article/components/createArticleForm";
-import { getMediasByType } from "@/features/media/dal/queries";
+import CreateArticle from "@/features/article/containers/createArticle";
 
 const AddNewArticle = () => {
-  const medias = getMediasByType(["image"]);
-  return <CreateArticleForm medias={medias} />;
+  return <CreateArticle />;
 };
 
 export default AddNewArticle;

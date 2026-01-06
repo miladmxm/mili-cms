@@ -25,13 +25,24 @@ import { Textarea } from "@/components/dashboard/ui/textarea";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 
+import type { Category } from "../types";
+
 import { useCreateArticle } from "../hooks/useCreateArticle";
 import { StatusDictionary } from "../types";
 import RichEditor from "./richEditor";
+import SelectMultipleCategories, {
+  SelectMultipleCategoriesSkeleton,
+} from "./selectMultipleCategories";
 import StatusDropdown from "./statusDropdown";
 
 // eslint-disable-next-line max-lines-per-function
-const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
+const CreateArticleForm = ({
+  medias,
+  categories,
+}: {
+  medias: Promise<Media[]>;
+  categories: Promise<Category[]>;
+}) => {
   const {
     control,
     getValue,
@@ -106,6 +117,39 @@ const CreateArticleForm = ({ medias }: { medias: Promise<Media[]> }) => {
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                       )}
+                    </Field>
+                  )}
+                />
+                <Controller
+                  name="categoryIds"
+                  control={control}
+                  render={({ fieldState }) => (
+                    <Field aria-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="categories">
+                        انتخاب دسته بندی ها
+                      </FieldLabel>
+                      <Suspense fallback={<SelectMultipleCategoriesSkeleton />}>
+                        <SelectMultipleCategories
+                          selectedItems={getValue("categoryIds")}
+                          triggerId="categories"
+                          categories={categories}
+                          onSelect={({ id }) => {
+                            const currentCategoriesValues =
+                              getValue("categoryIds");
+                            if (currentCategoriesValues.includes(id)) {
+                              setValue(
+                                "categoryIds",
+                                currentCategoriesValues.filter((i) => i !== id),
+                              );
+                            } else {
+                              setValue("categoryIds", [
+                                ...currentCategoriesValues,
+                                id,
+                              ]);
+                            }
+                          }}
+                        />
+                      </Suspense>
                     </Field>
                   )}
                 />

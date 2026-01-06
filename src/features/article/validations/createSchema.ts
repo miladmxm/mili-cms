@@ -11,5 +11,6 @@ export const CreateArticleSchema = v.object({
   thumbnail: v.optional(
     v.pipe(v.string(), v.nonEmpty("یک تصویر شاخص انتخاب کنید")),
   ),
+  categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
 });
 export type CreateArticleOutput = v.InferOutput<typeof CreateArticleSchema>;
