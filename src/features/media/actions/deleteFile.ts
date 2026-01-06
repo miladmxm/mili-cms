@@ -4,6 +4,8 @@ import { updateTag } from "next/cache";
 
 import type { ActionResult } from "@/types/actions";
 
+import { CacheKeys } from "@/constant/cacheKeys";
+
 import { removeFile } from "../dal/mutation";
 
 export const deleteFile = async (
@@ -12,7 +14,7 @@ export const deleteFile = async (
   // todo access check
   try {
     await removeFile(id);
-    updateTag("media");
+    updateTag(CacheKeys.medias);
     return { success: true };
   } catch (error) {
     if (error instanceof Error)

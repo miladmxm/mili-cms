@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import type { ActionResult } from "@/types/actions";
 
+import { CacheKeys } from "@/constant/cacheKeys";
 import { getSession } from "@/lib/auth";
 import { validator } from "@/validations";
 
@@ -29,7 +30,7 @@ export const createArticleAction = async (
       ...output,
       authorId: session.user.id,
     });
-    updateTag("articles");
+    updateTag(CacheKeys.articles);
     return { success, message: "مثاله با موفقیت ایجاد شد" };
   } catch (error) {
     console.log(error);
@@ -49,7 +50,7 @@ export const createCategoryAction = async (
   }
   try {
     await createCategory(output);
-    updateTag("article-categories");
+    updateTag(CacheKeys.articleCategories);
     return { success, message: "دسته بندی با موفقیت ایجاد شد" };
   } catch (error) {
     console.log(error);

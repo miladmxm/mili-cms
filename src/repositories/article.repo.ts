@@ -12,6 +12,11 @@ import {
 export const createArticle = (value: typeof article.$inferInsert) =>
   db.insert(article).values(value).returning({ id: article.id });
 
+export const findArticleById = async (id: string) =>
+  db.query.article.findFirst({
+    where: eq(article.id, id),
+  });
+
 export const findArticleBySlug = async (slug: string) =>
   db.query.article.findFirst({
     where: eq(article.slug, slug),
@@ -31,6 +36,7 @@ export const findCategoriesByIds = async (ids: string[]) => {
     where: inArray(articleCategory.id, ids),
   });
 };
+
 export const findArticlesByLimitAndOffset = (options?: OffsetLimit) =>
   db.query.article.findMany({
     orderBy: [desc(article.createdAt)],

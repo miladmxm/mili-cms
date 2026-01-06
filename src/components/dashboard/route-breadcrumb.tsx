@@ -36,7 +36,8 @@ const RouteBreadcrumb = () => {
         })}
         <BreadcrumbItem>
           <BreadcrumbPage>
-            {NavDictionary[arrayOfPaths[arrayOfPaths.length - 1]] || "داشبورد"}
+            {NavDictionary[arrayOfPaths[arrayOfPaths.length - 1]] ||
+              arrayOfPaths[arrayOfPaths.length - 1]}
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>

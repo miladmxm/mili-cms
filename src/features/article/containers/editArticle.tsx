@@ -1,0 +1,9 @@
+import { getArticle } from "../dal/query";
+
+const EditArticle = async ({ id }: { id: string }) => {
+  const article = await getArticle(id);
+  console.log(article);
+  return <div>{article?.title}</div>;
+};
+
+export default EditArticle;

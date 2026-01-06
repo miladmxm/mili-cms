@@ -5,6 +5,7 @@ import { updateTag } from "next/cache";
 import type { FileMeta } from "@/features/type";
 import type { ActionResult } from "@/types/actions";
 
+import { CacheKeys } from "@/constant/cacheKeys";
 import { updateMediaMeta } from "@/repositories/media.repo";
 import { validator } from "@/validations";
 
@@ -20,8 +21,8 @@ export const editFileMeta = async (
   }
   try {
     await updateMediaMeta(id, output);
-    updateTag("medias");
-    updateTag(`media-${id}`);
+    updateTag(CacheKeys.medias);
+    updateTag(`${CacheKeys.medias}-${id}`);
     return { success };
   } catch (error) {
     if (error instanceof Error) {

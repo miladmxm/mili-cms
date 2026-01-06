@@ -93,7 +93,7 @@ export const columns: ColumnDef<Article>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/admin/blog">
+              <Link href={`/admin/blog/${id}`}>
                 ویرایش
                 <Pen />
               </Link>
