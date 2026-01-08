@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 import { Controller } from "react-hook-form";
 
-import type { Media } from "@/features/type";
+import type { Media } from "@/services/media/type";
 
 import { Button } from "@/components/dashboard/ui/button";
 import {
@@ -25,10 +25,10 @@ import { Textarea } from "@/components/dashboard/ui/textarea";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 
-import type { Category } from "../types";
+import type { Category } from "../../../services/article/types";
 
+import { StatusDictionary } from "../../../services/article/types";
 import { useCreateArticle } from "../hooks/useCreateArticle";
-import { StatusDictionary } from "../types";
 import RichEditor from "./richEditor";
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,

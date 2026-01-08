@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-import type { MediaTypes } from "@/features/type";
+import type { MediaTypes } from "@/services/media/type";
 
 const AudioSchema = v.pipe(
   v.file(),

@@ -13,9 +13,9 @@ import {
 } from "@/components/dashboard/ui/dropdown-menu";
 import { useDirection } from "@/hooks/useDirection";
 
-import type { ArticleStatus } from "../types";
+import type { ArticleStatus } from "../../../services/article/types";
 
-import { StatusDictionary } from "../types";
+import { StatusDictionary } from "../../../services/article/types";
 
 interface StatusDropdownProps {
   value: ArticleStatus;

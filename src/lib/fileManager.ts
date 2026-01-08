@@ -10,7 +10,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { join as pathJoin } from "node:path";
 
-import type { MediaTypes } from "@/features/type";
+import type { MediaTypes } from "@/services/media/type";
 
 import env from "@/config/env";
 

@@ -12,7 +12,8 @@ export const deleteArticleAction = async (
   id: string,
 ): Promise<ActionResult<unknown>> => {
   try {
-    await deleteArticle(id);
+    const { success } = await deleteArticle(id);
+    if (!success) return { success, message: "خطا در حذف مقاله" };
     updateTag(CacheKeys.articles);
     return { success: true, message: "با موفقیت حذف شد" };
   } catch (error) {
@@ -24,7 +25,8 @@ export const deleteCategoryAction = async (
   id: string,
 ): Promise<ActionResult<unknown>> => {
   try {
-    await deleteCategory(id);
+    const { success } = await deleteCategory(id);
+    if (!success) return { success, message: "خطا در حذف دسته بندی" };
     updateTag(CacheKeys.articleCategories);
     return { success: true, message: "با موفقیت حذف شد" };
   } catch (error) {

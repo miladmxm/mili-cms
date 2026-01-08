@@ -11,9 +11,9 @@ import { removeFile } from "../dal/mutation";
 export const deleteFile = async (
   id: string,
 ): Promise<ActionResult<{ id: string }>> => {
-  // todo access check
   try {
-    await removeFile(id);
+    const { success } = await removeFile(id);
+    if (!success) return { success: false, message: "حذف فایل انجام نشد" };
     updateTag(CacheKeys.medias);
     return { success: true };
   } catch (error) {

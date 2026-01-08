@@ -6,6 +6,7 @@ export const statements = {
   blog: ["create", "read", "update", "delete"],
   comment: ["create", "read", "update", "delete", "spam"],
   settings: ["read", "update"],
+  media: ["read", "upload", "delete", "update"],
 } as const;
 
 export type KeyStatements = keyof typeof statements;
@@ -19,6 +20,7 @@ export const roles = {
     product: ["read"],
     blog: ["read"],
     comment: ["read", "create"],
+    media: ["read"],
   }),
 
   moderator: ac.newRole({
@@ -27,6 +29,7 @@ export const roles = {
     blog: ["read", "create", "update", "delete"],
     settings: ["read"],
     comment: ["spam", "delete", "read", "update", "create"],
+    media: ["read", "upload", "update"],
   }),
 
   admin: ac.newRole({
@@ -35,5 +38,6 @@ export const roles = {
     customer: ["create", "read", "update", "delete", "ban"],
     comment: ["create", "read", "update", "delete", "spam"],
     settings: ["read", "update"],
+    media: ["delete", "read", "upload", "update"],
   }),
 };

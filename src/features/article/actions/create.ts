@@ -9,7 +9,7 @@ import { CacheKeys } from "@/constant/cacheKeys";
 import { getSession } from "@/lib/auth";
 import { validator } from "@/validations";
 
-import type { CreateArticle } from "../types";
+import type { CreateArticle } from "../../../services/article/types";
 import type { CreateCategoryOutput } from "../validations/createCategory";
 
 import { createArticle, createCategory } from "../dal/mutation";
@@ -21,17 +21,22 @@ export const createArticleAction = async (
 ): Promise<ActionResult<Partial<CreateArticle>>> => {
   const session = await getSession();
   if (!session) redirect("/");
-  const { errors, output, success } = validator(CreateArticleSchema, inputData);
-  if (!success) {
-    return { success, message: "خطای اعتبارسنجی", errors };
+  const {
+    errors,
+    output,
+    success: successValidation,
+  } = validator(CreateArticleSchema, inputData);
+  if (!successValidation) {
+    return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
   try {
-    await createArticle({
+    const { success } = await createArticle({
       ...output,
       authorId: session.user.id,
     });
+    if (!success) return { success, message: "خطا در ایجاد مقاله" };
     updateTag(CacheKeys.articles);
-    return { success, message: "مثاله با موفقیت ایجاد شد" };
+    return { success: successValidation, message: "مثاله با موفقیت ایجاد شد" };
   } catch (error) {
     console.log(error);
     return { success: false, message: "خطا در ایجاد مقاله" };
@@ -41,15 +46,19 @@ export const createArticleAction = async (
 export const createCategoryAction = async (
   inputData: unknown,
 ): Promise<ActionResult<CreateCategoryOutput>> => {
-  const { errors, output, success } = validator(
-    CreateCategorySchema,
-    inputData,
-  );
-  if (!success) {
-    return { success, errors, message: "خطای اعتبارسنجی" };
+  const {
+    errors,
+    output,
+    success: successValidation,
+  } = validator(CreateCategorySchema, inputData);
+
+  if (!successValidation) {
+    return { success: successValidation, errors, message: "خطای اعتبارسنجی" };
   }
+
   try {
-    await createCategory(output);
+    const { success } = await createCategory(output);
+    if (!success) return { success, message: "خطا در ایجاد دسته بندی" };
     updateTag(CacheKeys.articleCategories);
     return { success, message: "دسته بندی با موفقیت ایجاد شد" };
   } catch (error) {

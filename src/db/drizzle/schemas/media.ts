@@ -1,6 +1,6 @@
 import { integer, jsonb, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-import type { FileMeta, MediaTypes } from "@/features/type";
+import type { FileMeta, MediaTypes } from "@/services/media/type";
 
 import { MainSchema } from "./main";
 

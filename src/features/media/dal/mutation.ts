@@ -1,39 +1,28 @@
-import type { FileMeta, MediaTypes } from "@/features/type";
+import type { FileMeta, SaveFile } from "@/services/media/type";
 
-import { deleteFile, writeFile } from "@/lib/fileManager";
-import * as mediaRepo from "@/repositories/media.repo";
-import { getToDayString } from "@/utils/getToDayString";
+import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
+import * as mediaService from "@/services/media";
 import "server-only";
 
-export const saveFile = async ({
-  file,
-  type,
-}: {
-  file: File;
-  type: MediaTypes;
-}) => {
-  // todo handle has access
-  const path = await writeFile({
-    file,
-    dir: getToDayString(),
-    name: crypto.randomUUID() + file.name.trim(),
-    type,
-  });
-  return await mediaRepo.createMedia({
-    type,
-    url: path,
-    size: file.size,
-    meta: { alt: file.name, name: file.name.trim(), title: file.name },
-  });
+export const saveFile = async (fileData: SaveFile) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => mediaService.uploadAndSaveFile(fileData)),
+    { media: ["upload"] },
+  );
 };
 
 export const removeFile = async (id: string) => {
-  // todo has access
-  const { url } = await mediaRepo.deleteMedia(id);
-  await deleteFile(url);
+  return dalRequireAuth(
+    () => dalDbOperation(() => mediaService.deleteFile(id)),
+    {
+      media: ["delete"],
+    },
+  );
 };
 
 export const updateFileData = async (id: string, data: FileMeta) => {
-  // todo has access
-  await mediaRepo.updateMediaMeta(id, data);
+  return dalRequireAuth(
+    () => dalDbOperation(() => mediaService.updateFileMeta(id, data)),
+    { media: ["update"] },
+  );
 };

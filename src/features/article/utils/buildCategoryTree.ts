@@ -1,4 +1,4 @@
-import type { Category, CategoryTree } from "../types";
+import type { Category, CategoryTree } from "../../../services/article/types";
 
 export function buildCategoryTree(categories: Category[]): CategoryTree[] {
   const map = new Map<string, CategoryTree>();

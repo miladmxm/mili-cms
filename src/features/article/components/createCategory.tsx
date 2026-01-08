@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 import { Controller } from "react-hook-form";
 
-import type { Media } from "@/features/type";
+import type { Media } from "@/services/media/type";
 
 import { Button } from "@/components/dashboard/ui/button";
 import {

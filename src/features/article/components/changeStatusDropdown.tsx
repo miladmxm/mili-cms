@@ -4,10 +4,10 @@ import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/dashboard/ui/button";
 import { Spinner } from "@/components/dashboard/ui/spinner";
 
-import type { ArticleStatus } from "../types";
+import type { ArticleStatus } from "../../../services/article/types";
 
+import { StatusDictionary } from "../../../services/article/types";
 import { useChangeStatus } from "../hooks/useChangeStatus";
-import { StatusDictionary } from "../types";
 import StatusDropdown from "./statusDropdown";
 
 const ChangeStatusDropdown = ({

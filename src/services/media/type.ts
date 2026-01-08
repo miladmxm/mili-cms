@@ -23,3 +23,8 @@ export interface Media {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface SaveFile {
+  file: File;
+  type: MediaTypes;
+}

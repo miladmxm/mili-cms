@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { MediaTypes } from "@/features/type";
+import type { MediaTypes } from "@/services/media/type";
 
 export interface UploadingFileData {
   type: MediaTypes;

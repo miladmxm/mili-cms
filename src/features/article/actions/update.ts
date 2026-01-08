@@ -16,12 +16,17 @@ export const updateArticleStatus = async (
   id: string,
   status: unknown,
 ): Promise<ActionResult<{ status: UpdateStatus }>> => {
-  const { errors, output, success } = validator(UpdateStatusSchema, { status });
-  if (!success) {
-    return { success, message: "خطای اعتبارسنجی", errors };
+  const {
+    errors,
+    output,
+    success: successValidation,
+  } = validator(UpdateStatusSchema, { status });
+  if (!successValidation) {
+    return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
   try {
-    await updateStatus(id, output.status);
+    const { success } = await updateStatus(id, output.status);
+    if (!success) return { success, message: "خطا در ویرایش مقاله" };
     updateTag(CacheKeys.articles);
     return { success, message: "ویرایش انجام شد" };
   } catch (error) {

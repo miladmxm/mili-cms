@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
-import type { Category, CategoryTree } from "../types";
+import type { Category, CategoryTree } from "../../../services/article/types";
 
 import { buildCategoryTree } from "../utils/buildCategoryTree";
 import DeleteCategory from "./deleteCategory";

@@ -20,7 +20,7 @@ import {
 } from "@/components/dashboard/ui/popover";
 import { Skeleton } from "@/components/dashboard/ui/skeleton";
 
-import type { Category } from "../types";
+import type { Category } from "../../../services/article/types";
 
 export const SelectMultipleCategoriesSkeleton = () => {
   return <Skeleton className="h-9 border w-full" />;

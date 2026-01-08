@@ -1,6 +1,6 @@
 import { and, desc, eq, inArray } from "drizzle-orm";
 
-import type { FileMeta, MediaTypes } from "@/features/type";
+import type { FileMeta, MediaTypes } from "@/services/media/type";
 
 import { db } from "@/db/drizzle/db";
 import { media } from "@/db/drizzle/schemas";

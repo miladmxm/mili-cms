@@ -2,28 +2,32 @@
 
 import { updateTag } from "next/cache";
 
-import type { FileMeta } from "@/features/type";
+import type { FileMeta } from "@/services/media/type";
 import type { ActionResult } from "@/types/actions";
 
 import { CacheKeys } from "@/constant/cacheKeys";
-import { updateMediaMeta } from "@/repositories/media.repo";
 import { validator } from "@/validations";
 
+import { updateFileData } from "../dal/mutation";
 import { EditFileDataSchema } from "../validations";
 
 export const editFileMeta = async (
   id: string,
   fileData: Partial<FileMeta>,
 ): Promise<ActionResult<{ id: string }>> => {
-  const { output, success } = validator(EditFileDataSchema, fileData);
-  if (!success) {
-    return { success, message: "validation error" };
+  const { output, success: successValidation } = validator(
+    EditFileDataSchema,
+    fileData,
+  );
+  if (!successValidation) {
+    return { success: successValidation, message: "validation error" };
   }
   try {
-    await updateMediaMeta(id, output);
+    const { success } = await updateFileData(id, output);
+    if (!success) return { success, message: "ویرایش انجام نشد" };
     updateTag(CacheKeys.medias);
     updateTag(`${CacheKeys.medias}-${id}`);
-    return { success };
+    return { success: successValidation };
   } catch (error) {
     if (error instanceof Error) {
       return { success: false, message: error.message };

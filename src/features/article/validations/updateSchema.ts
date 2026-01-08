@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-import type { ArticleStatus } from "../types";
+import type { ArticleStatus } from "../../../services/article/types";
 
 export const StatusSchema = v.pipe(
   v.picklist<ArticleStatus[]>(["archived", "draft", "published"]),

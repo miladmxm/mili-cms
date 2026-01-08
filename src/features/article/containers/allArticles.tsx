@@ -1,12 +1,13 @@
 import { IconListDetails } from "@tabler/icons-react";
 
 import EmptyPlaceholder from "@/components/dashboard/empty";
+import { dalVerifySuccess } from "@/dal/helpers";
 
 import { ArticleTable } from "../components/articleTable";
 import { getArticles } from "../dal/query";
 
 const AllArticles = async () => {
-  const articles = await getArticles();
+  const articles = dalVerifySuccess(await getArticles());
   if (!articles.length)
     return (
       <EmptyPlaceholder

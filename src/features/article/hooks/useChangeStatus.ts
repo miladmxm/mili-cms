@@ -1,7 +1,7 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import type { ArticleStatus } from "../types";
+import type { ArticleStatus } from "../../../services/article/types";
 
 import { updateArticleStatus } from "../actions/update";
 

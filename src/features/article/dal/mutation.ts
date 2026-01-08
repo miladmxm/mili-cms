@@ -1,51 +1,47 @@
 import "server-only";
 
-import { ThrowableDalError } from "@/dal/types";
-import { checkMediaType } from "@/features/media/dal/queries";
-import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
-import * as articleRepo from "@/repositories/article.repo";
+import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
+import * as articleService from "@/services/article";
 
-import type { ArticleStatus, CreateArticle, CreateCategory } from "../types";
+import type {
+  ArticleStatus,
+  CreateArticle,
+  CreateCategory,
+} from "../../../services/article/types";
 
 export const createArticle = async (data: CreateArticle) => {
-  //todo has access
-  if (data.thumbnail) {
-    await checkMediaType(data.thumbnail, "image");
-  }
-  const categories = await articleRepo.findCategoriesByIds(data.categoryIds);
-
-  let slug: string = convertToSlug(data.slug);
-  const existing = await articleRepo.findArticleByStartedSlugWith(slug);
-  slug = generateUniqueSlug(
-    slug,
-    existing.map((a) => a.slug),
+  const article = dalRequireAuth(
+    () => dalDbOperation(() => articleService.createArticle(data)),
+    { blog: ["create"] },
   );
-  const article = (await articleRepo.createArticle({ ...data, slug }))[0];
-
-  if (!article) throw new ThrowableDalError({ type: "no-access" });
-
-  await articleRepo.addArticleToCategories(
-    categories.map(({ id }) => ({ categoryId: id, articleId: article.id })),
-  );
+  return article;
 };
+
 export const updateStatus = (id: string, status: ArticleStatus) => {
-  //todo has access
-  return articleRepo.updateArticleById(id, { status });
+  const article = dalRequireAuth(
+    () => dalDbOperation(() => articleService.updateArticleStatus(id, status)),
+    { blog: ["update"] },
+  );
+  return article;
 };
 export const deleteArticle = (id: string) => {
-  //todo has access
-  return articleRepo.deleteArticleById(id);
+  return dalRequireAuth(
+    () => dalDbOperation(() => articleService.deleteArticle(id)),
+    {
+      blog: ["delete"],
+    },
+  );
 };
 
 export const createCategory = async (categoryData: CreateCategory) => {
-  //todo has access
-  if (categoryData.thumbnail) {
-    await checkMediaType(categoryData.thumbnail, "image");
-  }
-  const category = (await articleRepo.createArticleCategory(categoryData))[0];
-  return category;
+  return dalRequireAuth(
+    () => dalDbOperation(() => articleService.createCategory(categoryData)),
+    { blog: ["create"] },
+  );
 };
 export const deleteCategory = (id: string) => {
-  //todo has access
-  return articleRepo.deleteArticleCategoryById(id);
+  return dalRequireAuth(
+    () => dalDbOperation(() => articleService.deleteCategory(id)),
+    { blog: ["delete"] },
+  );
 };

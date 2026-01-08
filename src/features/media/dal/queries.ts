@@ -1,47 +1,43 @@
-import { cacheTag } from "next/cache";
-import { redirect } from "next/navigation";
 import "server-only";
 
-import type { Media, MediaTypes } from "@/features/type";
+import type { MediaTypes } from "@/services/media/type";
 
-import env from "@/config/env";
-import { CacheKeys } from "@/constant/cacheKeys";
+import {
+  dalDbOperation,
+  dalRequireAuth,
+  dalVerifySuccess,
+} from "@/dal/helpers";
 import { ThrowableDalError } from "@/dal/types";
-import * as mediaRepo from "@/repositories/media.repo";
+import * as mediaService from "@/services/media";
 
-export const DTOconvertMediaPathToRealUrl = (mediaPath: string) => {
-  return `${env.S3_ENDPOINT}/${env.S3_BUCKET}/${mediaPath}`;
-};
-export const DTOconvertMediaToRealUrlMedia = (medias: Media[]) => {
-  return medias.map((media) => {
-    media.url = DTOconvertMediaPathToRealUrl(media.url);
-    return media;
-  });
-};
 export const getMediasByType = async (types: MediaTypes[]) => {
-  "use cache";
-  cacheTag(CacheKeys.medias, ...types.map((t) => `media-type-${t}`));
-
-  const medias = await mediaRepo.findMediasByTypes(types);
-  return DTOconvertMediaToRealUrlMedia(medias);
+  const medias = dalVerifySuccess(
+    await dalRequireAuth(
+      () => dalDbOperation(() => mediaService.getMediasByTypes(types)),
+      { media: ["read"] },
+    ),
+  );
+  return medias;
 };
+
 export const getMedias = async () => {
-  "use cache";
-  cacheTag(CacheKeys.medias);
-  const medias = await mediaRepo.findMedias();
+  const medias = dalVerifySuccess(
+    await dalRequireAuth(() => dalDbOperation(mediaService.getMedias), {
+      media: ["read"],
+    }),
+  );
+  return medias;
+};
 
-  return DTOconvertMediaToRealUrlMedia(medias);
-};
-export const checkMediaType = async (id: string, type: MediaTypes) => {
-  "use cache";
-  cacheTag(`${CacheKeys.medias}-${id}`, type);
-  const media = await mediaRepo.findMediaByIdAndType(id, type);
-  if (!media) throw new ThrowableDalError({ type: "not-found" });
-};
 export const getMedia = async (id: string) => {
-  "use cache";
-  cacheTag(`${CacheKeys.medias}-${id}`);
-  const media = await mediaRepo.findMediaById(id);
-  if (!media) redirect("/admin/media");
-  return DTOconvertMediaToRealUrlMedia([media])[0];
+  const media = dalVerifySuccess(
+    await dalRequireAuth(
+      () => dalDbOperation(() => mediaService.getMedia(id)),
+      {
+        media: ["read"],
+      },
+    ),
+  );
+  if (!media) throw new ThrowableDalError({ type: "not-found" });
+  return media;
 };

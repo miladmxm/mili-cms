@@ -1,7 +1,7 @@
 "use client";
 import { use } from "react";
 
-import type { FileMeta, MediaTypes } from "@/features/type";
+import type { FileMeta, MediaTypes } from "@/services/media/type";
 
 import FileCard from "./fileCard";
 

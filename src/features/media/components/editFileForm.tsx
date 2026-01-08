@@ -3,7 +3,7 @@ import { filesize } from "filesize";
 import { Activity } from "react";
 import { Controller } from "react-hook-form";
 
-import type { Media } from "@/features/type";
+import type { Media } from "@/services/media/type";
 
 import CopyToClipboard from "@/components/dashboard/copy-to-clipboard";
 import { Badge } from "@/components/dashboard/ui/badge";

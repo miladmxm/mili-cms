@@ -1,7 +1,7 @@
 import { Clapperboard, File, Image as ImageIcon, Music4 } from "lucide-react";
 import Image from "next/image";
 
-import type { MediaTypes } from "@/features/type";
+import type { MediaTypes } from "@/services/media/type";
 
 import { cn } from "@/lib/utils";
 

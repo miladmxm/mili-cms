@@ -1,7 +1,7 @@
 "use client";
 import { use } from "react";
 
-import type { Media } from "@/features/type";
+import type { Media } from "@/services/media/type";
 
 import {
   Sheet,

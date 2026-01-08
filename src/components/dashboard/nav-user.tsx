@@ -3,7 +3,6 @@
 import {
   IconCreditCard,
   IconDotsVertical,
-  IconLogout,
   IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react";
@@ -31,6 +30,7 @@ import {
 import { useDirection } from "@/hooks/useDirection";
 import { useSession } from "@/hooks/useSession";
 
+import SignoutButton from "@/features/auth/admin/components/signoutButton";
 import { Skeleton } from "./ui/skeleton";
 
 const NavUserSkeleton = () => {
@@ -57,7 +57,7 @@ export function NavUser() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu dir={dir}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
@@ -119,9 +119,8 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem dir={dir}>
-              <IconLogout />
-              خروج
+            <DropdownMenuItem dir={dir} asChild>
+              <SignoutButton />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

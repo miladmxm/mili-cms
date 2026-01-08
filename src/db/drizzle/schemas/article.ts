@@ -10,7 +10,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type { ArticleStatus } from "@/features/article/types";
+import type { ArticleStatus } from "@/services/article/types";
 
 import { articleCategory } from "./articleCategory";
 import { user } from "./auth";

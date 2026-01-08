@@ -1,4 +1,4 @@
-import type { ArticleStatus } from "../../types";
+import type { ArticleStatus } from "../../../../services/article/types";
 
 export interface Article {
   id: string;
