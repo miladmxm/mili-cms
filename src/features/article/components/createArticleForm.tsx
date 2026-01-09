@@ -1,7 +1,4 @@
 "use client";
-import { ChevronDown } from "lucide-react";
-import Image from "next/image";
-import { Suspense } from "react";
 import { Controller } from "react-hook-form";
 
 import type { Media } from "@/services/media/type";
@@ -13,29 +10,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/dashboard/ui/card";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/dashboard/ui/field";
-import { Input } from "@/components/dashboard/ui/input";
+import { Field, FieldError, FieldGroup } from "@/components/dashboard/ui/field";
 import { Spinner } from "@/components/dashboard/ui/spinner";
-import { Textarea } from "@/components/dashboard/ui/textarea";
-import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
-import { convertToSlug } from "@/lib/slug";
 
 import type { Category } from "../../../services/article/types";
 
-import { StatusDictionary } from "../../../services/article/types";
 import { useCreateArticle } from "../hooks/useCreateArticle";
+import {
+  ArticleCategories,
+  ArticleExcerpt,
+  ArticleSlug,
+  ArticleStatus,
+  ArticleThumbnail,
+  ArticleTitle,
+} from "./articleFormFields";
 import RichEditor from "./richEditor";
-import SelectMultipleCategories, {
-  SelectMultipleCategoriesSkeleton,
-} from "./selectMultipleCategories";
-import StatusDropdown from "./statusDropdown";
 
-// eslint-disable-next-line max-lines-per-function
 const CreateArticleForm = ({
   medias,
   categories,
@@ -45,17 +35,12 @@ const CreateArticleForm = ({
 }) => {
   const {
     control,
-    getValue,
+    getValues,
     isPending,
     submit,
     setValue,
     defaultContentValue,
-    mediaPicker: {
-      previewImageUrl,
-      setPreviewImageUrl,
-      setShowMediaPicker,
-      showMediaPicker,
-    },
+    mediaPicker: { previewImageUrl, setPreviewImageUrl },
   } = useCreateArticle();
   return (
     <form onSubmit={submit}>
@@ -67,162 +52,35 @@ const CreateArticleForm = ({
             </CardHeader>
             <CardContent>
               <FieldGroup>
-                <Controller
-                  name="title"
+                <ArticleTitle control={control} />
+                <ArticleSlug
+                  getValues={getValues}
+                  setValue={setValue}
                   control={control}
-                  render={({ field, fieldState }) => (
-                    <Field aria-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="title">عنوان مقاله</FieldLabel>
-                      <Input
-                        id="title"
-                        placeholder="مقاله در مورد"
-                        {...field}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
                 />
-                <Controller
-                  name="slug"
+                <ArticleExcerpt control={control} />
+                <ArticleCategories
+                  getValues={getValues}
+                  setValue={setValue}
+                  categories={categories}
                   control={control}
-                  render={({ field, fieldState }) => (
-                    <Field aria-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="slug">Slug</FieldLabel>
-                      <Input
-                        dir="ltr"
-                        id="slug"
-                        onFocus={(e) => {
-                          if (!e.target.value) {
-                            setValue("slug", convertToSlug(getValue("title")));
-                          }
-                        }}
-                        placeholder="article-about"
-                        {...field}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
                 />
-                <Controller
-                  name="excerpt"
+                <ArticleThumbnail
+                  medias={medias}
+                  previewImageUrl={previewImageUrl}
+                  setPreviewImageUrl={setPreviewImageUrl}
+                  setValue={setValue}
                   control={control}
-                  render={({ field, fieldState }) => (
-                    <Field aria-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="excerpt">خلاصه از مقاله</FieldLabel>
-                      <Textarea id="excerpt" {...field} />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
                 />
-                <Controller
-                  name="categoryIds"
-                  control={control}
-                  render={({ fieldState }) => (
-                    <Field aria-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="categories">
-                        انتخاب دسته بندی ها
-                      </FieldLabel>
-                      <Suspense fallback={<SelectMultipleCategoriesSkeleton />}>
-                        <SelectMultipleCategories
-                          selectedItems={getValue("categoryIds")}
-                          triggerId="categories"
-                          categories={categories}
-                          onSelect={({ id }) => {
-                            const currentCategoriesValues =
-                              getValue("categoryIds");
-                            if (currentCategoriesValues.includes(id)) {
-                              setValue(
-                                "categoryIds",
-                                currentCategoriesValues.filter((i) => i !== id),
-                              );
-                            } else {
-                              setValue("categoryIds", [
-                                ...currentCategoriesValues,
-                                id,
-                              ]);
-                            }
-                          }}
-                        />
-                      </Suspense>
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name="thumbnail"
-                  control={control}
-                  render={({ fieldState }) => (
-                    <Field aria-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="thumbnail">
-                        انتخاب تصویر شاخص
-                      </FieldLabel>
-                      <Suspense fallback={null}>
-                        <MediaPickerSheet
-                          medias={medias}
-                          onOpenChange={setShowMediaPicker}
-                          onSelect={({ id, url }) => {
-                            setValue("thumbnail", id);
-                            setPreviewImageUrl(url);
-                            setShowMediaPicker(false);
-                          }}
-                          open={showMediaPicker}
-                        />
-                      </Suspense>
-                      <Button
-                        className="w-full h-32"
-                        variant="outline"
-                        onClick={() => setShowMediaPicker(true)}
-                      >
-                        {previewImageUrl && (
-                          <Image
-                            alt="image preview"
-                            className="size-full object-contain"
-                            src={{
-                              src: previewImageUrl,
-                              width: 128,
-                              height: 128,
-                            }}
-                          />
-                        )}
-                      </Button>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
+
                 <div className="flex gap-2">
-                  <Controller
-                    name="status"
+                  <ArticleStatus
+                    getValues={getValues}
+                    isPending={isPending}
+                    setValue={setValue}
                     control={control}
-                    render={({ fieldState }) => {
-                      const status = getValue("status");
-                      return (
-                        <Field
-                          aria-invalid={fieldState.invalid}
-                          className="w-max"
-                        >
-                          <StatusDropdown
-                            value={status}
-                            onChange={(v) => setValue("status", v)}
-                          >
-                            <Button disabled={isPending} variant="outline">
-                              <span>{StatusDictionary[status]}</span>
-                              <ChevronDown />
-                            </Button>
-                          </StatusDropdown>
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      );
-                    }}
                   />
+
                   <Field>
                     <Button
                       className="flex-auto"

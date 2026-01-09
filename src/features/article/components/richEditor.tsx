@@ -74,7 +74,7 @@ export default function RichEditor({
         cleanUpEditor();
       },
     };
-  }, []);
+  });
 
   return (
     <Editor

@@ -11,32 +11,32 @@ import { CreateArticleSchema } from "../validations/createSchema";
 
 export const useCreateArticle = () => {
   const router = useRouter();
-  const [showMediaPicker, setShowMediaPicker] = useState(false);
   const [previewImageUrl, setPreviewImageUrl] = useState("");
 
   const [defaultContentValue, setdefaultContentValue] = useState(
     `<div dir="rtl" style="text-align: right;"><p dir="rtl"></p></div>`,
   );
-  const form = useForm<CreateArticleOutput>({
-    resolver: valibotResolver(CreateArticleSchema),
-    defaultValues: {
-      content: "",
-      excerpt: "",
-      title: "",
-      slug: "",
-      thumbnail: "",
-      status: "draft",
-      categoryIds: [],
-    },
-  });
+  const { getValues, setValue, handleSubmit, control, reset } =
+    useForm<CreateArticleOutput>({
+      resolver: valibotResolver(CreateArticleSchema),
+      defaultValues: {
+        content: "",
+        excerpt: "",
+        title: "",
+        slug: "",
+        thumbnail: "",
+        status: "draft",
+        categoryIds: [],
+      },
+    });
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = (data: CreateArticleOutput) => {
+  const onSubmit = (data: CreateArticleOutput) => {
     startTransition(async () => {
       const { success, message } = await createArticleAction(data);
       if (!success) toast.error(message);
       else {
-        form.reset();
+        reset();
         setdefaultContentValue(`<p dir="rtl">helo</p>`);
         setPreviewImageUrl("");
         router.replace("/admin/blog");
@@ -46,14 +46,12 @@ export const useCreateArticle = () => {
 
   return {
     isPending,
-    control: form.control,
-    submit: form.handleSubmit(handleSubmit),
-    setValue: form.setValue,
-    getValue: form.getValues,
+    control,
+    submit: handleSubmit(onSubmit),
+    setValue,
+    getValues,
     defaultContentValue,
     mediaPicker: {
-      showMediaPicker,
-      setShowMediaPicker,
       previewImageUrl,
       setPreviewImageUrl,
     },
