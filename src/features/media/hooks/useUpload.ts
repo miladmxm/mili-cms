@@ -3,8 +3,8 @@ import type { FileError } from "react-dropzone";
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 
+import { useMediaStore } from "@/features/media/store/media.store";
 import { fetchToUploadWithProgress } from "@/lib/uploadWithProgress";
-import { useMediaStore } from "@/store/media.store";
 import { validator } from "@/validations";
 
 import { UploadMediaSchema } from "../validations";

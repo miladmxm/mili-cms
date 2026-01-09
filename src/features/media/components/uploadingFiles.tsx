@@ -2,7 +2,7 @@
 
 import { ViewTransition } from "react";
 
-import { useMediaStore } from "@/store/media.store";
+import { useMediaStore } from "@/features/media/store/media.store";
 
 import { FileCardForUpload } from "./fileCard";
 

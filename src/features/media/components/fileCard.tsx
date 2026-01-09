@@ -4,12 +4,12 @@ import type { FC, PropsWithChildren } from "react";
 import { Download, X } from "lucide-react";
 import Link from "next/link";
 
+import type { UploadingFileData } from "@/features/media/store/media.store";
 import type {
   FileMeta,
   MediaTypes,
   MinimumMediaProps,
 } from "@/services/media/type";
-import type { UploadingFileData } from "@/store/media.store";
 
 import CopyToClipboard from "@/components/dashboard/copy-to-clipboard";
 import { Button } from "@/components/dashboard/ui/button";
