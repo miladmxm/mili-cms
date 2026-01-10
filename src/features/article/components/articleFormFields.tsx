@@ -24,6 +24,7 @@ import { StatusDictionary } from "@/services/article/types";
 
 import type { CreateArticleOutput } from "../validations/createSchema";
 
+import { useCreateArticleStore } from "../store";
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,
 } from "./selectMultipleCategories";
@@ -149,15 +150,17 @@ export const ArticleThumbnail = ({
   control,
   medias,
   setValue,
-  setPreviewImageUrl,
-  previewImageUrl,
 }: ArticleFieldProps &
   ArticleSetValue & {
     medias: Promise<Media[]>;
-    previewImageUrl: string;
-    setPreviewImageUrl: (d: string) => void;
   }) => {
   const [open, setOpen] = useState(false);
+  const setPreviewImageUrl = useCreateArticleStore(
+    (store) => store.setPreviewImageUrl,
+  );
+  const previewImageUrl = useCreateArticleStore(
+    (store) => store.previewImageUrl,
+  );
   return (
     <Controller
       name="thumbnail"

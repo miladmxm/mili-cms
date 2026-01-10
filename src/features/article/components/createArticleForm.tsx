@@ -33,15 +33,8 @@ const CreateArticleForm = ({
   medias: Promise<Media[]>;
   categories: Promise<Category[]>;
 }) => {
-  const {
-    control,
-    getValues,
-    isPending,
-    submit,
-    setValue,
-    defaultContentValue,
-    mediaPicker: { previewImageUrl, setPreviewImageUrl },
-  } = useCreateArticle();
+  const { control, getValues, isPending, submit, setValue } =
+    useCreateArticle();
   return (
     <form onSubmit={submit}>
       <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-12 gap-4">
@@ -67,8 +60,6 @@ const CreateArticleForm = ({
                 />
                 <ArticleThumbnail
                   medias={medias}
-                  previewImageUrl={previewImageUrl}
-                  setPreviewImageUrl={setPreviewImageUrl}
                   setValue={setValue}
                   control={control}
                 />
@@ -104,7 +95,6 @@ const CreateArticleForm = ({
               <div className="lg:col-span-8">
                 <Field aria-invalid={fieldState.invalid}>
                   <RichEditor
-                    defaultValue={defaultContentValue}
                     onChange={(value) => setValue("content", value)}
                   />
                   {fieldState.invalid && (

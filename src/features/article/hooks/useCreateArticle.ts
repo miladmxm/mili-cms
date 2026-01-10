@@ -1,21 +1,32 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import type { CreateArticleOutput } from "../validations/createSchema";
 
 import { createArticleAction } from "../actions/create";
+import { useCreateArticleStore } from "../store";
 import { CreateArticleSchema } from "../validations/createSchema";
 
 export const useCreateArticle = () => {
   const router = useRouter();
-  const [previewImageUrl, setPreviewImageUrl] = useState("");
-
-  const [defaultContentValue, setdefaultContentValue] = useState(
-    `<div dir="rtl" style="text-align: right;"><p dir="rtl"></p></div>`,
+  const setPreviewImageUrl = useCreateArticleStore(
+    (store) => store.setPreviewImageUrl,
   );
+  const setDefalutContentValue = useCreateArticleStore(
+    (store) => store.setDefaultContentValue,
+  );
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log("object");
+      setDefalutContentValue("miladmxm ");
+    }, 5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
   const { getValues, setValue, handleSubmit, control, reset } =
     useForm<CreateArticleOutput>({
       resolver: valibotResolver(CreateArticleSchema),
@@ -37,7 +48,7 @@ export const useCreateArticle = () => {
       if (!success) toast.error(message);
       else {
         reset();
-        setdefaultContentValue(`<p dir="rtl">helo</p>`);
+        setDefalutContentValue(`<p dir="rtl"></p>`);
         setPreviewImageUrl("");
         router.replace("/admin/blog");
       }
@@ -50,10 +61,5 @@ export const useCreateArticle = () => {
     submit: handleSubmit(onSubmit),
     setValue,
     getValues,
-    defaultContentValue,
-    mediaPicker: {
-      previewImageUrl,
-      setPreviewImageUrl,
-    },
   };
 };

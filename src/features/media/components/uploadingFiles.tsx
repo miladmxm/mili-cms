@@ -7,7 +7,7 @@ import { useMediaStore } from "@/features/media/store/media.store";
 import { FileCardForUpload } from "./fileCard";
 
 const DisplayUploadingFiles = () => {
-  const { uploadingMedias } = useMediaStore();
+  const uploadingMedias = useMediaStore((store) => store.uploadingMedias);
   return (
     <div className="flex gap-5 flex-wrap ">
       <ViewTransition enter="auto">

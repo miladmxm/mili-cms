@@ -9,6 +9,8 @@ import { useImperativeHandle, useRef } from "react";
 
 import { Skeleton } from "@/components/dashboard/ui/skeleton";
 
+import { useCreateArticleStore } from "../store";
+
 export const RichEditorSkeleton = () => {
   return (
     <div className="flex flex-col gap-1 border p-2 rounded-xl">
@@ -48,12 +50,10 @@ const Editor = dynamic(
 
 export default function RichEditor({
   className,
-  defaultValue,
   onChange,
   handlerRef,
 }: {
   className?: string;
-  defaultValue?: string;
   onChange: (value: string) => void;
   handlerRef?: Ref<{ clear: () => void }>;
 }) {
@@ -76,10 +76,14 @@ export default function RichEditor({
     };
   });
 
+  const defaultContentValue = useCreateArticleStore(
+    (store) => store.defaultContentValue,
+  );
+  console.log(defaultContentValue);
   return (
     <Editor
       className={className}
-      defaultHtmlValue={defaultValue}
+      defaultHtmlValue={defaultContentValue}
       editorRef={ref}
       onHtmlChange={onChange}
     />
