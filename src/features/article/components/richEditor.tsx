@@ -79,7 +79,6 @@ export default function RichEditor({
   const defaultContentValue = useCreateArticleStore(
     (store) => store.defaultContentValue,
   );
-  console.log(defaultContentValue);
   return (
     <Editor
       className={className}

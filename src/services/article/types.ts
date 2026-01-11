@@ -1,4 +1,13 @@
 export type ArticleStatus = "archived" | "draft" | "published";
+export interface Article {
+  excerpt: string;
+  content: string;
+  title: string;
+  slug: string;
+  thumbnail?: string | null;
+  status?: ArticleStatus;
+  categoryIds: string[];
+}
 export interface CreateArticle {
   excerpt: string;
   content: string;

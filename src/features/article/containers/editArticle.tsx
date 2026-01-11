@@ -1,14 +1,14 @@
-import { dalVerifySuccess } from "@/dal/helpers";
 import { getMediasByType } from "@/features/media/dal/queries";
 
-import { getArticle, getCategories } from "../dal/query";
+import EditArticleForm from "../components/editArticleForm";
+import { getCategories } from "../dal/query";
 
 const EditArticle = async ({ id }: { id: string }) => {
+  console.log(id);
   const medias = getMediasByType(["image"]);
   const categories = getCategories();
 
-  const article = dalVerifySuccess(await getArticle(id));
-  return <div>{article?.title}</div>;
+  return <EditArticleForm medias={medias} categories={categories} />;
 };
 
 export default EditArticle;

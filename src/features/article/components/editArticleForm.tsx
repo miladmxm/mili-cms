@@ -25,7 +25,7 @@ import {
   ArticleTitle,
 } from "./articleFormFields";
 
-const CreateArticleForm = ({
+const EditArticleForm = ({
   medias,
   categories,
 }: {
@@ -92,4 +92,4 @@ const CreateArticleForm = ({
   );
 };
 
-export default CreateArticleForm;
+export default EditArticleForm;

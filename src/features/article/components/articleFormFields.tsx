@@ -25,6 +25,7 @@ import { StatusDictionary } from "@/services/article/types";
 import type { CreateArticleOutput } from "../validations/createSchema";
 
 import { useCreateArticleStore } from "../store";
+import RichEditor from "./richEditor";
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,
 } from "./selectMultipleCategories";
@@ -231,6 +232,28 @@ export const ArticleStatus = ({
             </StatusDropdown>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
+        );
+      }}
+    />
+  );
+};
+
+export const ArticleContent = ({
+  control,
+  setValue,
+}: ArticleFieldProps & ArticleSetValue) => {
+  return (
+    <Controller
+      name="content"
+      control={control}
+      render={({ fieldState }) => {
+        return (
+          <div className="lg:col-span-8">
+            <Field aria-invalid={fieldState.invalid}>
+              <RichEditor onChange={(value) => setValue("content", value)} />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          </div>
         );
       }}
     />
