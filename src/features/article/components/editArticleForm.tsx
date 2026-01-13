@@ -12,9 +12,9 @@ import {
 import { Field, FieldGroup } from "@/components/dashboard/ui/field";
 import { Spinner } from "@/components/dashboard/ui/spinner";
 
-import type { Category } from "../../../services/article/types";
+import type { Article, Category } from "../../../services/article/types";
 
-import { useCreateArticle } from "../hooks/useCreateArticle";
+import { useEditArticle } from "../hooks/useEditArticle";
 import {
   ArticleCategories,
   ArticleContent,
@@ -28,12 +28,14 @@ import {
 const EditArticleForm = ({
   medias,
   categories,
+  article,
 }: {
   medias: Promise<Media[]>;
+  article: Article;
   categories: Promise<Category[]>;
 }) => {
   const { control, getValues, isPending, submit, setValue } =
-    useCreateArticle();
+    useEditArticle(article);
   return (
     <form onSubmit={submit}>
       <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-12 gap-4">
@@ -86,7 +88,11 @@ const EditArticleForm = ({
             </CardContent>
           </Card>
         </div>
-        <ArticleContent setValue={setValue} control={control} />
+        <ArticleContent
+          key={article.id}
+          setValue={setValue}
+          control={control}
+        />
       </div>
     </form>
   );

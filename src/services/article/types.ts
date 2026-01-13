@@ -1,12 +1,21 @@
+import type { Media } from "../media/type";
+
 export type ArticleStatus = "archived" | "draft" | "published";
 export interface Article {
-  excerpt: string;
-  content: string;
+  id: string;
   title: string;
+  content: string;
   slug: string;
-  thumbnail?: string | null;
-  status?: ArticleStatus;
+  excerpt: string;
+  createdAt: Date;
+  updatedAt: Date;
+  thumbnail?: Media;
+  tags: string[];
+  authorId: string;
+  status: ArticleStatus;
   categoryIds: string[];
+  readingTime: number | null;
+  views: number;
 }
 export interface CreateArticle {
   excerpt: string;

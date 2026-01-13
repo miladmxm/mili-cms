@@ -166,41 +166,43 @@ export const ArticleThumbnail = ({
     <Controller
       name="thumbnail"
       control={control}
-      render={({ fieldState }) => (
-        <Field aria-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
-          <Suspense fallback={null}>
-            <MediaPickerSheet
-              medias={medias}
-              onOpenChange={setOpen}
-              onSelect={({ id, url }) => {
-                setValue("thumbnail", id);
-                setPreviewImageUrl(url);
-                setOpen(false);
-              }}
-              open={open}
-            />
-          </Suspense>
-          <Button
-            className="w-full h-32"
-            variant="outline"
-            onClick={() => setOpen(true)}
-          >
-            {previewImageUrl && (
-              <Image
-                alt="image preview"
-                className="size-full object-contain"
-                src={{
-                  src: previewImageUrl,
-                  width: 128,
-                  height: 128,
+      render={({ fieldState }) => {
+        return (
+          <Field aria-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
+            <Suspense fallback={null}>
+              <MediaPickerSheet
+                medias={medias}
+                onOpenChange={setOpen}
+                onSelect={({ id, url }) => {
+                  setValue("thumbnail", id);
+                  setPreviewImageUrl(url);
+                  setOpen(false);
                 }}
+                open={open}
               />
-            )}
-          </Button>
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
-      )}
+            </Suspense>
+            <Button
+              className="w-full h-32"
+              variant="outline"
+              onClick={() => setOpen(true)}
+            >
+              {previewImageUrl && (
+                <Image
+                  alt="image preview"
+                  className="size-full object-contain"
+                  src={{
+                    src: previewImageUrl,
+                    width: 128,
+                    height: 128,
+                  }}
+                />
+              )}
+            </Button>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        );
+      }}
     />
   );
 };

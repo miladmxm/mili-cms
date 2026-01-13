@@ -86,7 +86,7 @@ const CreateArticleForm = ({
             </CardContent>
           </Card>
         </div>
-        <ArticleContent setValue={setValue} control={control} />
+        <ArticleContent key="create" setValue={setValue} control={control} />
       </div>
     </form>
   );

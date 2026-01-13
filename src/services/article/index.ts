@@ -11,6 +11,7 @@ import { CacheKeys } from "@/constant/cacheKeys";
 import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import * as articleRepo from "@/repositories/article.repo";
 
+import type { Media } from "../media/type";
 import type { LimitAndOffset } from "../type";
 
 import { checkMediaType } from "../media";
@@ -29,7 +30,17 @@ export const getPaginationArticles = async (
 export const getArticle = async (id: string) => {
   "use cache";
   cacheTag(`${CacheKeys.articles}-${id}`);
-  return articleRepo.findArticleById(id);
+  const article = await articleRepo.findArticleById(id);
+  if (!article) return article;
+  let thumbnail: Media | undefined;
+  if (article.thumbnail && typeof article.thumbnail !== "string") {
+    thumbnail = article.thumbnail;
+  }
+  if (thumbnail) {
+    thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+  }
+
+  return { ...article, thumbnail };
 };
 
 export const getCategoriesWithThumbnail = async () => {

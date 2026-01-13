@@ -12,10 +12,24 @@ import {
 export const createArticle = (value: typeof article.$inferInsert) =>
   db.insert(article).values(value).returning({ id: article.id });
 
-export const findArticleById = async (id: string) =>
-  db.query.article.findFirst({
+export const findArticleById = async (id: string) => {
+  const findedArticle = await db.query.article.findFirst({
     where: eq(article.id, id),
+    with: {
+      categories: { columns: { categoryId: true } },
+      thumbnail: true,
+    },
   });
+  if (!findedArticle) return findedArticle;
+
+  const categoryIds = findedArticle.categories.map(
+    ({ categoryId }) => categoryId,
+  );
+  return {
+    ...findedArticle,
+    categoryIds,
+  };
+};
 
 export const findArticleBySlug = async (slug: string) =>
   db.query.article.findFirst({
