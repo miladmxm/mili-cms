@@ -6,3 +6,8 @@ export type Transaction = Parameters<
 export const withTransaction = (cb: (tx: Transaction) => Promise<void>) => {
   return db.transaction(cb);
 };
+
+export const getDBorTX = (tx?: Transaction) => {
+  if (tx) return tx;
+  else return db;
+};
