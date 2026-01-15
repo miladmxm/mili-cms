@@ -30,11 +30,13 @@ export const createArticleAction = async (
     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
   try {
-    const { success } = await createArticle({
+    const createdArticleOutput = await createArticle({
       ...output,
       authorId: session.user.id,
     });
-    if (!success) return { success, message: "خطا در ایجاد مقاله" };
+    if (!createdArticleOutput.success) {
+      return { success: false, message: "خطا در ایجاد مقاله" };
+    }
     updateTag(CacheKeys.articles);
     return { success: successValidation, message: "مثاله با موفقیت ایجاد شد" };
   } catch (error) {

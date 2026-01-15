@@ -77,12 +77,11 @@ export const createArticle = async (data: CreateArticle) => {
     existingArticleBySlug.map((a) => a.slug),
   );
   const article = (await articleRepo.createArticle({ ...data, slug }))[0];
-
   if (!article) throw new Error("DB error to create article");
-
-  await articleRepo.addArticleToCategories(
-    categories.map(({ id }) => ({ categoryId: id, articleId: article.id })),
-  );
+  if (categories.length)
+    await articleRepo.addArticleToCategories(
+      categories.map(({ id }) => ({ categoryId: id, articleId: article.id })),
+    );
 };
 
 export const createCategory = async (data: CreateCategory) => {

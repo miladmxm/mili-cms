@@ -27,7 +27,7 @@ export const useCreateArticle = () => {
         excerpt: "",
         title: "",
         slug: "",
-        thumbnail: "",
+        thumbnail: undefined,
         status: "draft",
         categoryIds: [],
       },
