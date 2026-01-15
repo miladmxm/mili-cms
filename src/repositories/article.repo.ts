@@ -2,18 +2,23 @@ import { desc, eq, inArray, like } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
-import { db } from "@/db/drizzle/db";
 import {
   article,
   articleCategory,
   articleToCategory,
 } from "@/db/drizzle/schemas";
 
-export const createArticle = (value: typeof article.$inferInsert) =>
-  db.insert(article).values(value).returning({ id: article.id });
+import type { Transaction } from ".";
 
-export const findArticleById = async (id: string) => {
-  const findedArticle = await db.query.article.findFirst({
+import { getDBorTX } from ".";
+
+export const createArticle = (
+  value: typeof article.$inferInsert,
+  tx?: Transaction,
+) => getDBorTX(tx).insert(article).values(value).returning({ id: article.id });
+
+export const findArticleById = async (id: string, tx?: Transaction) => {
+  const findedArticle = await getDBorTX(tx).query.article.findFirst({
     where: eq(article.id, id),
     with: {
       categories: { columns: { categoryId: true } },
@@ -31,28 +36,34 @@ export const findArticleById = async (id: string) => {
   };
 };
 
-export const findArticleBySlug = async (slug: string) =>
-  db.query.article.findFirst({
+export const findArticleBySlug = async (slug: string, tx?: Transaction) =>
+  getDBorTX(tx).query.article.findFirst({
     where: eq(article.slug, slug),
   });
-export const findArticleByStartedSlugWith = async (slug: string) =>
-  db.query.article.findMany({
+export const findArticleByStartedSlugWith = async (
+  slug: string,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.article.findMany({
     where: like(article.slug, `${slug}%`),
   });
-export const findCategories = async () => {
-  const categories = await db.query.articleCategory.findMany({
+export const findCategories = async (tx?: Transaction) => {
+  const categories = await getDBorTX(tx).query.articleCategory.findMany({
     with: { thumbnail: { columns: { url: true, meta: true } } },
   });
   return categories;
 };
-export const findCategoriesByIds = async (ids: string[]) => {
-  return await db.query.articleCategory.findMany({
+export const findCategoriesByIds = async (ids: string[], tx?: Transaction) => {
+  return await getDBorTX(tx).query.articleCategory.findMany({
     where: inArray(articleCategory.id, ids),
   });
 };
 
-export const findArticlesByLimitAndOffset = (options?: OffsetLimit) =>
-  db.query.article.findMany({
+export const findArticlesByLimitAndOffset = (
+  options?: OffsetLimit,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.article.findMany({
     orderBy: [desc(article.createdAt)],
     limit: options?.limit,
     offset: options?.offset,
@@ -60,17 +71,20 @@ export const findArticlesByLimitAndOffset = (options?: OffsetLimit) =>
 export const updateArticleById = (
   id: string,
   value: Partial<typeof article.$inferSelect>,
-) => db.update(article).set(value).where(eq(article.id, id));
+  tx?: Transaction,
+) => getDBorTX(tx).update(article).set(value).where(eq(article.id, id));
 
-export const deleteArticleById = (id: string) =>
-  db.delete(article).where(eq(article.id, id));
+export const deleteArticleById = (id: string, tx?: Transaction) =>
+  getDBorTX(tx).delete(article).where(eq(article.id, id));
 
 export const createArticleCategory = (
   data: typeof articleCategory.$inferInsert,
-) => db.insert(articleCategory).values(data).returning();
-export const deleteArticleCategoryById = (id: string) =>
-  db.delete(articleCategory).where(eq(articleCategory.id, id));
+  tx?: Transaction,
+) => getDBorTX(tx).insert(articleCategory).values(data).returning();
+export const deleteArticleCategoryById = (id: string, tx?: Transaction) =>
+  getDBorTX(tx).delete(articleCategory).where(eq(articleCategory.id, id));
 
 export const addArticleToCategories = (
   articleToCategories: (typeof articleToCategory.$inferInsert)[],
-) => db.insert(articleToCategory).values(articleToCategories);
+  tx?: Transaction,
+) => getDBorTX(tx).insert(articleToCategory).values(articleToCategories);
