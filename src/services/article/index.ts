@@ -79,9 +79,10 @@ export const createArticle = async (data: CreateArticle) => {
   const resultId = await withTransaction(async (tx) => {
     const article = (await articleRepo.createArticle({ ...data, slug }, tx))[0];
     if (!article) throw new Error("DB error to create article");
-    await articleRepo.addArticleToCategories(
-      categories.map(({ id }) => ({ categoryId: id, articleId: article.id })),
-    );
+    if (categories.length)
+      await articleRepo.addArticleToCategories(
+        categories.map(({ id }) => ({ categoryId: id, articleId: article.id })),
+      );
     return article;
   });
   return resultId.id;
