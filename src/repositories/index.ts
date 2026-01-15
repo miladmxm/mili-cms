@@ -3,7 +3,7 @@ import { db } from "@/db/drizzle/db";
 export type Transaction = Parameters<
   Parameters<(typeof db)["transaction"]>[0]
 >[0];
-export const withTransaction = (cb: (tx: Transaction) => Promise<void>) => {
+export const withTransaction = <T>(cb: (tx: Transaction) => Promise<T>) => {
   return db.transaction(cb);
 };
 

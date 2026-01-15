@@ -9,6 +9,7 @@ import type {
 
 import { CacheKeys } from "@/constant/cacheKeys";
 import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
+import { withTransaction } from "@/repositories";
 import * as articleRepo from "@/repositories/article.repo";
 
 import type { Media } from "../media/type";
@@ -68,7 +69,6 @@ export const createArticle = async (data: CreateArticle) => {
     await checkMediaType(data.thumbnail, "image");
   }
   const categories = await articleRepo.findCategoriesByIds(data.categoryIds);
-
   let slug: string = convertToSlug(data.slug);
   const existingArticleBySlug =
     await articleRepo.findArticleByStartedSlugWith(slug);
@@ -76,12 +76,15 @@ export const createArticle = async (data: CreateArticle) => {
     slug,
     existingArticleBySlug.map((a) => a.slug),
   );
-  const article = (await articleRepo.createArticle({ ...data, slug }))[0];
-  if (!article) throw new Error("DB error to create article");
-  if (categories.length)
+  const resultId = await withTransaction(async (tx) => {
+    const article = (await articleRepo.createArticle({ ...data, slug }, tx))[0];
+    if (!article) throw new Error("DB error to create article");
     await articleRepo.addArticleToCategories(
       categories.map(({ id }) => ({ categoryId: id, articleId: article.id })),
     );
+    return article;
+  });
+  return resultId.id;
 };
 
 export const createCategory = async (data: CreateCategory) => {
