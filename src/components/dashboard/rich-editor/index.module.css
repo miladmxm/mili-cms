@@ -1,0 +1,23 @@
+.wrapper{
+    a {
+        color: #60c9fb;
+        text-decoration: underline;
+    }
+    &>div{
+        outline: none;
+        width: 100%;
+        height: 100%;
+        padding: 0.5rem;
+        min-height: 300px;
+
+    }
+    ol, ul{
+        padding-inline-start: 30px;
+    }
+    ol{
+        list-style: decimal;
+    }
+    ul{
+        list-style: disc;
+    }
+}
