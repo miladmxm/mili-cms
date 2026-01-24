@@ -27,7 +27,11 @@ const SignoutButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="me-auto" disabled={isPending} variant="destructive">
+        <Button
+          className="w-full justify-start"
+          disabled={isPending}
+          variant="ghost"
+        >
           {isPending ? <Spinner /> : <IconLogout />}
           خروج
         </Button>
