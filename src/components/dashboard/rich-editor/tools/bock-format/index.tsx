@@ -6,27 +6,23 @@ import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
+  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/dashboard/ui/select";
 
-import Blockquote from "./blockquote";
-import Code from "./code";
-import HeadingItems from "./headings";
-import Lists from "./lists";
-import ParagraphItem from "./paragraph";
+import { BLOCKITEMS } from "./data";
 
-function getCurrentBlock(editor: Editor) {
-  if (editor.isActive("heading", { level: 1 })) return "H1";
-  if (editor.isActive("heading", { level: 2 })) return "H2";
-  if (editor.isActive("heading", { level: 3 })) return "H3";
-  if (editor.isActive("blockquote")) return "quote";
-  if (editor.isActive("codeBlock")) return "code";
-  if (editor.isActive("orderedList")) return "orderedList";
-  if (editor.isActive("bulletList")) return "bulletList";
-  if (editor.isActive("taskList")) return "taskList";
-  return "paragraph";
-}
+const getCurrentBlock = (editor: Editor) => {
+  let resutl: string = "paragraph";
+  for (const key of Object.keys(BLOCKITEMS)) {
+    const { attributes, name } = BLOCKITEMS[key as keyof typeof BLOCKITEMS];
+    if (editor.isActive(name, attributes)) {
+      resutl = key;
+    }
+  }
+  return resutl;
+};
 
 const BlockFormat = () => {
   const { editor } = useCurrentEditor();
@@ -44,17 +40,34 @@ const BlockFormat = () => {
       editor.off("transaction", update);
     };
   }, [editor]);
+
+  if (!editor) return;
+  const handleSetValue = (e: string) => {
+    setValue(e);
+    const block = BLOCKITEMS[e as keyof typeof BLOCKITEMS];
+    if (block.attributes) {
+      console.log(block);
+      editor.chain().focus()[block.operation](block.attributes).run();
+    } else {
+      editor.chain().focus()[block.operation]().run();
+    }
+  };
   return (
-    <Select value={value} onValueChange={setValue}>
+    <Select value={value} onValueChange={handleSetValue}>
       <SelectTrigger>
         <SelectValue className="text-xs" />
       </SelectTrigger>
       <SelectContent>
-        <ParagraphItem />
-        <HeadingItems />
-        <Lists />
-        <Blockquote />
-        <Code />
+        {Object.keys(BLOCKITEMS).map((key) => {
+          const name = key as keyof typeof BLOCKITEMS;
+          const { Icon, label } = BLOCKITEMS[name];
+          return (
+            <SelectItem key={name} value={name}>
+              <Icon />
+              {label}
+            </SelectItem>
+          );
+        })}
       </SelectContent>
     </Select>
   );

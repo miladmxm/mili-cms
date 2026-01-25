@@ -1,0 +1,77 @@
+import {
+  Code2,
+  Heading1,
+  Heading2,
+  Heading3,
+  ListIcon,
+  ListOrderedIcon,
+  ListTodoIcon,
+  QuoteIcon,
+  TextAlignStart,
+} from "lucide-react";
+
+export const BLOCKITEMS = {
+  paragraph: {
+    label: "بند",
+    attributes: undefined,
+    Icon: TextAlignStart,
+    name: "paragraph",
+    operation: "setParagraph",
+  },
+  h1: {
+    name: "heading",
+    label: "عنوان 1",
+    operation: "setHeading",
+    attributes: { level: 1 },
+    Icon: Heading1,
+  },
+  h2: {
+    label: "عنوان 2",
+    name: "heading",
+    operation: "setHeading",
+    attributes: { level: 2 },
+    Icon: Heading2,
+  },
+  h3: {
+    label: "عنوان 3",
+    name: "heading",
+    operation: "setHeading",
+    attributes: { level: 3 },
+    Icon: Heading3,
+  },
+  orderedList: {
+    name: "orderedList",
+    label: "لیست عددی",
+    operation: "toggleOrderedList",
+    attributes: undefined,
+    Icon: ListOrderedIcon,
+  },
+  bulletList: {
+    name: "bulletList",
+    label: "لیست معمولی",
+    operation: "toggleBulletList",
+    attributes: undefined,
+    Icon: ListIcon,
+  },
+  taskList: {
+    name: "taskList",
+    label: "چک لیست",
+    operation: "toggleTaskList",
+    attributes: undefined,
+    Icon: ListTodoIcon,
+  },
+  quote: {
+    name: "quote",
+    label: "نقل قول",
+    Icon: QuoteIcon,
+    operation: "toggleBlockquote",
+    attributes: undefined,
+  },
+  code: {
+    name: "code",
+    label: "کد",
+    Icon: Code2,
+    attributes: undefined,
+    operation: "toggleCode",
+  },
+} as const;
