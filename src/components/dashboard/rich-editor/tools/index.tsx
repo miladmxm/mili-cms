@@ -4,9 +4,11 @@ import { ScrollArea, ScrollBar } from "@/components/dashboard/ui/scroll-area";
 
 import BlockFormat from "./bock-format";
 import Clear from "./clear";
+import ColorPicker, { BackGroundColorPicker } from "./color";
 import FontFormat from "./font-format";
 import FontSize from "./font-size";
 import AddLink from "./link";
+import UnsetAll from "./unsetAll";
 
 export const HeaderTools = () => {
   return (
@@ -16,6 +18,9 @@ export const HeaderTools = () => {
         <BlockFormat />
         <FontSize />
         <AddLink />
+        <UnsetAll />
+        <ColorPicker />
+        <BackGroundColorPicker />
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
