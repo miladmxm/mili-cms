@@ -5,6 +5,8 @@ import { ScrollArea, ScrollBar } from "@/components/dashboard/ui/scroll-area";
 import BlockFormat from "./bock-format";
 import Clear from "./clear";
 import FontFormat from "./font-format";
+import FontSize from "./font-size";
+import AddLink from "./link";
 
 export const HeaderTools = () => {
   return (
@@ -12,6 +14,8 @@ export const HeaderTools = () => {
       <div className="flex gap-2 items-stretch">
         <FontFormat />
         <BlockFormat />
+        <FontSize />
+        <AddLink />
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

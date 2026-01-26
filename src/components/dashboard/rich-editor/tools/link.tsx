@@ -1,9 +1,9 @@
-import type { Editor } from "@tiptap/core";
-import type { MouseEvent } from "react";
+import type { KeyboardEvent, MouseEvent } from "react";
 
 import { PopoverClose } from "@radix-ui/react-popover";
+import { useCurrentEditor } from "@tiptap/react";
 import { Check, Link2 } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/dashboard/ui/button";
 import { Field } from "@/components/dashboard/ui/field";
@@ -15,8 +15,25 @@ import {
   PopoverTrigger,
 } from "@/components/dashboard/ui/popover";
 
-const AddLink = ({ editor }: { editor: Editor }) => {
+const AddLink = () => {
+  const { editor } = useCurrentEditor();
   const linkRef = useRef<HTMLInputElement>(null);
+  const [haveLink, setHaveLink] = useState<boolean>(false);
+  useEffect(() => {
+    if (!editor) return;
+    const update = () => {
+      setHaveLink(editor.isActive("link"));
+    };
+    editor.on("selectionUpdate", update);
+    editor.on("transaction", update);
+
+    return () => {
+      editor.off("selectionUpdate", update);
+      editor.off("transaction", update);
+    };
+  }, [editor]);
+
+  if (!editor) return;
   const handleAddLink = () => {
     const linkInput = linkRef.current;
     if (linkInput) {
@@ -30,19 +47,24 @@ const AddLink = ({ editor }: { editor: Editor }) => {
     }
   };
   const removeLink = (e: MouseEvent<HTMLButtonElement>) => {
-    if (editor.isActive("link")) {
+    if (haveLink) {
       e.preventDefault();
       editor.chain().focus().unsetLink().run();
+    }
+  };
+  const handleKeyDownForEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleAddLink();
     }
   };
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          size="icon-sm"
+          size="icon"
           className="line-through"
           type="button"
-          variant="outline"
+          variant={haveLink ? "default" : "outline"}
           onClick={removeLink}
         >
           <Link2 />
@@ -52,7 +74,13 @@ const AddLink = ({ editor }: { editor: Editor }) => {
         <Field>
           <Label htmlFor="add-link-input">لینک اضافه کنید</Label>
           <div className="flex gap-1.5">
-            <Input dir="ltr" id="add-link-input" ref={linkRef} type="url" />
+            <Input
+              dir="ltr"
+              id="add-link-input"
+              ref={linkRef}
+              type="url"
+              onKeyDown={handleKeyDownForEnter}
+            />
             <PopoverClose asChild>
               <Button size="icon-sm" onClick={handleAddLink}>
                 <Check />

@@ -9,6 +9,8 @@ import { useImperativeHandle } from "react";
 
 import type { RichEditorHandlerRef } from "./type";
 
+import { FontSize } from "./extensions/fontSize";
+
 export const useRichEditor = ({
   ref,
   onUpdate,
@@ -31,6 +33,7 @@ export const useRichEditor = ({
       TaskItem.configure({
         nested: true,
       }),
+      FontSize,
       Link.configure({ openOnClick: true }),
     ],
     content: "",
