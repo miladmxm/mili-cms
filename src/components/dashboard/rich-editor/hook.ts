@@ -1,7 +1,9 @@
 import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
 import Link from "@tiptap/extension-link";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -28,8 +30,14 @@ export const useRichEditor = ({
     extensions: [
       StarterKit,
       TextStyle,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
       Color,
       TaskList,
+      Highlight.configure({
+        multicolor: true,
+      }),
       TaskItem.configure({
         nested: true,
       }),

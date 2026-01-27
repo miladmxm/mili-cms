@@ -63,7 +63,7 @@ const ColorPicker = () => {
     </div>
   );
 };
-
+// todo fix background
 export const BackGroundColorPicker = () => {
   const [color, setColor] = useState<string>("");
   const { editor } = useCurrentEditor();
@@ -92,7 +92,8 @@ export const BackGroundColorPicker = () => {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      editor.chain().focus().setBackgroundColor(value).run();
+      editor.chain().focus().setHighlight({ color: "#330000" }).run();
+
       setColor(value);
     }, 100);
   };
