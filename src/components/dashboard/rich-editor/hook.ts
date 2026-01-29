@@ -12,6 +12,7 @@ import { useImperativeHandle } from "react";
 import type { RichEditorHandlerRef } from "./type";
 
 import { FontSize } from "./extensions/fontSize";
+import { ImageWithAlign } from "./extensions/image";
 
 export const useRichEditor = ({
   ref,
@@ -30,8 +31,9 @@ export const useRichEditor = ({
     extensions: [
       StarterKit,
       TextStyle,
+      ImageWithAlign,
       TextAlign.configure({
-        types: ["heading", "paragraph"],
+        types: ["heading", "paragraph", "image"],
       }),
       Color,
       TaskList,

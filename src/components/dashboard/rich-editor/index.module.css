@@ -20,4 +20,21 @@
     ul{
         list-style: disc;
     }
+    div[data-node=image]{
+        &:has([data-align=center]){
+            justify-content: center;
+        }
+          &:has([data-align=right]){
+            justify-content: right;
+        }
+        &:has([data-align=left]){
+            justify-content: left;
+        }
+        
+    }
+    div[data-resize-handle]{
+        width: 10px;
+        height: 30px;
+        background-color: burlywood;
+    }
 }

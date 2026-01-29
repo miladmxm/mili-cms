@@ -2,6 +2,7 @@ import type { Editor } from "@tiptap/core";
 
 import { ScrollArea, ScrollBar } from "@/components/dashboard/ui/scroll-area";
 
+import Additional from "./additional";
 import Alignments from "./alignments";
 import BlockFormat from "./bock-format";
 import Clear from "./clear";
@@ -9,6 +10,7 @@ import ColorPicker, { BackGroundColorPicker } from "./color";
 import FontFormat from "./font-format";
 import FontSize from "./font-size";
 import HorizontalRule from "./horizontalRule";
+import AddImage from "./image";
 import AddLink from "./link";
 import UnsetAll from "./unsetAll";
 
@@ -25,6 +27,8 @@ export const HeaderTools = () => {
         <BackGroundColorPicker />
         <HorizontalRule />
         <Alignments />
+        <AddImage />
+        <Additional />
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
