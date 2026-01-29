@@ -15,6 +15,7 @@ import { AdminNavLinks, navMain } from "@/constant/adminNavLinks";
 import { useDirection } from "@/hooks/useDirection";
 
 import SidebarHeader from "./app-sidebar-header";
+import { ScrollArea } from "./ui/scroll-area";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 export function AppSidebar({ ...props }: AppSidebarProps) {
@@ -28,9 +29,14 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
       <SidebarHeader />
 
       <SidebarContent>
-        <NavMain items={navMain} />
-        <NavDocuments items={AdminNavLinks.documents} />
-        <NavSecondary className="mt-auto" items={AdminNavLinks.navSecondary} />
+        <ScrollArea dir={dir} className="h-full pe-1">
+          <NavMain items={navMain} />
+          <NavDocuments items={AdminNavLinks.documents} />
+          <NavSecondary
+            className="mt-auto"
+            items={AdminNavLinks.navSecondary}
+          />
+        </ScrollArea>
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
