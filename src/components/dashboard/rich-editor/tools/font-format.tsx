@@ -1,6 +1,6 @@
 import type { Editor } from "@tiptap/react";
 
-import { useEditorState, useTiptap } from "@tiptap/react";
+import { useTiptap, useTiptapState } from "@tiptap/react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -41,12 +41,9 @@ const getCurrentBlock = (editor: Editor) => {
 };
 const FontFormat = () => {
   const { editor, isReady } = useTiptap();
-  const editorState = useEditorState({
-    editor,
-    selector: ({ editor: selectorEditor }) => {
-      if (!selectorEditor) return [];
-      return getCurrentBlock(selectorEditor);
-    },
+  const editorState = useTiptapState(({ editor: selectorEditor }) => {
+    if (!selectorEditor) return [];
+    return getCurrentBlock(selectorEditor);
   });
 
   if (!editor || !isReady) return;
@@ -56,7 +53,7 @@ const FontFormat = () => {
       dir="rtl"
       className="rtl:flex-row-reverse"
       type="multiple"
-      value={editorState ?? []}
+      value={editorState}
       variant="outline"
     >
       {FORMATS.map(({ format, icon: Icon, label, name }) => (

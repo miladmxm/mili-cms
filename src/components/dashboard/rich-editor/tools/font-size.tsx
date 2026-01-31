@@ -1,6 +1,5 @@
-import { useCurrentEditor } from "@tiptap/react";
+import { useCurrentEditor, useTiptapState } from "@tiptap/react";
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useEffectEvent, useState } from "react";
 
 import { Button } from "../../ui/button";
 import { ButtonGroup } from "../../ui/button-group";
@@ -11,39 +10,22 @@ const MIN_FONT_SIZE = 1;
 const MAX_FONT_SIZE = 72;
 const FontSize = () => {
   const { editor } = useCurrentEditor();
-  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
-  const updateFontSize = (size: number) => {
-    if (!editor) return;
-    editor.chain().focus().setFontSize(`${size}px`).run();
-    setFontSize(size);
-  };
-  const setSelectedNodeFontSize = useEffectEvent(() => {
-    if (!editor) return;
-    const nodeFontSize = editor.getAttributes("textStyle")?.fontSize;
+  const fontSize = useTiptapState((ctx) => {
+    const nodeFontSize = ctx.editor.getAttributes("textStyle")?.fontSize;
     if (nodeFontSize && typeof nodeFontSize === "string") {
       const convertFontSizeToNumberFromPX = Number(
         nodeFontSize.replace("px", ""),
       );
       if (!isNaN(convertFontSizeToNumberFromPX)) {
-        setFontSize(convertFontSizeToNumberFromPX);
+        return convertFontSizeToNumberFromPX;
       }
-    } else {
-      setFontSize(DEFAULT_FONT_SIZE);
     }
+    return DEFAULT_FONT_SIZE;
   });
-  useEffect(() => {
+  const updateFontSize = (size: number) => {
     if (!editor) return;
-    const update = () => {
-      setSelectedNodeFontSize();
-    };
-    editor.on("selectionUpdate", update);
-    editor.on("transaction", update);
-
-    return () => {
-      editor.off("selectionUpdate", update);
-      editor.off("transaction", update);
-    };
-  }, [editor]);
+    editor.chain().focus().setFontSize(`${size}px`).run();
+  };
 
   return (
     <ButtonGroup className="rtl:flex-row-reverse">

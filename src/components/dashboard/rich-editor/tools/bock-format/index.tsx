@@ -1,7 +1,6 @@
 import type { Editor } from "@tiptap/react";
 
-import { useCurrentEditor } from "@tiptap/react";
-import { useEffect, useState } from "react";
+import { useTiptap, useTiptapState } from "@tiptap/react";
 
 import {
   Select,
@@ -25,26 +24,11 @@ const getCurrentBlock = (editor: Editor) => {
 };
 
 const BlockFormat = () => {
-  const { editor } = useCurrentEditor();
+  const { editor, isReady } = useTiptap();
+  const value = useTiptapState((ctx) => getCurrentBlock(ctx.editor));
 
-  const [value, setValue] = useState<string>("paragraph");
-  useEffect(() => {
-    if (!editor) return;
-    const update = () => {
-      setValue(getCurrentBlock(editor));
-    };
-    editor.on("selectionUpdate", update);
-    editor.on("transaction", update);
-
-    return () => {
-      editor.off("selectionUpdate", update);
-      editor.off("transaction", update);
-    };
-  }, [editor]);
-
-  if (!editor) return;
+  if (!editor || !isReady) return;
   const handleSetValue = (e: string) => {
-    setValue(e);
     const block = BLOCKITEMS[e as keyof typeof BLOCKITEMS];
     if (block.attributes) {
       console.log(block);

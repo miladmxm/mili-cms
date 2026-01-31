@@ -60,8 +60,8 @@ export const BLOCKITEMS = {
     attributes: undefined,
     Icon: ListTodoIcon,
   },
-  quote: {
-    name: "quote",
+  blockquote: {
+    name: "blockquote",
     label: "نقل قول",
     Icon: QuoteIcon,
     operation: "toggleBlockquote",
