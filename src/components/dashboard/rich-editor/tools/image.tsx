@@ -1,4 +1,4 @@
-import { useCurrentEditor } from "@tiptap/react";
+import { useTiptap } from "@tiptap/react";
 import { Image } from "lucide-react";
 import { useRef } from "react";
 
@@ -10,11 +10,11 @@ import { Button } from "../../ui/button";
 import { useRichEditorContext } from "../context";
 
 const AddImage = () => {
-  const { editor } = useCurrentEditor();
+  const { editor, isReady } = useTiptap();
   const richEditorContext = useRichEditorContext();
   const sheetControllerRef = useRef<SheetController>(null);
 
-  if (!editor || !richEditorContext) return;
+  if (!editor || !richEditorContext || !isReady) return;
   const onClickHandler = ({ url, alt }: { url: string; alt: string }) => {
     editor
       .chain()

@@ -1,11 +1,11 @@
-import { useCurrentEditor } from "@tiptap/react";
+import { useTiptap } from "@tiptap/react";
 import { Minus } from "lucide-react";
 
 import { Button } from "../../ui/button";
 
 const HorizontalRule = () => {
-  const { editor } = useCurrentEditor();
-  if (!editor) return;
+  const { editor, isReady } = useTiptap();
+  if (!editor || !isReady) return;
   return (
     <Button
       size="icon"

@@ -4,10 +4,12 @@ import { Button } from "../../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
 import AddImage from "./image";
+import AddTable from "./table";
 
 const Additional = () => {
   return (
@@ -19,9 +21,14 @@ const Additional = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem asChild>
-          <AddImage />
-        </DropdownMenuItem>
+        <DropdownMenuGroup className="flex flex-col">
+          <DropdownMenuItem asChild>
+            <AddImage />
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <AddTable />
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -1,8 +1,7 @@
 import type { Editor } from "@tiptap/react";
 
-import { useCurrentEditor } from "@tiptap/react";
+import { useTiptap, useTiptapState } from "@tiptap/react";
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight } from "lucide-react";
-import { useEffect, useState } from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "../../ui/toggle-group";
 
@@ -26,25 +25,12 @@ const getActiveTextAlign = (edito: Editor) => {
   return align;
 };
 const Alignments = () => {
-  const { editor } = useCurrentEditor();
-  const [activeAlign, setActiveAlign] = useState<string>("");
-  useEffect(() => {
-    if (!editor) return;
-    const update = () => {
-      setActiveAlign(getActiveTextAlign(editor));
-    };
-    editor.on("selectionUpdate", update);
-    editor.on("transaction", update);
+  const { editor, isReady } = useTiptap();
+  const activeAlign = useTiptapState((ctx) => getActiveTextAlign(ctx.editor));
 
-    return () => {
-      editor.off("selectionUpdate", update);
-      editor.off("transaction", update);
-    };
-  }, [editor]);
-  if (!editor) return;
+  if (!editor || !isReady) return;
   const handleSetAlign = (align: string) => {
     editor.chain().focus().setTextAlign(align).run();
-    setActiveAlign(align);
   };
   return (
     <ToggleGroup

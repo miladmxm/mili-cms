@@ -1,6 +1,7 @@
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import Link from "@tiptap/extension-link";
+import { TableKit } from "@tiptap/extension-table";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 import TextAlign from "@tiptap/extension-text-align";
@@ -13,6 +14,7 @@ import type { RichEditorHandlerRef } from "./type";
 
 import { FontSize } from "./extensions/fontSize";
 import { ImageWithAlign } from "./extensions/image";
+import { TableCellWithBackground } from "./extensions/tableCell";
 
 export const useRichEditor = ({
   ref,
@@ -33,9 +35,13 @@ export const useRichEditor = ({
       TextStyle,
       ImageWithAlign,
       TextAlign.configure({
-        types: ["heading", "paragraph", "image"],
+        types: ["heading", "paragraph"],
       }),
       Color,
+      TableCellWithBackground,
+      TableKit.configure({
+        table: { resizable: true },
+      }),
       TaskList,
       Highlight.configure({
         multicolor: true,
