@@ -1,35 +1,49 @@
 import { useCurrentEditor } from "@tiptap/react";
+import { Image } from "lucide-react";
+import { useRef } from "react";
+
+import type { SheetController } from "@/features/media/components/mediaPickerSheet";
+
+import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 
 import { Button } from "../../ui/button";
+import { useRichEditorContext } from "../context";
 
 const AddImage = () => {
   const { editor } = useCurrentEditor();
-  if (!editor) return;
-  const onClickHandler = () => {
+  const richEditorContext = useRichEditorContext();
+  const sheetControllerRef = useRef<SheetController>(null);
+
+  if (!editor || !richEditorContext) return;
+  const onClickHandler = ({ url, alt }: { url: string; alt: string }) => {
     editor
       .chain()
       .focus()
       .setImage({
-        src: "http://localhost:9000/uploads/1-8-2026/image/80862b88-09e1-426e-a8d0-e922850a3cc6ame_21:28:09.png",
-        alt: "hellooooo",
+        src: url,
+        alt,
         height: 200,
       })
       .run();
+    sheetControllerRef.current?.close();
   };
   return (
     <>
-      <Button onClick={onClickHandler}> add</Button>
       <Button
+        size="sm"
+        variant="ghost"
         onClick={() => {
-          editor
-            .chain()
-            .focus()
-            .setNode("image", { "data-align": "left" })
-            .run();
+          sheetControllerRef.current?.open();
         }}
       >
-        left
+        <Image />
+        افزودن تصویر
       </Button>
+      <MediaPickerSheet
+        medias={richEditorContext.media}
+        controllerRef={sheetControllerRef}
+        onSelect={onClickHandler}
+      />
     </>
   );
 };

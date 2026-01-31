@@ -10,14 +10,13 @@ import ColorPicker, { BackGroundColorPicker } from "./color";
 import FontFormat from "./font-format";
 import FontSize from "./font-size";
 import HorizontalRule from "./horizontalRule";
-import AddImage from "./image";
 import AddLink from "./link";
 import UnsetAll from "./unsetAll";
 
 export const HeaderTools = () => {
   return (
     <ScrollArea dir="rtl" className="w-full min-w-0">
-      <div className="flex gap-2 items-stretch">
+      <div className="flex gap-2 items-stretch px-2">
         <FontFormat />
         <BlockFormat />
         <FontSize />
@@ -27,7 +26,6 @@ export const HeaderTools = () => {
         <BackGroundColorPicker />
         <HorizontalRule />
         <Alignments />
-        <AddImage />
         <Additional />
       </div>
       <ScrollBar orientation="horizontal" />

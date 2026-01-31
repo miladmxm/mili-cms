@@ -1,5 +1,7 @@
 "use client";
-import { use } from "react";
+import type { RefObject } from "react";
+
+import { use, useImperativeHandle, useState } from "react";
 
 import type { Media } from "@/services/media/type";
 
@@ -15,21 +17,35 @@ import { MinimalFileCard } from "./fileCard";
 import MediaDropzone from "./mediaDropzone";
 import DisplayUploadingFiles from "./uploadingFiles";
 
+export interface SheetController {
+  open: () => void;
+  close: () => void;
+}
 const MediaPickerSheet = ({
   medias,
-  onOpenChange,
-  open,
   onSelect,
+  controllerRef,
 }: {
   medias: Promise<Media[]>;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSelect: (data: { id: string; url: string }) => void;
+  onSelect: (data: { id: string; url: string; alt: string }) => void;
+  controllerRef: RefObject<SheetController | null>;
 }) => {
   const mediasData = use(medias);
-
+  const [open, setOpen] = useState(false);
+  useImperativeHandle(
+    controllerRef,
+    () => ({
+      close: () => {
+        setOpen(false);
+      },
+      open: () => {
+        setOpen(true);
+      },
+    }),
+    [],
+  );
   return (
-    <Sheet onOpenChange={onOpenChange} open={open}>
+    <Sheet onOpenChange={setOpen} open={open}>
       <SheetContent className="max-h-[90svh]" side="bottom">
         <SheetHeader>
           <SheetTitle>با کلیک بر روی هر کدام انتخاب کنید</SheetTitle>
@@ -48,7 +64,7 @@ const MediaPickerSheet = ({
                   name={meta.name || meta.alt}
                   type={type}
                   url={url}
-                  onSelectHandler={() => onSelect({ id, url })}
+                  onSelectHandler={() => onSelect({ id, url, alt: meta.alt })}
                 />
               ))}
             </div>

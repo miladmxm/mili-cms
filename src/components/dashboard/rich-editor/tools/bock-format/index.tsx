@@ -26,6 +26,7 @@ const getCurrentBlock = (editor: Editor) => {
 
 const BlockFormat = () => {
   const { editor } = useCurrentEditor();
+
   const [value, setValue] = useState<string>("paragraph");
   useEffect(() => {
     if (!editor) return;

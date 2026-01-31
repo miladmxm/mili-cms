@@ -8,9 +8,10 @@ import type {
 
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { Suspense, useState } from "react";
+import { Suspense, useRef } from "react";
 import { Controller } from "react-hook-form";
 
+import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 import type { Category } from "@/services/article/types";
 import type { Media } from "@/services/media/type";
 
@@ -155,7 +156,7 @@ export const ArticleThumbnail = ({
   ArticleSetValue & {
     medias: Promise<Media[]>;
   }) => {
-  const [open, setOpen] = useState(false);
+  const sheetControllerRef = useRef<SheetController>(null);
   const setPreviewImageUrl = useCreateArticleStore(
     (store) => store.setPreviewImageUrl,
   );
@@ -173,19 +174,18 @@ export const ArticleThumbnail = ({
             <Suspense fallback={null}>
               <MediaPickerSheet
                 medias={medias}
-                onOpenChange={setOpen}
+                controllerRef={sheetControllerRef}
                 onSelect={({ id, url }) => {
                   setValue("thumbnail", id);
                   setPreviewImageUrl(url);
-                  setOpen(false);
+                  sheetControllerRef.current?.close();
                 }}
-                open={open}
               />
             </Suspense>
             <Button
               className="w-full h-32"
               variant="outline"
-              onClick={() => setOpen(true)}
+              onClick={() => sheetControllerRef.current?.open()}
             >
               {previewImageUrl && (
                 <Image

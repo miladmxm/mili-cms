@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
+import AddImage from "./image";
 
 const Additional = () => {
   return (
@@ -18,7 +19,9 @@ const Additional = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>helo</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <AddImage />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
