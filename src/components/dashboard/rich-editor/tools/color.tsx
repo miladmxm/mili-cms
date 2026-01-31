@@ -1,40 +1,28 @@
-import { useCurrentEditor } from "@tiptap/react";
+import { useTiptap, useTiptapState } from "@tiptap/react";
 import { BaselineIcon, PaintBucketIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 import { Button } from "@/components/dashboard/ui/button";
 import { Label } from "@/components/dashboard/ui/label";
 
 const ColorPicker = () => {
-  const [color, setColor] = useState<string>("");
-  const { editor } = useCurrentEditor();
-  useEffect(() => {
-    if (!editor) return;
-    const update = () => {
-      const nodeColor = editor.getAttributes("textStyle").color;
-      if (nodeColor) {
-        setColor(nodeColor);
-      } else {
-        setColor("");
-      }
-    };
-    editor.on("selectionUpdate", update);
-    editor.on("transaction", update);
+  const { editor, isReady } = useTiptap();
+  const color = useTiptapState((ctx) => {
+    const nodeColor = ctx.editor.getAttributes("textStyle").color;
+    if (nodeColor && typeof nodeColor === "string") {
+      return nodeColor;
+    }
+    return "";
+  });
 
-    return () => {
-      editor.off("selectionUpdate", update);
-      editor.off("transaction", update);
-    };
-  }, [editor]);
   const timeoutRef = useRef<NodeJS.Timeout>(null);
-  if (!editor) return;
+  if (!editor || !isReady) return;
   const handleChangeColor = (value: string) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
       editor.chain().focus().setColor(value).run();
-      setColor(value);
     }, 100);
   };
   return (
@@ -56,7 +44,6 @@ const ColorPicker = () => {
         variant="outline"
       >
         <Label htmlFor="colorPicker">
-          {/* <PaletteIcon /> */}
           <BaselineIcon />
         </Label>
       </Button>
@@ -65,26 +52,14 @@ const ColorPicker = () => {
 };
 // todo fix background
 export const BackGroundColorPicker = () => {
-  const [color, setColor] = useState<string>("");
-  const { editor } = useCurrentEditor();
-  useEffect(() => {
-    if (!editor) return;
-    const update = () => {
-      const nodeColor = editor.getAttributes("textStyle").color;
-      if (nodeColor) {
-        setColor(nodeColor);
-      } else {
-        setColor("");
-      }
-    };
-    editor.on("selectionUpdate", update);
-    editor.on("transaction", update);
-
-    return () => {
-      editor.off("selectionUpdate", update);
-      editor.off("transaction", update);
-    };
-  }, [editor]);
+  const { editor } = useTiptap();
+  const color = useTiptapState((ctx) => {
+    const nodeColor = ctx.editor.getAttributes("textStyle").color;
+    if (nodeColor && typeof nodeColor === "string") {
+      return nodeColor;
+    }
+    return "";
+  });
   const timeoutRef = useRef<NodeJS.Timeout>(null);
   if (!editor) return;
   const handleChangeColor = (value: string) => {
@@ -92,9 +67,7 @@ export const BackGroundColorPicker = () => {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      editor.chain().focus().setHighlight({ color: "#330000" }).run();
-
-      setColor(value);
+      editor.chain().focus().setHighlight({ color: value }).run();
     }, 100);
   };
   return (

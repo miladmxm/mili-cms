@@ -1,11 +1,11 @@
-import { useCurrentEditor } from "@tiptap/react";
+import { useTiptap } from "@tiptap/react";
 import { Eraser } from "lucide-react";
 
 import { Button } from "../../ui/button";
 
 const UnsetAll = () => {
-  const { editor } = useCurrentEditor();
-  if (!editor) return;
+  const { editor, isReady } = useTiptap();
+  if (!editor || !isReady) return;
   const handleUnset = () => {
     editor.chain().focus().unsetAllMarks().run();
   };

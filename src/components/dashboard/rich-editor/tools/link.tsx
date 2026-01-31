@@ -1,9 +1,9 @@
 import type { KeyboardEvent, MouseEvent } from "react";
 
 import { PopoverClose } from "@radix-ui/react-popover";
-import { useTiptap } from "@tiptap/react";
+import { useTiptap, useTiptapState } from "@tiptap/react";
 import { Check, Link2 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { Button } from "@/components/dashboard/ui/button";
 import { Field } from "@/components/dashboard/ui/field";
@@ -17,23 +17,8 @@ import {
 
 const AddLink = () => {
   const { editor, isReady } = useTiptap();
-  console.log(editor);
   const linkRef = useRef<HTMLInputElement>(null);
-  const [haveLink, setHaveLink] = useState<boolean>(false);
-  // useEffect(() => {
-  //   if (!editor) return;
-  //   const update = () => {
-  //     setHaveLink(editor.isActive("link"));
-  //   };
-  //   editor.on("selectionUpdate", update);
-  //   editor.on("transaction", update);
-
-  //   return () => {
-  //     editor.off("selectionUpdate", update);
-  //     editor.off("transaction", update);
-  //   };
-  // }, [editor]);
-
+  const haveLink = useTiptapState((ctx) => ctx.editor.isActive("link"));
   if (!isReady || !editor) return;
   const handleAddLink = () => {
     const linkInput = linkRef.current;
