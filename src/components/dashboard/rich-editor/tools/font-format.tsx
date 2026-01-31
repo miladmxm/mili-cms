@@ -1,13 +1,12 @@
 import type { Editor } from "@tiptap/react";
 
-import { useCurrentEditor } from "@tiptap/react";
+import { useEditorState, useTiptap } from "@tiptap/react";
 import {
   BoldIcon,
   ItalicIcon,
   StrikethroughIcon,
   UnderlineIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 
 import {
   ToggleGroup,
@@ -41,32 +40,24 @@ const getCurrentBlock = (editor: Editor) => {
   return activedFormats;
 };
 const FontFormat = () => {
-  const { editor } = useCurrentEditor();
-  const [activeFormats, setActiveFormats] = useState<string[]>([]);
+  const { editor, isReady } = useTiptap();
+  const editorState = useEditorState({
+    editor,
+    selector: ({ editor: selectorEditor }) => {
+      if (!selectorEditor) return [];
+      return getCurrentBlock(selectorEditor);
+    },
+  });
 
-  useEffect(() => {
-    if (!editor) return;
-    const update = () => {
-      setActiveFormats(getCurrentBlock(editor));
-    };
-    editor.on("selectionUpdate", update);
-    editor.on("transaction", update);
-
-    return () => {
-      editor.off("selectionUpdate", update);
-      editor.off("transaction", update);
-    };
-  }, [editor]);
-  if (!editor) return;
+  if (!editor || !isReady) return;
 
   return (
     <ToggleGroup
       dir="rtl"
       className="rtl:flex-row-reverse"
       type="multiple"
-      value={activeFormats}
+      value={editorState ?? []}
       variant="outline"
-      onValueChange={setActiveFormats}
     >
       {FORMATS.map(({ format, icon: Icon, label, name }) => (
         <ToggleGroupItem

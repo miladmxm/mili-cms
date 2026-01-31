@@ -1,6 +1,5 @@
 "use client";
-import { EditorContent, EditorContext } from "@tiptap/react";
-import { useMemo } from "react";
+import { Tiptap } from "@tiptap/react";
 
 import type { RichEditorHandlerRef } from "./type";
 
@@ -12,6 +11,7 @@ import {
   CardHeader,
 } from "../ui/card";
 import { Separator } from "../ui/separator";
+import { Skeleton } from "../ui/skeleton";
 import { useRichEditor } from "./hook";
 import classes from "./index.module.css";
 import { FooterTools, HeaderTools } from "./tools";
@@ -26,19 +26,21 @@ const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
     ref: handlerRef,
     onUpdate,
   });
-  const providerValue = useMemo(() => ({ editor }), [editor]);
 
   if (!editor) return null;
   return (
     <Card className="gap-4 w-full max-w-5xl mx-auto">
-      <EditorContext value={providerValue}>
+      <Tiptap instance={editor}>
         <CardHeader>
           <HeaderTools />
         </CardHeader>
         <Separator />
         <CardContent>
           <div className="border border-dashed overflow-y-auto rounded-lg max-h-[60svh]">
-            <EditorContent className={classes.wrapper} editor={editor} />
+            <Tiptap.Loading>
+              <Skeleton className="size-full" />
+            </Tiptap.Loading>
+            <Tiptap.Content className={classes.wrapper} />
           </div>
         </CardContent>
         <Separator />
@@ -47,7 +49,7 @@ const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
             <FooterTools editor={editor} />
           </CardAction>
         </CardFooter>
-      </EditorContext>
+      </Tiptap>
     </Card>
   );
 };
