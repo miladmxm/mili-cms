@@ -6,6 +6,7 @@ import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
+import { Gapcursor } from "@tiptap/extensions";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useImperativeHandle } from "react";
@@ -33,6 +34,7 @@ export const useRichEditor = ({
     extensions: [
       StarterKit,
       TextStyle,
+      Gapcursor,
       ImageWithAlign,
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -40,7 +42,11 @@ export const useRichEditor = ({
       Color,
       TableCellWithBackground,
       TableKit.configure({
-        table: { resizable: true },
+        table: {
+          resizable: true,
+          allowTableNodeSelection: true,
+          renderWrapper: false,
+        },
       }),
       TaskList,
       Highlight.configure({

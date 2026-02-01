@@ -36,7 +36,7 @@ const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
         </CardHeader>
         <Separator />
         <CardContent>
-          <div className="border border-dashed overflow-y-auto rounded-lg max-h-[60svh]">
+          <div className="border relative border-dashed overflow-y-auto rounded-lg max-h-[60svh]">
             <Tiptap.Loading>
               <Skeleton className="size-full" />
             </Tiptap.Loading>
