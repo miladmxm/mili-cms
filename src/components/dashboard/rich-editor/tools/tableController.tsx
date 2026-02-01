@@ -77,7 +77,7 @@ const TableController = () => {
             </Button>
             <Button
               size="sm"
-              title="حذف ستون"
+              title="ترکیب کردن ستون ها"
               variant="outline"
               onClick={() => editor.chain().focus().mergeOrSplit().run()}
             >
