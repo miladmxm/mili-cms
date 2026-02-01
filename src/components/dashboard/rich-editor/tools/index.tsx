@@ -11,6 +11,7 @@ import FontFormat from "./font-format";
 import FontSize from "./font-size";
 import HorizontalRule from "./horizontalRule";
 import AddLink from "./link";
+import TableController from "./tableController";
 import UnsetAll from "./unsetAll";
 
 export const HeaderTools = () => {
@@ -28,10 +29,12 @@ export const HeaderTools = () => {
         <Alignments />
         <Additional />
       </div>
+      <TableController />
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 };
+
 export const FooterTools = ({ editor }: { editor: Editor }) => {
   return (
     <div className="flex gap-2 items-stretch">
