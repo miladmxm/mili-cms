@@ -1,7 +1,5 @@
 "use client";
-import DragHandle from "@tiptap/extension-drag-handle-react";
 import { Tiptap } from "@tiptap/react";
-import { GripVertical } from "lucide-react";
 
 import type { RichEditorHandlerRef } from "./type";
 
@@ -16,12 +14,14 @@ import { Separator } from "../ui/separator";
 import { Skeleton } from "../ui/skeleton";
 import { useRichEditor } from "./hook";
 import classes from "./index.module.css";
+import Drag from "./nodes/drag";
 import { FooterTools, HeaderTools } from "./tools";
 
 interface RichEditorProps {
   handlerRef?: RichEditorHandlerRef;
   onUpdate?: (content: string) => void;
 }
+
 const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
   const { editor } = useRichEditor({
     ref: handlerRef,
@@ -37,20 +37,12 @@ const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
         </CardHeader>
         <Separator />
         <CardContent>
-          <div className="border relative border-dashed overflow-y-auto rounded-lg max-h-[60svh]">
+          <div className="border isolate relative border-dashed overflow-y-auto rounded-lg max-h-[60svh]">
             <Tiptap.Loading>
               <Skeleton className="size-full" />
             </Tiptap.Loading>
             <Tiptap.Content className={classes.wrapper} />
-            <DragHandle
-              nested
-              computePositionConfig={{ placement: "left" }}
-              editor={editor}
-            >
-              <div className="size-5 pointer-events-auto cursor-grab">
-                <GripVertical className="size-full" />
-              </div>
-            </DragHandle>
+            <Drag />
           </div>
         </CardContent>
         <Separator />

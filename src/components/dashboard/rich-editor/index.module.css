@@ -207,6 +207,6 @@
   background-color: rgba(112, 207, 248, 0.3);
   border-radius: 0.2rem;
   pointer-events: none;
-  z-index: 10;
+  z-index: -1;
 }
 }
