@@ -119,7 +119,7 @@
 
     :global(.selectedCell)::after {
       background: var(--color-ring);
-       content: '';
+      content: "";
       left: 0;
       right: 0;
       top: 0;
@@ -130,14 +130,14 @@
     }
     :global(.column-resize-handle) {
       background-color: var(--color-primary);
-       bottom: -2px;
-       z-index: 2;
+      bottom: -2px;
+      z-index: 2;
       pointer-events: none;
       position: absolute;
       right: -1px;
       top: 0;
       width: 4px;
-      &:hover{
+      &:hover {
         cursor: col-resize;
       }
     }
@@ -191,22 +191,20 @@
     background-color: burlywood;
   }
 
+  /* Selection highlight for dragged nodes */
+  :global(.ProseMirror-selectednode),
+  :global(.ProseMirror-selectednoderange) {
+    position: relative;
+  }
 
-
-/* Selection highlight for dragged nodes */
-:global(.ProseMirror-selectednode),
-:global(.ProseMirror-selectednoderange) {
-  position: relative;
-}
-
-:global(.ProseMirror-selectednode)::before,
-:global(.ProseMirror-selectednoderange)::before {
-  content: '';
-  position: absolute;
-  inset: -0.25rem;
-  background-color: rgba(112, 207, 248, 0.3);
-  border-radius: 0.2rem;
-  pointer-events: none;
-  z-index: -1;
-}
+  :global(.ProseMirror-selectednode)::before,
+  :global(.ProseMirror-selectednoderange)::before {
+    content: "";
+    position: absolute;
+    inset: -0.25rem;
+    background-color: rgba(112, 207, 248, 0.3);
+    border-radius: 0.2rem;
+    pointer-events: none;
+    z-index: -1;
+  }
 }

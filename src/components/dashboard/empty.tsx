@@ -1,4 +1,9 @@
+import type { Route } from "next";
+
 import { CandyOff, Plus } from "lucide-react";
+import Link from "next/link";
+
+import type { Icon } from "@/types/adminNavs";
 
 import { Button } from "@/components/dashboard/ui/button";
 import {
@@ -10,9 +15,6 @@ import {
   EmptyTitle,
 } from "@/components/dashboard/ui/empty";
 import { cn } from "@/lib/utils";
-import { Icon } from "@/types/adminNavs";
-import { Route } from "next";
-import Link from "next/link";
 
 interface EmptyPlaceholderProps {
   icon?: Icon;

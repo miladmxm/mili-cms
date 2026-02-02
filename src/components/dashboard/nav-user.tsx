@@ -27,10 +27,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/dashboard/ui/sidebar";
+import SignoutButton from "@/features/auth/admin/components/signoutButton";
 import { useDirection } from "@/hooks/useDirection";
 import { useSession } from "@/hooks/useSession";
 
-import SignoutButton from "@/features/auth/admin/components/signoutButton";
 import { Skeleton } from "./ui/skeleton";
 
 const NavUserSkeleton = () => {

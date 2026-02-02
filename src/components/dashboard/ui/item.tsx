@@ -1,16 +1,18 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils";
+import { Slot } from "@radix-ui/react-slot";
+import { cva } from "class-variance-authority";
+import * as React from "react";
+
 import { Separator } from "@/components/dashboard/ui/separator";
+import { cn } from "@/lib/utils";
 
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      role="list"
-      data-slot="item-group"
       className={cn("group/item-group flex flex-col", className)}
+      data-slot="item-group"
+      role="list"
       {...props}
     />
   );
@@ -22,9 +24,9 @@ function ItemSeparator({
 }: React.ComponentProps<typeof Separator>) {
   return (
     <Separator
+      className={cn("my-0", className)}
       data-slot="item-separator"
       orientation="horizontal"
-      className={cn("my-0", className)}
       {...props}
     />
   );
@@ -62,10 +64,10 @@ function Item({
   const Comp = asChild ? Slot : "div";
   return (
     <Comp
-      data-slot="item"
-      data-variant={variant}
       data-size={size}
       className={cn(itemVariants({ variant, size, className }))}
+      data-variant={variant}
+      data-slot="item"
       {...props}
     />
   );
@@ -95,9 +97,9 @@ function ItemMedia({
 }: React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants>) {
   return (
     <div
-      data-slot="item-media"
-      data-variant={variant}
       className={cn(itemMediaVariants({ variant, className }))}
+      data-variant={variant}
+      data-slot="item-media"
       {...props}
     />
   );
@@ -146,8 +148,8 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
 function ItemActions({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      data-slot="item-actions"
       className={cn("flex items-center gap-2", className)}
+      data-slot="item-actions"
       {...props}
     />
   );
@@ -181,13 +183,13 @@ function ItemFooter({ className, ...props }: React.ComponentProps<"div">) {
 
 export {
   Item,
-  ItemMedia,
-  ItemContent,
   ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
   ItemGroup,
+  ItemHeader,
+  ItemMedia,
   ItemSeparator,
   ItemTitle,
-  ItemDescription,
-  ItemHeader,
-  ItemFooter,
 };

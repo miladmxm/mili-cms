@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { Fragment } from "react";
 
 import {
@@ -11,7 +12,6 @@ import {
 } from "@/components/dashboard/ui/breadcrumb";
 import { NavDictionary } from "@/constant/adminNavLinks";
 import { usePathAsArray } from "@/hooks/usePathAsArray";
-import Link from "next/link";
 
 const RouteBreadcrumb = () => {
   const arrayOfPaths = usePathAsArray();
@@ -25,7 +25,7 @@ const RouteBreadcrumb = () => {
             <Fragment key={item}>
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink asChild>
-                  <Link href={{ pathname: "/" + route.join("/") }}>
+                  <Link href={{ pathname: `/${route.join("/")}` }}>
                     {NavDictionary[item]}
                   </Link>
                 </BreadcrumbLink>

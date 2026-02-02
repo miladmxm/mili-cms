@@ -13,9 +13,9 @@ function Tabs({
   const dir = useDirection();
   return (
     <TabsPrimitive.Root
+      dir={dir}
       className={cn("flex flex-col gap-2", className)}
       data-slot="tabs"
-      dir={dir}
       {...props}
     />
   );
