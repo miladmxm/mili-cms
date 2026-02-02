@@ -25,7 +25,10 @@ const FilePreview = ({ type, url, className }: FilePreviewProps) => {
         src={{ src: url, width: 168, height: 168 }}
       />
     );
-  else return FileIconFromType[type];
+  else
+    return (
+      <span className="*:size-16 *:mx-auto">{FileIconFromType[type]}</span>
+    );
 };
 
 export default FilePreview;
