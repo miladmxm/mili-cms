@@ -15,6 +15,10 @@ const AddAudio = () => {
   const richEditorContext = useRichEditorContext();
   if (!editor || !isReady || !richEditorContext) return;
   const { audioMedia } = richEditorContext;
+  const handleAddAudio = ({ url }: { url: string }) => {
+    editor.chain().focus().setAudio({ src: url }).run();
+    sheetControllerRef.current?.close();
+  };
   return (
     <>
       <Button
@@ -25,12 +29,12 @@ const AddAudio = () => {
         }}
       >
         <Music />
-        افزودن تصویر
+        افزودن صدا
       </Button>
       <MediaPickerSheet
         medias={audioMedia}
         controllerRef={sheetControllerRef}
-        onSelect={console.log}
+        onSelect={handleAddAudio}
       />
     </>
   );
