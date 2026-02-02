@@ -31,6 +31,7 @@ const AddImage = () => {
     <>
       <Button
         size="sm"
+        type="button"
         variant="ghost"
         onClick={() => {
           sheetControllerRef.current?.open();

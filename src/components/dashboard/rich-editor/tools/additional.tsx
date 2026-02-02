@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
 import AddAudio from "./audio";
+import AddIFrame from "./iframe";
 import AddImage from "./image";
 import AddTable from "./table";
 
@@ -31,6 +32,9 @@ const Additional = () => {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <AddAudio />
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <AddIFrame />
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

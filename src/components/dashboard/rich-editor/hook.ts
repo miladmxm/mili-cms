@@ -16,6 +16,7 @@ import { useImperativeHandle } from "react";
 import type { RichEditorHandlerRef } from "./type";
 
 import { FontSize } from "./extensions/fontSize";
+import IFrame from "./extensions/iframe";
 import { ImageWithAlign } from "./extensions/image";
 import { TableCellWithBackground } from "./extensions/tableCell";
 
@@ -38,6 +39,7 @@ export const useRichEditor = ({
         controls: true,
         preload: "metadata",
       }),
+      IFrame.configure({ allowFullscreen: true }),
       StarterKit,
       Text,
       TextStyleKit,
