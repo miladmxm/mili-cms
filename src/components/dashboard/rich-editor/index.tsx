@@ -1,5 +1,7 @@
 "use client";
+import DragHandle from "@tiptap/extension-drag-handle-react";
 import { Tiptap } from "@tiptap/react";
+import { GripVertical } from "lucide-react";
 
 import type { RichEditorHandlerRef } from "./type";
 
@@ -20,7 +22,6 @@ interface RichEditorProps {
   handlerRef?: RichEditorHandlerRef;
   onUpdate?: (content: string) => void;
 }
-
 const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
   const { editor } = useRichEditor({
     ref: handlerRef,
@@ -41,6 +42,15 @@ const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
               <Skeleton className="size-full" />
             </Tiptap.Loading>
             <Tiptap.Content className={classes.wrapper} />
+            <DragHandle
+              nested
+              computePositionConfig={{ placement: "left" }}
+              editor={editor}
+            >
+              <div className="size-5 pointer-events-auto cursor-grab">
+                <GripVertical className="size-full" />
+              </div>
+            </DragHandle>
           </div>
         </CardContent>
         <Separator />

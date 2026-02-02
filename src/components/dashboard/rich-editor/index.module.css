@@ -1,4 +1,5 @@
 .wrapper {
+  padding-left: 1rem;
   :first-child {
     margin-top: 0;
   }
@@ -189,4 +190,23 @@
     height: 30px;
     background-color: burlywood;
   }
+
+
+
+/* Selection highlight for dragged nodes */
+:global(.ProseMirror-selectednode),
+:global(.ProseMirror-selectednoderange) {
+  position: relative;
+}
+
+:global(.ProseMirror-selectednode)::before,
+:global(.ProseMirror-selectednoderange)::before {
+  content: '';
+  position: absolute;
+  inset: -0.25rem;
+  background-color: rgba(112, 207, 248, 0.3);
+  border-radius: 0.2rem;
+  pointer-events: none;
+  z-index: 10;
+}
 }

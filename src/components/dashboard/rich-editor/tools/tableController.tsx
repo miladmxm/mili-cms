@@ -22,7 +22,9 @@ const TableController = () => {
   if (!isReady || !editor) return;
   return (
     <div
-      className={cn("h-0 overflow-hidden transition-all", { "h-12": isTable })}
+      className={cn("h-0 overflow-hidden sticky start-0 transition-all w-fit", {
+        "h-12": isTable,
+      })}
     >
       {isTable && (
         <div className=" flex gap-2 pt-3">

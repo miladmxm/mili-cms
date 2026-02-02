@@ -16,7 +16,7 @@ import UnsetAll from "./unsetAll";
 
 export const HeaderTools = () => {
   return (
-    <ScrollArea dir="rtl" className="w-full min-w-0">
+    <ScrollArea dir="rtl" className="w-full min-w-0 relative">
       <div className="flex gap-2 items-stretch px-2">
         <FontFormat />
         <BlockFormat />

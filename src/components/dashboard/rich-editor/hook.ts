@@ -4,8 +4,9 @@ import Link from "@tiptap/extension-link";
 import { TableKit } from "@tiptap/extension-table";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
-import { TextStyle } from "@tiptap/extension-text-style";
+import { TextStyleKit } from "@tiptap/extension-text-style";
 import { Gapcursor } from "@tiptap/extensions";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -33,7 +34,8 @@ export const useRichEditor = ({
     },
     extensions: [
       StarterKit,
-      TextStyle,
+      Text,
+      TextStyleKit,
       Gapcursor,
       ImageWithAlign,
       TextAlign.configure({

@@ -1,9 +1,12 @@
+import type { MouseEvent } from "react";
+
 import { useTiptap, useTiptapState } from "@tiptap/react";
-import { BaselineIcon, PaintBucketIcon } from "lucide-react";
+import { BaselineIcon, PaintBucketIcon, SquareX } from "lucide-react";
 import { useRef } from "react";
 
 import { Button } from "@/components/dashboard/ui/button";
 import { Label } from "@/components/dashboard/ui/label";
+import { cn } from "@/lib/utils";
 
 const ColorPicker = () => {
   const { editor, isReady } = useTiptap();
@@ -25,11 +28,16 @@ const ColorPicker = () => {
       editor.chain().focus().setColor(value).run();
     }, 100);
   };
+  const clearColor = (e: MouseEvent<HTMLButtonElement>) => {
+    if (!color) return;
+    e.preventDefault();
+    editor.chain().focus().unsetColor().run();
+  };
   return (
     <div className="relative">
       <input
         className="sr-only"
-        id="colorPicker"
+        id="textColorPicker"
         type="color"
         value={color}
         onChange={(e) => {
@@ -42,19 +50,27 @@ const ColorPicker = () => {
         style={{ color }}
         type="button"
         variant="outline"
+        onClick={clearColor}
       >
-        <Label htmlFor="colorPicker">
-          <BaselineIcon />
+        <Label
+          htmlFor="textColorPicker"
+          className={cn("cursor-pointer", {
+            "hover:[&_.clear]:block hover:[&_.baseLine]:hidden": !!color,
+          })}
+        >
+          <SquareX className="clear hidden" />
+          <BaselineIcon className="baseLine" />
         </Label>
       </Button>
     </div>
   );
 };
-// todo fix background
+
 export const BackGroundColorPicker = () => {
   const { editor } = useTiptap();
   const color = useTiptapState((ctx) => {
-    const nodeColor = ctx.editor.getAttributes("textStyle").color;
+    const nodeColor = ctx.editor.getAttributes("highlight").color;
+
     if (nodeColor && typeof nodeColor === "string") {
       return nodeColor;
     }
@@ -70,11 +86,16 @@ export const BackGroundColorPicker = () => {
       editor.chain().focus().setHighlight({ color: value }).run();
     }, 100);
   };
+  const clearColor = (e: MouseEvent<HTMLButtonElement>) => {
+    if (!color) return;
+    e.preventDefault();
+    editor.chain().focus().unsetHighlight().run();
+  };
   return (
     <div className="relative">
       <input
         className="sr-only"
-        id="colorPicker"
+        id="highlightColorPicker"
         type="color"
         value={color}
         onChange={(e) => {
@@ -87,9 +108,16 @@ export const BackGroundColorPicker = () => {
         style={{ backgroundColor: color }}
         type="button"
         variant="outline"
+        onClick={clearColor}
       >
-        <Label htmlFor="colorPicker">
-          <PaintBucketIcon className="size-4" />
+        <Label
+          htmlFor="highlightColorPicker"
+          className={cn("cursor-pointer", {
+            "hover:[&_.clear]:block hover:[&_.bucket]:hidden": !!color,
+          })}
+        >
+          <PaintBucketIcon className="size-4 bucket" />
+          <SquareX className="clear hidden" />
         </Label>
       </Button>
     </div>
