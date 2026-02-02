@@ -6,7 +6,8 @@ import { createContext, use, useMemo } from "react";
 import type { Media } from "@/services/media/type";
 
 interface RichEditorContext {
-  media: Promise<Media[]>;
+  imageMedia: Promise<Media[]>;
+  audioMedia: Promise<Media[]>;
 }
 const RichEditorContext = createContext<RichEditorContext | undefined>(
   undefined,
@@ -20,9 +21,16 @@ export const useRichEditorContext = () => {
 
 const RichEditorContextProvider = ({
   children,
-  media,
-}: PropsWithChildren & { media: Promise<Media[]> }) => {
-  const mediaMemo = useMemo(() => ({ media }), [media]);
+  imageMedia,
+  audioMedia,
+}: PropsWithChildren & {
+  imageMedia: Promise<Media[]>;
+  audioMedia: Promise<Media[]>;
+}) => {
+  const mediaMemo = useMemo(
+    () => ({ imageMedia, audioMedia }),
+    [imageMedia, audioMedia],
+  );
   return <RichEditorContext value={mediaMemo}>{children}</RichEditorContext>;
 };
 export default RichEditorContextProvider;

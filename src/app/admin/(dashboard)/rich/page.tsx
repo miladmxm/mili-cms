@@ -3,10 +3,14 @@ import RichEditorContextProvider from "@/components/dashboard/rich-editor/contex
 import { getMediasByType } from "@/features/media/dal/queries";
 
 const page = () => {
-  const medias = getMediasByType(["image"]);
+  const imageMedias = getMediasByType(["image"]);
+  const audioMedias = getMediasByType(["audio"]);
   return (
     <div>
-      <RichEditorContextProvider media={medias}>
+      <RichEditorContextProvider
+        imageMedia={imageMedias}
+        audioMedia={audioMedias}
+      >
         <RichEditor />
       </RichEditorContextProvider>
     </div>

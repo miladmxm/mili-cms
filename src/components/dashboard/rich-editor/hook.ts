@@ -1,3 +1,4 @@
+import Audio from "@tiptap/extension-audio";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import Link from "@tiptap/extension-link";
@@ -33,6 +34,10 @@ export const useRichEditor = ({
         onUpdate(`normilizeHtmlWhenUsingTagNode(e.editor.getHTML())`);
     },
     extensions: [
+      Audio.configure({
+        controls: true,
+        preload: "metadata",
+      }),
       StarterKit,
       Text,
       TextStyleKit,

@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-const TOGGLE_THEME_KEYBOARD_SHORTCUT = "d";
+import { useEffect, useEffectEvent } from "react";
 
 import { Button } from "@/components/dashboard/ui/button";
 import {
@@ -11,9 +11,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/dashboard/ui/dropdown-menu";
-import { useEffect, useEffectEvent } from "react";
+
 import { Kbd, KbdGroup } from "./ui/kbd";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+
+const TOGGLE_THEME_KEYBOARD_SHORTCUT = "d";
 
 export function ModeToggle() {
   const { resolvedTheme, setTheme } = useTheme();

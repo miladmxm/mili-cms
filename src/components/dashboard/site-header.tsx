@@ -1,7 +1,8 @@
 import { Separator } from "@/components/dashboard/ui/separator";
 import { SidebarTrigger } from "@/components/dashboard/ui/sidebar";
-import { ModeToggle } from "./ThemeSwitch";
+
 import RouteBreadcrumb from "./route-breadcrumb";
+import { ModeToggle } from "./ThemeSwitch";
 
 export function SiteHeader() {
   return (
