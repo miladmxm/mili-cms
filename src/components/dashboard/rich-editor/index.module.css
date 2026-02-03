@@ -190,13 +190,13 @@
     height: 30px;
     background-color: burlywood;
   }
-:global(.iframe-wrapper){
-  iframe{
-    width: 90%;
-    margin-inline: auto;
-    aspect-ratio: 16/9;
+  :global(.iframe-wrapper) {
+    iframe {
+      width: 90%;
+      margin-inline: auto;
+      aspect-ratio: 16/9;
+    }
   }
-}
   :global(.ProseMirror-selectednode),
   :global(.ProseMirror-selectednoderange) {
     position: relative;
