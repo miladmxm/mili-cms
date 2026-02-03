@@ -1,3 +1,5 @@
+import type { Content, JSONContent } from "@tiptap/react";
+
 import { useEditor } from "@tiptap/react";
 import { useImperativeHandle } from "react";
 
@@ -8,30 +10,31 @@ import { extensions } from "./extensions";
 export const useRichEditor = ({
   ref,
   onUpdate,
+  content,
 }: {
   ref?: RichEditorHandlerRef;
-  onUpdate?: (content: string) => void;
+  onUpdate?: (content: JSONContent) => void;
+  content?: Content;
 }) => {
   const editor = useEditor({
     immediatelyRender: false,
     textDirection: "auto",
-    onUpdate: () => {
-      if (onUpdate)
-        onUpdate(`normilizeHtmlWhenUsingTagNode(e.editor.getHTML())`);
+    onUpdate: ({ editor: e }) => {
+      if (onUpdate) onUpdate(e.getJSON());
     },
     extensions,
-    content: "",
+    content,
   });
   useImperativeHandle(ref, () => ({
-    clear: () => {
+    clear() {
       editor?.commands.clearContent();
     },
-    getHTML: () => {
+    getHTML() {
       if (!editor) return "";
       return editor.getHTML();
     },
-    getMD: () => {
-      return `normilizeHtmlWhenUsingTagNode(editor.getHTML());`;
+    getProceMirror() {
+      return editor?.getJSON();
     },
   }));
 

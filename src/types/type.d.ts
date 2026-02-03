@@ -1,15 +1,14 @@
-export type JsonValue =
-  | boolean
-  | number
-  | string
-  | JsonArray
-  | JsonObject
-  | null
-  | undefined;
-export interface JsonObject {
-  [key: string]: JsonValue;
-}
-
-export interface JsonArray extends Array<JsonValue> {}
-
 export type SearchParams = Record<string, string | string[] | undefined>;
+
+export interface ProseMirror {
+  type?: string;
+  attrs?: Record<string, any> | undefined;
+  content?: ProseMirror[];
+  marks?: {
+    type: string;
+    attrs?: Record<string, any>;
+    [key: string]: any;
+  }[];
+  text?: string;
+  [key: string]: any;
+}

@@ -1,3 +1,4 @@
+"use client";
 import RichEditor from "@/components/dashboard/rich-editor";
 import RichEditorContextProvider from "@/components/dashboard/rich-editor/context";
 import { getMediasByType } from "@/features/media/dal/queries";
@@ -11,7 +12,7 @@ const page = () => {
         imageMedia={imageMedias}
         audioMedia={audioMedias}
       >
-        <RichEditor />
+        <RichEditor onUpdate={console.log} />
       </RichEditorContextProvider>
     </div>
   );

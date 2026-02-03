@@ -1,5 +1,3 @@
-import type { Editor } from "@tiptap/core";
-
 import { ScrollArea, ScrollBar } from "@/components/dashboard/ui/scroll-area";
 
 import Additional from "./additional";
@@ -35,10 +33,10 @@ export const HeaderTools = () => {
   );
 };
 
-export const FooterTools = ({ editor }: { editor: Editor }) => {
+export const FooterTools = () => {
   return (
     <div className="flex gap-2 items-stretch">
-      <Clear editor={editor} />
+      <Clear />
     </div>
   );
 };

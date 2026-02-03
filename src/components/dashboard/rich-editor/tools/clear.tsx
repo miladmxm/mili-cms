@@ -1,10 +1,11 @@
-import type { Editor } from "@tiptap/core";
-
+import { useTiptap } from "@tiptap/react";
 import { Trash } from "lucide-react";
 
 import { Button } from "@/components/dashboard/ui/button";
 
-const Clear = ({ editor }: { editor: Editor }) => {
+const Clear = () => {
+  const { editor, isReady } = useTiptap();
+  if (!editor || !isReady) return;
   return (
     <Button
       size="icon-sm"

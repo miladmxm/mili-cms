@@ -1,4 +1,6 @@
 "use client";
+import type { Content } from "@tiptap/react";
+
 import { Tiptap } from "@tiptap/react";
 
 import type { RichEditorHandlerRef } from "./type";
@@ -19,7 +21,7 @@ import { FooterTools, HeaderTools } from "./tools";
 
 interface RichEditorProps {
   handlerRef?: RichEditorHandlerRef;
-  onUpdate?: (content: string) => void;
+  onUpdate?: (content: Content) => void;
 }
 
 const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
@@ -27,8 +29,7 @@ const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
     ref: handlerRef,
     onUpdate,
   });
-
-  if (!editor) return null;
+  if (!editor) return;
   return (
     <Card className="gap-4 w-full max-w-5xl mx-auto">
       <Tiptap instance={editor}>
@@ -48,7 +49,7 @@ const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
         <Separator />
         <CardFooter>
           <CardAction className="ms-auto">
-            <FooterTools editor={editor} />
+            <FooterTools />
           </CardAction>
         </CardFooter>
       </Tiptap>
