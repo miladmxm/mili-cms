@@ -1,7 +1,9 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+
+import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 
 import type { CreateCategoryOutput } from "../validations/createCategory";
 
@@ -9,9 +11,9 @@ import { createCategoryAction } from "../actions/create";
 import { CreateCategorySchema } from "../validations/createCategory";
 
 export const useCreateCategory = () => {
-  const [showMediaPicker, setShowMediaPicker] = useState(false);
   const [previewImageUrl, setPreviewImageUrl] = useState("");
 
+  const mediaPickerSheetControllerRef = useRef<SheetController>(null);
   const form = useForm<CreateCategoryOutput>({
     resolver: valibotResolver(CreateCategorySchema),
     defaultValues: {
@@ -41,8 +43,7 @@ export const useCreateCategory = () => {
     getValue: form.getValues,
     setValue: form.setValue,
     mediaPicker: {
-      showMediaPicker,
-      setShowMediaPicker,
+      mediaPickerSheetControllerRef,
       previewImageUrl,
       setPreviewImageUrl,
     },

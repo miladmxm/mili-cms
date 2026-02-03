@@ -51,8 +51,7 @@ const CreateCategory: FC<CreateCategoryProps> = ({
     mediaPicker: {
       previewImageUrl,
       setPreviewImageUrl,
-      setShowMediaPicker,
-      showMediaPicker,
+      mediaPickerSheetControllerRef,
     },
   } = useCreateCategory();
   return (
@@ -157,19 +156,20 @@ const CreateCategory: FC<CreateCategoryProps> = ({
                   <Suspense fallback={null}>
                     <MediaPickerSheet
                       medias={medias}
-                      onOpenChange={setShowMediaPicker}
+                      controllerRef={mediaPickerSheetControllerRef}
                       onSelect={({ id, url }) => {
                         setValue("thumbnail", id);
                         setPreviewImageUrl(url);
-                        setShowMediaPicker(false);
+                        mediaPickerSheetControllerRef.current?.close();
                       }}
-                      open={showMediaPicker}
                     />
                   </Suspense>
                   <Button
                     className="w-full h-32"
                     variant="outline"
-                    onClick={() => setShowMediaPicker(true)}
+                    onClick={() =>
+                      mediaPickerSheetControllerRef.current?.open()
+                    }
                   >
                     {previewImageUrl && (
                       <Image

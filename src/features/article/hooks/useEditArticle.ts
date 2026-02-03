@@ -41,12 +41,9 @@ export const useEditArticle = (article: Article) => {
   const handleSetDefaultImage = useEffectEvent(() =>
     setPreviewImageUrl(thumbnail?.url || ""),
   );
-  const handleSetDefaultContent = useEffectEvent(() => {
-    setDefalutContentValue(content);
-  });
+
   useEffect(() => {
     handleSetDefaultImage();
-    handleSetDefaultContent();
   }, []);
   const onSubmit = (data: CreateArticleOutput) => {
     startTransition(async () => {
