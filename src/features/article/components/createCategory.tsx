@@ -102,11 +102,11 @@ const CreateCategory: FC<CreateCategoryProps> = ({
               <Controller
                 name="parentId"
                 control={control}
-                render={({ fieldState }) => (
+                render={({ fieldState, field: { value } }) => (
                   <Field aria-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="parentId">دسته‌بندی والد</FieldLabel>
                     <SelectParentCategory
-                      value={getValue("parentId")}
+                      value={value}
                       allCategories={categories}
                       onChange={(id) => setValue("parentId", id || undefined)}
                     >
@@ -116,9 +116,8 @@ const CreateCategory: FC<CreateCategoryProps> = ({
                         variant="outline"
                       >
                         <span className="w-full">
-                          {categories.find(
-                            ({ id }) => id === getValue("parentId"),
-                          )?.name || "هیچ کدام"}
+                          {categories.find(({ id }) => id === value)?.name ||
+                            "هیچ کدام"}
                         </span>
                         <ChevronDown />
                       </Button>

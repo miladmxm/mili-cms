@@ -54,7 +54,6 @@ const EditArticleForm = ({
                 />
                 <ArticleExcerpt control={control} />
                 <ArticleCategories
-                  getValues={getValues}
                   setValue={setValue}
                   categories={categories}
                   control={control}
@@ -67,7 +66,6 @@ const EditArticleForm = ({
 
                 <div className="flex gap-2">
                   <ArticleStatus
-                    getValues={getValues}
                     isPending={isPending}
                     setValue={setValue}
                     control={control}

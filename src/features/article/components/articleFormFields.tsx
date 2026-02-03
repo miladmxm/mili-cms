@@ -27,7 +27,6 @@ import { StatusDictionary } from "@/services/article/types";
 import type { CreateArticleOutput } from "../validations/createSchema";
 
 import { useCreateArticleStore } from "../store";
-// import RichEditor from "./richEditor";
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,
 } from "./selectMultipleCategories";
@@ -111,34 +110,30 @@ export const ArticleExcerpt = ({ control }: ArticleFieldProps) => {
 
 export const ArticleCategories = ({
   control,
-  getValues,
   setValue,
   categories,
 }: ArticleFieldProps &
-  ArticleGetValues &
   ArticleSetValue & { categories: Promise<Category[]> }) => {
   return (
     <Controller
       name="categoryIds"
       control={control}
-      render={({ fieldState }) => (
+      render={({ fieldState, field: { value } }) => (
         <Field aria-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="categories">انتخاب دسته بندی ها</FieldLabel>
           <Suspense fallback={<SelectMultipleCategoriesSkeleton />}>
             <SelectMultipleCategories
-              selectedItems={getValues("categoryIds")}
+              selectedItems={value}
               triggerId="categories"
               categories={categories}
               onSelect={({ id }) => {
-                const currentCategoriesValues = getValues("categoryIds");
-                console.log(currentCategoriesValues);
-                if (currentCategoriesValues.includes(id)) {
+                if (value.includes(id)) {
                   setValue(
                     "categoryIds",
-                    currentCategoriesValues.filter((i) => i !== id),
+                    value.filter((i) => i !== id),
                   );
                 } else {
-                  setValue("categoryIds", [...currentCategoriesValues, id]);
+                  setValue("categoryIds", [...value, id]);
                 }
               }}
             />
@@ -210,26 +205,22 @@ export const ArticleThumbnail = ({
 
 export const ArticleStatus = ({
   control,
-  getValues,
   setValue,
   isPending,
-}: ArticleFieldProps &
-  ArticleGetValues &
-  ArticleSetValue & { isPending: boolean }) => {
+}: ArticleFieldProps & ArticleSetValue & { isPending: boolean }) => {
   return (
     <Controller
       name="status"
       control={control}
-      render={({ fieldState }) => {
-        const status = getValues("status");
+      render={({ fieldState, field: { value } }) => {
         return (
           <Field aria-invalid={fieldState.invalid} className="w-max">
             <StatusDropdown
-              value={status}
+              value={value}
               onChange={(v) => setValue("status", v)}
             >
               <Button disabled={isPending} variant="outline">
-                <span>{StatusDictionary[status]}</span>
+                <span>{StatusDictionary[value]}</span>
                 <ChevronDown />
               </Button>
             </StatusDropdown>
@@ -249,11 +240,12 @@ export const ArticleContent = ({
     <Controller
       name="content"
       control={control}
-      render={({ fieldState }) => {
+      render={({ fieldState, field: { value } }) => {
         return (
           <div className="lg:col-span-8">
             <Field aria-invalid={fieldState.invalid}>
               <RichEditor
+                content={value}
                 onUpdate={(content) => {
                   setValue("content", content);
                 }}

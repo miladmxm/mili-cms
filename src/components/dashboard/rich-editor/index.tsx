@@ -1,5 +1,5 @@
 "use client";
-import type { JSONContent } from "@tiptap/react";
+import type { Content, JSONContent } from "@tiptap/react";
 
 import { Tiptap } from "@tiptap/react";
 
@@ -22,12 +22,14 @@ import { FooterTools, HeaderTools } from "./tools";
 interface RichEditorProps {
   handlerRef?: RichEditorHandlerRef;
   onUpdate?: (content: JSONContent) => void;
+  content?: Content;
 }
 
-const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
+const RichEditor = ({ handlerRef, onUpdate, content }: RichEditorProps) => {
   const { editor } = useRichEditor({
     ref: handlerRef,
     onUpdate,
+    content,
   });
   if (!editor) return;
   return (
