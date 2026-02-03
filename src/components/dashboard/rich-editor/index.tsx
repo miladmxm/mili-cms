@@ -1,5 +1,5 @@
 "use client";
-import type { Content } from "@tiptap/react";
+import type { JSONContent } from "@tiptap/react";
 
 import { Tiptap } from "@tiptap/react";
 
@@ -21,7 +21,7 @@ import { FooterTools, HeaderTools } from "./tools";
 
 interface RichEditorProps {
   handlerRef?: RichEditorHandlerRef;
-  onUpdate?: (content: Content) => void;
+  onUpdate?: (content: JSONContent) => void;
 }
 
 const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
@@ -42,8 +42,8 @@ const RichEditor = ({ handlerRef, onUpdate }: RichEditorProps) => {
             <Tiptap.Loading>
               <Skeleton className="size-full" />
             </Tiptap.Loading>
-            <Tiptap.Content className={classes.wrapper} />
             <Drag />
+            <Tiptap.Content className={classes.wrapper} />
           </div>
         </CardContent>
         <Separator />

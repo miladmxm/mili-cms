@@ -23,7 +23,7 @@ export const useCreateArticle = () => {
     useForm<CreateArticleOutput>({
       resolver: valibotResolver(CreateArticleSchema),
       defaultValues: {
-        content: "",
+        content: {},
         excerpt: "",
         title: "",
         slug: "",

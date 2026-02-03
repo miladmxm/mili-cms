@@ -15,6 +15,7 @@ import type { SheetController } from "@/features/media/components/mediaPickerShe
 import type { Category } from "@/services/article/types";
 import type { Media } from "@/services/media/type";
 
+import RichEditor from "@/components/dashboard/rich-editor";
 import { Button } from "@/components/dashboard/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/dashboard/ui/field";
 import { Input } from "@/components/dashboard/ui/input";
@@ -26,7 +27,7 @@ import { StatusDictionary } from "@/services/article/types";
 import type { CreateArticleOutput } from "../validations/createSchema";
 
 import { useCreateArticleStore } from "../store";
-import RichEditor from "./richEditor";
+// import RichEditor from "./richEditor";
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,
 } from "./selectMultipleCategories";
@@ -252,7 +253,11 @@ export const ArticleContent = ({
         return (
           <div className="lg:col-span-8">
             <Field aria-invalid={fieldState.invalid}>
-              <RichEditor onChange={(value) => setValue("content", value)} />
+              <RichEditor
+                onUpdate={(content) => {
+                  setValue("content", content);
+                }}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           </div>

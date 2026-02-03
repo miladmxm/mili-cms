@@ -32,11 +32,7 @@ const StatusDropdown: FC<PropsWithChildren & StatusDropdownProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="center"
-        className="rtl:dir-rtl"
-        onChange={console.log}
-      >
+      <DropdownMenuContent align="center" className="rtl:dir-rtl">
         <DropdownMenuLabel>{label || "تغییر وضعیت به"}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup

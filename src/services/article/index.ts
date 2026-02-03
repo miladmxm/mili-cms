@@ -82,6 +82,7 @@ export const createArticle = async (data: CreateArticle) => {
     if (categories.length)
       await articleRepo.addArticleToCategories(
         categories.map(({ id }) => ({ categoryId: id, articleId: article.id })),
+        tx,
       );
     return article;
   });

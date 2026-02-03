@@ -11,6 +11,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import type { ArticleStatus } from "@/services/article/types";
+import type { ProseMirror } from "@/types/type";
 
 import { articleCategory } from "./articleCategory";
 import { user } from "./auth";
@@ -30,7 +31,7 @@ export const article = MainSchema.table(
   {
     id: uuid("id").primaryKey().notNull().defaultRandom(),
     title: varchar("title", { length: 255 }).notNull(),
-    content: text("content").notNull(),
+    content: jsonb("content").$type<ProseMirror>().notNull().default({}),
     slug: varchar("slug", { length: 255 }).notNull().unique(),
     excerpt: text("excerpt").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),

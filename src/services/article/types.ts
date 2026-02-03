@@ -1,10 +1,12 @@
+import type { ProseMirror } from "@/types/type";
+
 import type { Media } from "../media/type";
 
 export type ArticleStatus = "archived" | "draft" | "published";
 export interface Article {
   id: string;
   title: string;
-  content: string;
+  content: ProseMirror;
   slug: string;
   excerpt: string;
   createdAt: Date;
@@ -19,7 +21,7 @@ export interface Article {
 }
 export interface CreateArticle {
   excerpt: string;
-  content: string;
+  content: ProseMirror;
   title: string;
   slug: string;
   authorId: string;

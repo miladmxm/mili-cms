@@ -87,4 +87,8 @@ export const deleteArticleCategoryById = (id: string, tx?: Transaction) =>
 export const addArticleToCategories = (
   articleToCategories: (typeof articleToCategory.$inferInsert)[],
   tx?: Transaction,
-) => getDBorTX(tx).insert(articleToCategory).values(articleToCategories);
+) =>
+  getDBorTX(tx)
+    .insert(articleToCategory)
+    .values(articleToCategories)
+    .onConflictDoNothing();
