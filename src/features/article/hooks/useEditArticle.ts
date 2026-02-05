@@ -1,5 +1,4 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -8,19 +7,15 @@ import type { Article } from "@/services/article/types";
 
 import type { CreateArticleOutput } from "../validations/createSchema";
 
-import { createArticleAction } from "../actions/create";
+import { updateArticle } from "../actions/update";
 import { useCreateArticleStore } from "../store";
 import { CreateArticleSchema } from "../validations/createSchema";
 
 export const useEditArticle = (article: Article) => {
   const { content, excerpt, title, slug, thumbnail, status, categoryIds } =
     article;
-  const router = useRouter();
   const setPreviewImageUrl = useCreateArticleStore(
     (store) => store.setPreviewImageUrl,
-  );
-  const setDefalutContentValue = useCreateArticleStore(
-    (store) => store.setDefaultContentValue,
   );
 
   const form = useForm<CreateArticleOutput>({
@@ -46,13 +41,12 @@ export const useEditArticle = (article: Article) => {
   }, []);
   const onSubmit = (data: CreateArticleOutput) => {
     startTransition(async () => {
-      const { success, message } = await createArticleAction(data);
+      const { success, message } = await updateArticle(article.id, data);
       if (!success) toast.error(message);
       else {
         form.reset();
-        setDefalutContentValue(`<p dir="rtl"></p>`);
         setPreviewImageUrl("");
-        router.replace("/admin/blog");
+        toast.success(message);
       }
     });
   };

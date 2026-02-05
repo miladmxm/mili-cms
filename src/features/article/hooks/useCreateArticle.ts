@@ -15,9 +15,6 @@ export const useCreateArticle = () => {
   const setPreviewImageUrl = useCreateArticleStore(
     (store) => store.setPreviewImageUrl,
   );
-  const setDefalutContentValue = useCreateArticleStore(
-    (store) => store.setDefaultContentValue,
-  );
 
   const form = useForm<CreateArticleOutput>({
     resolver: valibotResolver(CreateArticleSchema),
@@ -39,7 +36,6 @@ export const useCreateArticle = () => {
       if (!success) toast.error(message);
       else {
         form.reset();
-        setDefalutContentValue(`<p dir="rtl"></p>`);
         setPreviewImageUrl("");
         router.replace("/admin/blog");
       }

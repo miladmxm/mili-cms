@@ -97,6 +97,12 @@ export const createCategory = async (data: CreateCategory) => {
   return category;
 };
 // UPDATE
+export const updateArticle = async (
+  id: string,
+  data: Partial<CreateArticle>,
+) => {
+  return articleRepo.updateArticleById(id, data);
+};
 export const updateArticleStatus = async (
   id: string,
   status: ArticleStatus,

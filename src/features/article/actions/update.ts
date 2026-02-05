@@ -7,10 +7,36 @@ import type { ActionResult } from "@/types/actions";
 import { CacheKeys } from "@/constant/cacheKeys";
 import { validator } from "@/validations";
 
-import type { UpdateStatus } from "../validations/updateSchema";
+import type { UpdateArticle, UpdateStatus } from "../validations/updateSchema";
 
-import { updateStatus } from "../dal/mutation";
-import { UpdateStatusSchema } from "../validations/updateSchema";
+import * as articleMutation from "../dal/mutation";
+import {
+  UpdateArticleSchema,
+  UpdateStatusSchema,
+} from "../validations/updateSchema";
+
+export const updateArticle = async (
+  id: string,
+  data: unknown,
+): Promise<ActionResult<UpdateArticle>> => {
+  const {
+    errors,
+    output,
+    success: successValidation,
+  } = validator(UpdateArticleSchema, data);
+  if (!successValidation)
+    return { success: successValidation, message: "خطای اعتبار سنجی", errors };
+  try {
+    const { success } = await articleMutation.updateArticle(id, output);
+    if (success) return { success, message: "خطا در ویرایش مقاله" };
+    updateTag(CacheKeys.articles);
+    updateTag(`${CacheKeys.articles}-${id}`);
+    return { success, message: "ویرایش انجام شد" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "خطا در ویرایش" };
+  }
+};
 
 export const updateArticleStatus = async (
   id: string,
@@ -25,7 +51,7 @@ export const updateArticleStatus = async (
     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
   try {
-    const { success } = await updateStatus(id, output.status);
+    const { success } = await articleMutation.updateStatus(id, output.status);
     if (!success) return { success, message: "خطا در ویرایش مقاله" };
     updateTag(CacheKeys.articles);
     return { success, message: "ویرایش انجام شد" };

@@ -16,7 +16,12 @@ export const createArticle = async (data: CreateArticle) => {
   );
   return article;
 };
-
+export const updateArticle = (id: string, data: Partial<CreateArticle>) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => articleService.updateArticle(id, data)),
+    { blog: ["update"] },
+  );
+};
 export const updateStatus = (id: string, status: ArticleStatus) => {
   const article = dalRequireAuth(
     () => dalDbOperation(() => articleService.updateArticleStatus(id, status)),
