@@ -12,7 +12,6 @@ export interface Article {
   createdAt: Date;
   updatedAt: Date;
   thumbnail?: Media;
-  tags: string[];
   authorId: string;
   status: ArticleStatus;
   categoryIds: string[];

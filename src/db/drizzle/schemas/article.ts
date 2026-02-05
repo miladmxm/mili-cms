@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm";
 import {
   integer,
   jsonb,
@@ -42,10 +41,6 @@ export const article = MainSchema.table(
     thumbnail: uuid("thumbnail").references(() => media.id, {
       onDelete: "set null",
     }),
-    tags: jsonb("tags")
-      .$type<string[]>()
-      .notNull()
-      .default(sql`'[]'`),
     authorId: text("author_id")
       .references(() => user.id)
       .notNull(),
