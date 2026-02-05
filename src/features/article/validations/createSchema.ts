@@ -1,8 +1,14 @@
 import * as v from "valibot";
 
+import type { ArticleStatus } from "@/services/article/types";
+
 import { ProseMirrorSchema } from "@/validations/proseMirror";
 
-import { StatusSchema } from "./updateSchema";
+export const StatusSchema = v.picklist<ArticleStatus[]>([
+  "archived",
+  "draft",
+  "published",
+]);
 
 export const CreateArticleSchema = v.object({
   title: v.pipe(v.string(), v.nonEmpty("عنوان نباید خالی باشد")),

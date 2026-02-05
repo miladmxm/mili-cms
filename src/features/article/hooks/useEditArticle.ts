@@ -5,11 +5,11 @@ import { toast } from "sonner";
 
 import type { Article } from "@/services/article/types";
 
-import type { CreateArticleOutput } from "../validations/createSchema";
+import type { UpdateArticle } from "../validations/updateSchema";
 
 import { updateArticle } from "../actions/update";
 import { useCreateArticleStore } from "../store";
-import { CreateArticleSchema } from "../validations/createSchema";
+import { UpdateArticleSchema } from "../validations/updateSchema";
 
 export const useEditArticle = (article: Article) => {
   const { content, excerpt, title, slug, thumbnail, status, categoryIds } =
@@ -18,8 +18,8 @@ export const useEditArticle = (article: Article) => {
     (store) => store.setPreviewImageUrl,
   );
 
-  const form = useForm<CreateArticleOutput>({
-    resolver: valibotResolver(CreateArticleSchema),
+  const form = useForm<UpdateArticle>({
+    resolver: valibotResolver(UpdateArticleSchema),
     defaultValues: {
       content,
       excerpt,
@@ -39,7 +39,7 @@ export const useEditArticle = (article: Article) => {
   useEffect(() => {
     handleSetDefaultImage();
   }, []);
-  const onSubmit = (data: CreateArticleOutput) => {
+  const onSubmit = (data: UpdateArticle) => {
     startTransition(async () => {
       const { success, message } = await updateArticle(article.id, data);
       if (!success) toast.error(message);
