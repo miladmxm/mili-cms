@@ -1,15 +1,10 @@
 "use client";
 import type { ComponentProps } from "react";
-import type {
-  Control,
-  UseFormGetValues,
-  UseFormSetValue,
-} from "react-hook-form";
 
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useRef } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 import type { Category } from "@/services/article/types";
@@ -32,21 +27,10 @@ import SelectMultipleCategories, {
 } from "./selectMultipleCategories";
 import StatusDropdown from "./statusDropdown";
 
-interface ArticleFieldProps<
-  T extends CreateArticleOutput = CreateArticleOutput,
-> {
-  control: Control<T>;
-}
-interface ArticleSetValue {
-  setValue: UseFormSetValue<CreateArticleOutput>;
-}
-interface ArticleGetValues {
-  getValues: UseFormGetValues<CreateArticleOutput>;
-}
-export const ArticleTitle = ({
-  control,
-  ...props
-}: ArticleFieldProps & ComponentProps<typeof Input>) => {
+const useArticleFormContext = () => useFormContext<CreateArticleOutput>();
+
+export const ArticleTitle = ({ ...props }: ComponentProps<typeof Input>) => {
+  const { control } = useArticleFormContext();
   return (
     <Controller
       name="title"
@@ -62,11 +46,8 @@ export const ArticleTitle = ({
   );
 };
 
-export const ArticleSlug = ({
-  control,
-  setValue,
-  getValues,
-}: ArticleFieldProps & ArticleGetValues & ArticleSetValue) => {
+export const ArticleSlug = () => {
+  const { control, setValue, getValues } = useArticleFormContext();
   return (
     <Controller
       name="slug"
@@ -92,7 +73,8 @@ export const ArticleSlug = ({
   );
 };
 
-export const ArticleExcerpt = ({ control }: ArticleFieldProps) => {
+export const ArticleExcerpt = () => {
+  const { control } = useArticleFormContext();
   return (
     <Controller
       name="excerpt"
@@ -109,11 +91,11 @@ export const ArticleExcerpt = ({ control }: ArticleFieldProps) => {
 };
 
 export const ArticleCategories = ({
-  control,
-  setValue,
   categories,
-}: ArticleFieldProps &
-  ArticleSetValue & { categories: Promise<Category[]> }) => {
+}: {
+  categories: Promise<Category[]>;
+}) => {
+  const { control, setValue } = useArticleFormContext();
   return (
     <Controller
       name="categoryIds"
@@ -144,14 +126,7 @@ export const ArticleCategories = ({
   );
 };
 
-export const ArticleThumbnail = ({
-  control,
-  medias,
-  setValue,
-}: ArticleFieldProps &
-  ArticleSetValue & {
-    medias: Promise<Media[]>;
-  }) => {
+export const ArticleThumbnail = ({ medias }: { medias: Promise<Media[]> }) => {
   const sheetControllerRef = useRef<SheetController>(null);
   const setPreviewImageUrl = useCreateArticleStore(
     (store) => store.setPreviewImageUrl,
@@ -159,6 +134,7 @@ export const ArticleThumbnail = ({
   const previewImageUrl = useCreateArticleStore(
     (store) => store.previewImageUrl,
   );
+  const { control, setValue } = useArticleFormContext();
   return (
     <Controller
       name="thumbnail"
@@ -203,11 +179,8 @@ export const ArticleThumbnail = ({
   );
 };
 
-export const ArticleStatus = ({
-  control,
-  setValue,
-  isPending,
-}: ArticleFieldProps & ArticleSetValue & { isPending: boolean }) => {
+export const ArticleStatus = ({ isPending }: { isPending: boolean }) => {
+  const { setValue, control } = useArticleFormContext();
   return (
     <Controller
       name="status"
@@ -232,10 +205,8 @@ export const ArticleStatus = ({
   );
 };
 
-export const ArticleContent = ({
-  control,
-  setValue,
-}: ArticleFieldProps & ArticleSetValue) => {
+export const ArticleContent = () => {
+  const { control, setValue } = useArticleFormContext();
   return (
     <Controller
       name="content"

@@ -19,19 +19,18 @@ export const useCreateArticle = () => {
     (store) => store.setDefaultContentValue,
   );
 
-  const { getValues, setValue, handleSubmit, control, reset } =
-    useForm<CreateArticleOutput>({
-      resolver: valibotResolver(CreateArticleSchema),
-      defaultValues: {
-        content: {},
-        excerpt: "",
-        title: "",
-        slug: "",
-        thumbnail: undefined,
-        status: "draft",
-        categoryIds: [],
-      },
-    });
+  const form = useForm<CreateArticleOutput>({
+    resolver: valibotResolver(CreateArticleSchema),
+    defaultValues: {
+      content: {},
+      excerpt: "",
+      title: "",
+      slug: "",
+      thumbnail: undefined,
+      status: "draft",
+      categoryIds: [],
+    },
+  });
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = (data: CreateArticleOutput) => {
@@ -39,7 +38,7 @@ export const useCreateArticle = () => {
       const { success, message } = await createArticleAction(data);
       if (!success) toast.error(message);
       else {
-        reset();
+        form.reset();
         setDefalutContentValue(`<p dir="rtl"></p>`);
         setPreviewImageUrl("");
         router.replace("/admin/blog");
@@ -49,9 +48,7 @@ export const useCreateArticle = () => {
 
   return {
     isPending,
-    control,
-    submit: handleSubmit(onSubmit),
-    setValue,
-    getValues,
+    submit: form.handleSubmit(onSubmit),
+    form,
   };
 };

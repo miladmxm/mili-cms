@@ -23,19 +23,18 @@ export const useEditArticle = (article: Article) => {
     (store) => store.setDefaultContentValue,
   );
 
-  const { getValues, setValue, handleSubmit, control, reset } =
-    useForm<CreateArticleOutput>({
-      resolver: valibotResolver(CreateArticleSchema),
-      defaultValues: {
-        content,
-        excerpt,
-        title,
-        slug,
-        thumbnail: thumbnail?.id ?? undefined,
-        status,
-        categoryIds,
-      },
-    });
+  const form = useForm<CreateArticleOutput>({
+    resolver: valibotResolver(CreateArticleSchema),
+    defaultValues: {
+      content,
+      excerpt,
+      title,
+      slug,
+      thumbnail: thumbnail?.id ?? undefined,
+      status,
+      categoryIds,
+    },
+  });
   const [isPending, startTransition] = useTransition();
 
   const handleSetDefaultImage = useEffectEvent(() =>
@@ -50,7 +49,7 @@ export const useEditArticle = (article: Article) => {
       const { success, message } = await createArticleAction(data);
       if (!success) toast.error(message);
       else {
-        reset();
+        form.reset();
         setDefalutContentValue(`<p dir="rtl"></p>`);
         setPreviewImageUrl("");
         router.replace("/admin/blog");
@@ -60,9 +59,7 @@ export const useEditArticle = (article: Article) => {
 
   return {
     isPending,
-    control,
-    submit: handleSubmit(onSubmit),
-    setValue,
-    getValues,
+    submit: form.handleSubmit(onSubmit),
+    form,
   };
 };

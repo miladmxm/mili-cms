@@ -1,5 +1,7 @@
 "use client";
 
+import { FormProvider } from "react-hook-form";
+
 import type { Media } from "@/services/media/type";
 
 import { Button } from "@/components/dashboard/ui/button";
@@ -32,61 +34,44 @@ const CreateArticleForm = ({
   medias: Promise<Media[]>;
   categories: Promise<Category[]>;
 }) => {
-  const { control, getValues, isPending, submit, setValue } =
-    useCreateArticle();
+  const { form, isPending, submit } = useCreateArticle();
   return (
-    <form onSubmit={submit}>
-      <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-12 gap-4">
-        <div className="lg:col-span-4">
-          <Card className="w-full lg:sticky lg:top-2">
-            <CardHeader>
-              <CardTitle>ایجاد مقاله جدید</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <FieldGroup>
-                <ArticleTitle control={control} />
-                <ArticleSlug
-                  getValues={getValues}
-                  setValue={setValue}
-                  control={control}
-                />
-                <ArticleExcerpt control={control} />
-                <ArticleCategories
-                  setValue={setValue}
-                  categories={categories}
-                  control={control}
-                />
-                <ArticleThumbnail
-                  medias={medias}
-                  setValue={setValue}
-                  control={control}
-                />
-
-                <div className="flex gap-2">
-                  <ArticleStatus
-                    isPending={isPending}
-                    setValue={setValue}
-                    control={control}
-                  />
-
-                  <Field>
-                    <Button
-                      className="flex-auto"
-                      disabled={isPending}
-                      type="submit"
-                    >
-                      ذخیره
-                      {isPending && <Spinner />}
-                    </Button>
-                  </Field>
-                </div>
-              </FieldGroup>
-            </CardContent>
-          </Card>
+    <FormProvider {...form}>
+      <form onSubmit={submit}>
+        <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-4">
+            <Card className="w-full lg:sticky lg:top-2">
+              <CardHeader>
+                <CardTitle>ایجاد مقاله جدید</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <FieldGroup>
+                  <ArticleTitle />
+                  <ArticleSlug />
+                  <ArticleExcerpt />
+                  <ArticleCategories categories={categories} />
+                  <ArticleThumbnail medias={medias} />
+                  <div className="flex gap-2">
+                    <ArticleStatus isPending={isPending} />
+                    <Field>
+                      <Button
+                        className="flex-auto"
+                        disabled={isPending}
+                        type="submit"
+                      >
+                        ذخیره
+                        {isPending && <Spinner />}
+                      </Button>
+                    </Field>
+                  </div>
+                </FieldGroup>
+              </CardContent>
+            </Card>
+          </div>
+          <ArticleContent key="create" />
         </div>
-        <ArticleContent key="create" setValue={setValue} control={control} />
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   );
 };
 
