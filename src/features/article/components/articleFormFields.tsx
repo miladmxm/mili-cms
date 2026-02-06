@@ -62,7 +62,9 @@ export const ArticleSlug = () => {
             {...field}
             onFocus={(e) => {
               if (!e.target.value) {
-                setValue("slug", convertToSlug(getValues("title")));
+                setValue("slug", convertToSlug(getValues("title")), {
+                  shouldDirty: true,
+                });
               }
             }}
           />
@@ -113,9 +115,12 @@ export const ArticleCategories = ({
                   setValue(
                     "categoryIds",
                     value.filter((i) => i !== id),
+                    { shouldDirty: true },
                   );
                 } else {
-                  setValue("categoryIds", [...value, id]);
+                  setValue("categoryIds", [...value, id], {
+                    shouldDirty: true,
+                  });
                 }
               }}
             />
@@ -148,7 +153,7 @@ export const ArticleThumbnail = ({ medias }: { medias: Promise<Media[]> }) => {
                 medias={medias}
                 controllerRef={sheetControllerRef}
                 onSelect={({ id, url }) => {
-                  setValue("thumbnail", id);
+                  setValue("thumbnail", id, { shouldDirty: true });
                   setPreviewImageUrl(url);
                   sheetControllerRef.current?.close();
                 }}
@@ -190,7 +195,7 @@ export const ArticleStatus = ({ isPending }: { isPending: boolean }) => {
           <Field aria-invalid={fieldState.invalid} className="w-max">
             <StatusDropdown
               value={value}
-              onChange={(v) => setValue("status", v)}
+              onChange={(v) => setValue("status", v, { shouldDirty: true })}
             >
               <Button disabled={isPending} variant="outline">
                 <span>{StatusDictionary[value]}</span>
@@ -218,7 +223,7 @@ export const ArticleContent = () => {
               <RichEditor
                 content={value}
                 onUpdate={(content) => {
-                  setValue("content", content);
+                  setValue("content", content, { shouldDirty: true });
                 }}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

@@ -24,6 +24,7 @@ export const updateArticle = async (
     output,
     success: successValidation,
   } = validator(UpdateArticleSchema, data);
+  // console.log(output);
   if (!successValidation)
     return { success: successValidation, message: "خطای اعتبار سنجی", errors };
   try {

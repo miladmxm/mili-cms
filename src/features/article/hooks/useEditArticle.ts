@@ -5,6 +5,8 @@ import { toast } from "sonner";
 
 import type { Article } from "@/services/article/types";
 
+import { getItemsDirtyData } from "@/utils/dirtyValues";
+
 import type { UpdateArticle } from "../validations/updateSchema";
 
 import { updateArticle } from "../actions/update";
@@ -40,11 +42,11 @@ export const useEditArticle = (article: Article) => {
     handleSetDefaultImage();
   }, []);
   const onSubmit = (data: UpdateArticle) => {
+    const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
     startTransition(async () => {
-      const { success, message } = await updateArticle(article.id, data);
+      const { success, message } = await updateArticle(article.id, dirtyData);
       if (!success) toast.error(message);
       else {
-        form.reset();
         setPreviewImageUrl("");
         toast.success(message);
       }

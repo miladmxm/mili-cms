@@ -60,10 +60,10 @@ const EditArticleForm = ({
                     <Field>
                       <Button
                         className="flex-auto"
-                        disabled={isPending}
+                        disabled={isPending || !form.formState.isDirty}
                         type="submit"
                       >
-                        ذخیره
+                        بروزرسانی
                         {isPending && <Spinner />}
                       </Button>
                     </Field>
