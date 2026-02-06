@@ -1,4 +1,4 @@
-import { desc, eq, inArray, like } from "drizzle-orm";
+import { and, desc, eq, inArray, like } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
@@ -72,7 +72,12 @@ export const updateArticleById = (
   id: string,
   value: Partial<typeof article.$inferSelect>,
   tx?: Transaction,
-) => getDBorTX(tx).update(article).set(value).where(eq(article.id, id));
+) =>
+  getDBorTX(tx)
+    .update(article)
+    .set(value)
+    .where(eq(article.id, id))
+    .returning();
 
 export const deleteArticleById = (id: string, tx?: Transaction) =>
   getDBorTX(tx).delete(article).where(eq(article.id, id));
@@ -92,3 +97,16 @@ export const addArticleToCategories = (
     .insert(articleToCategory)
     .values(articleToCategories)
     .onConflictDoNothing();
+
+export const deleteRelatedCategoryByArticleId = (
+  { articleId, categoryIds }: { articleId: string; categoryIds: string[] },
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .delete(articleToCategory)
+    .where(
+      and(
+        eq(articleToCategory.articleId, articleId),
+        inArray(articleToCategory.categoryId, categoryIds),
+      ),
+    );

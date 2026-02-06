@@ -97,11 +97,60 @@ export const createCategory = async (data: CreateCategory) => {
   return category;
 };
 // UPDATE
+const diffCategoryForUpdate = (prevIds: string[], nextIds: string[]) => {
+  const remove: string[] = [];
+  const add: string[] = [];
+  prevIds.forEach((prevId) => {
+    if (!nextIds.includes(prevId)) {
+      remove.push(prevId);
+    }
+  });
+  nextIds.forEach((nextId) => {
+    if (!prevIds.includes(nextId)) {
+      add.push(nextId);
+    }
+  });
+  return { remove, add };
+};
 export const updateArticle = async (
   id: string,
   data: Partial<CreateArticle>,
 ) => {
-  return articleRepo.updateArticleById(id, data);
+  const article = await articleRepo.findArticleById(id);
+  if (!article) throw new Error("not found");
+  if (data.thumbnail) {
+    await checkMediaType(data.thumbnail, "image");
+  }
+
+  let categoryIds: string[] = [];
+  if (data.categoryIds) {
+    categoryIds = (await articleRepo.findCategoriesByIds(data.categoryIds)).map(
+      ({ id: categoryId }) => categoryId,
+    );
+  }
+  const result = withTransaction(async (tx) => {
+    if (categoryIds && categoryIds.length > 0) {
+      const { add, remove } = diffCategoryForUpdate(
+        article.categoryIds,
+        categoryIds,
+      );
+      if (remove.length)
+        await articleRepo.deleteRelatedCategoryByArticleId(
+          {
+            articleId: article.id,
+            categoryIds: remove,
+          },
+          tx,
+        );
+      if (add.length)
+        await articleRepo.addArticleToCategories(
+          add.map((categoryId) => ({ articleId: article.id, categoryId })),
+          tx,
+        );
+      return articleRepo.updateArticleById(id, data);
+    }
+  });
+  return result;
 };
 
 export const updateArticleStatus = async (
