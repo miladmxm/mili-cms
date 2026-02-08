@@ -7,16 +7,12 @@ import { toast } from "sonner";
 import type { CreateArticleOutput } from "../validations/createSchema";
 
 import { createArticleAction } from "../actions/create";
-import { useCreateArticleStore } from "../store";
 import { CreateArticleSchema } from "../validations/createSchema";
 
 export const useCreateArticle = () => {
   const router = useRouter();
-  const setPreviewImageUrl = useCreateArticleStore(
-    (store) => store.setPreviewImageUrl,
-  );
 
-  const form = useForm<CreateArticleOutput>({
+  const form = useForm({
     resolver: valibotResolver(CreateArticleSchema),
     defaultValues: {
       content: {},
@@ -36,7 +32,6 @@ export const useCreateArticle = () => {
       if (!success) toast.error(message);
       else {
         form.reset();
-        setPreviewImageUrl("");
         router.replace("/admin/blog");
       }
     });

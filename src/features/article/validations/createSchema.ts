@@ -17,8 +17,19 @@ export const CreateArticleSchema = v.object({
   slug: v.pipe(v.string(), v.nonEmpty("مقدار slug را وارد کنید")),
   status: StatusSchema,
   thumbnail: v.optional(
-    v.pipe(v.string(), v.nonEmpty("یک تصویر شاخص انتخاب کنید")),
+    v.union([
+      v.pipe(
+        v.object({
+          id: v.pipe(v.string(), v.nonEmpty("یک تصویر شاخص انتخاب کنید")),
+          url: v.pipe(v.string(), v.nonEmpty()),
+        }),
+        v.transform(({ id }) => id),
+      ),
+      v.pipe(v.string(), v.nonEmpty()),
+    ]),
   ),
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
 });
+
+export type CreateArticleInput = v.InferInput<typeof CreateArticleSchema>;
 export type CreateArticleOutput = v.InferOutput<typeof CreateArticleSchema>;

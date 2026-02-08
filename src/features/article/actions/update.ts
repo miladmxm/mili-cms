@@ -24,11 +24,12 @@ export const updateArticle = async (
     output,
     success: successValidation,
   } = validator(UpdateArticleSchema, data);
+  console.log(output, errors);
   if (!successValidation)
     return { success: successValidation, message: "خطای اعتبار سنجی", errors };
   try {
     const { success } = await articleMutation.updateArticle(id, output);
-    if (success) return { success, message: "خطا در ویرایش مقاله" };
+    if (!success) return { success, message: "خطا در ویرایش مقاله" };
     updateTag(CacheKeys.articles);
     updateTag(`${CacheKeys.articles}-${id}`);
     return { success, message: "ویرایش انجام شد" };

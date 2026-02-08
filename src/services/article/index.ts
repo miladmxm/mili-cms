@@ -114,8 +114,9 @@ const diffCategoryForUpdate = (prevIds: string[], nextIds: string[]) => {
 };
 export const updateArticle = async (
   id: string,
-  data: Partial<CreateArticle>,
+  input: Partial<CreateArticle>,
 ) => {
+  const data = input;
   const article = await articleRepo.findArticleById(id);
   if (!article) throw new Error("not found");
   if (data.thumbnail) {
@@ -128,13 +129,22 @@ export const updateArticle = async (
       ({ id: categoryId }) => categoryId,
     );
   }
-  const result = withTransaction(async (tx) => {
+  if (data.slug) {
+    data.slug = convertToSlug(data.slug);
+    const existingArticleBySlug =
+      await articleRepo.findArticleByStartedSlugWith(data.slug);
+    data.slug = generateUniqueSlug(
+      data.slug,
+      existingArticleBySlug.map((a) => a.slug),
+    );
+  }
+  const result = await withTransaction(async (tx) => {
     if (categoryIds && categoryIds.length > 0) {
       const { add, remove } = diffCategoryForUpdate(
         article.categoryIds,
         categoryIds,
       );
-      if (remove.length)
+      if (remove.length) {
         await articleRepo.deleteRelatedCategoryByArticleId(
           {
             articleId: article.id,
@@ -142,13 +152,15 @@ export const updateArticle = async (
           },
           tx,
         );
-      if (add.length)
+      }
+      if (add.length) {
         await articleRepo.addArticleToCategories(
           add.map((categoryId) => ({ articleId: article.id, categoryId })),
           tx,
         );
-      return articleRepo.updateArticleById(id, data);
+      }
     }
+    return articleRepo.updateArticleById(id, data, tx);
   });
   return result;
 };

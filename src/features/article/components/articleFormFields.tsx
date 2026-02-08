@@ -19,15 +19,14 @@ import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 import { StatusDictionary } from "@/services/article/types";
 
-import type { CreateArticleOutput } from "../validations/createSchema";
+import type { CreateArticleInput } from "../validations/createSchema";
 
-import { useCreateArticleStore } from "../store";
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,
 } from "./selectMultipleCategories";
 import StatusDropdown from "./statusDropdown";
 
-const useArticleFormContext = () => useFormContext<CreateArticleOutput>();
+const useArticleFormContext = () => useFormContext<CreateArticleInput>();
 
 export const ArticleTitle = ({ ...props }: ComponentProps<typeof Input>) => {
   const { control } = useArticleFormContext();
@@ -133,18 +132,14 @@ export const ArticleCategories = ({
 
 export const ArticleThumbnail = ({ medias }: { medias: Promise<Media[]> }) => {
   const sheetControllerRef = useRef<SheetController>(null);
-  const setPreviewImageUrl = useCreateArticleStore(
-    (store) => store.setPreviewImageUrl,
-  );
-  const previewImageUrl = useCreateArticleStore(
-    (store) => store.previewImageUrl,
-  );
+
   const { control, setValue } = useArticleFormContext();
   return (
     <Controller
       name="thumbnail"
       control={control}
-      render={({ fieldState }) => {
+      render={({ fieldState, field: { value } }) => {
+        const validImageUrl = value && typeof value !== "string";
         return (
           <Field aria-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
@@ -153,8 +148,7 @@ export const ArticleThumbnail = ({ medias }: { medias: Promise<Media[]> }) => {
                 medias={medias}
                 controllerRef={sheetControllerRef}
                 onSelect={({ id, url }) => {
-                  setValue("thumbnail", id, { shouldDirty: true });
-                  setPreviewImageUrl(url);
+                  setValue("thumbnail", { id, url }, { shouldDirty: true });
                   sheetControllerRef.current?.close();
                 }}
               />
@@ -164,12 +158,12 @@ export const ArticleThumbnail = ({ medias }: { medias: Promise<Media[]> }) => {
               variant="outline"
               onClick={() => sheetControllerRef.current?.open()}
             >
-              {previewImageUrl && (
+              {validImageUrl && (
                 <Image
                   alt="image preview"
                   className="size-full object-contain"
                   src={{
-                    src: previewImageUrl,
+                    src: value.url,
                     width: 128,
                     height: 128,
                   }}
