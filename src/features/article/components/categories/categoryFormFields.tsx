@@ -1,9 +1,9 @@
-import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
+import type { Category } from "@/services/article/types";
 import type { Media } from "@/services/media/type";
 
 import { Button } from "@/components/dashboard/ui/button";
@@ -15,7 +15,7 @@ import { convertToSlug } from "@/lib/slug";
 
 import type { CreateCategoryInput } from "../../validations/category.schema";
 
-import SelectParentCategory from "../selectParentCategory";
+import SelectCategory from "./selectCategory";
 
 const useCategoryFormContext = useFormContext<CreateCategoryInput>;
 
@@ -64,7 +64,7 @@ export const CategorySlugField = () => {
 export const CategorySelectParrent = ({
   categories,
 }: {
-  categories: { name: string; id: string }[];
+  categories: Category[];
 }) => {
   const { control, setValue } = useCategoryFormContext();
   return (
@@ -74,23 +74,16 @@ export const CategorySelectParrent = ({
       render={({ fieldState, field: { value } }) => (
         <Field aria-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="parentId">دسته‌بندی والد</FieldLabel>
-          <SelectParentCategory
-            value={value}
-            allCategories={categories}
-            onChange={(id) =>
+          <SelectCategory
+            selectedItemId={value}
+            categories={categories}
+            onSelect={({ id }) =>
               setValue("parentId", id || undefined, {
                 shouldDirty: true,
                 shouldValidate: true,
               })
             }
-          >
-            <Button className="text-start" variant="outline">
-              <span className="w-full">
-                {categories.find(({ id }) => id === value)?.name || "هیچ کدام"}
-              </span>
-              <ChevronDown />
-            </Button>
-          </SelectParentCategory>
+          />
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
       )}

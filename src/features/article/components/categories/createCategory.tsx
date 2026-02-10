@@ -3,6 +3,7 @@ import type { FC } from "react";
 
 import { FormProvider } from "react-hook-form";
 
+import type { Category } from "@/services/article/types";
 import type { Media } from "@/services/media/type";
 
 import { Button } from "@/components/dashboard/ui/button";
@@ -27,7 +28,7 @@ import {
 
 interface CreateCategoryProps {
   className?: string;
-  categories: { name: string; id: string }[];
+  categories: Category[];
   media: Promise<Media[]>;
 }
 

@@ -24,7 +24,6 @@ const CategoryItem = ({
   id,
   slug,
   children,
-  description,
 }: PropsWithChildren<Category>) => {
   return (
     <div className="ps-3 border-s border-dashed flex flex-col gap-4">

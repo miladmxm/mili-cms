@@ -28,7 +28,7 @@ import {
 
 interface CreateCategoryProps {
   className?: string;
-  categories: { name: string; id: string }[];
+  categories: Category[];
   media: Promise<Media[]>;
   editCategory: Category;
 }
