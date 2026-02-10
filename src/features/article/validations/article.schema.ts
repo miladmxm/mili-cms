@@ -25,7 +25,7 @@ export const CreateArticleSchema = v.object({
         }),
         v.transform(({ id }) => id),
       ),
-      v.pipe(v.string(), v.nonEmpty()),
+      v.nullable(v.string()),
     ]),
   ),
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),

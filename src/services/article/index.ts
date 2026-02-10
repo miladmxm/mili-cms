@@ -129,6 +129,7 @@ export const updateArticle = async (
   const data = input;
   const article = await articleRepo.findArticleById(id);
   if (!article) throw new Error("not found");
+  console.log(data);
   if (data.thumbnail) {
     await checkMediaType(data.thumbnail, "image");
   }

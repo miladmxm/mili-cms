@@ -1,3 +1,4 @@
+import { Trash } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -77,8 +78,8 @@ export const CategorySelectParrent = ({
           <SelectCategory
             selectedItemId={value}
             categories={categories}
-            onSelect={({ id }) =>
-              setValue("parentId", id || undefined, {
+            onSelect={(selected) =>
+              setValue("parentId", selected?.id || null, {
                 shouldDirty: true,
                 shouldValidate: true,
               })
@@ -122,41 +123,58 @@ export const CategoryThumbnailSelector = ({
       name="thumbnail"
       control={control}
       render={({ fieldState, field: { value } }) => (
-        <Field aria-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
-          <Suspense fallback={null}>
-            <MediaPickerSheet
-              media={media}
-              controllerRef={mediaPickerSheetControllerRef}
-              onSelect={({ id, url }) => {
-                setValue(
-                  "thumbnail",
-                  { id, url },
-                  { shouldDirty: true, shouldValidate: true },
-                );
-                mediaPickerSheetControllerRef.current?.close();
-              }}
-            />
-          </Suspense>
-          <Button
-            className="w-full h-32"
-            variant="outline"
-            onClick={() => mediaPickerSheetControllerRef.current?.open()}
-          >
-            {typeof value !== "string" && value?.url && (
-              <Image
-                alt="image preview"
-                className="size-full object-contain"
-                src={{
-                  src: value.url,
-                  width: 128,
-                  height: 128,
+        <div className="relative">
+          <Field aria-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
+            <Suspense fallback={null}>
+              <MediaPickerSheet
+                media={media}
+                controllerRef={mediaPickerSheetControllerRef}
+                onSelect={({ id, url }) => {
+                  setValue(
+                    "thumbnail",
+                    { id, url },
+                    { shouldDirty: true, shouldValidate: true },
+                  );
+                  mediaPickerSheetControllerRef.current?.close();
                 }}
               />
-            )}
-          </Button>
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
+            </Suspense>
+            <Button
+              className="w-full h-32"
+              variant="outline"
+              onClick={() => mediaPickerSheetControllerRef.current?.open()}
+            >
+              {typeof value !== "string" && value?.url && (
+                <Image
+                  alt="image preview"
+                  className="size-full object-contain"
+                  src={{
+                    src: value.url,
+                    width: 128,
+                    height: 128,
+                  }}
+                />
+              )}
+            </Button>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+          {value && (
+            <Button
+              size="icon-sm"
+              className="absolute end-4 top-10 z-20 text-destructive"
+              variant="outline"
+              onClick={() =>
+                setValue("thumbnail", null, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            >
+              <Trash />
+            </Button>
+          )}
+        </div>
       )}
     />
   );

@@ -26,8 +26,8 @@ export const SelectCategorySkeleton = () => {
 };
 const SelectCategory: FC<{
   categories: Category[];
-  onSelect: (selected: { id: string; name: string }) => void;
-  selectedItemId?: string;
+  onSelect: (selected: { id: string; name: string } | null) => void;
+  selectedItemId?: string | null;
   triggerId?: string;
 }> = ({ categories, onSelect, selectedItemId, triggerId = "customField" }) => {
   const selectedItem = categories.find(({ id }) => id === selectedItemId);
@@ -57,6 +57,16 @@ const SelectCategory: FC<{
           <CommandInput placeholder="جستجو فیلد سفارشی..." />
           <CommandList>
             <CommandEmpty>هیچ فیلد سفارشی پیدا نشد</CommandEmpty>
+            <CommandGroup>
+              <CommandItem
+                onSelect={() => {
+                  onSelect(null);
+                  setOpen(false);
+                }}
+              >
+                هیچ کدام
+              </CommandItem>
+            </CommandGroup>
             <CommandGroup>
               {categories.map(({ id, name }) => (
                 <CommandItem

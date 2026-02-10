@@ -13,6 +13,7 @@ import {
   SheetTitle,
 } from "@/components/dashboard/ui/sheet";
 import { Spinner } from "@/components/dashboard/ui/spinner";
+import { cn } from "@/lib/utils";
 
 import EmptyMedias from "../containers/emptyMedias";
 import { MinimalFileCard } from "./fileCard";
@@ -26,9 +27,11 @@ export interface SheetController {
 const MediaPickerSheet = ({
   media,
   onSelect,
+  selectedIds,
   controllerRef,
 }: {
   media: Promise<Media[]>;
+  selectedIds?: string[];
   onSelect: (data: { id: string; url: string; alt: string }) => void;
   controllerRef: RefObject<SheetController | null>;
 }) => {
@@ -62,13 +65,15 @@ const MediaPickerSheet = ({
             <div className="h-max grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 pe-2 auto-rows-min">
               {mediaData.map(({ id, meta, url, type }) => (
                 <MinimalFileCard
-                  className=" max-w-full"
                   id={id}
                   key={id}
                   name={meta.name || meta.alt}
                   type={type}
                   url={url}
                   onSelectHandler={() => onSelect({ id, url, alt: meta.alt })}
+                  className={cn(" max-w-full", {
+                    "ring ring-primary": selectedIds?.includes(id),
+                  })}
                 />
               ))}
             </div>

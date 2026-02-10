@@ -1,7 +1,7 @@
 "use client";
 import type { ComponentProps } from "react";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Trash } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -141,37 +141,58 @@ export const ArticleThumbnail = ({ media }: { media: Promise<Media[]> }) => {
       render={({ fieldState, field: { value } }) => {
         const validImageUrl = value && typeof value !== "string";
         return (
-          <Field aria-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
-            <Suspense fallback={null}>
-              <MediaPickerSheet
-                media={media}
-                controllerRef={sheetControllerRef}
-                onSelect={({ id, url }) => {
-                  setValue("thumbnail", { id, url }, { shouldDirty: true });
-                  sheetControllerRef.current?.close();
-                }}
-              />
-            </Suspense>
-            <Button
-              className="w-full h-32"
-              variant="outline"
-              onClick={() => sheetControllerRef.current?.open()}
-            >
-              {validImageUrl && (
-                <Image
-                  alt="image preview"
-                  className="size-full object-contain"
-                  src={{
-                    src: value.url,
-                    width: 128,
-                    height: 128,
+          <div className="relative">
+            <Field aria-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
+              <Suspense fallback={null}>
+                <MediaPickerSheet
+                  media={media}
+                  controllerRef={sheetControllerRef}
+                  onSelect={({ id, url }) => {
+                    setValue("thumbnail", { id, url }, { shouldDirty: true });
+                    sheetControllerRef.current?.close();
                   }}
+                  selectedIds={
+                    validImageUrl ? [value.id] : value ? [value] : []
+                  }
                 />
-              )}
-            </Button>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
+              </Suspense>
+
+              <Button
+                className="w-full h-32"
+                variant="outline"
+                onClick={() => sheetControllerRef.current?.open()}
+              >
+                {validImageUrl && (
+                  <Image
+                    alt="image preview"
+                    className="size-full object-contain"
+                    src={{
+                      src: value.url,
+                      width: 128,
+                      height: 128,
+                    }}
+                  />
+                )}
+              </Button>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+            {value && (
+              <Button
+                size="icon-sm"
+                className="absolute end-4 top-10 z-20 text-destructive"
+                variant="outline"
+                onClick={() =>
+                  setValue("thumbnail", null, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+              >
+                <Trash />
+              </Button>
+            )}
+          </div>
         );
       }}
     />

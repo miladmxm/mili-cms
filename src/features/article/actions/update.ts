@@ -59,6 +59,7 @@ export const updateArticleStatus = async (
     const { success } = await articleMutation.updateStatus(id, output.status);
     if (!success) return { success, message: "خطا در ویرایش مقاله" };
     updateTag(CacheKeys.articles);
+    updateTag(`${CacheKeys.articles}-${id}`);
     return { success, message: "ویرایش انجام شد" };
   } catch (error) {
     console.log(error);

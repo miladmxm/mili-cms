@@ -18,10 +18,10 @@ export const CreateCategorySchema = v.object({
         }),
         v.transform(({ id }) => id),
       ),
-      v.pipe(v.string(), v.nonEmpty()),
+      v.nullable(v.string()),
     ]),
   ),
-  parentId: v.optional(v.pipe(v.string(), v.nonEmpty())),
+  parentId: v.optional(v.nullable(v.pipe(v.string(), v.nonEmpty()))),
 });
 export type CreateCategoryInput = v.InferInput<typeof CreateCategorySchema>;
 

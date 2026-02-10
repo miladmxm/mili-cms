@@ -57,6 +57,7 @@ export const findCategoryByStartedSlugWith = async (
 export const findCategories = async (tx?: Transaction) => {
   const categories = await getDBorTX(tx).query.articleCategory.findMany({
     with: { thumbnail: { columns: { url: true, meta: true } } },
+    orderBy: [desc(articleCategory.createdAt)],
   });
   return categories;
 };

@@ -27,6 +27,7 @@ const AllCategories = ({
       {editableCategory ? (
         <EditCategory
           className="md:col-span-3"
+          key={editableCategory.updatedAt.toString()}
           media={media}
           categories={categories}
           editCategory={editableCategory}

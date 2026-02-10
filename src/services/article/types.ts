@@ -31,14 +31,16 @@ export interface CreateArticle {
 export interface CreateCategory {
   name: string;
   slug: string;
-  thumbnail?: string;
-  parentId?: string;
+  thumbnail?: string | null;
+  parentId?: string | null;
   description?: string;
 }
 export interface Category {
   name: string;
   id: string;
   slug: string;
+  createdAt: Date;
+  updatedAt: Date;
   thumbnail?: { url: string; alt: string; id: string } | null;
   parentId?: string | null;
   description?: string | null;
