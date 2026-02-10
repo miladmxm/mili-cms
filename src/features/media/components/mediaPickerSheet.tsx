@@ -24,16 +24,16 @@ export interface SheetController {
   close: () => void;
 }
 const MediaPickerSheet = ({
-  medias,
+  media,
   onSelect,
   controllerRef,
 }: {
-  medias: Promise<Media[]>;
+  media: Promise<Media[]>;
   onSelect: (data: { id: string; url: string; alt: string }) => void;
   controllerRef: RefObject<SheetController | null>;
 }) => {
   const { pending } = useLinkStatus();
-  const mediasData = use(medias);
+  const mediaData = use(media);
   const [open, setOpen] = useState(false);
   useImperativeHandle(
     controllerRef,
@@ -58,9 +58,9 @@ const MediaPickerSheet = ({
           <MediaDropzone />
           <DisplayUploadingFiles />
           {pending && <Spinner className="size-10 mx-auto" />}
-          {mediasData ? (
+          {mediaData ? (
             <div className="h-max grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 pe-2 auto-rows-min">
-              {mediasData.map(({ id, meta, url, type }) => (
+              {mediaData.map(({ id, meta, url, type }) => (
                 <MinimalFileCard
                   className=" max-w-full"
                   id={id}

@@ -19,7 +19,7 @@ const DashboardLayout = ({ children }: Readonly<LayoutProps<"/admin">>) => {
         <ThemeProvider attribute="class">
           <main className="w-full">
             {children}
-            <Toaster position="top-center" />
+            <Toaster position="top-center" richColors />
           </main>
         </ThemeProvider>
       </body>

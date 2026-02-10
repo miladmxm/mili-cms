@@ -1,0 +1,43 @@
+import type { Media } from "@/services/media/type";
+
+import { cn } from "@/lib/utils";
+
+import type { Category } from "../../../../services/article/types";
+
+import { buildCategoryTree } from "../../utils/buildCategoryTree";
+import CategoryList from "./categoryList";
+import CreateCategory from "./createCategory";
+
+const AllCategories = ({
+  categories,
+  media,
+  className,
+  editCategoryId,
+}: {
+  media: Promise<Media[]>;
+  categories: Category[];
+  className?: string;
+  editCategoryId?: string;
+}) => {
+  const categoriesTree = buildCategoryTree(categories);
+  const editableCategory = categories.find(({ id }) => id === editCategoryId);
+  return (
+    <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-8">
+      <CreateCategory
+        className="md:col-span-3"
+        media={media}
+        categories={categories}
+      />
+      <div
+        className={cn(
+          "md:ps-4 md:col-span-5 flex flex-col gap-4 pt-5 w-full",
+          className,
+        )}
+      >
+        <CategoryList treeCategories={categoriesTree} />
+      </div>
+    </div>
+  );
+};
+
+export default AllCategories;

@@ -1,12 +1,12 @@
-import { ImageOff } from "lucide-react";
+import { Edit2, ImageOff } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-import { cn } from "@/lib/utils";
+import type { CategoryTree } from "@/services/article/types";
 
-import type { Category, CategoryTree } from "../../../services/article/types";
+import { Button } from "@/components/dashboard/ui/button";
 
-import { buildCategoryTree } from "../utils/buildCategoryTree";
-import DeleteCategory from "./deleteCategory";
+import DeleteCategory from "../deleteCategory";
 
 const CategoryList = ({
   treeCategories,
@@ -37,7 +37,14 @@ const CategoryList = ({
               )}
               <span>{category.name}</span>
             </div>
-            <DeleteCategory id={category.id} />
+            <div>
+              <Button asChild size="icon-sm" variant="ghost">
+                <Link href={`/admin/blog/categories/${category.id}`}>
+                  <Edit2 />
+                </Link>
+              </Button>
+              <DeleteCategory id={category.id} />
+            </div>
           </div>
           {category.children && category.children.length > 0 && (
             <CategoryList treeCategories={category.children} />
@@ -47,20 +54,4 @@ const CategoryList = ({
     </div>
   );
 };
-
-const AllCategories = ({
-  categories,
-  className,
-}: {
-  categories: Category[];
-  className?: string;
-}) => {
-  const categoriesTree = buildCategoryTree(categories);
-  return (
-    <div className={cn("md:ps-4 flex flex-col gap-4 pt-5 w-full", className)}>
-      <CategoryList treeCategories={categoriesTree} />
-    </div>
-  );
-};
-
-export default AllCategories;
+export default CategoryList;

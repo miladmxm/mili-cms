@@ -1,21 +1,17 @@
 import { getMediasByType } from "@/features/media/dal/queries";
 
-import AllCategories from "../components/allCategories";
-import CreateCategory from "../components/createCategory";
+import AllCategories from "../components/categories/allCategories";
 import { getCategories } from "../dal/query";
 
-const Categories = async () => {
+const Categories = async ({ editCategoryId }: { editCategoryId?: string }) => {
   const categories = await getCategories();
-  const medias = getMediasByType(["image"]);
+  const media = getMediasByType(["image"]);
   return (
-    <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-8">
-      <CreateCategory
-        className="md:col-span-3"
-        medias={medias}
-        categories={categories}
-      />
-      <AllCategories className="md:col-span-5" categories={categories} />
-    </div>
+    <AllCategories
+      media={media}
+      categories={categories}
+      editCategoryId={editCategoryId}
+    />
   );
 };
 
