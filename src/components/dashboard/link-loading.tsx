@@ -1,11 +1,16 @@
+"use client";
 import { useLinkStatus } from "next/link";
+
+import { cn } from "@/lib/utils";
 
 import { Spinner } from "./ui/spinner";
 
-const LinkLoading = () => {
+const LinkLoading = ({ className }: { className?: string }) => {
   const { pending } = useLinkStatus();
   if (!pending) return;
 
-  return <Spinner className="link-loader-spinner absolute end-1" />;
+  return (
+    <Spinner className={cn("link-loader-spinner absolute end-1", className)} />
+  );
 };
 export default LinkLoading;

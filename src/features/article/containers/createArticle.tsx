@@ -10,7 +10,7 @@ const CreateArticle = () => {
   const categories = getCategories();
   return (
     <RichEditorContextProvider imageMedia={images} audioMedia={audios}>
-      <CreateArticleForm medias={images} categories={categories} />;
+      <CreateArticleForm media={images} categories={categories} />;
     </RichEditorContextProvider>
   );
 };

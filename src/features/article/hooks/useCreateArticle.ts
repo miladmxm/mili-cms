@@ -4,10 +4,10 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import type { CreateArticleOutput } from "../validations/createSchema";
+import type { CreateArticleOutput } from "../validations/article.schema";
 
 import { createArticleAction } from "../actions/create";
-import { CreateArticleSchema } from "../validations/createSchema";
+import { CreateArticleSchema } from "../validations/article.schema";
 
 export const useCreateArticle = () => {
   const router = useRouter();

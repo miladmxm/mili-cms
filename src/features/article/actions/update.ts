@@ -7,13 +7,16 @@ import type { ActionResult } from "@/types/actions";
 import { CacheKeys } from "@/constant/cacheKeys";
 import { validator } from "@/validations";
 
-import type { UpdateArticle, UpdateStatus } from "../validations/updateSchema";
+import type {
+  UpdateArticle,
+  UpdateStatus,
+} from "../validations/article.schema";
 
 import * as articleMutation from "../dal/mutation";
 import {
   UpdateArticleSchema,
   UpdateStatusSchema,
-} from "../validations/updateSchema";
+} from "../validations/article.schema";
 
 export const updateArticle = async (
   id: string,

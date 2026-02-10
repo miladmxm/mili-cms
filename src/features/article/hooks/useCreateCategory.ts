@@ -3,10 +3,10 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import type { CreateCategoryOutput } from "../validations/createCategory";
+import type { CreateCategoryOutput } from "../validations/category.schema";
 
 import { createCategoryAction } from "../actions/create";
-import { CreateCategorySchema } from "../validations/createCategory";
+import { CreateCategorySchema } from "../validations/category.schema";
 
 export const useCreateCategory = () => {
   const form = useForm({

@@ -41,7 +41,7 @@ const AddImage = () => {
         افزودن تصویر
       </Button>
       <MediaPickerSheet
-        medias={richEditorContext.imageMedia}
+        media={richEditorContext.imageMedia}
         controllerRef={sheetControllerRef}
         onSelect={onClickHandler}
       />

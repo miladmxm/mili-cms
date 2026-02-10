@@ -13,7 +13,7 @@ import { Textarea } from "@/components/dashboard/ui/textarea";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 
-import type { CreateCategoryInput } from "../../validations/createCategory";
+import type { CreateCategoryInput } from "../../validations/category.schema";
 
 import SelectParentCategory from "../selectParentCategory";
 
@@ -77,7 +77,12 @@ export const CategorySelectParrent = ({
           <SelectParentCategory
             value={value}
             allCategories={categories}
-            onChange={(id) => setValue("parentId", id || undefined)}
+            onChange={(id) =>
+              setValue("parentId", id || undefined, {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }
           >
             <Button className="text-start" variant="outline">
               <span className="w-full">
@@ -131,7 +136,11 @@ export const CategoryThumbnailSelector = ({
               media={media}
               controllerRef={mediaPickerSheetControllerRef}
               onSelect={({ id, url }) => {
-                setValue("thumbnail", { id, url });
+                setValue(
+                  "thumbnail",
+                  { id, url },
+                  { shouldDirty: true, shouldValidate: true },
+                );
                 mediaPickerSheetControllerRef.current?.close();
               }}
             />

@@ -19,7 +19,7 @@ import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 import { StatusDictionary } from "@/services/article/types";
 
-import type { CreateArticleInput } from "../validations/createSchema";
+import type { CreateArticleInput } from "../validations/article.schema";
 
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,
@@ -130,7 +130,7 @@ export const ArticleCategories = ({
   );
 };
 
-export const ArticleThumbnail = ({ medias }: { medias: Promise<Media[]> }) => {
+export const ArticleThumbnail = ({ media }: { media: Promise<Media[]> }) => {
   const sheetControllerRef = useRef<SheetController>(null);
 
   const { control, setValue } = useArticleFormContext();
@@ -145,7 +145,7 @@ export const ArticleThumbnail = ({ medias }: { medias: Promise<Media[]> }) => {
             <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
             <Suspense fallback={null}>
               <MediaPickerSheet
-                medias={medias}
+                media={media}
                 controllerRef={sheetControllerRef}
                 onSelect={({ id, url }) => {
                   setValue("thumbnail", { id, url }, { shouldDirty: true });

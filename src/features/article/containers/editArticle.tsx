@@ -9,15 +9,11 @@ import { getArticle, getCategories } from "../dal/query";
 const EditArticle = async ({ id }: { id: string }) => {
   const article = dalVerifySuccess(await getArticle(id));
   if (!article) redirect("/admin");
-  const medias = getMediasByType(["image"]);
+  const media = getMediasByType(["image"]);
   const categories = getCategories();
 
   return (
-    <EditArticleForm
-      article={article}
-      medias={medias}
-      categories={categories}
-    />
+    <EditArticleForm article={article} media={media} categories={categories} />
   );
 };
 

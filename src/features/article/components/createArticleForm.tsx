@@ -28,10 +28,10 @@ import {
 } from "./articleFormFields";
 
 const CreateArticleForm = ({
-  medias,
+  media,
   categories,
 }: {
-  medias: Promise<Media[]>;
+  media: Promise<Media[]>;
   categories: Promise<Category[]>;
 }) => {
   const { form, isPending, submit } = useCreateArticle();
@@ -50,7 +50,7 @@ const CreateArticleForm = ({
                   <ArticleSlug />
                   <ArticleExcerpt />
                   <ArticleCategories categories={categories} />
-                  <ArticleThumbnail medias={medias} />
+                  <ArticleThumbnail media={media} />
                   <div className="flex gap-2">
                     <ArticleStatus isPending={isPending} />
                     <Field>

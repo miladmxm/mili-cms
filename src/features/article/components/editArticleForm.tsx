@@ -28,11 +28,11 @@ import {
 } from "./articleFormFields";
 
 const EditArticleForm = ({
-  medias,
+  media,
   categories,
   article,
 }: {
-  medias: Promise<Media[]>;
+  media: Promise<Media[]>;
   article: Article;
   categories: Promise<Category[]>;
 }) => {
@@ -52,7 +52,7 @@ const EditArticleForm = ({
                   <ArticleSlug />
                   <ArticleExcerpt />
                   <ArticleCategories categories={categories} />
-                  <ArticleThumbnail medias={medias} />
+                  <ArticleThumbnail media={media} />
 
                   <div className="flex gap-2">
                     <ArticleStatus isPending={isPending} />

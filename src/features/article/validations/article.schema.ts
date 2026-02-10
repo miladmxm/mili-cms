@@ -33,3 +33,11 @@ export const CreateArticleSchema = v.object({
 
 export type CreateArticleInput = v.InferInput<typeof CreateArticleSchema>;
 export type CreateArticleOutput = v.InferOutput<typeof CreateArticleSchema>;
+
+export const UpdateArticleSchema = v.partial(CreateArticleSchema);
+export type UpdateArticle = v.InferOutput<typeof UpdateArticleSchema>;
+
+export const UpdateStatusSchema = v.object({
+  status: StatusSchema,
+});
+export type UpdateStatus = v.InferOutput<typeof UpdateStatusSchema>;

@@ -10,11 +10,11 @@ import { getSession } from "@/lib/auth";
 import { validator } from "@/validations";
 
 import type { CreateArticle } from "../../../services/article/types";
-import type { CreateCategoryOutput } from "../validations/createCategory";
+import type { CreateCategoryOutput } from "../validations/category.schema";
 
 import { createArticle, createCategory } from "../dal/mutation";
-import { CreateCategorySchema } from "../validations/createCategory";
-import { CreateArticleSchema } from "../validations/createSchema";
+import { CreateArticleSchema } from "../validations/article.schema";
+import { CreateCategorySchema } from "../validations/category.schema";
 
 export const createArticleAction = async (
   inputData: unknown,

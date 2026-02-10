@@ -55,6 +55,7 @@ export const getCategoriesWithThumbnail = async () => {
     if (category.thumbnail && category.thumbnail.url) {
       newCategory.thumbnail = {
         url: DTOconvertMediaPathToRealUrl(category.thumbnail.url),
+        id: category.id,
         alt: category.thumbnail.meta.alt,
       };
     }

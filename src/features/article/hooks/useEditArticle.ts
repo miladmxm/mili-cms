@@ -7,10 +7,10 @@ import type { Article } from "@/services/article/types";
 
 import { getItemsDirtyData } from "@/utils/dirtyValues";
 
-import type { UpdateArticle } from "../validations/updateSchema";
+import type { UpdateArticle } from "../validations/article.schema";
 
 import { updateArticle } from "../actions/update";
-import { UpdateArticleSchema } from "../validations/updateSchema";
+import { UpdateArticleSchema } from "../validations/article.schema";
 
 export const useEditArticle = (article: Article) => {
   const { content, excerpt, title, slug, thumbnail, status, categoryIds } =

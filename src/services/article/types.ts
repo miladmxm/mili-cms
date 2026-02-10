@@ -39,7 +39,7 @@ export interface Category {
   name: string;
   id: string;
   slug: string;
-  thumbnail?: { url: string; alt: string } | null;
+  thumbnail?: { url: string; alt: string; id: string } | null;
   parentId?: string | null;
   description?: string | null;
 }
