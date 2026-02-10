@@ -94,7 +94,16 @@ export const createCategory = async (data: CreateCategory) => {
   if (data.thumbnail) {
     await checkMediaType(data.thumbnail, "image");
   }
-  const category = (await articleRepo.createArticleCategory(data))[0];
+  let slug: string = convertToSlug(data.slug);
+  const existingArticleBySlug =
+    await articleRepo.findCategoryByStartedSlugWith(slug);
+  slug = generateUniqueSlug(
+    slug,
+    existingArticleBySlug.map((a) => a.slug),
+  );
+  const category = (
+    await articleRepo.createArticleCategory({ ...data, slug })
+  )[0];
   return category;
 };
 // UPDATE
@@ -171,6 +180,23 @@ export const updateArticleStatus = async (
   status: ArticleStatus,
 ) => {
   return articleRepo.updateArticleById(id, { status });
+};
+
+export const updateCategory = async (
+  id: string,
+  input: Partial<CreateCategory>,
+) => {
+  const data = input;
+  if (data.slug) {
+    data.slug = convertToSlug(data.slug);
+    const existingArticleBySlug =
+      await articleRepo.findCategoryByStartedSlugWith(data.slug);
+    data.slug = generateUniqueSlug(
+      data.slug,
+      existingArticleBySlug.map((a) => a.slug),
+    );
+  }
+  return articleRepo.updateCategoryById(id, data);
 };
 
 // DELETE

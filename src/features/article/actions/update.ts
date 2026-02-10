@@ -11,12 +11,14 @@ import type {
   UpdateArticle,
   UpdateStatus,
 } from "../validations/article.schema";
+import type { UpdateCategoryOutput } from "../validations/category.schema";
 
 import * as articleMutation from "../dal/mutation";
 import {
   UpdateArticleSchema,
   UpdateStatusSchema,
 } from "../validations/article.schema";
+import { UpdateCategorySchema } from "../validations/category.schema";
 
 export const updateArticle = async (
   id: string,
@@ -27,7 +29,6 @@ export const updateArticle = async (
     output,
     success: successValidation,
   } = validator(UpdateArticleSchema, data);
-  console.log(output, errors);
   if (!successValidation)
     return { success: successValidation, message: "خطای اعتبار سنجی", errors };
   try {
@@ -62,5 +63,37 @@ export const updateArticleStatus = async (
   } catch (error) {
     console.log(error);
     return { success: false, message: "خطا در ویرایش" };
+  }
+};
+
+export const updateCategory = async (
+  id: string,
+  data: unknown,
+): Promise<ActionResult<UpdateCategoryOutput>> => {
+  const {
+    errors,
+    output,
+    success: isSuccessValidation,
+  } = validator(UpdateCategorySchema, data);
+  if (!isSuccessValidation)
+    return {
+      success: isSuccessValidation,
+      errors,
+      message: "خطا در اعتبارسنجی",
+    };
+  try {
+    const { success } = await articleMutation.updateCategory(id, output);
+    if (success) {
+      updateTag(CacheKeys.articleCategories);
+      return { success: true, message: "با موفقیت ویرایش شد" };
+    } else {
+      return { success: false, message: "خطا در ویرایش دسته بندی" };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, message: error.message };
+    } else {
+      return { success: false, message: "خطایی ناشناخته در ویرایش مقاله" };
+    }
   }
 };

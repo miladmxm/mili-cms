@@ -47,6 +47,13 @@ export const findArticleByStartedSlugWith = async (
   getDBorTX(tx).query.article.findMany({
     where: like(article.slug, `${slug}%`),
   });
+export const findCategoryByStartedSlugWith = async (
+  slug: string,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.articleCategory.findMany({
+    where: like(articleCategory.slug, `${slug}%`),
+  });
 export const findCategories = async (tx?: Transaction) => {
   const categories = await getDBorTX(tx).query.articleCategory.findMany({
     with: { thumbnail: { columns: { url: true, meta: true } } },
@@ -79,6 +86,16 @@ export const updateArticleById = (
     .where(eq(article.id, id))
     .returning();
 
+export const updateCategoryById = (
+  id: string,
+  value: Partial<typeof articleCategory.$inferInsert>,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .update(articleCategory)
+    .set(value)
+    .where(eq(articleCategory.id, id))
+    .returning();
 export const deleteArticleById = (id: string, tx?: Transaction) =>
   getDBorTX(tx).delete(article).where(eq(article.id, id));
 
