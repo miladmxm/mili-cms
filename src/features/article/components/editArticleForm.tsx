@@ -53,10 +53,8 @@ const EditArticleForm = ({
                   <ArticleExcerpt />
                   <ArticleCategories categories={categories} />
                   <ArticleThumbnail media={media} />
-
                   <div className="flex gap-2">
                     <ArticleStatus isPending={isPending} />
-
                     <Field>
                       <Button
                         className="flex-auto"
