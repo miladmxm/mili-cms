@@ -2,8 +2,18 @@ import type { PropsWithChildren } from "react";
 
 import { ImageOff } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import type { Category } from "@/services/article/types";
+
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/dashboard/ui/item";
 
 import DeleteCategory from "../deleteCategory";
 import LinkToEdit from "./linkToEdit";
@@ -12,12 +22,14 @@ const CategoryItem = ({
   name,
   thumbnail,
   id,
+  slug,
   children,
+  description,
 }: PropsWithChildren<Category>) => {
   return (
     <div className="ps-3 border-s border-dashed flex flex-col gap-4">
-      <div className="bg-accent p-3 rounded-lg flex justify-between items-center ">
-        <div className="flex items-center gap-3">
+      <Item className="bg-accent/40 p-3 rounded-lg flex justify-between items-center ">
+        <ItemMedia>
           {thumbnail?.url ? (
             <Image
               height={32}
@@ -31,13 +43,20 @@ const CategoryItem = ({
               <ImageOff />
             </div>
           )}
-          <span>{name}</span>
-        </div>
-        <div>
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>{name}</ItemTitle>
+          <ItemDescription>
+            <Link className="" href="/" target="_blank">
+              {slug}
+            </Link>
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
           <LinkToEdit id={id} />
           <DeleteCategory id={id} />
-        </div>
-      </div>
+        </ItemActions>
+      </Item>
       {children}
     </div>
   );
