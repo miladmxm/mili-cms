@@ -2,7 +2,8 @@
 import type { ComponentProps, RefObject } from "react";
 
 import { useLinkStatus } from "next/link";
-import { use, useImperativeHandle, useState } from "react";
+import { useRouter } from "next/navigation";
+import { use, useImperativeHandle, useRef, useState } from "react";
 
 import type { Media } from "@/services/media/type";
 
@@ -51,6 +52,19 @@ const MediaPickerSheet = ({
     }),
     [],
   );
+  const router = useRouter();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const isBottom = () => {
+    if (wrapperRef.current === null) return false;
+    return (
+      wrapperRef.current?.getBoundingClientRect().bottom <= window.innerHeight
+    );
+  };
+  const handleScroll = () => {
+    if (isBottom()) {
+      router.push(`?mediaPageIndex=${mediaData.length + 20}`);
+    }
+  };
   return (
     <Sheet onOpenChange={setOpen} open={open}>
       <SheetContent className="max-h-[90svh]" side="bottom">
@@ -58,12 +72,18 @@ const MediaPickerSheet = ({
           <SheetTitle>با کلیک بر روی هر کدام انتخاب کنید</SheetTitle>
         </SheetHeader>
 
-        <div className="overflow-y-auto h-full p-6 container gap-6 flex flex-col">
+        <div
+          className="overflow-y-auto h-full p-6 container gap-6 flex flex-col"
+          onScrollEnd={handleScroll}
+        >
           <MediaDropzone {...props} />
           <DisplayUploadingFiles />
           {pending && <Spinner className="size-10 mx-auto" />}
           {mediaData ? (
-            <div className="h-max grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 pe-2 auto-rows-min">
+            <div
+              className="h-max grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 pe-2 auto-rows-min"
+              ref={wrapperRef}
+            >
               {mediaData.map(({ id, meta, url, type }) => (
                 <MinimalFileCard
                   id={id}
