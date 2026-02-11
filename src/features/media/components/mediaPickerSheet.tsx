@@ -1,5 +1,5 @@
 "use client";
-import type { RefObject } from "react";
+import type { ComponentProps, RefObject } from "react";
 
 import { useLinkStatus } from "next/link";
 import { use, useImperativeHandle, useState } from "react";
@@ -29,7 +29,8 @@ const MediaPickerSheet = ({
   onSelect,
   selectedIds,
   controllerRef,
-}: {
+  ...props
+}: ComponentProps<typeof MediaDropzone> & {
   media: Promise<Media[]>;
   selectedIds?: string[];
   onSelect: (data: { id: string; url: string; alt: string }) => void;
@@ -58,7 +59,7 @@ const MediaPickerSheet = ({
         </SheetHeader>
 
         <div className="overflow-y-auto h-full p-6 container gap-6 flex flex-col">
-          <MediaDropzone />
+          <MediaDropzone {...props} />
           <DisplayUploadingFiles />
           {pending && <Spinner className="size-10 mx-auto" />}
           {mediaData ? (

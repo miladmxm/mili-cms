@@ -32,6 +32,7 @@ const AddAudio = () => {
         افزودن صدا
       </Button>
       <MediaPickerSheet
+        acceptTypes={["audio"]}
         media={audioMedia}
         controllerRef={sheetControllerRef}
         onSelect={handleAddAudio}

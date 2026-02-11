@@ -1,4 +1,4 @@
-import type { FileError } from "react-dropzone";
+import type { Accept, FileError } from "react-dropzone";
 
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
@@ -23,7 +23,7 @@ const customDropzoneValidator = (
 
 const createDataUrl = (file: File) => URL.createObjectURL(file);
 
-export const useUpload = () => {
+export const useUpload = (accept?: Accept) => {
   const { addToUploadingMedias, setProgressById, removeFromUploadingMedias } =
     useMediaStore();
   const router = useRouter();
@@ -68,6 +68,7 @@ export const useUpload = () => {
   };
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
+    accept,
     validator: customDropzoneValidator,
     multiple: true,
     maxFiles: 10,

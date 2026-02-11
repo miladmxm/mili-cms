@@ -2,9 +2,11 @@ import * as v from "valibot";
 
 import type { MediaTypes } from "@/services/media/type";
 
+import { mimeKeys } from "@/constant/mimeSupport";
+
 const AudioSchema = v.pipe(
   v.file(),
-  v.mimeType(["audio/aac", "audio/mp4", "audio/mpeg"]),
+  v.mimeType(mimeKeys("audio")),
   v.transform((input) => ({
     file: input,
     type: "audio" as MediaTypes,
@@ -12,15 +14,7 @@ const AudioSchema = v.pipe(
 );
 const DocsSchema = v.pipe(
   v.file(),
-  v.mimeType([
-    "text/plain",
-    "application/pdf",
-    "application/msword",
-    "application/vnd.ms-excel",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  ]),
+  v.mimeType(mimeKeys("document")),
   v.transform((input) => ({
     file: input,
     type: "document" as MediaTypes,
@@ -28,7 +22,7 @@ const DocsSchema = v.pipe(
 );
 const ImageSchema = v.pipe(
   v.file(),
-  v.mimeType(["image/jpeg", "image/png", "image/webp", "image/gif"]),
+  v.mimeType(mimeKeys("image")),
   v.transform((input) => ({
     file: input,
     type: "image" as MediaTypes,
@@ -36,7 +30,7 @@ const ImageSchema = v.pipe(
 );
 const VideoSchema = v.pipe(
   v.file(),
-  v.mimeType(["video/mp4", "video/webm"]),
+  v.mimeType(mimeKeys("video")),
   v.transform((input) => ({
     file: input,
     type: "video" as MediaTypes,

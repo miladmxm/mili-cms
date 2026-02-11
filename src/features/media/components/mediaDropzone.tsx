@@ -1,5 +1,7 @@
 "use client";
 
+import type { MediaTypes } from "@/services/media/type";
+
 import {
   Card,
   CardContent,
@@ -8,12 +10,15 @@ import {
   CardTitle,
 } from "@/components/dashboard/ui/card";
 import { Separator } from "@/components/dashboard/ui/separator";
+import { MimeValues } from "@/constant/mimeSupport";
 import { cn } from "@/lib/utils";
 
 import { useUpload } from "../hooks/useUpload";
 
-const MediaDropzone = () => {
-  const { getInputProps, getRootProps, fileRejections } = useUpload();
+const MediaDropzone = ({ acceptTypes }: { acceptTypes?: MediaTypes[] }) => {
+  const { getInputProps, getRootProps, fileRejections } = useUpload(
+    MimeValues(acceptTypes),
+  );
   return (
     <Card
       className={cn("border-dashed text-center", {

@@ -128,6 +128,7 @@ export const CategoryThumbnailSelector = ({
             <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
             <Suspense fallback={null}>
               <MediaPickerSheet
+                acceptTypes={["image"]}
                 media={media}
                 controllerRef={mediaPickerSheetControllerRef}
                 onSelect={({ id, url }) => {

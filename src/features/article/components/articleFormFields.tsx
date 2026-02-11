@@ -146,6 +146,7 @@ export const ArticleThumbnail = ({ media }: { media: Promise<Media[]> }) => {
               <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
               <Suspense fallback={null}>
                 <MediaPickerSheet
+                  acceptTypes={["image"]}
                   media={media}
                   controllerRef={sheetControllerRef}
                   onSelect={({ id, url }) => {
