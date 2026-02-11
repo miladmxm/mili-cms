@@ -58,7 +58,7 @@ export const FileCardForUpload: FC<PropsWithChildren & UploadingFileData> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{name}</CardTitle>
+        <CardTitle className="truncate">{name}</CardTitle>
       </CardHeader>
       <Separator />
 
