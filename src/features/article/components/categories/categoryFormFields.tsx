@@ -5,7 +5,6 @@ import { Controller, useFormContext } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 import type { Category } from "@/services/article/types";
-import type { Media } from "@/services/media/type";
 
 import { Button } from "@/components/dashboard/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/dashboard/ui/field";
@@ -111,11 +110,7 @@ export const CategoryDescriptionField = () => {
     />
   );
 };
-export const CategoryThumbnailSelector = ({
-  media,
-}: {
-  media: Promise<Media[]>;
-}) => {
+export const CategoryThumbnailSelector = () => {
   const { control, setValue } = useCategoryFormContext();
   const mediaPickerSheetControllerRef = useRef<SheetController>(null);
   return (
@@ -128,8 +123,7 @@ export const CategoryThumbnailSelector = ({
             <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
             <Suspense fallback={null}>
               <MediaPickerSheet
-                acceptTypes={["image"]}
-                media={media}
+                mediaKey="image"
                 controllerRef={mediaPickerSheetControllerRef}
                 onSelect={({ id, url }) => {
                   setValue(

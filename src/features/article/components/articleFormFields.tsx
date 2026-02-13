@@ -8,7 +8,6 @@ import { Controller, useFormContext } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 import type { Category } from "@/services/article/types";
-import type { Media } from "@/services/media/type";
 
 import RichEditor from "@/components/dashboard/rich-editor";
 import { Button } from "@/components/dashboard/ui/button";
@@ -130,7 +129,7 @@ export const ArticleCategories = ({
   );
 };
 
-export const ArticleThumbnail = ({ media }: { media: Promise<Media[]> }) => {
+export const ArticleThumbnail = () => {
   const sheetControllerRef = useRef<SheetController>(null);
 
   const { control, setValue } = useArticleFormContext();
@@ -146,8 +145,7 @@ export const ArticleThumbnail = ({ media }: { media: Promise<Media[]> }) => {
               <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
               <Suspense fallback={null}>
                 <MediaPickerSheet
-                  acceptTypes={["image"]}
-                  media={media}
+                  mediaKey="image"
                   controllerRef={sheetControllerRef}
                   onSelect={({ id, url }) => {
                     setValue("thumbnail", { id, url }, { shouldDirty: true });

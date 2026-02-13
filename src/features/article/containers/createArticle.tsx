@@ -1,4 +1,4 @@
-import RichEditorContextProvider from "@/components/dashboard/rich-editor/context";
+import MediaContextProvider from "@/features/media/context";
 import { getMediasByType } from "@/features/media/dal/queries";
 
 import CreateArticleForm from "../components/createArticleForm";
@@ -9,9 +9,9 @@ const CreateArticle = () => {
   const audios = getMediasByType(["audio"]);
   const categories = getCategories();
   return (
-    <RichEditorContextProvider imageMedia={images} audioMedia={audios}>
-      <CreateArticleForm media={images} categories={categories} />;
-    </RichEditorContextProvider>
+    <MediaContextProvider media={{ image: images, audio: audios }}>
+      <CreateArticleForm categories={categories} />;
+    </MediaContextProvider>
   );
 };
 

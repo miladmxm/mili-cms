@@ -7,14 +7,12 @@ import type { SheetController } from "@/features/media/components/mediaPickerShe
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 
 import { Button } from "../../ui/button";
-import { useRichEditorContext } from "../context";
 
 const AddImage = () => {
   const { editor, isReady } = useTiptap();
-  const richEditorContext = useRichEditorContext();
   const sheetControllerRef = useRef<SheetController>(null);
 
-  if (!editor || !richEditorContext || !isReady) return;
+  if (!editor || !isReady) return;
   const onClickHandler = ({ url, alt }: { url: string; alt: string }) => {
     editor
       .chain()
@@ -41,8 +39,7 @@ const AddImage = () => {
         افزودن تصویر
       </Button>
       <MediaPickerSheet
-        acceptTypes={["image"]}
-        media={richEditorContext.imageMedia}
+        mediaKey="image"
         controllerRef={sheetControllerRef}
         onSelect={onClickHandler}
       />

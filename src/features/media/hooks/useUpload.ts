@@ -24,7 +24,7 @@ const customDropzoneValidator = (
 const createDataUrl = (file: File) => URL.createObjectURL(file);
 
 export const useUpload = (accept?: Accept) => {
-  const { addToUploadingMedias, setProgressById, removeFromUploadingMedias } =
+  const { addToUploadingMedia, setProgressById, removeFromUploadingMedia } =
     useMediaStore();
   const router = useRouter();
   const onDrop = (acceptedFiles: File[]) => {
@@ -39,7 +39,7 @@ export const useUpload = (accept?: Accept) => {
         progressCb: (progress) => setProgressById(id, progress),
       });
 
-      let storData: Parameters<typeof addToUploadingMedias>[0] = {
+      let storData: Parameters<typeof addToUploadingMedia>[0] = {
         name: file.name,
         type: output.type,
         id,
@@ -53,14 +53,14 @@ export const useUpload = (accept?: Accept) => {
         };
       }
 
-      addToUploadingMedias(storData);
+      addToUploadingMedia(storData);
       try {
         await send();
         router.refresh();
       } catch (error) {
         console.log(error);
       } finally {
-        removeFromUploadingMedias(id);
+        removeFromUploadingMedia(id);
         if (storData.type === "image" && storData.uri)
           URL.revokeObjectURL(storData.uri);
       }

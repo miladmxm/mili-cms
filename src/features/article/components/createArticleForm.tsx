@@ -2,8 +2,6 @@
 
 import { FormProvider } from "react-hook-form";
 
-import type { Media } from "@/services/media/type";
-
 import { Button } from "@/components/dashboard/ui/button";
 import {
   Card,
@@ -28,10 +26,8 @@ import {
 } from "./articleFormFields";
 
 const CreateArticleForm = ({
-  media,
   categories,
 }: {
-  media: Promise<Media[]>;
   categories: Promise<Category[]>;
 }) => {
   const { form, isPending, submit } = useCreateArticle();
@@ -50,7 +46,7 @@ const CreateArticleForm = ({
                   <ArticleSlug />
                   <ArticleExcerpt />
                   <ArticleCategories categories={categories} />
-                  <ArticleThumbnail media={media} />
+                  <ArticleThumbnail />
                   <div className="flex gap-2">
                     <ArticleStatus isPending={isPending} />
                     <Field>

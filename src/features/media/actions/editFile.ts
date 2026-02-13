@@ -25,8 +25,8 @@ export const editFileMeta = async (
   try {
     const { success } = await updateFileData(id, output);
     if (!success) return { success, message: "ویرایش انجام نشد" };
-    updateTag(CacheKeys.medias);
-    updateTag(`${CacheKeys.medias}-${id}`);
+    updateTag(CacheKeys.media);
+    updateTag(`${CacheKeys.media}-${id}`);
     return { success: successValidation };
   } catch (error) {
     if (error instanceof Error) {

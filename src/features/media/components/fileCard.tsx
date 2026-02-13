@@ -23,6 +23,7 @@ import {
   CardTitle,
 } from "@/components/dashboard/ui/card";
 import { Separator } from "@/components/dashboard/ui/separator";
+import { Skeleton } from "@/components/dashboard/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 import DeleteFile from "./deleteButton";
@@ -88,6 +89,33 @@ interface FileData {
   meta: FileMeta;
   type: MediaTypes;
 }
+export const FileCardSkeleton = ({ length = 2 }: { length?: number }) => {
+  const items = new Array(length).fill("").map((_, i) => i);
+  return (
+    <>
+      {items.map((i) => (
+        <Card key={i}>
+          <CardHeader>
+            <Skeleton className="w-11/12 h-3" />
+          </CardHeader>
+          <Separator />
+          <CardContent>
+            <Skeleton className="w-full h-36" />
+          </CardContent>
+          <CardFooter className="gap-2 flex mt-auto">
+            <CardAction>
+              <Skeleton className="size-8" />
+            </CardAction>
+            <CardAction>
+              <Skeleton className="size-8" />
+            </CardAction>
+            <Skeleton className="size-8" />
+          </CardFooter>
+        </Card>
+      ))}
+    </>
+  );
+};
 const FileCard: FC<FileData> = ({ id, type, url, meta }) => {
   return (
     <Card>

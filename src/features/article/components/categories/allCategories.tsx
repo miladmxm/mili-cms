@@ -1,5 +1,3 @@
-import type { Media } from "@/services/media/type";
-
 import { cn } from "@/lib/utils";
 
 import type { Category } from "../../../../services/article/types";
@@ -11,11 +9,9 @@ import EditCategory from "./editCategory";
 
 const AllCategories = ({
   categories,
-  media,
   className,
   editCategoryId,
 }: {
-  media: Promise<Media[]>;
   categories: Category[];
   className?: string;
   editCategoryId?: string;
@@ -28,16 +24,11 @@ const AllCategories = ({
         <EditCategory
           className="md:col-span-3"
           key={editableCategory.updatedAt.toString()}
-          media={media}
           categories={categories}
           editCategory={editableCategory}
         />
       ) : (
-        <CreateCategory
-          className="md:col-span-3"
-          media={media}
-          categories={categories}
-        />
+        <CreateCategory className="md:col-span-3" categories={categories} />
       )}
       <div
         className={cn(

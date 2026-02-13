@@ -12,33 +12,33 @@ export interface UploadingFileData {
 }
 
 interface State {
-  uploadingMedias: UploadingFileData[];
+  uploadingMedia: UploadingFileData[];
 }
 
 interface Actions {
-  addToUploadingMedias: (media: State["uploadingMedias"][number]) => void;
-  removeFromUploadingMedias: (id: string) => void;
+  addToUploadingMedia: (media: State["uploadingMedia"][number]) => void;
+  removeFromUploadingMedia: (id: string) => void;
   setProgressById: (id: string, progress: number) => void;
 }
 
 export const useMediaStore = create<Actions & State>((set) => ({
-  uploadingMedias: [],
-  removeFromUploadingMedias: (id) =>
-    set(({ uploadingMedias }) => ({
-      uploadingMedias: uploadingMedias.filter((item) => item.id !== id),
+  uploadingMedia: [],
+  removeFromUploadingMedia: (id) =>
+    set(({ uploadingMedia }) => ({
+      uploadingMedia: uploadingMedia.filter((item) => item.id !== id),
     })),
   setProgressById: (id, progress) =>
-    set(({ uploadingMedias }) => {
-      const updatedItem = uploadingMedias.map((item) => {
+    set(({ uploadingMedia }) => {
+      const updatedItem = uploadingMedia.map((item) => {
         if (item.id === id) {
           item.progress = progress;
         }
         return item;
       });
-      return { uploadingMedias: updatedItem };
+      return { uploadingMedia: updatedItem };
     }),
-  addToUploadingMedias: (media) =>
-    set(({ uploadingMedias }) => ({
-      uploadingMedias: [...uploadingMedias, media],
+  addToUploadingMedia: (media) =>
+    set(({ uploadingMedia }) => ({
+      uploadingMedia: [...uploadingMedia, media],
     })),
 }));

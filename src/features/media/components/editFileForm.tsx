@@ -99,7 +99,7 @@ const EditFileForm = ({
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="name">نام تصویر</FieldLabel>
+                  <FieldLabel htmlFor="name">نام</FieldLabel>
                   <Input
                     dir="ltr"
                     id="name"
@@ -119,7 +119,7 @@ const EditFileForm = ({
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="title">عنوان تصویر</FieldLabel>
+                  <FieldLabel htmlFor="title">عنوان</FieldLabel>
                   <Input
                     dir="ltr"
                     id="title"

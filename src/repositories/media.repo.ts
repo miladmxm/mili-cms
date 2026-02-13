@@ -5,6 +5,7 @@ import type { FileMeta, MediaTypes } from "@/services/media/type";
 import { media } from "@/db/drizzle/schemas";
 
 import type { Transaction } from ".";
+import type { OffsetAndLimit } from "./types";
 
 import { getDBorTX } from ".";
 
@@ -13,8 +14,12 @@ export const createMedia = (
   tx?: Transaction,
 ) => getDBorTX(tx).insert(media).values(data).returning();
 
-export const findMedias = (tx?: Transaction) =>
-  getDBorTX(tx).query.media.findMany({ orderBy: [desc(media.createdAt)] });
+export const findMediaByLimit = (options?: OffsetAndLimit, tx?: Transaction) =>
+  getDBorTX(tx).query.media.findMany({
+    offset: options?.offset,
+    limit: options?.limit,
+    orderBy: [desc(media.createdAt)],
+  });
 export const findMediaByIdAndType = (
   id: string,
   type: MediaTypes,
@@ -23,8 +28,19 @@ export const findMediaByIdAndType = (
   getDBorTX(tx).query.media.findFirst({
     where: and(eq(media.id, id), eq(media.type, type)),
   });
-export const findMediasByTypes = (types: MediaTypes[], tx?: Transaction) =>
+export const findMediaByTypesAndLimit = (
+  {
+    types,
+    limit,
+    offset,
+  }: OffsetAndLimit & {
+    types: MediaTypes[];
+  },
+  tx?: Transaction,
+) =>
   getDBorTX(tx).query.media.findMany({
+    offset,
+    limit,
     where: inArray(media.type, types),
     orderBy: [desc(media.createdAt)],
   });

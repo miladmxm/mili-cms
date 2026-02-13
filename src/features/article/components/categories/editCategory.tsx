@@ -4,7 +4,6 @@ import type { FC } from "react";
 import { FormProvider } from "react-hook-form";
 
 import type { Category } from "@/services/article/types";
-import type { Media } from "@/services/media/type";
 
 import { Button } from "@/components/dashboard/ui/button";
 import {
@@ -29,7 +28,6 @@ import {
 interface CreateCategoryProps {
   className?: string;
   categories: Category[];
-  media: Promise<Media[]>;
   editCategory: Category;
 }
 
@@ -37,7 +35,6 @@ const EditCategory: FC<CreateCategoryProps> = ({
   className,
   categories,
   editCategory,
-  media,
 }) => {
   const { isPending, submit, form } = useEditCategory(editCategory);
   return (
@@ -53,7 +50,7 @@ const EditCategory: FC<CreateCategoryProps> = ({
               <CategorySlugField />
               <CategorySelectParrent categories={categories} />
               <CategoryDescriptionField />
-              <CategoryThumbnailSelector media={media} />
+              <CategoryThumbnailSelector />
               <Field>
                 <Button
                   className="flex-auto"

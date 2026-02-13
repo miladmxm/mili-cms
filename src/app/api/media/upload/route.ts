@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         success: false,
         message: "در ایجاد فایل مشکلی رخ داد",
       });
-    revalidateTag(CacheKeys.medias, "");
+    revalidateTag(CacheKeys.media, "");
     return Response.json({ success: successValidation }, { status: 201 });
   } catch (error) {
     console.log(error);

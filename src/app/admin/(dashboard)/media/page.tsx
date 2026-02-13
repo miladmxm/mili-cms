@@ -1,9 +1,9 @@
-import AllMedias from "@/features/media/containers/allMedias";
+import AllMedia from "@/features/media/containers/allMedia";
 
 const Media = () => {
   return (
     <div>
-      <AllMedias />
+      <AllMedia />
     </div>
   );
 };

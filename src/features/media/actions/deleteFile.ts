@@ -14,7 +14,7 @@ export const deleteFile = async (
   try {
     const { success } = await removeFile(id);
     if (!success) return { success: false, message: "حذف فایل انجام نشد" };
-    updateTag(CacheKeys.medias);
+    updateTag(CacheKeys.media);
     return { success: true };
   } catch (error) {
     if (error instanceof Error)

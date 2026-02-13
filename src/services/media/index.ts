@@ -10,30 +10,30 @@ import type { FileMeta, MediaTypes, SaveFile } from "./type";
 import { DTOconvertMediaToRealUrlMedia } from "./dto";
 
 // READ
-export const getMediasByTypes = async (types: MediaTypes[]) => {
+export const getMediaByTypes = async (types: MediaTypes[]) => {
   "use cache";
-  cacheTag(CacheKeys.medias, ...types.map((t) => `media-type-${t}`));
+  cacheTag(CacheKeys.media, ...types.map((t) => `media-type-${t}`));
 
-  const medias = await mediaRepo.findMediasByTypes(types);
-  return DTOconvertMediaToRealUrlMedia(medias);
+  const media = await mediaRepo.findMediaByTypesAndLimit({ types });
+  return DTOconvertMediaToRealUrlMedia(media);
 };
-export const getMedias = async () => {
+export const getMedia = async () => {
   "use cache";
-  cacheTag(CacheKeys.medias);
+  cacheTag(CacheKeys.media);
 
-  const medias = await mediaRepo.findMedias();
-  return DTOconvertMediaToRealUrlMedia(medias);
+  const media = await mediaRepo.findMediaByLimit();
+  return DTOconvertMediaToRealUrlMedia(media);
 };
 
 export const checkMediaType = async (id: string, type: MediaTypes) => {
   "use cache: private";
-  cacheTag(`${CacheKeys.medias}-${id}`, type);
+  cacheTag(`${CacheKeys.media}-${id}`, type);
   const media = await mediaRepo.findMediaByIdAndType(id, type);
   if (!media) throw new Error("not ok");
 };
-export const getMedia = async (id: string) => {
+export const getMediaById = async (id: string) => {
   "use cache";
-  cacheTag(`${CacheKeys.medias}-${id}`);
+  cacheTag(`${CacheKeys.media}-${id}`);
   const media = await mediaRepo.findMediaById(id);
   if (!media) return;
   return DTOconvertMediaToRealUrlMedia([media])[0];

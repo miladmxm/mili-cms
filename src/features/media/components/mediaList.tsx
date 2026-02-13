@@ -4,9 +4,10 @@ import { use } from "react";
 import type { FileMeta, MediaTypes } from "@/services/media/type";
 
 import FileCard from "./fileCard";
+import MediaCardWrapper from "./MediaCardWrapper";
 
 interface MediaListParameters {
-  medias: Promise<
+  media: Promise<
     {
       type: MediaTypes;
       id: string;
@@ -19,14 +20,14 @@ interface MediaListParameters {
   >;
 }
 
-const MediaList = ({ medias: mediasRequest }: MediaListParameters) => {
-  const medias = use(mediasRequest);
+const MediaList = ({ media: mediaRequest }: MediaListParameters) => {
+  const media = use(mediaRequest);
   return (
-    <div className="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-      {medias.map((item) => (
+    <MediaCardWrapper>
+      {media.map((item) => (
         <FileCard key={item.id} {...item} />
       ))}
-    </div>
+    </MediaCardWrapper>
   );
 };
 

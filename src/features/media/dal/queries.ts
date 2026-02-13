@@ -11,28 +11,28 @@ import { ThrowableDalError } from "@/dal/types";
 import * as mediaService from "@/services/media";
 
 export const getMediasByType = async (types: MediaTypes[]) => {
-  const medias = dalVerifySuccess(
+  const media = dalVerifySuccess(
     await dalRequireAuth(
-      () => dalDbOperation(() => mediaService.getMediasByTypes(types)),
+      () => dalDbOperation(() => mediaService.getMediaByTypes(types)),
       { media: ["read"] },
     ),
   );
-  return medias;
+  return media;
 };
 
-export const getMedias = async () => {
-  const medias = dalVerifySuccess(
-    await dalRequireAuth(() => dalDbOperation(mediaService.getMedias), {
+export const getMedia = async () => {
+  const media = dalVerifySuccess(
+    await dalRequireAuth(() => dalDbOperation(mediaService.getMedia), {
       media: ["read"],
     }),
   );
-  return medias;
+  return media;
 };
 
-export const getMedia = async (id: string) => {
+export const getMediaById = async (id: string) => {
   const media = dalVerifySuccess(
     await dalRequireAuth(
-      () => dalDbOperation(() => mediaService.getMedia(id)),
+      () => dalDbOperation(() => mediaService.getMediaById(id)),
       {
         media: ["read"],
       },

@@ -1,9 +1,12 @@
+import { redirect, RedirectType } from "next/navigation";
+
+import { getMediaById } from "@/services/media";
+
 import EditFileForm from "../components/editFileForm";
-import { getMedia } from "../dal/queries";
 
 const EditFileData = async ({ id }: { id: string }) => {
-  const media = await getMedia(id);
-
+  const media = await getMediaById(id);
+  if (!media) return redirect("/admin/media", RedirectType.replace);
   return <EditFileForm {...media} />;
 };
 

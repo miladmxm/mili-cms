@@ -1,12 +1,12 @@
 "use client";
-import type { ComponentProps, RefObject } from "react";
+import type { RefObject } from "react";
 
+import { Upload } from "lucide-react";
 import { useLinkStatus } from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useImperativeHandle, useRef, useState } from "react";
 
-import type { Media } from "@/services/media/type";
-
+import EmptyPlaceholder from "@/components/dashboard/empty";
 import {
   Sheet,
   SheetContent,
@@ -16,8 +16,12 @@ import {
 import { Spinner } from "@/components/dashboard/ui/spinner";
 import { cn } from "@/lib/utils";
 
-import EmptyMedias from "../containers/emptyMedias";
+import type { MediaContextKey } from "../context/types";
+
+import { useMediaContext } from "../context";
+import { typesFromMediaContextKey } from "../context/utils";
 import { MinimalFileCard } from "./fileCard";
+import MediaCardWrapper from "./MediaCardWrapper";
 import MediaDropzone from "./mediaDropzone";
 import DisplayUploadingFiles from "./uploadingFiles";
 
@@ -26,17 +30,17 @@ export interface SheetController {
   close: () => void;
 }
 const MediaPickerSheet = ({
-  media,
+  mediaKey,
   onSelect,
   selectedIds,
   controllerRef,
-  ...props
-}: ComponentProps<typeof MediaDropzone> & {
-  media: Promise<Media[]>;
+}: {
+  mediaKey: MediaContextKey;
   selectedIds?: string[];
   onSelect: (data: { id: string; url: string; alt: string }) => void;
   controllerRef: RefObject<SheetController | null>;
 }) => {
+  const media = useMediaContext(mediaKey);
   const { pending } = useLinkStatus();
   const mediaData = use(media);
   const [open, setOpen] = useState(false);
@@ -76,12 +80,12 @@ const MediaPickerSheet = ({
           className="overflow-y-auto h-full p-6 container gap-6 flex flex-col"
           onScrollEnd={handleScroll}
         >
-          <MediaDropzone {...props} />
+          <MediaDropzone acceptTypes={typesFromMediaContextKey(mediaKey)} />
           <DisplayUploadingFiles />
           {pending && <Spinner className="size-10 mx-auto" />}
           {mediaData ? (
-            <div
-              className="h-max grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 pe-2 auto-rows-min"
+            <MediaCardWrapper
+              className="h-max auto-rows-min pe-2"
               ref={wrapperRef}
             >
               {mediaData.map(({ id, meta, url, type }) => (
@@ -97,9 +101,13 @@ const MediaPickerSheet = ({
                   })}
                 />
               ))}
-            </div>
+            </MediaCardWrapper>
           ) : (
-            <EmptyMedias />
+            <EmptyPlaceholder
+              link="/admin/media"
+              title="هیچ رسانه ای وجود ندارد"
+              icon={Upload}
+            />
           )}
         </div>
       </SheetContent>
