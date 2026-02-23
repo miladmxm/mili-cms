@@ -5,23 +5,30 @@ import * as fileManager from "@/lib/fileManager";
 import * as mediaRepo from "@/repositories/media.repo";
 import { getToDayString } from "@/utils/getToDayString";
 
+import type { LimitAndOffset } from "../type";
 import type { FileMeta, MediaTypes, SaveFile } from "./type";
 
 import { DTOconvertMediaToRealUrlMedia } from "./dto";
 
 // READ
-export const getMediaByTypes = async (types: MediaTypes[]) => {
+export const getMediaByTypes = async (
+  types: MediaTypes[],
+  options?: LimitAndOffset,
+) => {
   "use cache";
-  cacheTag(CacheKeys.media, ...types.map((t) => `media-type-${t}`));
+  cacheTag(CacheKeys.media, ...types.map((t) => `media-type-${t}`, options));
 
-  const media = await mediaRepo.findMediaByTypesAndLimit({ types });
+  const media = await mediaRepo.findMediaByTypesAndLimit({
+    types,
+    ...options,
+  });
   return DTOconvertMediaToRealUrlMedia(media);
 };
-export const getMedia = async () => {
+export const getMedia = async (options?: LimitAndOffset) => {
   "use cache";
   cacheTag(CacheKeys.media);
 
-  const media = await mediaRepo.findMediaByLimit();
+  const media = await mediaRepo.findMediaByLimit(options);
   return DTOconvertMediaToRealUrlMedia(media);
 };
 

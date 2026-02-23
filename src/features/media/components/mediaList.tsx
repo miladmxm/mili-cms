@@ -3,6 +3,9 @@ import { use } from "react";
 
 import type { FileMeta, MediaTypes } from "@/services/media/type";
 
+import { Spinner } from "@/components/dashboard/ui/spinner";
+
+import { useInfinityScroll } from "../hooks/useInfinityScroll";
 import FileCard from "./fileCard";
 import MediaCardWrapper from "./MediaCardWrapper";
 
@@ -22,12 +25,20 @@ interface MediaListParameters {
 
 const MediaList = ({ media: mediaRequest }: MediaListParameters) => {
   const media = use(mediaRequest);
+  const { handleScroll, isLoadEnded, wrapperRef } = useInfinityScroll(media);
   return (
-    <MediaCardWrapper>
-      {media.map((item) => (
-        <FileCard key={item.id} {...item} />
-      ))}
-    </MediaCardWrapper>
+    <div className="overflow-y-auto h-full pe-2" onScrollEnd={handleScroll}>
+      <MediaCardWrapper ref={wrapperRef}>
+        {media.map((item) => (
+          <FileCard key={item.id} {...item} />
+        ))}
+      </MediaCardWrapper>
+      {!isLoadEnded && (
+        <div className="center">
+          <Spinner />
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,9 +1,9 @@
 import AllMedia from "@/features/media/containers/allMedia";
 
-const Media = () => {
+const Media = async ({ searchParams }: PageProps<"/admin/media">) => {
   return (
     <div>
-      <AllMedia />
+      <AllMedia searchParams={await searchParams} />
     </div>
   );
 };

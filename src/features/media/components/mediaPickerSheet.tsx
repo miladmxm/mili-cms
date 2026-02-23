@@ -3,8 +3,7 @@ import type { RefObject } from "react";
 
 import { Upload } from "lucide-react";
 import { useLinkStatus } from "next/link";
-import { useRouter } from "next/navigation";
-import { use, useImperativeHandle, useRef, useState } from "react";
+import { use, useImperativeHandle, useState } from "react";
 
 import EmptyPlaceholder from "@/components/dashboard/empty";
 import {
@@ -20,6 +19,7 @@ import type { MediaContextKey } from "../context/types";
 
 import { useMediaContext } from "../context";
 import { typesFromMediaContextKey } from "../context/utils";
+import { useInfinityScroll } from "../hooks/useInfinityScroll";
 import { MinimalFileCard } from "./fileCard";
 import MediaCardWrapper from "./MediaCardWrapper";
 import MediaDropzone from "./mediaDropzone";
@@ -43,6 +43,8 @@ const MediaPickerSheet = ({
   const media = useMediaContext(mediaKey);
   const { pending } = useLinkStatus();
   const mediaData = use(media);
+  const { handleScroll, isLoadEnded, wrapperRef } =
+    useInfinityScroll(mediaData);
   const [open, setOpen] = useState(false);
   useImperativeHandle(
     controllerRef,
@@ -56,19 +58,7 @@ const MediaPickerSheet = ({
     }),
     [],
   );
-  const router = useRouter();
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const isBottom = () => {
-    if (wrapperRef.current === null) return false;
-    return (
-      wrapperRef.current?.getBoundingClientRect().bottom <= window.innerHeight
-    );
-  };
-  const handleScroll = () => {
-    if (isBottom()) {
-      router.push(`?mediaPageIndex=${mediaData.length + 20}`);
-    }
-  };
+
   return (
     <Sheet onOpenChange={setOpen} open={open}>
       <SheetContent className="max-h-[90svh]" side="bottom">
@@ -84,24 +74,31 @@ const MediaPickerSheet = ({
           <DisplayUploadingFiles />
           {pending && <Spinner className="size-10 mx-auto" />}
           {mediaData ? (
-            <MediaCardWrapper
-              className="h-max auto-rows-min pe-2"
-              ref={wrapperRef}
-            >
-              {mediaData.map(({ id, meta, url, type }) => (
-                <MinimalFileCard
-                  id={id}
-                  key={id}
-                  name={meta.name || meta.alt}
-                  type={type}
-                  url={url}
-                  onSelectHandler={() => onSelect({ id, url, alt: meta.alt })}
-                  className={cn(" max-w-full", {
-                    "ring ring-primary": selectedIds?.includes(id),
-                  })}
-                />
-              ))}
-            </MediaCardWrapper>
+            <>
+              <MediaCardWrapper
+                className="h-max auto-rows-min pe-2"
+                ref={wrapperRef}
+              >
+                {mediaData.map(({ id, meta, url, type }) => (
+                  <MinimalFileCard
+                    id={id}
+                    key={id}
+                    name={meta.name || meta.alt}
+                    type={type}
+                    url={url}
+                    onSelectHandler={() => onSelect({ id, url, alt: meta.alt })}
+                    className={cn(" max-w-full", {
+                      "ring ring-primary": selectedIds?.includes(id),
+                    })}
+                  />
+                ))}
+              </MediaCardWrapper>
+              {!isLoadEnded && (
+                <div className="center">
+                  <Spinner />
+                </div>
+              )}
+            </>
           ) : (
             <EmptyPlaceholder
               link="/admin/media"

@@ -1,6 +1,6 @@
 import type { SearchParams } from "@/types/type";
 
-const getItemFromSearchParam = ({
+export const getItemFromSearchParam = ({
   selectorKey,
   defaultValue,
   searchParams,
