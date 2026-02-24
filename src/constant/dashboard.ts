@@ -1,1 +1,1 @@
-export const LoadMediaOffset = 5;
+export const LoadMediaOffset = 10;
