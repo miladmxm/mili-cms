@@ -94,7 +94,7 @@ const MediaPickerSheet = ({
                 ))}
               </MediaCardWrapper>
               {!isLoadEnded && (
-                <div className="center">
+                <div className="center h-10">
                   <Spinner />
                 </div>
               )}

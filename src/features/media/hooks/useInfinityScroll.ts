@@ -1,5 +1,5 @@
 import { useRouter, useSearchParams } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 
 import type { Media } from "@/services/media/type";
 
@@ -33,6 +33,32 @@ export const useInfinityScroll = (mediaData: Media[]) => {
       lastLength.current = page * LoadMediaOffset;
     }
   };
+
+  const timerRef = useRef<NodeJS.Timeout>(null);
+  const checkIfWrapperSmaller = useEffectEvent(() => {
+    if (isLoadEnded) {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        return;
+      }
+    }
+    if (wrapperRef.current === null) return false;
+
+    if (
+      wrapperRef.current?.getBoundingClientRect().bottom <= window.innerHeight
+    ) {
+      handleScroll();
+    }
+  });
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      checkIfWrapperSmaller();
+    }, 3000);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
 
   return { handleScroll, wrapperRef, isLoadEnded };
 };
