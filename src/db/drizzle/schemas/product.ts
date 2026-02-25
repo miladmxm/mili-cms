@@ -1,5 +1,4 @@
 import {
-  integer,
   jsonb,
   primaryKey,
   text,
@@ -12,24 +11,19 @@ import {
 import type { ArticleStatus } from "@/services/article/types";
 import type { ProseMirror } from "@/types/type";
 
-import { articleCategory } from "./articleCategory";
+import { articleStatus } from "./article";
 import { user } from "./auth";
 import { comment } from "./comment";
 import { MainSchema, RelationSchema } from "./main";
 import { media } from "./media";
+import { productCategory } from "./productCategory";
 import { rate } from "./rate";
 
-export const articleStatus = MainSchema.enum("article_status", [
-  "draft",
-  "published",
-  "archived",
-]);
-
-export const article = MainSchema.table(
-  "article",
+export const product = MainSchema.table(
+  "product",
   {
-    id: uuid("id").primaryKey().notNull().defaultRandom(),
-    title: varchar("title", { length: 255 }).notNull(),
+    id: uuid("id").notNull().primaryKey().defaultRandom(),
+    name: text("name").notNull(),
     content: jsonb("content").$type<ProseMirror>().notNull().default({}),
     slug: varchar("slug", { length: 255 }).notNull().unique(),
     excerpt: text("excerpt").notNull(),
@@ -48,49 +42,45 @@ export const article = MainSchema.table(
       .notNull()
       .$type<ArticleStatus>()
       .default("draft"),
-    readingTime: integer("reading_time"),
-    views: integer("vires").default(0).notNull(),
   },
   (table) => ({
-    slugUnique: uniqueIndex("article_slug_unique").on(table.slug),
+    slugUnique: uniqueIndex("product_slug_unique").on(table.slug),
   }),
 );
-
-export const articleToComments = RelationSchema.table(
-  "article_to_comments",
+export const productToComments = RelationSchema.table(
+  "product_to_comments",
   {
-    articleId: uuid("article_id")
+    productId: uuid("product_id")
       .notNull()
-      .references(() => article.id, { onDelete: "cascade" }),
+      .references(() => product.id, { onDelete: "cascade" }),
     commentId: uuid("comment_id")
       .notNull()
       .references(() => comment.id, { onDelete: "cascade" }),
   },
-  (table) => [primaryKey({ columns: [table.articleId, table.commentId] })],
+  (table) => [primaryKey({ columns: [table.productId, table.commentId] })],
 );
-
-export const articleToCategory = RelationSchema.table(
-  "article_to_category",
+export const productToCategory = RelationSchema.table(
+  "product_to_category",
   {
-    articleId: uuid("article_id")
-      .references(() => article.id, { onDelete: "cascade" })
+    productId: uuid("product_id")
+      .references(() => product.id, { onDelete: "cascade" })
       .notNull(),
     categoryId: uuid("category_id")
-      .references(() => articleCategory.id, { onDelete: "cascade" })
+      .references(() => productCategory.id, { onDelete: "cascade" })
       .notNull(),
   },
-  (table) => [primaryKey({ columns: [table.articleId, table.categoryId] })],
+  (table) => [primaryKey({ columns: [table.productId, table.categoryId] })],
 );
 
-export const articleToRate = RelationSchema.table(
-  "article_to_rate",
+export const productToRate = RelationSchema.table(
+  "product_to_rate",
   {
-    articleId: uuid("article_id")
-      .references(() => article.id, { onDelete: "cascade" })
+    productId: uuid("product_id")
+      .references(() => product.id, { onDelete: "cascade" })
       .notNull(),
     rateId: uuid("rate_id")
       .references(() => rate.id, { onDelete: "cascade" })
       .notNull(),
   },
-  (table) => [primaryKey({ columns: [table.articleId, table.rateId] })],
+  (table) => [primaryKey({ columns: [table.productId, table.rateId] })],
 );

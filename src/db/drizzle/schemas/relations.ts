@@ -10,6 +10,13 @@ import { articleCategory } from "./articleCategory";
 import { account, session, user } from "./auth";
 import { comment } from "./comment";
 import { media } from "./media";
+import {
+  product,
+  productToCategory,
+  productToComments,
+  productToRate,
+} from "./product";
+import { productCategory } from "./productCategory";
 import { rate } from "./rate";
 
 export const articleToCategoryRelations = relations(
@@ -38,7 +45,6 @@ export const articleToCommentRelations = relations(
     }),
   }),
 );
-
 export const articleToRateRelations = relations(articleToRate, ({ one }) => ({
   rate: one(rate, {
     fields: [articleToRate.rateId],
@@ -50,6 +56,42 @@ export const articleToRateRelations = relations(articleToRate, ({ one }) => ({
   }),
 }));
 
+export const productToCategoryRelations = relations(
+  productToCategory,
+  ({ one }) => ({
+    product: one(product, {
+      fields: [productToCategory.productId],
+      references: [product.id],
+    }),
+    category: one(productCategory, {
+      fields: [productToCategory.categoryId],
+      references: [productCategory.id],
+    }),
+  }),
+);
+export const productToCommentRelations = relations(
+  productToComments,
+  ({ one }) => ({
+    product: one(product, {
+      fields: [productToComments.productId],
+      references: [product.id],
+    }),
+    comment: one(comment, {
+      fields: [productToComments.commentId],
+      references: [comment.id],
+    }),
+  }),
+);
+export const productToRateRelations = relations(productToRate, ({ one }) => ({
+  rate: one(rate, {
+    fields: [productToRate.rateId],
+    references: [rate.id],
+  }),
+  product: one(product, {
+    fields: [productToRate.productId],
+    references: [product.id],
+  }),
+}));
 export const articleRelations = relations(article, ({ many, one }) => ({
   thumbnail: one(media, {
     fields: [article.thumbnail],
@@ -64,6 +106,19 @@ export const articleRelations = relations(article, ({ many, one }) => ({
   rates: many(articleToRate),
 }));
 
+export const productRelations = relations(product, ({ many, one }) => ({
+  thumbnail: one(media, {
+    fields: [product.thumbnail],
+    references: [media.id],
+  }),
+  author: one(user, {
+    fields: [product.authorId],
+    references: [user.id],
+  }),
+  comments: many(productToComments),
+  categories: many(productToCategory),
+  rates: many(productToRate),
+}));
 export const categoryRelations = relations(
   articleCategory,
   ({ many, one }) => ({
@@ -78,7 +133,20 @@ export const categoryRelations = relations(
     articles: many(articleToCategory),
   }),
 );
-
+export const productCategoryRelations = relations(
+  productCategory,
+  ({ many, one }) => ({
+    thumbnail: one(media, {
+      fields: [productCategory.thumbnail],
+      references: [media.id],
+    }),
+    parent: one(productCategory, {
+      fields: [productCategory.parentId],
+      references: [productCategory.id],
+    }),
+    product: many(productToCategory),
+  }),
+);
 export const commentRelations = relations(comment, ({ one }) => ({
   parent: one(comment, {
     fields: [comment.parentId],
@@ -92,6 +160,10 @@ export const commentRelations = relations(comment, ({ one }) => ({
     fields: [comment.id],
     references: [articleToComments.commentId],
   }),
+  product: one(productToComments, {
+    fields: [comment.id],
+    references: [productToComments.commentId],
+  }),
 }));
 
 export const rateRelations = relations(rate, ({ one }) => ({
@@ -103,6 +175,10 @@ export const rateRelations = relations(rate, ({ one }) => ({
     fields: [rate.id],
     references: [articleToRate.rateId],
   }),
+  product: one(productToRate, {
+    fields: [rate.id],
+    references: [productToRate.productId],
+  }),
 }));
 
 // * Better auth relations
@@ -113,6 +189,7 @@ export const userRelations = relations(user, ({ many }) => ({
   articles: many(article),
   comments: many(comment),
   rates: many(rate),
+  product: many(product),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
