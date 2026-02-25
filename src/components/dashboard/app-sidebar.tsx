@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import type { User } from "@/features/auth/admin/types";
+
 import { NavDocuments } from "@/components/dashboard/nav-documents";
 import { NavMain } from "@/components/dashboard/nav-main";
 import { NavSecondary } from "@/components/dashboard/nav-secondary";
@@ -17,8 +19,8 @@ import { useDirection } from "@/hooks/useDirection";
 import SidebarHeader from "./app-sidebar-header";
 import { ScrollArea } from "./ui/scroll-area";
 
-type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
-export function AppSidebar({ ...props }: AppSidebarProps) {
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & { user: User };
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const dir = useDirection();
   return (
     <Sidebar
@@ -26,7 +28,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
       collapsible="offcanvas"
       {...props}
     >
-      <SidebarHeader />
+      <SidebarHeader user={user} />
 
       <SidebarContent>
         <ScrollArea dir={dir} className="h-full pe-1">
@@ -39,7 +41,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
         </ScrollArea>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );

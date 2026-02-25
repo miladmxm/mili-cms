@@ -1,7 +1,7 @@
 "use client";
 import { IconInnerShadowTop } from "@tabler/icons-react";
 
-import { useSession } from "@/hooks/useSession";
+import type { User } from "@/features/auth/admin/types";
 
 import {
   SidebarHeader,
@@ -9,21 +9,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar";
-import { Skeleton } from "./ui/skeleton";
 
-const AppSidebarHeader = () => {
-  const { data, isPending } = useSession();
+const AppSidebarHeader = ({ user }: { user: User }) => {
   return (
     <SidebarHeader>
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton className="data-[slot=sidebar-menu-button]:!p-1.5">
             <IconInnerShadowTop className="size-5!" />
-            {isPending || !data?.user ? (
-              <Skeleton className="h-3 w-36" />
-            ) : (
-              <span className="text-base font-semibold">{data.user.name}</span>
-            )}
+            <span className="text-base font-semibold">{user.name}</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

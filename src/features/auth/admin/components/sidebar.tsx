@@ -1,12 +1,17 @@
 import type { FC, PropsWithChildren } from "react";
 
+import { redirect } from "next/navigation";
+
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/dashboard/ui/sidebar";
+import { getSession } from "@/lib/auth";
 
 const SidebarWrapper: FC<PropsWithChildren> = async ({ children }) => {
+  const userSession = await getSession();
+  if (!userSession) redirect("/admin/login");
   return (
     <SidebarProvider
       style={
@@ -16,7 +21,7 @@ const SidebarWrapper: FC<PropsWithChildren> = async ({ children }) => {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" collapsible="icon" />
+      <AppSidebar user={userSession.user} variant="inset" collapsible="icon" />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );

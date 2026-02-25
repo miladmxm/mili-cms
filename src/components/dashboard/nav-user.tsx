@@ -7,6 +7,8 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 
+import type { User } from "@/features/auth/admin/types";
+
 import {
   Avatar,
   AvatarFallback,
@@ -29,30 +31,12 @@ import {
 } from "@/components/dashboard/ui/sidebar";
 import SignoutButton from "@/features/auth/admin/components/signoutButton";
 import { useDirection } from "@/hooks/useDirection";
-import { useSession } from "@/hooks/useSession";
 
-import { Skeleton } from "./ui/skeleton";
-
-const NavUserSkeleton = () => {
-  return (
-    <div className="flex justify-between gap-3 p-2 items-center">
-      <Skeleton className="size-8 rounded-lg" />
-      <div className="flex flex-col flex-auto items-end gap-1.5 py-1">
-        <Skeleton className="w-1/2 h-2" />
-        <Skeleton className="w-1/3 h-1.5" />
-      </div>
-      <Skeleton className="size-4 my-auto" />
-    </div>
-  );
-};
-export function NavUser() {
+export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
-  const { data, isPending } = useSession();
   const dir = useDirection();
-  if (isPending || !data?.user) {
-    return <NavUserSkeleton />;
-  }
-  const { name, email, image } = data.user;
+
+  const { name, email, image } = user;
   const userImageCallBack = name.slice(0, 2);
   return (
     <SidebarMenu>

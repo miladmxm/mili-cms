@@ -12,7 +12,7 @@ const CreateArticle = ({ searchParams }: { searchParams?: SearchParams }) => {
   const categories = getCategories();
   return (
     <MediaContextProvider media={{ image: images, audio: audios }}>
-      <CreateArticleForm categories={categories} />;
+      <CreateArticleForm categories={categories} />
     </MediaContextProvider>
   );
 };
