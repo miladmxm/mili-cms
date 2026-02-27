@@ -2,7 +2,6 @@
 import type { RefObject } from "react";
 
 import { Upload } from "lucide-react";
-import { useLinkStatus } from "next/link";
 import { use, useImperativeHandle, useState } from "react";
 
 import EmptyPlaceholder from "@/components/dashboard/empty";
@@ -41,10 +40,8 @@ const MediaPickerSheet = ({
   controllerRef: RefObject<SheetController | null>;
 }) => {
   const media = useMediaContext(mediaKey);
-  const { pending } = useLinkStatus();
   const mediaData = use(media);
-  const { handleScroll, isLoadEnded, wrapperRef } =
-    useInfinityScroll(mediaData);
+  const { handleScroll, wrapperRef, pending } = useInfinityScroll(mediaData);
   const [open, setOpen] = useState(false);
   useImperativeHandle(
     controllerRef,
@@ -93,7 +90,7 @@ const MediaPickerSheet = ({
                   />
                 ))}
               </MediaCardWrapper>
-              {!isLoadEnded && (
+              {pending && (
                 <div className="center h-10">
                   <Spinner />
                 </div>

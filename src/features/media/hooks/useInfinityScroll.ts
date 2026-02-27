@@ -1,5 +1,11 @@
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useEffectEvent, useRef, useState } from "react";
+import {
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 
 import type { Media } from "@/services/media/type";
 
@@ -19,6 +25,8 @@ export const useInfinityScroll = (mediaData: Media[]) => {
   };
   const lastLength = useRef<number>(mediaData.length);
   const searchParams = useSearchParams();
+  const [pending, startTransition] = useTransition();
+
   const handleScroll = () => {
     if (isBottom() && !isLoadEnded) {
       const page = parseInt(searchParams.get("page") || "1", 10);
@@ -29,11 +37,12 @@ export const useInfinityScroll = (mediaData: Media[]) => {
         setIsLoadEnded(true);
         return;
       }
-      router.push(`?page=${page + 1}`, { scroll: false });
-      lastLength.current = page * LoadMediaOffset;
+      startTransition(() => {
+        router.push(`?page=${page + 1}`, { scroll: false });
+        lastLength.current = page * LoadMediaOffset;
+      });
     }
   };
-
   const timerRef = useRef<NodeJS.Timeout>(null);
   const checkIfWrapperSmaller = useEffectEvent(() => {
     if (isLoadEnded) {
@@ -60,5 +69,5 @@ export const useInfinityScroll = (mediaData: Media[]) => {
     };
   }, []);
 
-  return { handleScroll, wrapperRef, isLoadEnded };
+  return { handleScroll, wrapperRef, isLoadEnded, pending };
 };

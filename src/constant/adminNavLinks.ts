@@ -24,6 +24,7 @@ export const NavDictionary: Record<string, string> = {
   add: "افزودن",
   edit: "ویرایش",
   categories: "دسته بندی ها",
+  products: "محصولات",
 };
 export const navMain: AdminNavMain[] = [
   {
@@ -49,6 +50,26 @@ export const navMain: AdminNavMain[] = [
       {
         title: "دسته بندی ها",
         url: "/admin/blog/categories",
+      },
+    ],
+  },
+  {
+    title: "محصولات",
+    icon: IconListDetails,
+    base: "/admin/products",
+    haveChild: true,
+    items: [
+      {
+        title: "مشاهده همه",
+        url: "/admin/products",
+      },
+      {
+        title: "افزودن",
+        url: "/admin/products/add",
+      },
+      {
+        title: "دسته بندی ها",
+        url: "/admin/products/categories",
       },
     ],
   },

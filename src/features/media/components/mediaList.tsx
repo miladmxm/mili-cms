@@ -25,7 +25,7 @@ interface MediaListParameters {
 
 const MediaList = ({ media: mediaRequest }: MediaListParameters) => {
   const media = use(mediaRequest);
-  const { handleScroll, isLoadEnded, wrapperRef } = useInfinityScroll(media);
+  const { handleScroll, wrapperRef, pending } = useInfinityScroll(media);
   return (
     <div className="overflow-y-auto h-full pe-2" onScrollEnd={handleScroll}>
       <MediaCardWrapper ref={wrapperRef}>
@@ -33,7 +33,7 @@ const MediaList = ({ media: mediaRequest }: MediaListParameters) => {
           <FileCard key={item.id} {...item} />
         ))}
       </MediaCardWrapper>
-      {!isLoadEnded && (
+      {pending && (
         <div className="center h-10">
           <Spinner />
         </div>
