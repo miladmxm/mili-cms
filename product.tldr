@@ -42,8 +42,63 @@
 			"typeName": "pointer"
 		},
 		{
-			"x": 1250,
-			"y": -130,
+			"meta": {},
+			"id": "binding:iSD0WzCmDrEmT7kx05E7V",
+			"type": "arrow",
+			"fromId": "shape:72iyFz869SxJDBGFzGPIB",
+			"toId": "shape:2J358b3h_5rsKC_j78gXn",
+			"props": {
+				"isPrecise": true,
+				"isExact": false,
+				"normalizedAnchor": {
+					"x": 0.294742670335892,
+					"y": 0.13717347622237105
+				},
+				"snap": "none",
+				"terminal": "start"
+			},
+			"typeName": "binding"
+		},
+		{
+			"meta": {},
+			"id": "binding:1Uv3VNabHlmXkCiOMPWMw",
+			"type": "arrow",
+			"fromId": "shape:72iyFz869SxJDBGFzGPIB",
+			"toId": "shape:GYIrTBQyiEh4BQ_mh4cyg",
+			"props": {
+				"isPrecise": true,
+				"isExact": false,
+				"normalizedAnchor": {
+					"x": 0.5,
+					"y": 0.5
+				},
+				"snap": "center",
+				"terminal": "end"
+			},
+			"typeName": "binding"
+		},
+		{
+			"x": -900,
+			"y": -260,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:5epQGsBr3nRoKd2-q97qY",
+			"type": "frame",
+			"props": {
+				"w": 603.1433761150865,
+				"h": 394.54545874895547,
+				"name": "option_item",
+				"color": "black"
+			},
+			"parentId": "page:page",
+			"index": "aBpVzL9l",
+			"typeName": "shape"
+		},
+		{
+			"x": -880,
+			"y": 230,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -51,8 +106,8 @@
 			"id": "shape:3y7VESKTPINm_wjf341Wm",
 			"type": "frame",
 			"props": {
-				"w": 489.6610107421875,
-				"h": 618.4027709960938,
+				"w": 491.72265625,
+				"h": 683.203125,
 				"name": "product",
 				"color": "black"
 			},
@@ -61,37 +116,18 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 222.63007207551078,
-			"y": 341.161645424389,
-			"z": 0.5536298897064122,
+			"x": 1051.9850540771288,
+			"y": 70.29282113819687,
+			"z": 0.48338776055361055,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
 		},
 		{
-			"x": 620,
-			"y": -310,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"id": "shape:nG-3lrJ5hbQRggs69Fz1p",
-			"type": "frame",
-			"props": {
-				"w": 475.26214599609375,
-				"h": 391.6015625,
-				"name": "product_option",
-				"color": "black"
-			},
-			"parentId": "page:page",
-			"index": "a62zPxgG",
-			"typeName": "shape"
-		},
-		{
 			"editingShapeId": null,
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:Vfz4K08GEIjbXen_Uh8kf"
+				"shape:plN32SaFrXp4QaQxBw6Pc"
 			],
 			"hoveredShapeId": null,
 			"erasingShapeIds": [],
@@ -109,12 +145,12 @@
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:sRHdOFNjJ8gOROq7Wru8K",
+			"id": "shape:2J358b3h_5rsKC_j78gXn",
 			"type": "text",
 			"props": {
 				"color": "black",
 				"size": "m",
-				"w": 389.6610107421875,
+				"w": 305.3511047363281,
 				"font": "draw",
 				"textAlign": "start",
 				"autoSize": true,
@@ -138,7 +174,7 @@
 											"type": "code"
 										}
 									],
-									"text": "interface product_variant {"
+									"text": "interface product {"
 								}
 							]
 						},
@@ -155,7 +191,7 @@
 											"type": "code"
 										}
 									],
-									"text": "\toptionId: string;"
+									"text": "\tproductId:string;"
 								}
 							]
 						},
@@ -172,7 +208,7 @@
 											"type": "code"
 										}
 									],
-									"text": " productId: string;"
+									"text": "\toptionItemId:string;"
 								}
 							]
 						},
@@ -189,7 +225,7 @@
 											"type": "code"
 										}
 									],
-									"text": "\tdefultItemId?:string;"
+									"text": "\tprice:{"
 								}
 							]
 						},
@@ -206,7 +242,7 @@
 											"type": "code"
 										}
 									],
-									"text": " items: {"
+									"text": "\t\tamount:number;"
 								}
 							]
 						},
@@ -223,7 +259,7 @@
 											"type": "code"
 										}
 									],
-									"text": "\t\tlabel: string;"
+									"text": "\t\tcurrency:\"IRR\""
 								}
 							]
 						},
@@ -240,7 +276,7 @@
 											"type": "code"
 										}
 									],
-									"text": "\t\tvalue: string;"
+									"text": "\t}"
 								}
 							]
 						},
@@ -257,7 +293,7 @@
 											"type": "code"
 										}
 									],
-									"text": "\t\tid: string;"
+									"text": "\tstock?:number;"
 								}
 							]
 						},
@@ -274,104 +310,7 @@
 											"type": "code"
 										}
 									],
-									"text": "\t\tprice:{"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t\t\tamount:number;"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t\t\tcurrency:\"IRR\""
-								},
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										},
-										{
-											"type": "italic"
-										}
-									],
-									"text": ";"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t\t}"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t\timageId:string;"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t}[];"
+									"text": "\tthumbnail:string;"
 								}
 							]
 						},
@@ -395,28 +334,27 @@
 					]
 				}
 			},
-			"parentId": "shape:Vfz4K08GEIjbXen_Uh8kf",
-			"index": "a1wnFtzG",
+			"parentId": "shape:plN32SaFrXp4QaQxBw6Pc",
+			"index": "a2uqU7FG",
 			"typeName": "shape"
 		},
 		{
-			"x": 610,
-			"y": 180,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
 			"meta": {},
-			"id": "shape:Vfz4K08GEIjbXen_Uh8kf",
-			"type": "frame",
+			"id": "binding:MXmGbcIt5Maeu0nExGPqU",
+			"type": "arrow",
+			"fromId": "shape:aeTApczD0F7-rZ9l1eoiv",
+			"toId": "shape:2J358b3h_5rsKC_j78gXn",
 			"props": {
-				"w": 489.6610107421875,
-				"h": 586.0025939941406,
-				"name": "product_variant",
-				"color": "black"
+				"isPrecise": true,
+				"isExact": false,
+				"normalizedAnchor": {
+					"x": 0.49123778389315337,
+					"y": 0.3772270596115204
+				},
+				"snap": "none",
+				"terminal": "start"
 			},
-			"parentId": "page:page",
-			"index": "a8KyXWiV",
-			"typeName": "shape"
+			"typeName": "binding"
 		},
 		{
 			"x": 50,
@@ -425,16 +363,16 @@
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:1eRf9jGDCaWis89_wl7Az",
+			"id": "shape:elerTelSpgvQrplEQdJJs",
 			"type": "text",
 			"props": {
 				"color": "black",
 				"size": "m",
-				"w": 375.26214599609375,
+				"w": 503.1433761150866,
 				"font": "draw",
 				"textAlign": "start",
 				"autoSize": true,
-				"scale": 1,
+				"scale": 1.5151434973627351,
 				"richText": {
 					"type": "doc",
 					"attrs": {
@@ -454,7 +392,7 @@
 											"type": "code"
 										}
 									],
-									"text": "interface product_option {"
+									"text": "interface option_item {"
 								}
 							]
 						},
@@ -471,41 +409,7 @@
 											"type": "code"
 										}
 									],
-									"text": "\toptionId: string;"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": " productId: string;"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": " items: {"
+									"text": "  id: string;"
 								}
 							]
 						},
@@ -556,24 +460,7 @@
 											"type": "code"
 										}
 									],
-									"text": "\t\tid: string;"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t}[];"
+									"text": "\t\toptionId: string;"
 								}
 							]
 						},
@@ -597,13 +484,76 @@
 					]
 				}
 			},
-			"parentId": "shape:nG-3lrJ5hbQRggs69Fz1p",
-			"index": "a1wnFtzG",
+			"parentId": "shape:5epQGsBr3nRoKd2-q97qY",
+			"index": "a2FIXHvV",
 			"typeName": "shape"
 		},
 		{
-			"x": -140,
-			"y": -150,
+			"x": -170,
+			"y": 340,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:plN32SaFrXp4QaQxBw6Pc",
+			"type": "frame",
+			"props": {
+				"w": 405.3511047363281,
+				"h": 424.001708984375,
+				"name": "product_variant",
+				"color": "black"
+			},
+			"parentId": "page:page",
+			"index": "a7qPCpv8",
+			"typeName": "shape"
+		},
+		{
+			"x": 130,
+			"y": 570,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:aSjYNXQ3cD_nQ_2ig3jXh",
+			"type": "arrow",
+			"props": {
+				"kind": "arc",
+				"elbowMidPoint": 0.5,
+				"dash": "draw",
+				"size": "m",
+				"fill": "none",
+				"color": "black",
+				"labelColor": "black",
+				"bend": 0,
+				"start": {
+					"x": 0,
+					"y": 0
+				},
+				"end": {
+					"x": 70,
+					"y": -420
+				},
+				"arrowheadStart": "none",
+				"arrowheadEnd": "arrow",
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph"
+						}
+					]
+				},
+				"labelPosition": 0.5,
+				"font": "draw",
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "aCKWKejV",
+			"typeName": "shape"
+		},
+		{
+			"x": -228.40706665438125,
+			"y": -250.00000000000003,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -612,13 +562,31 @@
 			"type": "frame",
 			"props": {
 				"w": 581.3434444967054,
-				"h": 640,
+				"h": 394.54545874895547,
 				"name": "option",
 				"color": "black"
 			},
 			"parentId": "page:page",
 			"index": "a5QdpiDV",
 			"typeName": "shape"
+		},
+		{
+			"meta": {},
+			"id": "binding:wPBy-P4u8EEViJ_graQlN",
+			"type": "arrow",
+			"fromId": "shape:aSjYNXQ3cD_nQ_2ig3jXh",
+			"toId": "shape:FWRhkVktQKN3dbCNXEiVS",
+			"props": {
+				"isPrecise": true,
+				"isExact": false,
+				"normalizedAnchor": {
+					"x": 0.5,
+					"y": 0.5
+				},
+				"snap": "center",
+				"terminal": "end"
+			},
+			"typeName": "binding"
 		},
 		{
 			"x": 50,
@@ -632,7 +600,7 @@
 			"props": {
 				"color": "black",
 				"size": "m",
-				"w": 389.6610107421875,
+				"w": 391.72265625,
 				"font": "draw",
 				"textAlign": "start",
 				"autoSize": true,
@@ -826,6 +794,23 @@
 											"type": "code"
 										}
 									],
+									"text": "\ttype: \"varient\" | \"normal\""
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"marks": [
+										{
+											"type": "code"
+										}
+									],
 									"text": " status: \"draft\"|\"puplish\";"
 								}
 							]
@@ -911,6 +896,23 @@
 											"type": "code"
 										}
 									],
+									"text": "\tstock?:number;"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"marks": [
+										{
+											"type": "code"
+										}
+									],
 									"text": "}"
 								}
 							]
@@ -921,6 +923,42 @@
 			"parentId": "shape:3y7VESKTPINm_wjf341Wm",
 			"index": "a19qFsdV",
 			"typeName": "shape"
+		},
+		{
+			"meta": {},
+			"id": "binding:CMW_EOJB-jtOZy3Q7Ljop",
+			"type": "arrow",
+			"fromId": "shape:aeTApczD0F7-rZ9l1eoiv",
+			"toId": "shape:elerTelSpgvQrplEQdJJs",
+			"props": {
+				"isPrecise": true,
+				"isExact": false,
+				"normalizedAnchor": {
+					"x": 0.49999999999999994,
+					"y": 0.5
+				},
+				"snap": "center",
+				"terminal": "end"
+			},
+			"typeName": "binding"
+		},
+		{
+			"meta": {},
+			"id": "binding:OLgoV11qt0AMdX5YsW1Ss",
+			"type": "arrow",
+			"fromId": "shape:aSjYNXQ3cD_nQ_2ig3jXh",
+			"toId": "shape:elerTelSpgvQrplEQdJJs",
+			"props": {
+				"isPrecise": true,
+				"isExact": false,
+				"normalizedAnchor": {
+					"x": 0.6161265649437708,
+					"y": 0.780864186387038
+				},
+				"snap": "none",
+				"terminal": "start"
+			},
+			"typeName": "binding"
 		},
 		{
 			"meta": {},
@@ -937,13 +975,53 @@
 			"typeName": "document"
 		},
 		{
+			"x": 60,
+			"y": 540,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:aeTApczD0F7-rZ9l1eoiv",
+			"type": "arrow",
+			"props": {
+				"kind": "arc",
+				"elbowMidPoint": 0.5,
+				"dash": "draw",
+				"size": "m",
+				"fill": "none",
+				"color": "black",
+				"labelColor": "black",
+				"bend": 0,
+				"start": {
+					"x": 0,
+					"y": 0
+				},
+				"end": {
+					"x": -590,
+					"y": -410
+				},
+				"arrowheadStart": "none",
+				"arrowheadEnd": "arrow",
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph"
+						}
+					]
+				},
+				"labelPosition": 0.5,
+				"font": "draw",
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "aBwfeWpS",
+			"typeName": "shape"
+		},
+		{
 			"followingUserId": null,
 			"opacityForNextShape": 1,
-			"stylesForNextShape": {
-				"tldraw:geo": "rectangle",
-				"tldraw:horizontalAlign": "start",
-				"tldraw:dash": "dotted"
-			},
+			"stylesForNextShape": {},
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
@@ -957,8 +1035,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 1333.333251953125,
-				"h": 693.0555419921875
+				"w": 979.861083984375,
+				"h": 627.7777709960938
 			},
 			"insets": [
 				false,
@@ -998,7 +1076,7 @@
 			"props": {
 				"color": "black",
 				"size": "m",
-				"w": 317.6883544921875,
+				"w": 481.34344449670533,
 				"font": "draw",
 				"textAlign": "start",
 				"autoSize": true,
@@ -1107,91 +1185,6 @@
 											"type": "code"
 										}
 									],
-									"text": "\t items:{"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t\t label: string;"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t\t\tvalue: string;"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t\t\tid: string;"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
-									"text": "\t }[]"
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"attrs": {
-								"dir": "auto"
-							},
-							"content": [
-								{
-									"type": "text",
-									"marks": [
-										{
-											"type": "code"
-										}
-									],
 									"text": "}"
 								}
 							]
@@ -1201,6 +1194,50 @@
 			},
 			"parentId": "shape:80xCWkXRPXwFSfMCJ_Qkl",
 			"index": "a169FmdV",
+			"typeName": "shape"
+		},
+		{
+			"x": 0,
+			"y": 470,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:72iyFz869SxJDBGFzGPIB",
+			"type": "arrow",
+			"props": {
+				"kind": "arc",
+				"elbowMidPoint": 0.5,
+				"dash": "draw",
+				"size": "m",
+				"fill": "none",
+				"color": "black",
+				"labelColor": "black",
+				"bend": 0,
+				"start": {
+					"x": 0,
+					"y": 0
+				},
+				"end": {
+					"x": -350,
+					"y": 40
+				},
+				"arrowheadStart": "none",
+				"arrowheadEnd": "arrow",
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph"
+						}
+					]
+				},
+				"labelPosition": 0.5,
+				"font": "draw",
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "a7zlXZjz",
 			"typeName": "shape"
 		}
 	]
