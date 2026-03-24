@@ -8,3 +8,13 @@ export const productOption = MainSchema.table("product_option", {
   slug: text("slug").notNull().unique(),
   description: text("description"),
 });
+
+export const productOptionItem = MainSchema.table("product_option_item", {
+  id: uuid("id").notNull().primaryKey().defaultRandom(),
+  slug: text("slug").notNull().unique(),
+  label: text("name").notNull(),
+  value: text("value").notNull(),
+  optionId: uuid("option_id")
+    .notNull()
+    .references(() => productOption.id, { onDelete: "cascade" }),
+});

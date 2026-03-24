@@ -1,4 +1,5 @@
 import {
+  integer,
   jsonb,
   primaryKey,
   text,
@@ -72,6 +73,21 @@ export const productToCategory = RelationSchema.table(
   (table) => [primaryKey({ columns: [table.productId, table.categoryId] })],
 );
 
+export const productGallery = RelationSchema.table(
+  "product_gallery",
+  {
+    productId: uuid("product_id")
+      .references(() => product.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+    mediaId: uuid("media_id")
+      .references(() => media.id, { onDelete: "cascade" })
+      .notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.productId, table.mediaId] })],
+);
+
 export const productToRate = RelationSchema.table(
   "product_to_rate",
   {
@@ -84,3 +100,29 @@ export const productToRate = RelationSchema.table(
   },
   (table) => [primaryKey({ columns: [table.productId, table.rateId] })],
 );
+
+export const productToOptionItem = RelationSchema.table(
+  "product_to_option_item",
+  {
+    productId: uuid("product_id")
+      .references(() => product.id, { onDelete: "cascade" })
+      .notNull(),
+    optionItemId: uuid("option_item_id")
+      .references(() => rate.id, { onDelete: "cascade" })
+      .notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.productId, table.optionItemId] })],
+);
+
+export const productMeta = MainSchema.table("product_meta", {
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
+  price: jsonb("price").notNull(),
+  stock: integer("stock").notNull().default(-1),
+  productId: uuid("product_id")
+    .notNull()
+    .references(() => product.id, { onDelete: "cascade" }),
+  thumbnail: uuid("thumbnail").references(() => media.id, {
+    onDelete: "set null",
+  }),
+  optionItemIds: text("option_item_ids"),
+});
