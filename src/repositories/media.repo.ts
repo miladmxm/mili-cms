@@ -28,6 +28,15 @@ export const findMediaByIdAndType = (
   getDBorTX(tx).query.media.findFirst({
     where: and(eq(media.id, id), eq(media.type, type)),
   });
+export const findMediaByIdsAndTypes = (
+  ids: string[],
+  types: MediaTypes[],
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.media.findMany({
+    where: and(inArray(media.id, ids), inArray(media.type, types)),
+    columns: { id: true },
+  });
 export const findMediaByTypesAndLimit = (
   {
     types,

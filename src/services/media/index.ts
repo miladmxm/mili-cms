@@ -38,6 +38,15 @@ export const checkMediaType = async (id: string, type: MediaTypes) => {
   const media = await mediaRepo.findMediaByIdAndType(id, type);
   if (!media) throw new Error("not ok");
 };
+export const filterMediaIdsByTypes = async (
+  ids: string[],
+  types: MediaTypes[],
+) => {
+  "use cache";
+  cacheTag(`${CacheKeys.media}-${ids.join("-")}`, types.sort().join("-"));
+  const media = await mediaRepo.findMediaByIdsAndTypes(ids, types);
+  return media.map(({ id }) => id);
+};
 export const getMediaById = async (id: string) => {
   "use cache";
   cacheTag(`${CacheKeys.media}-${id}`);

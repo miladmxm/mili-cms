@@ -9,7 +9,11 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type { ArticleStatus } from "@/services/article/types";
+import type {
+  ProductPrice,
+  ProductStatus,
+  ProductType,
+} from "@/services/product/type";
 import type { ProseMirror } from "@/types/type";
 
 import { articleStatus } from "./article";
@@ -41,8 +45,11 @@ export const product = MainSchema.table(
       .notNull(),
     status: articleStatus("status")
       .notNull()
-      .$type<ArticleStatus>()
+      .$type<ProductStatus>()
       .default("draft"),
+    type: text({ enum: ["default", "variable"] })
+      .$type<ProductType>()
+      .default("default"),
   },
   (table) => ({
     slugUnique: uniqueIndex("product_slug_unique").on(table.slug),
@@ -116,7 +123,7 @@ export const productToOptionItem = RelationSchema.table(
 
 export const productMeta = MainSchema.table("product_meta", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
-  price: jsonb("price").notNull(),
+  price: jsonb("price").$type<ProductPrice>().notNull(),
   stock: integer("stock").notNull().default(-1),
   productId: uuid("product_id")
     .notNull()
