@@ -1,9 +1,9 @@
-import CreateArticle from "@/features/article/containers/createArticle";
+import CreateProduct from "@/features/product/containers/createProduct";
 
-const AddNewArticle = async ({
+const AddNewProduct = async ({
   searchParams,
 }: PageProps<"/admin/blog/add">) => {
-  return <CreateArticle searchParams={await searchParams} />;
+  return <CreateProduct searchParams={await searchParams} />;
 };
 
-export default AddNewArticle;
+export default AddNewProduct;

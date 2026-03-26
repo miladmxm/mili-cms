@@ -29,7 +29,7 @@ interface CreateProductBaseData {
 export type CreateProduct =
   | (CreateProductBaseData & {
       type: "default";
-      metadata: [ProductMetadata];
+      metadata: ProductMetadata[];
     })
   | (CreateProductBaseData & {
       type: "variable";
