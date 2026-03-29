@@ -1,12 +1,40 @@
+import { cacheTag } from "next/cache";
+
+import { CacheKeys } from "@/constant/cacheKeys";
 import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import { withTransaction } from "@/repositories";
 import * as productRepo from "@/repositories/product.repo";
 
+import type { Media } from "../media/type";
+import type { LimitAndOffset } from "../type";
 import type { CreateProduct } from "./type";
 
 import { checkMediaType, filterMediaIdsByTypes } from "../media";
+import { DTOconvertMediaPathToRealUrl } from "../media/dto";
 // * READ
+export const getPaginationProduct = async (limitAndOffset?: LimitAndOffset) => {
+  "use cache";
+  cacheTag(CacheKeys.product);
+
+  return productRepo.findProductsByLimitAndOffset(limitAndOffset);
+};
 export const getAllProducts = () => productRepo.findProducts();
+
+export const getProduct = async (id: string) => {
+  "use cache";
+  cacheTag(`${CacheKeys.product}-${id}`);
+  const product = await productRepo.findProductById(id);
+  if (!product) return product;
+  let thumbnail: Media | undefined;
+  if (product.thumbnail && typeof product.thumbnail !== "string") {
+    thumbnail = product.thumbnail;
+  }
+  if (thumbnail) {
+    thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+  }
+
+  return { ...product, thumbnail };
+};
 
 // * CREATE
 

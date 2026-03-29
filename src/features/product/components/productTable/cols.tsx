@@ -14,13 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/dashboard/ui/dropdown-menu";
 
-import type { Article } from "./type";
+import type { Product } from "./type";
 
 import ChangeStatusDropdown from "../changeStatusDropdown";
 import DeleteArticle from "../deleteArticle";
-import { ArticleDictionary } from "./type";
+import { ProductDictionary } from "./type";
 
-export const columns: ColumnDef<Article>[] = [
+export const columns: ColumnDef<Product>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -44,11 +44,11 @@ export const columns: ColumnDef<Article>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "title",
-    header: ArticleDictionary["title"],
+    accessorKey: "name",
+    header: ProductDictionary["name"],
     cell: ({ row }) => (
       <div className="capitalize space-y-1">
-        <h6>{row.getValue("title")}</h6>
+        <h6>{row.getValue("name")}</h6>
         <small className="text-card-foreground/70 text-xs">
           {row.original.slug}
         </small>
@@ -57,7 +57,7 @@ export const columns: ColumnDef<Article>[] = [
   },
   {
     accessorKey: "status",
-    header: ArticleDictionary["status"],
+    header: ProductDictionary["status"],
     cell: ({ row }) => {
       const { id } = row.original;
       return (

@@ -16,24 +16,44 @@ import {
 } from "@/components/dashboard/ui/empty";
 import { cn } from "@/lib/utils";
 
+import { Label } from "./ui/label";
+
 interface EmptyPlaceholderProps {
   icon?: Icon;
   title: string;
   description?: string;
-  link: Route;
   className?: string;
-  linkTitle?: string;
-  linkIcon?: Icon;
+  actionIcon?: Icon;
+  actionTitle?: string;
+  link?: Route;
+  htmlFor?: string;
+  onClick?: () => void;
 }
+type ActionProp =
+  | {
+      type: "button";
+      onClick: () => void;
+    }
+  | {
+      type: "label";
+      htmlFor: string;
+    }
+  | {
+      type: "link";
+      link: Route;
+    };
 const EmptyPlaceholder = ({
   description,
   icon: IconComponent = CandyOff,
   title,
   link,
-  linkIcon: LinkIcon = Plus,
-  linkTitle,
+  actionIcon: ActionIcon = Plus,
+  actionTitle,
   className,
-}: EmptyPlaceholderProps) => {
+  type,
+  htmlFor,
+  onClick,
+}: ActionProp & EmptyPlaceholderProps) => {
   return (
     <Empty className={cn("border border-dashed", className)}>
       <EmptyHeader>
@@ -44,12 +64,31 @@ const EmptyPlaceholder = ({
         {description && <EmptyDescription>{description}</EmptyDescription>}
       </EmptyHeader>
       <EmptyContent>
-        <Button asChild size="sm" variant="outline">
-          <Link href={link}>
-            {linkTitle}
-            <LinkIcon />
-          </Link>
-        </Button>
+        {type === "button" ? (
+          <Button size="sm" variant="outline" onClick={onClick}>
+            {actionTitle}
+            <ActionIcon />
+          </Button>
+        ) : type === "link" ? (
+          <Button asChild size="sm" variant="outline">
+            <Link href={link}>
+              {actionTitle}
+              <ActionIcon />
+            </Link>
+          </Button>
+        ) : type === "label" ? (
+          <Button asChild size="sm" variant="outline">
+            <Label htmlFor={htmlFor}>
+              {actionTitle}
+              <ActionIcon />
+            </Label>
+          </Button>
+        ) : (
+          <div>
+            {actionTitle}
+            <ActionIcon />
+          </div>
+        )}
       </EmptyContent>
     </Empty>
   );

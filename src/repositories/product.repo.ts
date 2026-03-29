@@ -1,5 +1,7 @@
 import { desc, eq, inArray, like } from "drizzle-orm";
 
+import type { OffsetLimit } from "@/types/repo";
+
 import {
   product,
   productCategory,
@@ -12,10 +14,39 @@ import type { Transaction } from ".";
 
 import { getDBorTX } from ".";
 
+export const findProductById = async (id: string, tx?: Transaction) => {
+  const findedProduct = await getDBorTX(tx).query.product.findFirst({
+    where: eq(product.id, id),
+    with: {
+      categories: { columns: { categoryId: true } },
+      thumbnail: true,
+    },
+  });
+  if (!findedProduct) return findedProduct;
+
+  const categoryIds = findedProduct.categories.map(
+    ({ categoryId }) => categoryId,
+  );
+  return {
+    ...findedProduct,
+    categoryIds,
+  };
+};
+export const findProductsByLimitAndOffset = (
+  options?: OffsetLimit,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.product.findMany({
+    orderBy: [desc(product.createdAt)],
+    limit: options?.limit,
+    offset: options?.offset,
+  });
+
 export const findProducts = (tx?: Transaction) =>
   getDBorTX(tx).query.product.findMany({
     orderBy: [desc(product.createdAt)],
   });
+
 export const findProductByIdWithAll = (id: string, tx?: Transaction) =>
   getDBorTX(tx).query.product.findFirst({
     where: eq(product.id, id),
@@ -30,6 +61,7 @@ export const findProductByIdWithAll = (id: string, tx?: Transaction) =>
       thumbnail: true,
     },
   });
+
 export const findProductByStartedSlugWith = async (
   slug: string,
   tx?: Transaction,
@@ -37,6 +69,7 @@ export const findProductByStartedSlugWith = async (
   getDBorTX(tx).query.product.findMany({
     where: like(product.slug, `${slug}%`),
   });
+
 export const createProduct = (
   data: typeof product.$inferInsert,
   tx?: Transaction,
@@ -47,6 +80,7 @@ export const findCategoriesByIds = async (ids: string[], tx?: Transaction) => {
     where: inArray(productCategory.id, ids),
   });
 };
+
 export const addProductToCategories = (
   productToCategories: (typeof productToCategory.$inferInsert)[],
   tx?: Transaction,
@@ -65,3 +99,22 @@ export const addMediaToProductGallery = (
   data: (typeof productGallery.$inferInsert)[],
   tx?: Transaction,
 ) => getDBorTX(tx).insert(productGallery).values(data);
+
+export const createCategory = (
+  data: typeof productCategory.$inferInsert,
+  tx?: Transaction,
+) => getDBorTX(tx).insert(productCategory).values(data).returning();
+export const findCategories = async (tx?: Transaction) => {
+  const categories = await getDBorTX(tx).query.productCategory.findMany({
+    with: { thumbnail: { columns: { url: true, meta: true } } },
+    orderBy: [desc(productCategory.createdAt)],
+  });
+  return categories;
+};
+export const findCategoryByStartedSlugWith = async (
+  slug: string,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.articleCategory.findMany({
+    where: like(productCategory.slug, `${slug}%`),
+  });

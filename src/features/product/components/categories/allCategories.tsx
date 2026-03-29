@@ -1,3 +1,4 @@
+import EmptyPlaceholder from "@/components/dashboard/empty";
 import { cn } from "@/lib/utils";
 
 import type { Category } from "../../../../services/article/types";
@@ -32,11 +33,20 @@ const AllCategories = ({
       )}
       <div
         className={cn(
-          "md:ps-4 md:col-span-5 flex flex-col gap-4 pt-5 w-full",
+          "md:ps-4 md:col-span-5 flex flex-col gap-4 w-full",
           className,
+          { "pt-5": categoriesTree.length },
         )}
       >
-        <CategoryList treeCategories={categoriesTree} />
+        {categoriesTree.length <= 0 ? (
+          <EmptyPlaceholder
+            title="هیچ دسته بندی ای وجود ندارد"
+            type="label"
+            htmlFor="name"
+          />
+        ) : (
+          <CategoryList treeCategories={categoriesTree} />
+        )}
       </div>
     </div>
   );

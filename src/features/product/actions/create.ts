@@ -10,7 +10,10 @@ import { CacheKeys } from "@/constant/cacheKeys";
 import { getSession } from "@/lib/auth";
 import { validator } from "@/validations";
 
-import { createProduct } from "../dal/mutation";
+import type { CreateCategoryOutput } from "../validations/category.schema";
+
+import { createCategory, createProduct } from "../dal/mutation";
+import { CreateCategorySchema } from "../validations/category.schema";
 import { CreateProductSchema } from "../validations/product.schema";
 
 export const createArticleAction = async (
@@ -42,26 +45,26 @@ export const createArticleAction = async (
   }
 };
 
-// export const createCategoryAction = async (
-//   inputData: unknown,
-// ): Promise<ActionResult<CreateCategoryOutput>> => {
-//   const {
-//     errors,
-//     output,
-//     success: successValidation,
-//   } = validator(CreateCategorySchema, inputData);
+export const createCategoryAction = async (
+  inputData: unknown,
+): Promise<ActionResult<CreateCategoryOutput>> => {
+  const {
+    errors,
+    output,
+    success: successValidation,
+  } = validator(CreateCategorySchema, inputData);
 
-//   if (!successValidation) {
-//     return { success: successValidation, errors, message: "خطای اعتبارسنجی" };
-//   }
+  if (!successValidation) {
+    return { success: successValidation, errors, message: "خطای اعتبارسنجی" };
+  }
 
-//   try {
-//     const { success } = await createCategory(output);
-//     if (!success) return { success, message: "خطا در ایجاد دسته بندی" };
-//     updateTag(CacheKeys.articleCategories);
-//     return { success, message: "دسته بندی با موفقیت ایجاد شد" };
-//   } catch (error) {
-//     console.log(error);
-//     return { success: false, message: "خطا در ایجاد دسته بندی" };
-//   }
-// };
+  try {
+    const { success } = await createCategory(output);
+    if (!success) return { success, message: "خطا در ایجاد دسته بندی" };
+    updateTag(CacheKeys.productCategories);
+    return { success, message: "دسته بندی با موفقیت ایجاد شد" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "خطا در ایجاد دسته بندی" };
+  }
+};

@@ -1,9 +1,10 @@
 import "server-only";
 
-import type { CreateProduct } from "@/services/product/type";
+import type { CreateCategory, CreateProduct } from "@/services/product/type";
 
 import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
-import * as productService from "@/services/product";
+import * as categoryService from "@/services/product/category.service";
+import * as productService from "@/services/product/product.service";
 
 export const createProduct = async (data: CreateProduct) => {
   const product = dalRequireAuth(
@@ -40,12 +41,12 @@ export const createProduct = async (data: CreateProduct) => {
 //   );
 // };
 
-// export const createCategory = async (categoryData: CreateCategory) => {
-//   return dalRequireAuth(
-//     () => dalDbOperation(() => articleService.createCategory(categoryData)),
-//     { blog: ["create"] },
-//   );
-// };
+export const createCategory = async (categoryData: CreateCategory) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => categoryService.createCategory(categoryData)),
+    { product: ["create"] },
+  );
+};
 // export const deleteCategory = (id: string) => {
 //   return dalRequireAuth(
 //     () => dalDbOperation(() => articleService.deleteCategory(id)),

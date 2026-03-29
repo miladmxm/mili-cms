@@ -35,12 +35,12 @@ import {
 } from "@/components/dashboard/ui/table";
 import { useDirection } from "@/hooks/useDirection";
 
-import type { Article } from "./type";
+import type { Product } from "./type";
 
 import { columns } from "./cols";
-import { ArticleDictionary } from "./type";
+import { ProductDictionary } from "./type";
 
-export function ArticleTable({ data }: { data: Article[] }) {
+export function ProductTable({ data }: { data: Product[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -74,9 +74,9 @@ export function ArticleTable({ data }: { data: Article[] }) {
       <div className="flex items-center py-4">
         <Input
           className="max-w-sm"
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           placeholder="جست و جو بر اساس عنوان ..."
         />
@@ -101,7 +101,7 @@ export function ArticleTable({ data }: { data: Article[] }) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {ArticleDictionary[column.id as keyof Article]}
+                    {ProductDictionary[column.id as keyof Product]}
                   </DropdownMenuCheckboxItem>
                 );
               })}

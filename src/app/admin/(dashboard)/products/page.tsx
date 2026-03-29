@@ -1,7 +1,7 @@
-import AllArticles from "@/features/article/containers/allArticles";
+import AllProducts from "@/features/product/containers/allProducts";
 
-const BlogPage = () => {
-  return <AllArticles />;
+const ProductsPage = () => {
+  return <AllProducts />;
 };
 
-export default BlogPage;
+export default ProductsPage;

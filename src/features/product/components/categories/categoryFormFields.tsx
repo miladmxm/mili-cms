@@ -27,8 +27,8 @@ export const CategoryNameField = () => {
       control={control}
       render={({ field, fieldState }) => (
         <Field aria-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor="name">نام دسته بندی</FieldLabel>
-          <Input id="name" placeholder="آموزش" {...field} />
+          <FieldLabel htmlFor={field.name}>نام دسته بندی</FieldLabel>
+          <Input id={field.name} placeholder="آموزش" {...field} />
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
       )}

@@ -1,4 +1,4 @@
-import Categories from "@/features/article/containers/categories";
+import Categories from "@/features/product/containers/categories";
 
 const CategoriesPage = async ({
   searchParams,

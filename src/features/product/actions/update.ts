@@ -1,100 +1,100 @@
 "use server";
 
-import { updateTag } from "next/cache";
+// import { updateTag } from "next/cache";
 
-import type { ActionResult } from "@/types/actions";
+// import type { ActionResult } from "@/types/actions";
 
-import { CacheKeys } from "@/constant/cacheKeys";
-import { validator } from "@/validations";
+// import { CacheKeys } from "@/constant/cacheKeys";
+// import { validator } from "@/validations";
 
-import type { UpdateCategoryOutput } from "../validations/category.schema";
-import type {
-  UpdateArticle,
-  UpdateStatus,
-} from "../validations/product.schema";
+// import type { UpdateCategoryOutput } from "../validations/category.schema";
+// import type {
+//   UpdateArticle,
+//   UpdateStatus,
+// } from "../validations/product.schema";
 
-import * as articleMutation from "../dal/mutation";
-import { UpdateCategorySchema } from "../validations/category.schema";
-import {
-  UpdateArticleSchema,
-  UpdateStatusSchema,
-} from "../validations/product.schema";
+// import * as articleMutation from "../dal/mutation";
+// import { UpdateCategorySchema } from "../validations/category.schema";
+// import {
+//   UpdateArticleSchema,
+//   UpdateStatusSchema,
+// } from "../validations/product.schema";
 
-export const updateArticle = async (
-  id: string,
-  data: unknown,
-): Promise<ActionResult<UpdateArticle>> => {
-  const {
-    errors,
-    output,
-    success: successValidation,
-  } = validator(UpdateArticleSchema, data);
-  if (!successValidation)
-    return { success: successValidation, message: "خطای اعتبار سنجی", errors };
-  try {
-    const { success } = await articleMutation.updateArticle(id, output);
-    if (!success) return { success, message: "خطا در ویرایش مقاله" };
-    updateTag(CacheKeys.articles);
-    updateTag(`${CacheKeys.articles}-${id}`);
-    return { success, message: "ویرایش انجام شد" };
-  } catch (error) {
-    console.log(error);
-    return { success: false, message: "خطا در ویرایش" };
-  }
-};
+// export const updateArticle = async (
+//   id: string,
+//   data: unknown,
+// ): Promise<ActionResult<UpdateArticle>> => {
+//   const {
+//     errors,
+//     output,
+//     success: successValidation,
+//   } = validator(UpdateArticleSchema, data);
+//   if (!successValidation)
+//     return { success: successValidation, message: "خطای اعتبار سنجی", errors };
+//   try {
+//     const { success } = await articleMutation.updateArticle(id, output);
+//     if (!success) return { success, message: "خطا در ویرایش مقاله" };
+//     updateTag(CacheKeys.articles);
+//     updateTag(`${CacheKeys.articles}-${id}`);
+//     return { success, message: "ویرایش انجام شد" };
+//   } catch (error) {
+//     console.log(error);
+//     return { success: false, message: "خطا در ویرایش" };
+//   }
+// };
 
-export const updateArticleStatus = async (
-  id: string,
-  status: unknown,
-): Promise<ActionResult<{ status: UpdateStatus }>> => {
-  const {
-    errors,
-    output,
-    success: successValidation,
-  } = validator(UpdateStatusSchema, { status });
-  if (!successValidation) {
-    return { success: successValidation, message: "خطای اعتبارسنجی", errors };
-  }
-  try {
-    const { success } = await articleMutation.updateStatus(id, output.status);
-    if (!success) return { success, message: "خطا در ویرایش مقاله" };
-    updateTag(CacheKeys.articles);
-    updateTag(`${CacheKeys.articles}-${id}`);
-    return { success, message: "ویرایش انجام شد" };
-  } catch (error) {
-    console.log(error);
-    return { success: false, message: "خطا در ویرایش" };
-  }
-};
+// export const updateArticleStatus = async (
+//   id: string,
+//   status: unknown,
+// ): Promise<ActionResult<{ status: UpdateStatus }>> => {
+//   const {
+//     errors,
+//     output,
+//     success: successValidation,
+//   } = validator(UpdateStatusSchema, { status });
+//   if (!successValidation) {
+//     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
+//   }
+//   try {
+//     const { success } = await articleMutation.updateStatus(id, output.status);
+//     if (!success) return { success, message: "خطا در ویرایش مقاله" };
+//     updateTag(CacheKeys.articles);
+//     updateTag(`${CacheKeys.articles}-${id}`);
+//     return { success, message: "ویرایش انجام شد" };
+//   } catch (error) {
+//     console.log(error);
+//     return { success: false, message: "خطا در ویرایش" };
+//   }
+// };
 
-export const updateCategory = async (
-  id: string,
-  data: unknown,
-): Promise<ActionResult<UpdateCategoryOutput>> => {
-  const {
-    errors,
-    output,
-    success: isSuccessValidation,
-  } = validator(UpdateCategorySchema, data);
-  if (!isSuccessValidation)
-    return {
-      success: isSuccessValidation,
-      errors,
-      message: "خطا در اعتبارسنجی",
-    };
-  try {
-    const { success } = await articleMutation.updateCategory(id, output);
-    if (success) {
-      updateTag(CacheKeys.articleCategories);
-      return { success: true, message: "با موفقیت ویرایش شد" };
-    } else {
-      return { success: false, message: "خطا در ویرایش دسته بندی" };
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      return { success: false, message: error.message };
-    } else {
-      return { success: false, message: "خطایی ناشناخته در ویرایش مقاله" };
-    }
-  }
-};
+// export const updateCategory = async (
+//   id: string,
+//   data: unknown,
+// ): Promise<ActionResult<UpdateCategoryOutput>> => {
+//   const {
+//     errors,
+//     output,
+//     success: isSuccessValidation,
+//   } = validator(UpdateCategorySchema, data);
+//   if (!isSuccessValidation)
+//     return {
+//       success: isSuccessValidation,
+//       errors,
+//       message: "خطا در اعتبارسنجی",
+//     };
+//   try {
+//     const { success } = await articleMutation.updateCategory(id, output);
+//     if (success) {
+//       updateTag(CacheKeys.articleCategories);
+//       return { success: true, message: "با موفقیت ویرایش شد" };
+//     } else {
+//       return { success: false, message: "خطا در ویرایش دسته بندی" };
+//     }
+//   } catch (error) {
+//     if (error instanceof Error) {
+//       return { success: false, message: error.message };
+//     } else {
+//       return { success: false, message: "خطایی ناشناخته در ویرایش مقاله" };
+//     }
+//   }
+// };
