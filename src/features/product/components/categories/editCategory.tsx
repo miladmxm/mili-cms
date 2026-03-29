@@ -42,7 +42,7 @@ const EditCategory: FC<CreateCategoryProps> = ({
       <form className={cn(className)} onSubmit={submit}>
         <Card>
           <CardHeader>
-            <CardTitle>اضافه کردن یک دسته بندی جدید</CardTitle>
+            <CardTitle>ویرایش دسته بندی "{editCategory.name}"</CardTitle>
           </CardHeader>
           <CardContent>
             <FieldGroup>

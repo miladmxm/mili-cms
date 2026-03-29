@@ -7,7 +7,7 @@ import { Button } from "@/components/dashboard/ui/button";
 const LinkToEdit = ({ id }: { id: string }) => {
   return (
     <Button asChild size="sm" variant="ghost">
-      <Link href={`/admin/blog/categories/${id}`}>
+      <Link href={`/admin/products/categories/${id}`}>
         <LinkLoading className="static" />
         <Edit2 />
       </Link>

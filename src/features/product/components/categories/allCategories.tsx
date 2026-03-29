@@ -21,6 +21,7 @@ const AllCategories = ({
 }) => {
   const categoriesTree = buildCategoryTree(categories);
   const editableCategory = categories.find(({ id }) => id === editCategoryId);
+
   return (
     <div className="grid grid-cols-1 auto-rows-auto lg:grid-cols-8">
       {editableCategory ? (

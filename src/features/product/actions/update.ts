@@ -1,19 +1,20 @@
 "use server";
 
-// import { updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
-// import type { ActionResult } from "@/types/actions";
+import type { ActionResult } from "@/types/actions";
 
-// import { CacheKeys } from "@/constant/cacheKeys";
-// import { validator } from "@/validations";
-
-// import type { UpdateCategoryOutput } from "../validations/category.schema";
 // import type {
 //   UpdateArticle,
 //   UpdateStatus,
 // } from "../validations/product.schema";
+import { CacheKeys } from "@/constant/cacheKeys";
+import { validator } from "@/validations";
 
-// import * as articleMutation from "../dal/mutation";
+import type { UpdateCategoryOutput } from "../validations/category.schema";
+
+import * as productMutation from "../dal/mutation";
+import { UpdateCategorySchema } from "../validations/category.schema";
 // import { UpdateCategorySchema } from "../validations/category.schema";
 // import {
 //   UpdateArticleSchema,
@@ -67,34 +68,34 @@
 //   }
 // };
 
-// export const updateCategory = async (
-//   id: string,
-//   data: unknown,
-// ): Promise<ActionResult<UpdateCategoryOutput>> => {
-//   const {
-//     errors,
-//     output,
-//     success: isSuccessValidation,
-//   } = validator(UpdateCategorySchema, data);
-//   if (!isSuccessValidation)
-//     return {
-//       success: isSuccessValidation,
-//       errors,
-//       message: "خطا در اعتبارسنجی",
-//     };
-//   try {
-//     const { success } = await articleMutation.updateCategory(id, output);
-//     if (success) {
-//       updateTag(CacheKeys.articleCategories);
-//       return { success: true, message: "با موفقیت ویرایش شد" };
-//     } else {
-//       return { success: false, message: "خطا در ویرایش دسته بندی" };
-//     }
-//   } catch (error) {
-//     if (error instanceof Error) {
-//       return { success: false, message: error.message };
-//     } else {
-//       return { success: false, message: "خطایی ناشناخته در ویرایش مقاله" };
-//     }
-//   }
-// };
+export const updateCategory = async (
+  id: string,
+  data: unknown,
+): Promise<ActionResult<UpdateCategoryOutput>> => {
+  const {
+    errors,
+    output,
+    success: isSuccessValidation,
+  } = validator(UpdateCategorySchema, data);
+  if (!isSuccessValidation)
+    return {
+      success: isSuccessValidation,
+      errors,
+      message: "خطا در اعتبارسنجی",
+    };
+  try {
+    const { success } = await productMutation.updateCategory(id, output);
+    if (success) {
+      updateTag(CacheKeys.productCategories);
+      return { success: true, message: "با موفقیت ویرایش شد" };
+    } else {
+      return { success: false, message: "خطا در ویرایش دسته بندی" };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, message: error.message };
+    } else {
+      return { success: false, message: "خطایی ناشناخته در ویرایش مقاله" };
+    }
+  }
+};

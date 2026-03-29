@@ -120,3 +120,14 @@ export const findCategoryByStartedSlugWith = async (
   });
 export const deleteProductCategoryById = (id: string, tx?: Transaction) =>
   getDBorTX(tx).delete(productCategory).where(eq(productCategory.id, id));
+
+export const updateCategoryById = (
+  id: string,
+  value: Partial<typeof productCategory.$inferInsert>,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .update(productCategory)
+    .set(value)
+    .where(eq(productCategory.id, id))
+    .returning();

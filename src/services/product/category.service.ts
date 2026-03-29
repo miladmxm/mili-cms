@@ -46,6 +46,22 @@ export const createCategory = async (data: CreateCategory) => {
   return category;
 };
 // * UPDATE
+export const updateCategory = async (
+  id: string,
+  input: Partial<CreateCategory>,
+) => {
+  const data = input;
+  if (data.slug) {
+    data.slug = convertToSlug(data.slug);
+    const existingArticleBySlug =
+      await productRepo.findCategoryByStartedSlugWith(data.slug);
+    data.slug = generateUniqueSlug(
+      data.slug,
+      existingArticleBySlug.map((a) => a.slug),
+    );
+  }
+  return productRepo.updateCategoryById(id, data);
+};
 
 // * DELETE
 export const deleteCategory = (id: string) => {

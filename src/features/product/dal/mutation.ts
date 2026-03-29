@@ -19,12 +19,12 @@ export const createProduct = async (data: CreateProduct) => {
 //     { blog: ["update"] },
 //   );
 // };
-// export const updateCategory = (id: string, data: Partial<CreateCategory>) => {
-//   return dalRequireAuth(
-//     () => dalDbOperation(() => articleService.updateCategory(id, data)),
-//     { blog: ["update"] },
-//   );
-// };
+export const updateCategory = (id: string, data: Partial<CreateCategory>) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => categoryService.updateCategory(id, data)),
+    { blog: ["update"] },
+  );
+};
 // export const updateStatus = (id: string, status: ArticleStatus) => {
 //   const article = dalRequireAuth(
 //     () => dalDbOperation(() => articleService.updateArticleStatus(id, status)),
