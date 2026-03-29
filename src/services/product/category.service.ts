@@ -32,8 +32,8 @@ export const getCategoriesWithThumbnail = async () => {
 
 // * CREATE
 export const createCategory = async (data: CreateCategory) => {
-  if (data.thumbnail) {
-    await checkMediaType(data.thumbnail, "image");
+  if (data.thumbnailId) {
+    await checkMediaType(data.thumbnailId, "image");
   }
   let slug: string = convertToSlug(data.slug);
   const existingArticleBySlug =
@@ -51,6 +51,9 @@ export const updateCategory = async (
   input: Partial<CreateCategory>,
 ) => {
   const data = input;
+  if (data.thumbnailId) {
+    await checkMediaType(data.thumbnailId, "image");
+  }
   if (data.slug) {
     data.slug = convertToSlug(data.slug);
     const existingArticleBySlug =

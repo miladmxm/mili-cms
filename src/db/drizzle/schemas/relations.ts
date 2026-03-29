@@ -117,7 +117,7 @@ export const articleRelations = relations(article, ({ many, one }) => ({
 
 export const productRelations = relations(product, ({ many, one }) => ({
   thumbnail: one(media, {
-    fields: [product.thumbnail],
+    fields: [product.thumbnailId],
     references: [media.id],
   }),
   author: one(user, {
@@ -151,7 +151,7 @@ export const productCategoryRelations = relations(
   productCategory,
   ({ many, one }) => ({
     thumbnail: one(media, {
-      fields: [productCategory.thumbnail],
+      fields: [productCategory.thumbnailId],
       references: [media.id],
     }),
     parent: one(productCategory, {
@@ -241,7 +241,7 @@ export const productMetaRelation = relations(productMeta, ({ one }) => ({
     references: [product.id],
   }),
   thumbnail: one(media, {
-    fields: [productMeta.thumbnail],
+    fields: [productMeta.thumbnailId],
     references: [media.id],
   }),
 }));

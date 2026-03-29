@@ -37,8 +37,8 @@ export const product = MainSchema.table(
       .defaultNow()
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
-    thumbnail: uuid("thumbnail").references(() => media.id, {
-      onDelete: "set null",
+    thumbnailId: uuid("thumbnail_id").references(() => media.id, {
+      onDelete: "no action",
     }),
     authorId: text("author_id")
       .references(() => user.id)
@@ -128,7 +128,7 @@ export const productMeta = MainSchema.table("product_meta", {
   productId: uuid("product_id")
     .notNull()
     .references(() => product.id, { onDelete: "cascade" }),
-  thumbnail: uuid("thumbnail").references(() => media.id, {
+  thumbnailId: uuid("thumbnail_id").references(() => media.id, {
     onDelete: "set null",
   }),
   optionItemIds: text("option_item_ids"),

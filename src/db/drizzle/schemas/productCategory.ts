@@ -23,7 +23,7 @@ export const productCategory = MainSchema.table(
       .defaultNow()
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
-    thumbnail: uuid("thumbnail").references(() => media.id, {
+    thumbnailId: uuid("thumbnail_id").references(() => media.id, {
       onDelete: "set null",
     }),
     parentId: uuid("parent_id").references(

@@ -59,7 +59,10 @@ export const createCategoryAction = async (
   }
 
   try {
-    const { success } = await createCategory(output);
+    const { success } = await createCategory({
+      ...output,
+      thumbnailId: output.thumbnail,
+    });
     if (!success) return { success, message: "خطا در ایجاد دسته بندی" };
     updateTag(CacheKeys.productCategories);
     return { success, message: "دسته بندی با موفقیت ایجاد شد" };

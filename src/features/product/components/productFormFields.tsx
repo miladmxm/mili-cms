@@ -135,7 +135,7 @@ export const ProductThumbnail = () => {
   const { control, setValue } = useProductFormContext();
   return (
     <Controller
-      name="thumbnail"
+      name="thumbnailId"
       control={control}
       render={({ fieldState, field: { value } }) => {
         const validImageUrl = value && typeof value !== "string";
@@ -148,7 +148,7 @@ export const ProductThumbnail = () => {
                   mediaKey="image"
                   controllerRef={sheetControllerRef}
                   onSelect={({ id, url }) => {
-                    setValue("thumbnail", { id, url }, { shouldDirty: true });
+                    setValue("thumbnailId", { id, url }, { shouldDirty: true });
                     sheetControllerRef.current?.close();
                   }}
                   selectedIds={

@@ -16,7 +16,7 @@ export const CreateProductBaseSchema = v.object({
   content: ProseMirrorSchema,
   slug: v.pipe(v.string(), v.nonEmpty("مقدار slug را وارد کنید")),
   status: StatusSchema,
-  thumbnail: v.union([
+  thumbnailId: v.union([
     v.pipe(
       v.object({
         id: v.pipe(v.string(), v.nonEmpty("یک تصویر شاخص انتخاب کنید")),

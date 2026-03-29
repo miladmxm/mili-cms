@@ -84,7 +84,10 @@ export const updateCategory = async (
       message: "خطا در اعتبارسنجی",
     };
   try {
-    const { success } = await productMutation.updateCategory(id, output);
+    const { success } = await productMutation.updateCategory(id, {
+      ...output,
+      thumbnailId: output.thumbnail,
+    });
     if (success) {
       updateTag(CacheKeys.productCategories);
       return { success: true, message: "با موفقیت ویرایش شد" };

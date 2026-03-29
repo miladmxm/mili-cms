@@ -25,10 +25,7 @@ export const getProduct = async (id: string) => {
   cacheTag(`${CacheKeys.product}-${id}`);
   const product = await productRepo.findProductById(id);
   if (!product) return product;
-  let thumbnail: Media | undefined;
-  if (product.thumbnail && typeof product.thumbnail !== "string") {
-    thumbnail = product.thumbnail;
-  }
+  const thumbnail: Media | null = product.thumbnail;
   if (thumbnail) {
     thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
   }
@@ -39,8 +36,8 @@ export const getProduct = async (id: string) => {
 // * CREATE
 
 export const createProduct = async (productData: CreateProduct) => {
-  if (productData.thumbnail) {
-    await checkMediaType(productData.thumbnail, "image");
+  if (productData.thumbnailId) {
+    await checkMediaType(productData.thumbnailId, "image");
   }
   const categories = await productRepo.findCategoriesByIds(
     productData.categoryIds,
