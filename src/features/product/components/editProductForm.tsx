@@ -12,27 +12,27 @@ import {
 import { Field, FieldGroup } from "@/components/dashboard/ui/field";
 import { Spinner } from "@/components/dashboard/ui/spinner";
 
-import type { Article, Category } from "../../../services/article/types";
+import type { Category, Product } from "../../../services/product/type";
 
-import { useEditArticle } from "../hooks/useEditArticle";
+import { useEditProduct } from "../hooks/useEditProduct";
 import {
-  ArticleCategories,
-  ArticleContent,
-  ArticleExcerpt,
-  ArticleSlug,
-  ArticleStatus,
-  ArticleThumbnail,
+  ProductCategories,
+  ProductContent,
+  ProductExcerpt,
   ProductName,
+  ProductSlug,
+  ProductStatus,
+  ProductThumbnail,
 } from "./productFormFields";
 
-const EditArticleForm = ({
+const EditProductForm = ({
   categories,
-  article,
+  product,
 }: {
-  article: Article;
+  product: Product;
   categories: Promise<Category[]>;
 }) => {
-  const { isPending, submit, form } = useEditArticle(article);
+  const { isPending, submit, form } = useEditProduct(product);
   return (
     <FormProvider {...form}>
       <form onSubmit={submit}>
@@ -45,12 +45,12 @@ const EditArticleForm = ({
               <CardContent>
                 <FieldGroup>
                   <ProductName />
-                  <ArticleSlug />
-                  <ArticleExcerpt />
-                  <ArticleCategories categories={categories} />
-                  <ArticleThumbnail />
+                  <ProductSlug />
+                  <ProductExcerpt />
+                  <ProductCategories categories={categories} />
+                  <ProductThumbnail />
                   <div className="flex gap-2">
-                    <ArticleStatus isPending={isPending} />
+                    <ProductStatus isPending={isPending} />
                     <Field>
                       <Button
                         className="flex-auto"
@@ -66,11 +66,11 @@ const EditArticleForm = ({
               </CardContent>
             </Card>
           </div>
-          <ArticleContent key={article.id} />
+          <ProductContent key={Product.id} />
         </div>
       </form>
     </FormProvider>
   );
 };
 
-export default EditArticleForm;
+export default EditProductForm;

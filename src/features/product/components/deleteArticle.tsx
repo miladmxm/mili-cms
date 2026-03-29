@@ -17,12 +17,12 @@ import {
 import { Spinner } from "@/components/dashboard/ui/spinner";
 import { cn } from "@/lib/utils";
 
-import { useDeleteArticle } from "../hooks/useDeleteArticle";
+import { useDeleteProduct } from "../hooks/useDeleteProduct";
 
 const DeleteArticle: FC<
   PropsWithChildren & { id: string; className?: string }
 > = ({ children, className, id }) => {
-  const { isPending, handleClickToDelete } = useDeleteArticle(id);
+  const { isPending, handleClickToDelete } = useDeleteProduct(id);
   return (
     <Dialog>
       <DialogTrigger asChild>

@@ -1,5 +1,7 @@
 import type { Currency, ProseMirror } from "@/types/type";
 
+import type { FileMeta } from "../media/type";
+
 export type ProductType = "default" | "variable";
 export type ProductStatus = "archived" | "draft" | "published";
 export interface ProductPrice {
@@ -36,6 +38,33 @@ export type CreateProduct =
       metadata: VariableProductMetadata[];
     });
 
+export interface Product {
+  categoryIds: string[];
+  id: string;
+  type: ProductType | null;
+  name: string;
+  content: ProseMirror;
+  slug: string;
+  excerpt: string;
+  createdAt: Date;
+  updatedAt: Date;
+  thumbnail:
+    | (string & {
+        id: string;
+        type: "audio" | "document" | "image" | "video";
+        url: string;
+        createdAt: Date;
+        updatedAt: Date;
+        size: number;
+        meta: FileMeta;
+      })
+    | null;
+  authorId: string;
+  status: ProductStatus;
+  categories: {
+    categoryId: string;
+  }[];
+}
 export interface CreateCategory {
   name: string;
   slug: string;

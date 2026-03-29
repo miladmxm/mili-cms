@@ -1,7 +1,7 @@
 "use client";
 import type { ComponentProps } from "react";
 
-import { ChevronDown, Trash } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -176,21 +176,6 @@ export const ProductThumbnail = () => {
               </Button>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
-            {value && (
-              <Button
-                size="icon-sm"
-                className="absolute end-4 top-10 z-20 text-destructive"
-                variant="outline"
-                onClick={() =>
-                  setValue("thumbnail", null, {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  })
-                }
-              >
-                <Trash />
-              </Button>
-            )}
           </div>
         );
       }}

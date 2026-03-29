@@ -3,7 +3,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import type { Article } from "@/services/article/types";
+import type { Product } from "@/services/product/type";
 
 import { getItemsDirtyData } from "@/utils/dirtyValues";
 
@@ -12,16 +12,16 @@ import type { UpdateArticle } from "../validations/product.schema";
 import { updateArticle } from "../actions/update";
 import { UpdateArticleSchema } from "../validations/product.schema";
 
-export const useEditArticle = (article: Article) => {
-  const { content, excerpt, title, slug, thumbnail, status, categoryIds } =
-    article;
+export const useEditProduct = (product: Product) => {
+  const { content, excerpt, name, slug, thumbnail, status, categoryIds } =
+    product;
 
   const form = useForm({
     resolver: valibotResolver(UpdateArticleSchema),
     defaultValues: {
       content,
       excerpt,
-      title,
+      name,
       slug,
       thumbnail: thumbnail
         ? { id: thumbnail.id, url: thumbnail.url }
@@ -35,7 +35,7 @@ export const useEditArticle = (article: Article) => {
   const onSubmit = (data: UpdateArticle) => {
     const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
     startTransition(async () => {
-      const { success, message } = await updateArticle(article.id, dirtyData);
+      const { success, message } = await updateArticle(product.id, dirtyData);
       if (!success) toast.error(message);
       else {
         toast.success(message);

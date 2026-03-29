@@ -118,3 +118,5 @@ export const findCategoryByStartedSlugWith = async (
   getDBorTX(tx).query.articleCategory.findMany({
     where: like(productCategory.slug, `${slug}%`),
   });
+export const deleteProductCategoryById = (id: string, tx?: Transaction) =>
+  getDBorTX(tx).delete(productCategory).where(eq(productCategory.id, id));

@@ -47,9 +47,9 @@ export const createCategory = async (categoryData: CreateCategory) => {
     { product: ["create"] },
   );
 };
-// export const deleteCategory = (id: string) => {
-//   return dalRequireAuth(
-//     () => dalDbOperation(() => articleService.deleteCategory(id)),
-//     { blog: ["delete"] },
-//   );
-// };
+export const deleteCategory = (id: string) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => categoryService.deleteCategory(id)),
+    { product: ["delete"] },
+  );
+};

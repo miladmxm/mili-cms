@@ -12,8 +12,9 @@ const AllProducts = async () => {
     return (
       <EmptyPlaceholder
         link="/admin/products/add"
-        linkTitle="افزودن محصول"
         title="هیچ محصولی نیست"
+        type="link"
+        actionTitle="افزودن محصول"
         description="موردی در پایگاه داده یافت نشد"
         icon={IconListDetails}
       />

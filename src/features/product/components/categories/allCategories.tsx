@@ -1,3 +1,5 @@
+import { List } from "lucide-react";
+
 import EmptyPlaceholder from "@/components/dashboard/empty";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +44,9 @@ const AllCategories = ({
           <EmptyPlaceholder
             title="هیچ دسته بندی ای وجود ندارد"
             type="label"
+            description="برای ایجاد دسته بندی جدید از تب سمت راست استفاده کنید"
             htmlFor="name"
+            icon={List}
           />
         ) : (
           <CategoryList treeCategories={categoriesTree} />

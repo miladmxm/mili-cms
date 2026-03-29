@@ -48,3 +48,6 @@ export const createCategory = async (data: CreateCategory) => {
 // * UPDATE
 
 // * DELETE
+export const deleteCategory = (id: string) => {
+  return productRepo.deleteProductCategoryById(id);
+};

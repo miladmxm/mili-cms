@@ -100,6 +100,7 @@ const MediaPickerSheet = ({
             <EmptyPlaceholder
               link="/admin/media"
               title="هیچ رسانه ای وجود ندارد"
+              type="link"
               icon={Upload}
             />
           )}

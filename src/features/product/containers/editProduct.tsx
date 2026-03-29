@@ -4,19 +4,19 @@ import { dalVerifySuccess } from "@/dal/helpers";
 import MediaContextProvider from "@/features/media/context";
 import { getMediasByType } from "@/features/media/dal/queries";
 
-import EditArticleForm from "../components/editArticleForm";
-import { getArticle, getCategories } from "../dal/query";
+import EditProductForm from "../components/editProductForm";
+import { getCategories, getProduct } from "../dal/query";
 
 const EditArticle = async ({ id }: { id: string }) => {
-  const article = dalVerifySuccess(await getArticle(id));
-  if (!article) redirect("/admin");
+  const product = dalVerifySuccess(await getProduct(id));
+  if (!product) redirect("/admin");
   const images = getMediasByType(["image"]);
   const audios = getMediasByType(["audio"]);
   const categories = getCategories();
 
   return (
     <MediaContextProvider media={{ image: images, audio: audios }}>
-      <EditArticleForm article={article} categories={categories} />
+      <EditProductForm categories={categories} product={product} />
     </MediaContextProvider>
   );
 };

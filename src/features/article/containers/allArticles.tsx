@@ -12,8 +12,9 @@ const AllArticles = async () => {
     return (
       <EmptyPlaceholder
         link="/admin/blog/add"
-        linkTitle="افزودن مقاله"
         title="هیچ مقاله ای نیست"
+        type="link"
+        actionTitle="افزودن مقاله"
         description="موردی در پایگاه داده یافت نشد"
         icon={IconListDetails}
       />
