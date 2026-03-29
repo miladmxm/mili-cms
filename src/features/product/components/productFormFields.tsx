@@ -8,11 +8,23 @@ import { Controller, useFormContext } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 import type { Category } from "@/services/article/types";
+import type { ProductType } from "@/services/product/type";
 
 import RichEditor from "@/components/dashboard/rich-editor";
 import { Button } from "@/components/dashboard/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/dashboard/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/dashboard/ui/field";
 import { Input } from "@/components/dashboard/ui/input";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/dashboard/ui/tabs";
 import { Textarea } from "@/components/dashboard/ui/textarea";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
@@ -217,19 +229,43 @@ export const ProductContent = () => {
       control={control}
       render={({ fieldState, field: { value } }) => {
         return (
-          <div className="lg:col-span-8">
-            <Field aria-invalid={fieldState.invalid}>
-              <RichEditor
-                content={value}
-                onUpdate={(content) => {
-                  setValue("content", content, { shouldDirty: true });
-                }}
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          </div>
+          <Field aria-invalid={fieldState.invalid}>
+            <RichEditor
+              content={value}
+              onUpdate={(content) => {
+                setValue("content", content, { shouldDirty: true });
+              }}
+            />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
         );
       }}
     />
+  );
+};
+export const ProductMeta = () => {
+  const { getValues, setValue } = useProductFormContext();
+  return (
+    <div className="flex flex-col gap-3">
+      <h4>نوع محصول</h4>
+      <Tabs
+        defaultValue="default"
+        value={getValues("type")}
+        onValueChange={(v) => setValue("type", v as ProductType)}
+      >
+        <TabsList className="w-full">
+          <TabsTrigger defaultChecked value="default">
+            معمولی
+          </TabsTrigger>
+          <TabsTrigger value="variable">متغیر</TabsTrigger>
+        </TabsList>
+        <TabsContent value="default">
+          <FieldGroup></FieldGroup>
+        </TabsContent>
+        <TabsContent value="variable">
+          <FieldGroup></FieldGroup>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };

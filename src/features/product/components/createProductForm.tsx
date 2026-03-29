@@ -19,6 +19,7 @@ import {
   ProductCategories,
   ProductContent,
   ProductExcerpt,
+  ProductMeta,
   ProductName,
   ProductSlug,
   ProductStatus,
@@ -64,7 +65,17 @@ const CreateProductForm = ({
               </CardContent>
             </Card>
           </div>
-          <ProductContent key="create" />
+          <div className="lg:col-span-8 flex flex-col gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>داده های محصول</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProductMeta />
+              </CardContent>
+            </Card>
+            <ProductContent key="create" />
+          </div>
         </div>
       </form>
     </FormProvider>
