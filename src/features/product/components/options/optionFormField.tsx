@@ -77,21 +77,20 @@ export const OptionDescription = () => {
 };
 
 interface OptionItemFieldsProps {
-  id: string;
   index: number;
   remove: (index: number) => void;
 }
-const OptionItemFields = ({ id, index, remove }: OptionItemFieldsProps) => {
+const OptionItemFields = ({ index, remove }: OptionItemFieldsProps) => {
   const { control } = useOptionFormContext();
   return (
-    <div className="flex gap-4" key={id}>
+    <div className="flex gap-4">
       <Controller
         name={`items.${index}.label`}
         control={control}
         render={({ field, fieldState }) => (
           <Field>
-            <FieldLabel htmlFor={id}>برچسب</FieldLabel>
-            <Input {...field} id={id} placeholder="قرمز" />
+            <FieldLabel htmlFor={field.name}>برچسب</FieldLabel>
+            <Input {...field} id={field.name} placeholder="قرمز" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -101,9 +100,9 @@ const OptionItemFields = ({ id, index, remove }: OptionItemFieldsProps) => {
         control={control}
         render={({ field, fieldState }) => (
           <Field>
-            <FieldLabel htmlFor={id}>مقدار</FieldLabel>
+            <FieldLabel htmlFor={field.name}>مقدار</FieldLabel>
             <div className="flex gap-3">
-              <Input {...field} id={id} placeholder="red" />
+              <Input {...field} id={field.name} placeholder="red" />
               <Button
                 size="icon"
                 className="text-destructive mt-auto"
@@ -126,11 +125,12 @@ export const OptionItems = () => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
+    keyName: "kid",
   });
   return (
     <div className="flex flex-col gap-4">
-      {fields.map(({ id }, index) => (
-        <OptionItemFields id={id} index={index} key={id} remove={remove} />
+      {fields.map(({ kid }, index) => (
+        <OptionItemFields index={index} key={kid} remove={remove} />
       ))}
       <Button
         size="sm"

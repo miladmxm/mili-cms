@@ -44,3 +44,12 @@ export const getOptions = async () => {
     ),
   );
 };
+
+export const getOption = async (id: string) => {
+  return dalVerifySuccess(
+    await dalRequireAuth(
+      () => dalDbOperation(() => optionService.getOptionWithItems(id)),
+      { product: ["read"] },
+    ),
+  );
+};

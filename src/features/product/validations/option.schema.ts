@@ -1,6 +1,7 @@
 import * as v from "valibot";
 
 const OptionItemSchema = v.object({
+  id: v.optional(v.string()),
   label: v.pipe(
     v.string("مقدار برچسب اجباری است"),
     v.nonEmpty("نمی‌تواند خالی باشد"),
@@ -17,3 +18,9 @@ export const CreateOptionSchema = v.object({
 });
 
 export type CreateOptionInput = v.InferInput<typeof CreateOptionSchema>;
+
+export const EditOptionSchema = v.object({
+  ...v.partial(CreateOptionSchema).entries,
+  deletedOptionItemIds: v.optional(v.array(v.string())),
+});
+export type EditOptionInput = v.InferInput<typeof EditOptionSchema>;

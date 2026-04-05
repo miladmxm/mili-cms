@@ -1,3 +1,6 @@
+import { Edit2 } from "lucide-react";
+import Link from "next/link";
+
 import type { Option, OptionItem } from "@/services/product/type";
 
 import {
@@ -6,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/dashboard/ui/accordion";
+import { Button } from "@/components/dashboard/ui/button";
 import {
   Card,
   CardAction,
@@ -90,6 +94,11 @@ const OptionCard = ({ name, description, slug, items, id }: Option) => {
       <CardFooter>
         <CardAction className="ms-auto">
           <DeleteOptionButton id={id} name={name} />
+          <Button size="sm" variant="ghost">
+            <Link href={`/admin/products/options/${id}`}>
+              <Edit2 />
+            </Link>
+          </Button>
         </CardAction>
       </CardFooter>
     </Card>

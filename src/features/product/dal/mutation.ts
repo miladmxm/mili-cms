@@ -4,6 +4,7 @@ import type {
   CreateCategory,
   CreateOption,
   CreateProduct,
+  UpdateOption,
 } from "@/services/product/type";
 
 import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
@@ -31,7 +32,12 @@ export const deleteOption = (id: string) => {
     { product: ["delete"] },
   );
 };
-
+export const updateOption = (id: string, data: UpdateOption) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => optionService.updateOption(id, data)),
+    { product: ["update"] },
+  );
+};
 // export const updateArticle = (id: string, data: Partial<CreateArticle>) => {
 //   return dalRequireAuth(
 //     () => dalDbOperation(() => articleService.updateArticle(id, data)),
@@ -41,7 +47,7 @@ export const deleteOption = (id: string) => {
 export const updateCategory = (id: string, data: Partial<CreateCategory>) => {
   return dalRequireAuth(
     () => dalDbOperation(() => categoryService.updateCategory(id, data)),
-    { blog: ["update"] },
+    { product: ["update"] },
   );
 };
 // export const updateStatus = (id: string, status: ArticleStatus) => {

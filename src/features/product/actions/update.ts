@@ -12,9 +12,11 @@ import { CacheKeys } from "@/constant/cacheKeys";
 import { validator } from "@/validations";
 
 import type { UpdateCategoryOutput } from "../validations/category.schema";
+import type { EditOptionInput } from "../validations/option.schema";
 
 import * as productMutation from "../dal/mutation";
 import { UpdateCategorySchema } from "../validations/category.schema";
+import { EditOptionSchema } from "../validations/option.schema";
 // import { UpdateCategorySchema } from "../validations/category.schema";
 // import {
 //   UpdateArticleSchema,
@@ -99,6 +101,38 @@ export const updateCategory = async (
       return { success: false, message: error.message };
     } else {
       return { success: false, message: "خطایی ناشناخته در ویرایش مقاله" };
+    }
+  }
+};
+
+export const updateOptionAction = async (
+  id: string,
+  data: unknown,
+): Promise<ActionResult<EditOptionInput>> => {
+  const {
+    errors,
+    output,
+    success: isSuccessValidation,
+  } = validator(EditOptionSchema, data);
+  if (!isSuccessValidation)
+    return {
+      success: isSuccessValidation,
+      errors,
+      message: "خطا در اعتبارسنجی",
+    };
+  try {
+    const { success } = await productMutation.updateOption(id, output);
+    if (success) {
+      updateTag(`${CacheKeys.productOption}-${id}`);
+      return { success: true, message: "با موفقیت ویرایش شد" };
+    } else {
+      return { success: false, message: "خطا در ویرایش ویژگی" };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, message: error.message };
+    } else {
+      return { success: false, message: "خطایی ناشناخته در ویرایش رخ داد" };
     }
   }
 };

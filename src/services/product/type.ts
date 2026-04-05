@@ -88,10 +88,19 @@ export interface OptionItem {
   id: string;
   label: string;
 }
+export interface UpdateOption extends Partial<CreateOption> {
+  deletedOptionItemIds?: string[];
+  items: {
+    value: string;
+    id?: string;
+    label: string;
+  }[];
+}
+
 export interface Option {
   id: string;
   name: string;
   slug: string;
-  description: string | null;
+  description?: string;
   items: OptionItem[];
 }

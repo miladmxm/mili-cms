@@ -6,7 +6,7 @@ export const productOption = MainSchema.table("product_option", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
-  description: text("description"),
+  description: text("description").notNull().default(""),
 });
 
 export const productOptionItem = MainSchema.table("product_option_item", {
