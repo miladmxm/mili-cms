@@ -51,7 +51,30 @@ const OptionItems = ({ optionItems }: { optionItems: OptionItem[] }) => {
     </Table>
   );
 };
-
+const OptionItemsAccordion = ({
+  optionItems,
+}: {
+  optionItems: OptionItem[];
+}) => {
+  if (optionItems.length <= 0) return;
+  return (
+    <>
+      <Separator />
+      <CardContent>
+        <Accordion type="multiple">
+          <AccordionItem value="content">
+            <AccordionTrigger className="py-1" value="content">
+              مقادیر ویژگی ها
+            </AccordionTrigger>
+            <AccordionContent>
+              <OptionItems optionItems={optionItems} />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </CardContent>
+    </>
+  );
+};
 const OptionCard = ({ name, description, slug, items, id }: Option) => {
   return (
     <Card className="h-max">
@@ -62,23 +85,7 @@ const OptionCard = ({ name, description, slug, items, id }: Option) => {
         </CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
-      {items.length > 0 && (
-        <>
-          <Separator />
-          <CardContent>
-            <Accordion type="multiple">
-              <AccordionItem value="content">
-                <AccordionTrigger className="py-1" value="content">
-                  مقادیر ویژگی ها
-                </AccordionTrigger>
-                <AccordionContent>
-                  <OptionItems optionItems={items} />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </CardContent>
-        </>
-      )}
+      <OptionItemsAccordion optionItems={items} />
       <Separator />
       <CardFooter>
         <CardAction className="ms-auto">
