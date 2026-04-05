@@ -9,6 +9,10 @@ import {
   productMeta,
   productToCategory,
 } from "@/db/drizzle/schemas";
+import {
+  productOption,
+  productOptionItem,
+} from "@/db/drizzle/schemas/productOptions";
 
 import type { Transaction } from ".";
 
@@ -131,3 +135,29 @@ export const updateCategoryById = (
     .set(value)
     .where(eq(productCategory.id, id))
     .returning();
+
+export const createOption = (
+  data: typeof productOption.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .insert(productOption)
+    .values(data)
+    .returning({ id: productOption.id });
+
+export const createOptionItems = (
+  data: (typeof productOptionItem.$inferInsert)[],
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .insert(productOptionItem)
+    .values(data)
+    .returning({ id: productOptionItem.id });
+
+export const findOptionByStartedSlugWith = async (
+  slug: string,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.productOption.findMany({
+    where: like(productOption.slug, `${slug}%`),
+  });

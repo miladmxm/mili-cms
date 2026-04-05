@@ -72,3 +72,14 @@ export interface Category {
 export interface CategoryTree extends Category {
   children?: CategoryTree[];
 }
+
+export interface CreateOptionItem {
+  label: string;
+  value: string;
+}
+export interface CreateOption {
+  name: string;
+  slug: string;
+  description?: string | undefined;
+  items: CreateOptionItem[];
+}

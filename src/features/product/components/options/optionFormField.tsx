@@ -68,7 +68,7 @@ export const OptionDescription = () => {
       render={({ field, fieldState }) => (
         <Field aria-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={field.name}>توضیح کوتاه ویژگی</FieldLabel>
-          <Textarea id={field.name} {...field} />
+          <Textarea id={field.name} {...field} className="max-h-52" />
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
       )}

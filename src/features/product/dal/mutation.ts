@@ -1,14 +1,26 @@
 import "server-only";
 
-import type { CreateCategory, CreateProduct } from "@/services/product/type";
+import type {
+  CreateCategory,
+  CreateOption,
+  CreateProduct,
+} from "@/services/product/type";
 
 import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
 import * as categoryService from "@/services/product/category.service";
+import * as optionService from "@/services/product/option.service";
 import * as productService from "@/services/product/product.service";
 
 export const createProduct = async (data: CreateProduct) => {
   const product = dalRequireAuth(
     () => dalDbOperation(() => productService.createProduct(data)),
+    { product: ["create"] },
+  );
+  return product;
+};
+export const createOption = async (data: CreateOption) => {
+  const product = dalRequireAuth(
+    () => dalDbOperation(() => optionService.createOption(data)),
     { product: ["create"] },
   );
   return product;

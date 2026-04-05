@@ -11,9 +11,11 @@ import { getSession } from "@/lib/auth";
 import { validator } from "@/validations";
 
 import type { CreateCategoryOutput } from "../validations/category.schema";
+import type { CreateOptionInput } from "../validations/option.schema";
 
-import { createCategory, createProduct } from "../dal/mutation";
+import { createCategory, createOption, createProduct } from "../dal/mutation";
 import { CreateCategorySchema } from "../validations/category.schema";
+import { CreateOptionSchema } from "../validations/option.schema";
 import { CreateProductSchema } from "../validations/product.schema";
 
 export const createArticleAction = async (
@@ -69,5 +71,26 @@ export const createCategoryAction = async (
   } catch (error) {
     console.log(error);
     return { success: false, message: "خطا در ایجاد دسته بندی" };
+  }
+};
+
+export const createOptionAction = async (
+  inputData: unknown,
+): Promise<ActionResult<CreateOptionInput>> => {
+  const {
+    errors,
+    output,
+    success: isSuccessValidation,
+  } = validator(CreateOptionSchema, inputData);
+  if (!isSuccessValidation)
+    return { success: false, errors, message: "خطای اعتبار سنجی" };
+  try {
+    const { success } = await createOption(output);
+    if (!success) return { success, message: "خطا در ایجاد ویژگی" };
+    updateTag(CacheKeys.productOption);
+    return { success: true, message: "ویژگی با موفقیت ایجاد شد" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "خطا در ایجاد ویژگی" };
   }
 };
