@@ -83,3 +83,15 @@ export interface CreateOption {
   description?: string | undefined;
   items: CreateOptionItem[];
 }
+export interface OptionItem {
+  value: string;
+  id: string;
+  label: string;
+}
+export interface Option {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  items: OptionItem[];
+}

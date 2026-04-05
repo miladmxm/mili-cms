@@ -136,6 +136,11 @@ export const updateCategoryById = (
     .where(eq(productCategory.id, id))
     .returning();
 
+export const findOptionsWithItems = (tx?: Transaction) =>
+  getDBorTX(tx).query.productOption.findMany({
+    with: { items: { columns: { optionId: false } } },
+  });
+
 export const createOption = (
   data: typeof productOption.$inferInsert,
   tx?: Transaction,
@@ -153,6 +158,9 @@ export const createOptionItems = (
     .insert(productOptionItem)
     .values(data)
     .returning({ id: productOptionItem.id });
+
+export const deleteOptionById = (id: string, tx?: Transaction) =>
+  getDBorTX(tx).delete(productOption).where(eq(productOption.id, id));
 
 export const findOptionByStartedSlugWith = async (
   slug: string,

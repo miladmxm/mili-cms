@@ -25,6 +25,13 @@ export const createOption = async (data: CreateOption) => {
   );
   return product;
 };
+export const deleteOption = (id: string) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => optionService.deleteOption(id)),
+    { product: ["delete"] },
+  );
+};
+
 // export const updateArticle = (id: string, data: Partial<CreateArticle>) => {
 //   return dalRequireAuth(
 //     () => dalDbOperation(() => articleService.updateArticle(id, data)),

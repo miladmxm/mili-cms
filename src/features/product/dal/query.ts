@@ -6,6 +6,7 @@ import {
   dalVerifySuccess,
 } from "@/dal/helpers";
 import * as productCategoryService from "@/services/product/category.service";
+import * as optionService from "@/services/product/option.service";
 import * as productService from "@/services/product/product.service";
 
 export const getProducts = async () => {
@@ -33,4 +34,13 @@ export const getCategories = async () => {
   );
 
   return categories;
+};
+
+export const getOptions = async () => {
+  return dalVerifySuccess(
+    await dalRequireAuth(
+      () => dalDbOperation(optionService.getOptionsWithItems),
+      { product: ["read"] },
+    ),
+  );
 };

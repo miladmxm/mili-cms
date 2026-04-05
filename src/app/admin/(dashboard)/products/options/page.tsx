@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/dashboard/ui/button";
+import Options from "@/features/product/containers/options";
 
 const OptionsPage = () => {
   return (
@@ -15,6 +16,7 @@ const OptionsPage = () => {
           </Link>
         </Button>
       </div>
+      <Options />
     </div>
   );
 };

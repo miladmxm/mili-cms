@@ -5,15 +5,14 @@ import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import { withTransaction } from "@/repositories";
 import * as productRepo from "@/repositories/product.repo";
 
-import type { LimitAndOffset } from "../type";
 import type { CreateOption } from "./type";
 
 // * READ
-export const getPaginationProduct = async (limitAndOffset?: LimitAndOffset) => {
+export const getOptionsWithItems = async () => {
   "use cache";
   cacheTag(CacheKeys.productOption);
 
-  return productRepo.findProductsByLimitAndOffset(limitAndOffset);
+  return productRepo.findOptionsWithItems();
 };
 
 // * CREATE
@@ -48,3 +47,5 @@ export const createOption = async (optionData: CreateOption) => {
 // * UPDATE
 
 // * DELETE
+
+export const deleteOption = (id: string) => productRepo.deleteOptionById(id);
