@@ -9,23 +9,36 @@ export const StatusSchema = v.picklist<ProductStatus[]>([
   "draft",
   "published",
 ]);
-
+const PriceSchema = v.object({
+  amount: v.union([
+    v.number(),
+    v.pipe(
+      v.string(),
+      v.nonEmpty(),
+      v.transform((s) => Number(s)),
+      v.number(),
+    ),
+  ]),
+  currency: v.optional(v.picklist(["IRR"]), "IRR"),
+});
 export const CreateProductBaseSchema = v.object({
   name: v.pipe(v.string(), v.nonEmpty("نام نباید خالی باشد")),
   excerpt: v.pipe(v.string(), v.nonEmpty("خلاصه ای از مقاله بنویسید")),
   content: ProseMirrorSchema,
   slug: v.pipe(v.string(), v.nonEmpty("مقدار slug را وارد کنید")),
   status: StatusSchema,
-  thumbnailId: v.union([
-    v.pipe(
-      v.object({
-        id: v.pipe(v.string(), v.nonEmpty("یک تصویر شاخص انتخاب کنید")),
-        url: v.pipe(v.string(), v.nonEmpty()),
-      }),
-      v.transform(({ id }) => id),
-    ),
-    v.string(),
-  ]),
+  thumbnailId: v.optional(
+    v.union([
+      v.pipe(
+        v.object({
+          id: v.pipe(v.string(), v.nonEmpty("یک تصویر شاخص انتخاب کنید")),
+          url: v.pipe(v.string(), v.nonEmpty()),
+        }),
+        v.transform(({ id }) => id),
+      ),
+      v.string(),
+    ]),
+  ),
 
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
   gallery: v.optional(
@@ -48,15 +61,13 @@ export const CreateProductSchema = v.variant("type", [
     metadata: v.pipe(
       v.array(
         v.object({
-          price: v.object({
-            amount: v.number(),
-            currency: v.picklist(["IRR"]),
-          }),
+          price: PriceSchema,
           stock: v.optional(v.number(), -1),
-          thumbnail: v.string(),
+          thumbnail: v.optional(v.string()),
         }),
       ),
       v.minLength(1),
+      v.maxLength(1),
     ),
   }),
   v.object({
@@ -65,12 +76,9 @@ export const CreateProductSchema = v.variant("type", [
     metadata: v.pipe(
       v.array(
         v.object({
-          price: v.object({
-            amount: v.number(),
-            currency: v.picklist(["IRR"]),
-          }),
+          price: PriceSchema,
           stock: v.optional(v.number(), -1),
-          thumbnail: v.string(),
+          thumbnail: v.optional(v.string()),
           optionItemIds: v.string(),
         }),
       ),

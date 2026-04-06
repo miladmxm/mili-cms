@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useRef } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 import type { Category } from "@/services/article/types";
@@ -14,11 +14,19 @@ import RichEditor from "@/components/dashboard/rich-editor";
 import { Button } from "@/components/dashboard/ui/button";
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/dashboard/ui/field";
 import { Input } from "@/components/dashboard/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/dashboard/ui/select";
 import {
   Tabs,
   TabsContent,
@@ -26,6 +34,7 @@ import {
   TabsTrigger,
 } from "@/components/dashboard/ui/tabs";
 import { Textarea } from "@/components/dashboard/ui/textarea";
+import { CURRENCY } from "@/constant/appData";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 import { StatusDictionary } from "@/services/article/types";
@@ -243,14 +252,78 @@ export const ProductContent = () => {
     />
   );
 };
+const ProductDefaultMeta = () => {
+  const { control } = useProductFormContext();
+  return (
+    <FieldGroup>
+      <Controller
+        name="metadata.0.price.amount"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Field aria-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>قیمت محصول</FieldLabel>
+            <div className="flex gap-2">
+              <Input {...field} id={field.name} placeholder="120000" />
+              <Controller
+                name="metadata.0.price.currency"
+                control={control}
+                render={({
+                  field: currencyField,
+                  fieldState: currencyState,
+                }) => (
+                  <Field
+                    aria-invalid={currencyState.invalid}
+                    className="max-w-fit"
+                  >
+                    <Select
+                      value={currencyField.value}
+                      onValueChange={currencyField.onChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CURRENCY.map((currency) => (
+                          <SelectItem key={currency} value={currency}>
+                            {currency}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+              />
+            </div>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+      <Controller
+        name="metadata.0.stock"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Field aria-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>موجودی</FieldLabel>
+            <FieldDescription>
+              عدد -1 به معنی نامحدود بودن و عدد 0 به معنای ناموجود بودن است
+            </FieldDescription>
+            <Input {...field} id={field.name} placeholder="120" />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+    </FieldGroup>
+  );
+};
 export const ProductMeta = () => {
-  const { getValues, setValue } = useProductFormContext();
+  const { control, setValue } = useProductFormContext();
+  const typeValue = useWatch({ control, name: "type" });
   return (
     <div className="flex flex-col gap-3">
       <h4>نوع محصول</h4>
       <Tabs
         defaultValue="default"
-        value={getValues("type")}
+        value={typeValue}
         onValueChange={(v) => setValue("type", v as ProductType)}
       >
         <TabsList className="w-full">
@@ -260,7 +333,9 @@ export const ProductMeta = () => {
           <TabsTrigger value="variable">متغیر</TabsTrigger>
         </TabsList>
         <TabsContent value="default">
-          <FieldGroup></FieldGroup>
+          <FieldGroup>
+            <ProductDefaultMeta />
+          </FieldGroup>
         </TabsContent>
         <TabsContent value="variable">
           <FieldGroup></FieldGroup>

@@ -38,7 +38,7 @@ export const product = MainSchema.table(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
     thumbnailId: uuid("thumbnail_id").references(() => media.id, {
-      onDelete: "no action",
+      onDelete: "set null",
     }),
     authorId: text("author_id")
       .references(() => user.id)
