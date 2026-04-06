@@ -60,7 +60,7 @@ const sliceUpdatingOptionItemsWithNewOptionItems = (
 ) => {
   const update: OptionItem[] = [];
   const create: CreateOptionItem[] = [];
-
+  if (!items) return { update, create };
   for (const item of items) {
     if (item.id) {
       update.push({ ...item, id: item.id });
@@ -93,6 +93,7 @@ export const updateOption = async (id: string, input: UpdateOption) => {
       const { create, update } = sliceUpdatingOptionItemsWithNewOptionItems(
         data.items,
       );
+
       for (const itemData of update) {
         itemsUpdatePromise.push(
           productRepo.updateOptionItemById(
@@ -102,6 +103,7 @@ export const updateOption = async (id: string, input: UpdateOption) => {
         );
       }
       await Promise.all(itemsUpdatePromise);
+
       if (create.length > 0) {
         await productRepo.createOptionItems(
           create.map((item) => ({ ...item, optionId: id })),

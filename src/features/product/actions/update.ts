@@ -124,6 +124,7 @@ export const updateOptionAction = async (
     const { success } = await productMutation.updateOption(id, output);
     if (success) {
       updateTag(`${CacheKeys.productOption}-${id}`);
+      updateTag(CacheKeys.productOption);
       return { success: true, message: "با موفقیت ویرایش شد" };
     } else {
       return { success: false, message: "خطا در ویرایش ویژگی" };
