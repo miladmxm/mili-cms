@@ -41,6 +41,7 @@ import { StatusDictionary } from "@/services/article/types";
 
 import type { CreateProductInput } from "../validations/product.schema";
 
+import SelectMultipleOptionItem from "./options/selectMultipleOptionItem";
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,
 } from "./selectMultipleCategories";
@@ -315,11 +316,16 @@ const ProductDefaultMeta = () => {
     </FieldGroup>
   );
 };
-const ProductVariableMeta = () => {
+const ProductVariableMeta = ({ options }: { options: Option[] }) => {
   const { control } = useProductFormContext();
 
   return (
     <FieldGroup>
+      <SelectMultipleOptionItem
+        selectedItems={[]}
+        onSelect={console.log}
+        options={options}
+      />
       <Controller
         name="metadata.0.price.amount"
         control={control}
@@ -405,7 +411,7 @@ export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
         </TabsContent>
         <TabsContent value="variable">
           <FieldGroup>
-            <ProductVariableMeta />
+            <ProductVariableMeta options={optionsData} />
           </FieldGroup>
         </TabsContent>
       </Tabs>
