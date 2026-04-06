@@ -2,6 +2,7 @@ import * as v from "valibot";
 
 import type { ProductStatus } from "@/services/product/type";
 
+import { ThumbnailSchema } from "@/validations/mainSchemas";
 import { ProseMirrorSchema } from "@/validations/proseMirror";
 
 export const StatusSchema = v.picklist<ProductStatus[]>([
@@ -27,19 +28,7 @@ export const CreateProductBaseSchema = v.object({
   content: ProseMirrorSchema,
   slug: v.pipe(v.string(), v.nonEmpty("مقدار slug را وارد کنید")),
   status: StatusSchema,
-  thumbnailId: v.optional(
-    v.union([
-      v.pipe(
-        v.object({
-          id: v.pipe(v.string(), v.nonEmpty("یک تصویر شاخص انتخاب کنید")),
-          url: v.pipe(v.string(), v.nonEmpty()),
-        }),
-        v.transform(({ id }) => id),
-      ),
-      v.string(),
-    ]),
-  ),
-
+  thumbnailId: ThumbnailSchema,
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
   gallery: v.optional(
     v.array(
@@ -63,7 +52,7 @@ export const CreateProductSchema = v.variant("type", [
         v.object({
           price: PriceSchema,
           stock: v.optional(v.number(), -1),
-          thumbnail: v.optional(v.string()),
+          thumbnail: ThumbnailSchema,
         }),
       ),
       v.minLength(1),
@@ -78,7 +67,7 @@ export const CreateProductSchema = v.variant("type", [
         v.object({
           price: PriceSchema,
           stock: v.optional(v.number(), -1),
-          thumbnail: v.optional(v.string()),
+          thumbnail: ThumbnailSchema,
           optionItemIds: v.string(),
         }),
       ),

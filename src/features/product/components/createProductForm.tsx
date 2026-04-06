@@ -2,6 +2,8 @@
 
 import { FormProvider } from "react-hook-form";
 
+import type { Option } from "@/services/product/type";
+
 import { Button } from "@/components/dashboard/ui/button";
 import {
   Card,
@@ -28,8 +30,10 @@ import {
 
 const CreateProductForm = ({
   categories,
+  options,
 }: {
   categories: Promise<Category[]>;
+  options: Promise<Option[]>;
 }) => {
   const { form, isPending, submit } = useCreateProduct();
   return (
@@ -71,7 +75,7 @@ const CreateProductForm = ({
                 <CardTitle>داده های محصول</CardTitle>
               </CardHeader>
               <CardContent>
-                <ProductMeta />
+                <ProductMeta options={options} />
               </CardContent>
             </Card>
             <ProductContent key="create" />
