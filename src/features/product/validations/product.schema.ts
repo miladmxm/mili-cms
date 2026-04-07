@@ -22,6 +22,18 @@ const PriceSchema = v.object({
   ]),
   currency: v.optional(v.picklist(["IRR"]), "IRR"),
 });
+const StockSchema = v.optional(
+  v.union([
+    v.number(),
+    v.pipe(
+      v.string(),
+      v.nonEmpty(),
+      v.transform((s) => Number(s)),
+      v.number(),
+    ),
+  ]),
+  -1,
+);
 export const CreateProductBaseSchema = v.object({
   name: v.pipe(v.string(), v.nonEmpty("نام نباید خالی باشد")),
   excerpt: v.pipe(v.string(), v.nonEmpty("خلاصه ای از مقاله بنویسید")),
@@ -51,7 +63,7 @@ export const CreateProductSchema = v.variant("type", [
       v.array(
         v.object({
           price: PriceSchema,
-          stock: v.optional(v.number(), -1),
+          stock: StockSchema,
           thumbnail: ThumbnailSchema,
         }),
       ),
@@ -66,7 +78,7 @@ export const CreateProductSchema = v.variant("type", [
       v.array(
         v.object({
           price: PriceSchema,
-          stock: v.optional(v.number(), -1),
+          stock: StockSchema,
           thumbnail: ThumbnailSchema,
           optionItemIds: v.string(),
         }),

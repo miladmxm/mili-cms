@@ -1,5 +1,5 @@
 "use client";
-import type { ComponentProps } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
 
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -253,66 +253,92 @@ export const ProductContent = () => {
     />
   );
 };
-const ProductDefaultMeta = () => {
+interface MetaProps {
+  metaIndex: number;
+}
+
+const ProductPriceCurrencty = ({ metaIndex }: MetaProps) => {
   const { control } = useProductFormContext();
   return (
+    <Controller
+      name={`metadata.${metaIndex}.price.currency`}
+      control={control}
+      render={({ field: currencyField, fieldState: currencyState }) => (
+        <Field aria-invalid={currencyState.invalid} className="max-w-fit">
+          <Select
+            value={currencyField.value}
+            onValueChange={currencyField.onChange}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {CURRENCY.map((currency) => (
+                <SelectItem key={currency} value={currency}>
+                  {currency}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+      )}
+    />
+  );
+};
+const ProductPriceAmount = ({
+  metaIndex,
+  children,
+}: PropsWithChildren<MetaProps>) => {
+  const { control } = useProductFormContext();
+  return (
+    <Controller
+      name={`metadata.${metaIndex}.price.amount`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <Field aria-invalid={fieldState.invalid}>
+          <FieldLabel htmlFor={field.name}>قیمت محصول</FieldLabel>
+          <div className="flex gap-2">
+            <Input {...field} id={field.name} placeholder="120000" />
+            {children}
+          </div>
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+};
+
+const ProductPriceFields = ({ metaIndex }: MetaProps) => {
+  return (
+    <ProductPriceAmount metaIndex={metaIndex}>
+      <ProductPriceCurrencty metaIndex={metaIndex} />
+    </ProductPriceAmount>
+  );
+};
+const ProductStock = ({ metaIndex }: MetaProps) => {
+  const { control } = useProductFormContext();
+  return (
+    <Controller
+      name={`metadata.${metaIndex}.stock`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <Field aria-invalid={fieldState.invalid}>
+          <FieldLabel htmlFor={field.name}>موجودی</FieldLabel>
+          <FieldDescription>
+            عدد -1 به معنی نامحدود بودن و عدد 0 به معنای ناموجود بودن است
+          </FieldDescription>
+          <Input {...field} id={field.name} placeholder="120" />
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+};
+const ProductDefaultMeta = () => {
+  return (
     <FieldGroup>
-      <Controller
-        name="metadata.0.price.amount"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field aria-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>قیمت محصول</FieldLabel>
-            <div className="flex gap-2">
-              <Input {...field} id={field.name} placeholder="120000" />
-              <Controller
-                name="metadata.0.price.currency"
-                control={control}
-                render={({
-                  field: currencyField,
-                  fieldState: currencyState,
-                }) => (
-                  <Field
-                    aria-invalid={currencyState.invalid}
-                    className="max-w-fit"
-                  >
-                    <Select
-                      value={currencyField.value}
-                      onValueChange={currencyField.onChange}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CURRENCY.map((currency) => (
-                          <SelectItem key={currency} value={currency}>
-                            {currency}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                )}
-              />
-            </div>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-      <Controller
-        name="metadata.0.stock"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field aria-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>موجودی</FieldLabel>
-            <FieldDescription>
-              عدد -1 به معنی نامحدود بودن و عدد 0 به معنای ناموجود بودن است
-            </FieldDescription>
-            <Input {...field} id={field.name} placeholder="120" />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+      <ProductPriceFields metaIndex={0} />
+      <ProductStock metaIndex={0} />
     </FieldGroup>
   );
 };
@@ -326,62 +352,8 @@ const ProductVariableMeta = ({ options }: { options: Option[] }) => {
         onSelect={console.log}
         options={options}
       />
-      <Controller
-        name="metadata.0.price.amount"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field aria-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>قیمت محصول</FieldLabel>
-            <div className="flex gap-2">
-              <Input {...field} id={field.name} placeholder="120000" />
-              <Controller
-                name="metadata.0.price.currency"
-                control={control}
-                render={({
-                  field: currencyField,
-                  fieldState: currencyState,
-                }) => (
-                  <Field
-                    aria-invalid={currencyState.invalid}
-                    className="max-w-fit"
-                  >
-                    <Select
-                      value={currencyField.value}
-                      onValueChange={currencyField.onChange}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CURRENCY.map((currency) => (
-                          <SelectItem key={currency} value={currency}>
-                            {currency}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                )}
-              />
-            </div>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-      <Controller
-        name="metadata.0.stock"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field aria-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>موجودی</FieldLabel>
-            <FieldDescription>
-              عدد -1 به معنی نامحدود بودن و عدد 0 به معنای ناموجود بودن است
-            </FieldDescription>
-            <Input {...field} id={field.name} placeholder="120" />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+      <ProductPriceFields metaIndex={0} />
+      <ProductStock metaIndex={0} />
     </FieldGroup>
   );
 };
