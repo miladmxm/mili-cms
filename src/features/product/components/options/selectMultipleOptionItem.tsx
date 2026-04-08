@@ -26,7 +26,12 @@ export const SelectMultipleCategoriesSkeleton = () => {
 };
 const SelectMultipleOptionItem: FC<{
   options: Option[];
-  onSelect: (selected: { id: string; value: string; optionId: string }) => void;
+  onSelect: (selected: {
+    id: string;
+    value: string;
+    optionId: string;
+    label: string;
+  }) => void;
   selectedItems: string[];
   triggerId?: string;
 }> = ({ options, onSelect, selectedItems, triggerId = "customField" }) => {
@@ -58,7 +63,7 @@ const SelectMultipleOptionItem: FC<{
                       variant="ghost"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onSelect({ id, optionId, value });
+                        onSelect({ id, optionId, value, label });
                       }}
                     >
                       <span>
@@ -95,7 +100,7 @@ const SelectMultipleOptionItem: FC<{
                       key={id}
                       value={value}
                       keywords={[value, label]}
-                      onSelect={() => onSelect({ id, value, optionId })}
+                      onSelect={() => onSelect({ id, value, optionId, label })}
                     >
                       <span className="truncate">{label}</span>
                       {selectedItems.includes(id) && (

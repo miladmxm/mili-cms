@@ -3,7 +3,7 @@ import type { ComponentProps, PropsWithChildren } from "react";
 
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { Suspense, use, useRef } from "react";
+import { Suspense, use, useRef, useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
@@ -342,24 +342,97 @@ const ProductDefaultMeta = () => {
     </FieldGroup>
   );
 };
+const VariableSection = ({ children }: PropsWithChildren) => {
+  return (
+    <div className="p-2 rounded-xl border border-dashed border-border">
+      {children}
+    </div>
+  );
+};
+const VariableItemLoop = ({
+  items,
+  index,
+}: {
+  items: { id: string; label: string }[][];
+  index: number;
+}) => {
+  if (items.length === 0) return;
+  if (index === 0) {
+    return (
+      <>
+        {items[index].map(({ id, label }) => (
+          <VariableSection key={id}>{label}</VariableSection>
+        ))}
+      </>
+    );
+  }
+  return (
+    <>
+      {items[index].map(({ id, label }) => (
+        <VariableSection key={id}>
+          {label}
+          <VariableItemLoop index={index - 1} items={items} />
+        </VariableSection>
+      ))}
+    </>
+  );
+};
+type SelectOptionState = Record<string, { id: string; label: string }[]>;
+const VariableMapHanlder = ({
+  selectedOptionItem,
+}: {
+  selectedOptionItem: SelectOptionState;
+}) => {
+  const valueOfSelectedOptionItems = Object.values(selectedOptionItem);
+  return (
+    <VariableItemLoop
+      index={valueOfSelectedOptionItems.length - 1}
+      items={valueOfSelectedOptionItems}
+    />
+  );
+};
 const ProductVariableMeta = ({ options }: { options: Option[] }) => {
-  const { control } = useProductFormContext();
+  const [selectedOptionItem, setSelectedOptionItem] =
+    useState<SelectOptionState>({});
+  const selectedIds: string[] = Object.values(selectedOptionItem)
+    .flat()
+    .map(({ id }) => id);
 
   return (
     <FieldGroup>
       <SelectMultipleOptionItem
-        selectedItems={[]}
-        onSelect={console.log}
+        selectedItems={selectedIds}
+        onSelect={({ id, optionId, label }) => {
+          if (selectedIds.indexOf(id) === -1) {
+            setSelectedOptionItem((prev) => {
+              const prevOptionData = prev[optionId] || [];
+              return {
+                ...prev,
+                [optionId]: [...prevOptionData, { id, label }],
+              };
+            });
+          } else {
+            setSelectedOptionItem((prev) => {
+              const prevOptionData = prev[optionId].filter(
+                ({ id: prevId }) => id !== prevId,
+              );
+              return {
+                ...prev,
+                [optionId]: prevOptionData,
+              };
+            });
+          }
+        }}
         options={options}
       />
-      <ProductPriceFields metaIndex={0} />
-      <ProductStock metaIndex={0} />
+      <VariableMapHanlder selectedOptionItem={selectedOptionItem} />
+      {/* <ProductPriceFields metaIndex={0} />
+      <ProductStock metaIndex={0} /> */}
     </FieldGroup>
   );
 };
 export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
   const optionsData = use(options);
-  console.log(optionsData);
   const { control, setValue } = useProductFormContext();
   const typeValue = useWatch({ control, name: "type" });
   return (
