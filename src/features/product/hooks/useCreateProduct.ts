@@ -19,15 +19,11 @@ export const useCreateProduct = () => {
       slug: "",
       status: "draft",
       type: "default",
-      metadata: [
-        {
-          price: { amount: 0, currency: "IRR" },
-          stock: -1,
-        },
-      ],
+      metadata: [],
       categoryIds: [],
     },
   });
+  // console.log(form.formState.errors);
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = (data: CreateProductOutput) => {

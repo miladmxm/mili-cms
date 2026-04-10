@@ -37,6 +37,7 @@ import { Textarea } from "@/components/dashboard/ui/textarea";
 import { CURRENCY } from "@/constant/appData";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
+import { cn } from "@/lib/utils";
 import { StatusDictionary } from "@/services/article/types";
 
 import type { CreateProductInput } from "../validations/product.schema";
@@ -261,6 +262,7 @@ const ProductPriceCurrencty = ({ metaIndex }: MetaProps) => {
   const { control } = useProductFormContext();
   return (
     <Controller
+      defaultValue="IRR"
       name={`metadata.${metaIndex}.price.currency`}
       control={control}
       render={({ field: currencyField, fieldState: currencyState }) => (
@@ -292,6 +294,7 @@ const ProductPriceAmount = ({
   const { control } = useProductFormContext();
   return (
     <Controller
+      defaultValue={0}
       name={`metadata.${metaIndex}.price.amount`}
       control={control}
       render={({ field, fieldState }) => (
@@ -319,6 +322,7 @@ const ProductStock = ({ metaIndex }: MetaProps) => {
   const { control } = useProductFormContext();
   return (
     <Controller
+      defaultValue={-1}
       name={`metadata.${metaIndex}.stock`}
       control={control}
       render={({ field, fieldState }) => (
@@ -342,38 +346,80 @@ const ProductDefaultMeta = () => {
     </FieldGroup>
   );
 };
-const VariableSection = ({ children }: PropsWithChildren) => {
+const VariableSection = ({
+  children,
+  className,
+  ...more
+}: ComponentProps<"div">) => {
   return (
-    <div className="p-2 rounded-xl border border-dashed border-border">
+    <div
+      className={cn(
+        "p-2 rounded-xl border border-dashed border-border",
+        className,
+      )}
+      {...more}
+    >
       {children}
     </div>
   );
 };
 const VariableItemLoop = ({
   items,
+  counterToZiro,
   index,
+  parrentId,
 }: {
   items: { id: string; label: string }[][];
-  index: number;
+  counterToZiro: number;
+  index?: number;
+  parrentId?: string[];
 }) => {
   if (items.length === 0) return;
-  if (index === 0) {
+  if (counterToZiro === 0) {
     return (
       <>
-        {items[index].map(({ id, label }) => (
-          <VariableSection key={id}>{label}</VariableSection>
-        ))}
+        {items[counterToZiro].map(({ id, label }, i) => {
+          const regularIndex = index
+            ? items[counterToZiro].length * index + i
+            : i;
+          const optionItemIds = parrentId ? [...parrentId, id].join("|") : id;
+          return (
+            <VariableSection data-key={regularIndex} key={id}>
+              {label}
+              <FieldGroup>
+                <ProductPriceFields metaIndex={regularIndex} />
+                <ProductStock metaIndex={regularIndex} />
+                <input
+                  defaultValue={optionItemIds}
+                  name="optionItemIds"
+                  type="text"
+                />
+              </FieldGroup>
+            </VariableSection>
+          );
+        })}
       </>
     );
   }
   return (
     <>
-      {items[index].map(({ id, label }) => (
-        <VariableSection key={id}>
-          {label}
-          <VariableItemLoop index={index - 1} items={items} />
-        </VariableSection>
-      ))}
+      {items[counterToZiro].map(({ id, label }, i) => {
+        const regularIndex = index
+          ? items[counterToZiro].length * index + i
+          : i;
+        const idList = parrentId ? [...parrentId, id] : [id];
+        return (
+          <VariableSection data-i={i} key={id}>
+            {label}
+            <VariableItemLoop
+              index={regularIndex}
+              items={items}
+              parrentId={idList}
+              counterToZiro={counterToZiro - 1}
+            />
+          </VariableSection>
+        );
+      })}
     </>
   );
 };
@@ -383,11 +429,13 @@ const VariableMapHanlder = ({
 }: {
   selectedOptionItem: SelectOptionState;
 }) => {
-  const valueOfSelectedOptionItems = Object.values(selectedOptionItem);
+  const valueOfSelectedOptionItems = Object.values(selectedOptionItem).filter(
+    (option) => option.length > 0,
+  );
   return (
     <VariableItemLoop
-      index={valueOfSelectedOptionItems.length - 1}
       items={valueOfSelectedOptionItems}
+      counterToZiro={valueOfSelectedOptionItems.length - 1}
     />
   );
 };
@@ -397,7 +445,6 @@ const ProductVariableMeta = ({ options }: { options: Option[] }) => {
   const selectedIds: string[] = Object.values(selectedOptionItem)
     .flat()
     .map(({ id }) => id);
-
   return (
     <FieldGroup>
       <SelectMultipleOptionItem
@@ -426,8 +473,6 @@ const ProductVariableMeta = ({ options }: { options: Option[] }) => {
         options={options}
       />
       <VariableMapHanlder selectedOptionItem={selectedOptionItem} />
-      {/* <ProductPriceFields metaIndex={0} />
-      <ProductStock metaIndex={0} /> */}
     </FieldGroup>
   );
 };
