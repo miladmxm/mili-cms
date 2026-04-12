@@ -11,9 +11,9 @@ export interface ProductPrice {
 export interface ProductMetadata {
   price: ProductPrice;
   stock?: number;
-  thumbnail?: string;
 }
 export interface VariableProductMetadata extends ProductMetadata {
+  thumbnailId?: string | null | undefined;
   optionItemIds: string;
 }
 interface CreateProductBaseData {
@@ -21,7 +21,7 @@ interface CreateProductBaseData {
   content: ProseMirror;
   slug: string;
   excerpt: string;
-  thumbnailId: string;
+  thumbnailId?: string | null | undefined;
   authorId: string;
   status?: ProductStatus;
   categoryIds: string[];

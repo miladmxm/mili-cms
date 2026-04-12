@@ -18,9 +18,9 @@ import { CreateCategorySchema } from "../validations/category.schema";
 import { CreateOptionSchema } from "../validations/option.schema";
 import { CreateProductSchema } from "../validations/product.schema";
 
-export const createArticleAction = async (
+export const createProductAction = async (
   inputData: unknown,
-): Promise<ActionResult<Partial<CreateProduct>>> => {
+): Promise<ActionResult<CreateProduct>> => {
   const session = await getSession();
   if (!session) redirect("/");
   const {
@@ -31,19 +31,20 @@ export const createArticleAction = async (
   if (!successValidation) {
     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
+
   try {
     const createdArticleOutput = await createProduct({
       ...output,
       authorId: session.user.id,
     });
     if (!createdArticleOutput.success) {
-      return { success: false, message: "خطا در ایجاد مقاله" };
+      return { success: false, message: "خطا در ایجاد محصول" };
     }
     updateTag(CacheKeys.articles);
-    return { success: successValidation, message: "مثاله با موفقیت ایجاد شد" };
+    return { success: successValidation, message: "محصول با موفقیت ایجاد شد" };
   } catch (error) {
     console.log(error);
-    return { success: false, message: "خطا در ایجاد مقاله" };
+    return { success: false, message: "خطا در ایجاد محصول" };
   }
 };
 

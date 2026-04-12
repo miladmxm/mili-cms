@@ -70,6 +70,19 @@ export const createProduct = async (productData: CreateProduct) => {
       })),
       tx,
     );
+    if (productData.type === "variable") {
+      const optionIds = Array.from(
+        new Set(
+          productData.metadata
+            .map(({ optionItemIds }) => optionItemIds.split("|"))
+            .flat(),
+        ),
+      );
+      productRepo.createProductToOptionItem(
+        optionIds.map((id) => ({ optionItemId: id, productId: product.id })),
+        tx,
+      );
+    }
     if (filteredGalleryByAcceptionType.length > 0) {
       await productRepo.addMediaToProductGallery(
         filteredGalleryByAcceptionType.map((mediaId) => ({

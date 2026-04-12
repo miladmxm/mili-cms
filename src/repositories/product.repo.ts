@@ -8,6 +8,7 @@ import {
   productGallery,
   productMeta,
   productToCategory,
+  productToOptionItem,
 } from "@/db/drizzle/schemas";
 import {
   productOption,
@@ -198,3 +199,7 @@ export const deleteOptionItemsByIds = (ids: string[], tx?: Transaction) =>
   getDBorTX(tx)
     .delete(productOptionItem)
     .where(inArray(productOptionItem.id, ids));
+export const createProductToOptionItem = (
+  data: (typeof productToOptionItem.$inferInsert)[],
+  tx?: Transaction,
+) => getDBorTX(tx).insert(productToOptionItem).values(data);

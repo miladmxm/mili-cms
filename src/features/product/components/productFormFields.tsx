@@ -552,10 +552,10 @@ const VariableItemLoop = ({
                   metaIndex={regularIndex}
                   optionItemIds={optionItemIds}
                 />
-                <div className="flex gap-4">
+                <div className="flex gap-4 @sm:flex-row flex-col">
                   <ProductStock metaIndex={regularIndex} />
                   <ProductVariantThumbnail
-                    className="flex-1/4"
+                    className="flex-1/3"
                     metaIndex={regularIndex}
                   />
                 </div>
@@ -574,7 +574,11 @@ const VariableItemLoop = ({
           : i;
         const idList = parrentId ? [...parrentId, id] : [id];
         return (
-          <VariableSection className="flex flex-col gap-4" data-i={i} key={id}>
+          <VariableSection
+            className="flex flex-col gap-4 @container"
+            data-i={i}
+            key={id}
+          >
             <p>{label}</p>
             <VariableItemLoop
               index={regularIndex}

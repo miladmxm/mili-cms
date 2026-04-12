@@ -2,7 +2,10 @@ import * as v from "valibot";
 
 import type { ProductStatus } from "@/services/product/type";
 
-import { ThumbnailSchema } from "@/validations/mainSchemas";
+import {
+  ThumbnailNotNullSchema,
+  ThumbnailSchema,
+} from "@/validations/mainSchemas";
 import { ProseMirrorSchema } from "@/validations/proseMirror";
 
 export const StatusSchema = v.picklist<ProductStatus[]>([
@@ -42,7 +45,7 @@ export const CreateProductBaseSchema = v.object({
   status: StatusSchema,
   thumbnailId: ThumbnailSchema,
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
-  gallery: v.optional(v.array(ThumbnailSchema), []),
+  gallery: v.pipe(v.optional(v.array(ThumbnailNotNullSchema), [])),
 });
 export const CreateProductSchema = v.variant("type", [
   v.object({
