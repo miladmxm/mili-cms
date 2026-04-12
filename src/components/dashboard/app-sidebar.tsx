@@ -4,16 +4,14 @@ import * as React from "react";
 
 import type { User } from "@/features/auth/admin/types";
 
-import { NavDocuments } from "@/components/dashboard/nav-documents";
 import { NavMain } from "@/components/dashboard/nav-main";
-import { NavSecondary } from "@/components/dashboard/nav-secondary";
 import { NavUser } from "@/components/dashboard/nav-user";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
 } from "@/components/dashboard/ui/sidebar";
-import { AdminNavLinks, navMain } from "@/constant/adminNavLinks";
+import { navMain } from "@/constant/adminNavLinks";
 import { useDirection } from "@/hooks/useDirection";
 
 import SidebarHeader from "./app-sidebar-header";
@@ -33,11 +31,11 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       <SidebarContent>
         <ScrollArea dir={dir} className="h-full pe-1">
           <NavMain items={navMain} />
-          <NavDocuments items={AdminNavLinks.documents} />
-          <NavSecondary
+          {/* <NavDocuments items={AdminNavLinks.documents} /> */}
+          {/* <NavSecondary
             className="mt-auto"
             items={AdminNavLinks.navSecondary}
-          />
+          /> */}
         </ScrollArea>
       </SidebarContent>
       <SidebarFooter>

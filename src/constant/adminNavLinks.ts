@@ -5,13 +5,11 @@ import {
   IconFileAi,
   IconFileDescription,
   IconFileWord,
-  IconFolder,
   IconHelp,
   IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
-  IconUsers,
 } from "@tabler/icons-react";
 import { Image } from "lucide-react";
 
@@ -84,18 +82,18 @@ export const navMain: AdminNavMain[] = [
     url: "/admin/media",
     icon: Image,
   },
-  {
-    haveChild: false,
-    title: "Projects",
-    url: "#",
-    icon: IconFolder,
-  },
-  {
-    haveChild: false,
-    title: "Team",
-    url: "#",
-    icon: IconUsers,
-  },
+  // {
+  //   haveChild: false,
+  //   title: "Projects",
+  //   url: "#",
+  //   icon: IconFolder,
+  // },
+  // {
+  //   haveChild: false,
+  //   title: "Team",
+  //   url: "#",
+  //   icon: IconUsers,
+  // },
 ];
 export const AdminNavLinks = {
   navClouds: [

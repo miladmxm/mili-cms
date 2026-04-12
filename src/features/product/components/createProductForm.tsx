@@ -21,6 +21,7 @@ import {
   ProductCategories,
   ProductContent,
   ProductExcerpt,
+  ProductGallery,
   ProductMeta,
   ProductName,
   ProductSlug,
@@ -52,6 +53,7 @@ const CreateProductForm = ({
                   <ProductExcerpt />
                   <ProductCategories categories={categories} />
                   <ProductThumbnail />
+                  <ProductGallery />
                   <div className="flex gap-2">
                     <ProductStatus isPending={isPending} />
                     <Field>

@@ -42,18 +42,7 @@ export const CreateProductBaseSchema = v.object({
   status: StatusSchema,
   thumbnailId: ThumbnailSchema,
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
-  gallery: v.optional(
-    v.array(
-      v.pipe(
-        v.object({
-          id: v.pipe(v.string(), v.nonEmpty("یک تصویر انتخاب کنید")),
-          url: v.pipe(v.string(), v.nonEmpty()),
-        }),
-        v.transform(({ id }) => id),
-      ),
-    ),
-    [],
-  ),
+  gallery: v.optional(v.array(ThumbnailSchema), []),
 });
 export const CreateProductSchema = v.variant("type", [
   v.object({
@@ -64,7 +53,6 @@ export const CreateProductSchema = v.variant("type", [
         v.object({
           price: PriceSchema,
           stock: StockSchema,
-          thumbnail: ThumbnailSchema,
         }),
       ),
       v.minLength(1),
@@ -79,7 +67,7 @@ export const CreateProductSchema = v.variant("type", [
         v.object({
           price: PriceSchema,
           stock: StockSchema,
-          thumbnail: ThumbnailSchema,
+          thumbnailId: ThumbnailSchema,
           optionItemIds: v.string(),
         }),
       ),

@@ -1,7 +1,8 @@
 "use client";
 import type { ComponentProps, PropsWithChildren } from "react";
+import type { FieldPath } from "react-hook-form";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import {
   Suspense,
@@ -159,27 +160,116 @@ export const ProductCategories = ({
     />
   );
 };
+export const ProductGallery = () => {
+  const { control, setValue } = useProductFormContext();
+  const sheetControllerRef = useRef<SheetController>(null);
+  return (
+    <Controller
+      name="gallery"
+      control={control}
+      render={({ fieldState: { invalid }, field: { name, value } }) => {
+        const dataValue = value || [];
+        const dataValidValues = dataValue.filter(
+          (item) => !!item && typeof item !== "string",
+        );
+        const dataValueIds = dataValidValues.map(({ id }) => id);
 
-export const ProductThumbnail = () => {
+        const removeItem = (id: string) => {
+          setValue(
+            name,
+            [...dataValidValues.filter(({ id: prevId }) => id !== prevId)],
+            {
+              shouldDirty: true,
+            },
+          );
+        };
+        return (
+          <Field aria-invalid={invalid}>
+            <FieldLabel htmlFor={name}>انتخاب تصویر گالری</FieldLabel>
+            <Suspense fallback={null}>
+              <MediaPickerSheet
+                mediaKey="image"
+                selectedIds={dataValueIds}
+                controllerRef={sheetControllerRef}
+                onSelect={({ id, url }) => {
+                  if (dataValueIds.includes(id)) {
+                    removeItem(id);
+                  } else {
+                    setValue(name, [...dataValue, { id, url }], {
+                      shouldDirty: true,
+                    });
+                  }
+                  // sheetControllerRef.current?.close();
+                }}
+              />
+            </Suspense>
+
+            <div className="bg-background shadow-xs hover:text-accent-foreground dark:bg-input/30 dark:border-input gap-2 p-4 border-3 rounded-xl grid grid-cols-3 auto-rows-fr">
+              {dataValidValues.map(({ url, id }) => (
+                <div className="relative group" key={id}>
+                  <Button
+                    size="icon-sm"
+                    className="absolute end-1.5 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:scale-100 opacity-0 invisible pointer-events-none scale-75 transition-all top-1.5 z-20 text-destructive"
+                    variant="outline"
+                    onClick={() => removeItem(id)}
+                  >
+                    <Trash />
+                  </Button>
+                  <Image
+                    alt="image preview"
+                    className="size-full object-cover rounded-xl"
+                    src={{
+                      src: url,
+                      width: 128,
+                      height: 128,
+                    }}
+                  />
+                </div>
+              ))}
+              <Button
+                className="size-full"
+                id={name}
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  sheetControllerRef.current?.open();
+                }}
+              >
+                <Plus />
+              </Button>
+            </div>
+          </Field>
+        );
+      }}
+    />
+  );
+};
+const SingleImagePicker = ({
+  name,
+  className,
+}: {
+  name: FieldPath<CreateProductInput>;
+  className?: string;
+}) => {
   const sheetControllerRef = useRef<SheetController>(null);
 
   const { control, setValue } = useProductFormContext();
   return (
     <Controller
-      name="thumbnailId"
+      name={name}
       control={control}
       render={({ fieldState, field: { value } }) => {
         const validImageUrl = value && typeof value !== "string";
         return (
-          <div className="relative">
+          <div className={cn("relative", className)}>
             <Field aria-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
+              <FieldLabel htmlFor={name}>انتخاب تصویر شاخص</FieldLabel>
               <Suspense fallback={null}>
                 <MediaPickerSheet
                   mediaKey="image"
                   controllerRef={sheetControllerRef}
                   onSelect={({ id, url }) => {
-                    setValue("thumbnailId", { id, url }, { shouldDirty: true });
+                    setValue(name, { id, url }, { shouldDirty: true });
                     sheetControllerRef.current?.close();
                   }}
                   selectedIds={
@@ -187,9 +277,9 @@ export const ProductThumbnail = () => {
                   }
                 />
               </Suspense>
-
               <Button
                 className="w-full h-32"
+                id={name}
                 variant="outline"
                 onClick={() => sheetControllerRef.current?.open()}
               >
@@ -207,11 +297,30 @@ export const ProductThumbnail = () => {
               </Button>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
+            {value && (
+              <Button
+                size="icon-sm"
+                className="absolute end-4 top-10 z-20 text-destructive"
+                variant="outline"
+                onClick={() =>
+                  setValue(name, null, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+              >
+                <Trash />
+              </Button>
+            )}
           </div>
         );
       }}
     />
   );
+};
+
+export const ProductThumbnail = () => {
+  return <SingleImagePicker name="thumbnailId" />;
 };
 
 export const ProductStatus = ({ isPending }: { isPending: boolean }) => {
@@ -262,6 +371,7 @@ export const ProductContent = () => {
     />
   );
 };
+
 interface MetaProps {
   metaIndex: number;
 }
@@ -347,7 +457,17 @@ const ProductStock = ({ metaIndex }: MetaProps) => {
     />
   );
 };
-
+const ProductVariantThumbnail = ({
+  metaIndex,
+  className,
+}: MetaProps & { className?: string }) => {
+  return (
+    <SingleImagePicker
+      className={className}
+      name={`metadata.${metaIndex}.thumbnailId`}
+    />
+  );
+};
 const ProductDefaultMeta = () => {
   return (
     <FieldGroup>
@@ -364,7 +484,7 @@ const VariableSection = ({
   return (
     <div
       className={cn(
-        "p-2 rounded-xl border border-dashed border-border",
+        "p-4 rounded-xl border border-dashed border-border",
         className,
       )}
       {...more}
@@ -425,14 +545,20 @@ const VariableItemLoop = ({
             : id;
           return (
             <VariableSection data-key={regularIndex} key={id}>
-              {label}
+              <p className="mb-3">{label}</p>
               <FieldGroup>
                 <ProductPriceFields metaIndex={regularIndex} />
-                <ProductStock metaIndex={regularIndex} />
                 <HiddenOptionItemIdsInput
                   metaIndex={regularIndex}
                   optionItemIds={optionItemIds}
                 />
+                <div className="flex gap-4">
+                  <ProductStock metaIndex={regularIndex} />
+                  <ProductVariantThumbnail
+                    className="flex-1/4"
+                    metaIndex={regularIndex}
+                  />
+                </div>
               </FieldGroup>
             </VariableSection>
           );
@@ -448,8 +574,8 @@ const VariableItemLoop = ({
           : i;
         const idList = parrentId ? [...parrentId, id] : [id];
         return (
-          <VariableSection data-i={i} key={id}>
-            {label}
+          <VariableSection className="flex flex-col gap-4" data-i={i} key={id}>
+            <p>{label}</p>
             <VariableItemLoop
               index={regularIndex}
               items={items}
