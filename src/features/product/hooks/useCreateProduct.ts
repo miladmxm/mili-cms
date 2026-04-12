@@ -23,7 +23,7 @@ export const useCreateProduct = () => {
       categoryIds: [],
     },
   });
-  // console.log(form.formState.errors);
+  console.log(form.formState.errors);
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = (data: CreateProductOutput) => {

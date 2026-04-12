@@ -3,7 +3,14 @@ import type { ComponentProps, PropsWithChildren } from "react";
 
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { Suspense, use, useRef, useState } from "react";
+import {
+  Suspense,
+  use,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
@@ -85,6 +92,7 @@ export const ProductSlug = () => {
               if (!e.target.value) {
                 setValue("slug", convertToSlug(getValues("name")), {
                   shouldDirty: true,
+                  shouldValidate: true,
                 });
               }
             }}
@@ -318,6 +326,7 @@ const ProductPriceFields = ({ metaIndex }: MetaProps) => {
     </ProductPriceAmount>
   );
 };
+
 const ProductStock = ({ metaIndex }: MetaProps) => {
   const { control } = useProductFormContext();
   return (
@@ -338,6 +347,7 @@ const ProductStock = ({ metaIndex }: MetaProps) => {
     />
   );
 };
+
 const ProductDefaultMeta = () => {
   return (
     <FieldGroup>
@@ -363,6 +373,34 @@ const VariableSection = ({
     </div>
   );
 };
+
+const HiddenOptionItemIdsInput = ({
+  optionItemIds,
+  metaIndex,
+}: {
+  optionItemIds: string;
+  metaIndex: number;
+}) => {
+  const { control, setValue } = useProductFormContext();
+  const fieldName = `metadata.${metaIndex}.optionItemIds` as const;
+  const setNewIdValue = useEffectEvent(() => {
+    setValue(fieldName, optionItemIds);
+  });
+  useEffect(() => {
+    setNewIdValue();
+  }, [optionItemIds]);
+  return (
+    <Controller
+      defaultValue={optionItemIds}
+      name={fieldName}
+      control={control}
+      render={({ field }) => (
+        <Input type="hidden" {...field} value={optionItemIds} />
+      )}
+    />
+  );
+};
+
 const VariableItemLoop = ({
   items,
   counterToZiro,
@@ -382,17 +420,18 @@ const VariableItemLoop = ({
           const regularIndex = index
             ? items[counterToZiro].length * index + i
             : i;
-          const optionItemIds = parrentId ? [...parrentId, id].join("|") : id;
+          const optionItemIds = parrentId
+            ? [...parrentId, id].sort().join("|")
+            : id;
           return (
             <VariableSection data-key={regularIndex} key={id}>
               {label}
               <FieldGroup>
                 <ProductPriceFields metaIndex={regularIndex} />
                 <ProductStock metaIndex={regularIndex} />
-                <input
-                  defaultValue={optionItemIds}
-                  name="optionItemIds"
-                  type="text"
+                <HiddenOptionItemIdsInput
+                  metaIndex={regularIndex}
+                  optionItemIds={optionItemIds}
                 />
               </FieldGroup>
             </VariableSection>
