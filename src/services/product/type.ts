@@ -4,6 +4,12 @@ import type { Media } from "../media/type";
 
 export type ProductType = "default" | "variable";
 export type ProductStatus = "archived" | "draft" | "published";
+export const StatusDictionary: Record<ProductStatus, string> = {
+  archived: "آرشیو",
+  draft: "پیش‌نویس",
+  published: "منتشر شده",
+};
+
 export interface ProductPrice {
   currency: Currency;
   amount: number;

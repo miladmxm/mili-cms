@@ -33,11 +33,11 @@ export const createProductAction = async (
   }
 
   try {
-    const createdArticleOutput = await createProduct({
+    const createdProductOutput = await createProduct({
       ...output,
       authorId: session.user.id,
     });
-    if (!createdArticleOutput.success) {
+    if (!createdProductOutput.success) {
       return { success: false, message: "خطا در ایجاد محصول" };
     }
     updateTag(CacheKeys.articles);

@@ -78,7 +78,8 @@ export const createProduct = async (productData: CreateProduct) => {
             .flat(),
         ),
       );
-      productRepo.createProductToOptionItem(
+
+      await productRepo.createProductToOptionItem(
         optionIds.map((id) => ({ optionItemId: id, productId: product.id })),
         tx,
       );

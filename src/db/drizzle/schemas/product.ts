@@ -22,6 +22,7 @@ import { comment } from "./comment";
 import { MainSchema, RelationSchema } from "./main";
 import { media } from "./media";
 import { productCategory } from "./productCategory";
+import { productOptionItem } from "./productOptions";
 import { rate } from "./rate";
 
 export const product = MainSchema.table(
@@ -115,7 +116,7 @@ export const productToOptionItem = RelationSchema.table(
       .references(() => product.id, { onDelete: "cascade" })
       .notNull(),
     optionItemId: uuid("option_item_id")
-      .references(() => rate.id, { onDelete: "cascade" })
+      .references(() => productOptionItem.id, { onDelete: "cascade" })
       .notNull(),
   },
   (table) => [primaryKey({ columns: [table.productId, table.optionItemId] })],

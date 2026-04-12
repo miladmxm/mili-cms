@@ -15,8 +15,7 @@ import {
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
-import type { Category } from "@/services/article/types";
-import type { Option, ProductType } from "@/services/product/type";
+import type { Category, Option, ProductType } from "@/services/product/type";
 
 import RichEditor from "@/components/dashboard/rich-editor";
 import { Button } from "@/components/dashboard/ui/button";
@@ -46,7 +45,7 @@ import { CURRENCY } from "@/constant/appData";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
 import { convertToSlug } from "@/lib/slug";
 import { cn } from "@/lib/utils";
-import { StatusDictionary } from "@/services/article/types";
+import { StatusDictionary } from "@/services/product/type";
 
 import type { CreateProductInput } from "../validations/product.schema";
 
@@ -87,7 +86,7 @@ export const ProductSlug = () => {
           <Input
             dir="ltr"
             id="slug"
-            placeholder="article-about"
+            placeholder="product-name"
             {...field}
             onFocus={(e) => {
               if (!e.target.value) {
