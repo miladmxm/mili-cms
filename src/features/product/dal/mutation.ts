@@ -57,14 +57,14 @@ export const updateCategory = (id: string, data: Partial<CreateCategory>) => {
 //   );
 //   return article;
 // };
-// export const deleteArticle = (id: string) => {
-//   return dalRequireAuth(
-//     () => dalDbOperation(() => articleService.deleteArticle(id)),
-//     {
-//       blog: ["delete"],
-//     },
-//   );
-// };
+export const deleteProduct = (id: string) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => productService.deleteProduct(id)),
+    {
+      product: ["delete"],
+    },
+  );
+};
 
 export const createCategory = async (categoryData: CreateCategory) => {
   return dalRequireAuth(

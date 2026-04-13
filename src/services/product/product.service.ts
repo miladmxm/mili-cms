@@ -101,3 +101,7 @@ export const createProduct = async (productData: CreateProduct) => {
 // * UPDATE
 
 // * DELETE
+
+export const deleteProduct = (id: string) => {
+  return productRepo.deleteProductById(id);
+};

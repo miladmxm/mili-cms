@@ -17,7 +17,7 @@ import {
 import type { Product } from "./type";
 
 import ChangeStatusDropdown from "../changeStatusDropdown";
-import DeleteArticle from "../deleteArticle";
+import DeleteProduct from "../deleteProduct";
 import { ProductDictionary } from "./type";
 
 export const columns: ColumnDef<Product>[] = [
@@ -71,7 +71,7 @@ export const columns: ColumnDef<Product>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const { id } = row.original;
+      const { id, name } = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -93,18 +93,19 @@ export const columns: ColumnDef<Product>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/admin/blog/${id}`}>
+              <Link href={`/admin/products/${id}`}>
                 ویرایش
                 <Pen />
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <DeleteArticle
+              <DeleteProduct
                 className="w-full text-destructive hover:text-destructive"
                 id={id}
+                name={name}
               >
                 حذف
-              </DeleteArticle>
+              </DeleteProduct>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

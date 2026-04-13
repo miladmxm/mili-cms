@@ -6,23 +6,22 @@ import type { ActionResult } from "@/types/actions";
 
 import { CacheKeys } from "@/constant/cacheKeys";
 
-import { deleteCategory, deleteOption } from "../dal/mutation";
+import { deleteCategory, deleteOption, deleteProduct } from "../dal/mutation";
 
-// import { deleteArticle, deleteCategory } from "../dal/mutation";
+export const deleteProductAction = async (
+  id: string,
+): Promise<ActionResult<unknown>> => {
+  try {
+    const { success } = await deleteProduct(id);
 
-// export const deleteArticleAction = async (
-//   id: string,
-// ): Promise<ActionResult<unknown>> => {
-//   try {
-//     const { success } = await deleteArticle(id);
-//     if (!success) return { success, message: "خطا در حذف مقاله" };
-//     updateTag(CacheKeys.articles);
-//     return { success: true, message: "با موفقیت حذف شد" };
-//   } catch (error) {
-//     console.log(error);
-//     return { success: false, message: "در حذف مقاله مشکلی رخ داد" };
-//   }
-// };
+    if (!success) return { success, message: "خطا در حذف محصول" };
+    updateTag(CacheKeys.product);
+    return { success: true, message: "با موفقیت حذف شد" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "در حذف محصول مشکلی رخ داد" };
+  }
+};
 export const deleteCategoryAction = async (
   id: string,
 ): Promise<ActionResult<unknown>> => {

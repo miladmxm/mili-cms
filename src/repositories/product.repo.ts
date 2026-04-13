@@ -203,3 +203,9 @@ export const createProductToOptionItem = (
   data: (typeof productToOptionItem.$inferInsert)[],
   tx?: Transaction,
 ) => getDBorTX(tx).insert(productToOptionItem).values(data);
+
+export const deleteProductById = (id: string, tx?: Transaction) =>
+  getDBorTX(tx)
+    .delete(product)
+    .where(eq(product.id, id))
+    .returning({ id: product.id });

@@ -19,9 +19,9 @@ import { cn } from "@/lib/utils";
 
 import { useDeleteProduct } from "../hooks/useDeleteProduct";
 
-const DeleteArticle: FC<
-  PropsWithChildren & { id: string; className?: string }
-> = ({ children, className, id }) => {
+const DeleteProduct: FC<
+  PropsWithChildren & { id: string; className?: string; name: string }
+> = ({ children, className, id, name }) => {
   const { isPending, handleClickToDelete } = useDeleteProduct(id);
   return (
     <Dialog>
@@ -38,7 +38,7 @@ const DeleteArticle: FC<
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>آیا از حذف این مقاله اطمینان دارید؟</DialogTitle>
+          <DialogTitle>آیا از حذف محصول "{name}" اطمینان دارید؟</DialogTitle>
         </DialogHeader>
         <DialogDescription>این کار غیر قابل بازگشت است</DialogDescription>
         <DialogFooter>
@@ -56,4 +56,4 @@ const DeleteArticle: FC<
   );
 };
 
-export default DeleteArticle;
+export default DeleteProduct;
