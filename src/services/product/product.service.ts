@@ -29,8 +29,17 @@ export const getProduct = async (id: string) => {
   if (thumbnail) {
     thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
   }
+  let gallery = product.gallery.map(({ media }) => media);
+  if (gallery && gallery.length > 0) {
+    gallery = gallery.map((img) => {
+      return {
+        ...img,
+        url: DTOconvertMediaPathToRealUrl(img.url),
+      };
+    });
+  }
 
-  return { ...product, thumbnail };
+  return { ...product, thumbnail, gallery };
 };
 
 // * CREATE

@@ -1,45 +1,52 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 import type { Product } from "@/services/product/type";
 
-import { getItemsDirtyData } from "@/utils/dirtyValues";
+import type { CreateProductOutput } from "../validations/product.schema";
 
-import type { UpdateArticle } from "../validations/product.schema";
-
-import { updateArticle } from "../actions/update";
-import { UpdateArticleSchema } from "../validations/product.schema";
+import { CreateProductSchema } from "../validations/product.schema";
 
 export const useEditProduct = (product: Product) => {
-  const { content, excerpt, name, slug, thumbnail, status, categoryIds } =
-    product;
+  const {
+    content,
+    excerpt,
+    name,
+    slug,
+    thumbnail,
+    status,
+    categoryIds,
+    type,
+    productMeta,
+    gallery,
+  } = product;
 
   const form = useForm({
-    resolver: valibotResolver(UpdateArticleSchema),
+    resolver: valibotResolver(CreateProductSchema),
     defaultValues: {
       content,
       excerpt,
       name,
       slug,
-      thumbnail: thumbnail
-        ? { id: thumbnail.id, url: thumbnail.url }
-        : undefined,
       status,
       categoryIds,
+      // metadata: [],
+      // type,
+      gallery,
     },
   });
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = (data: UpdateArticle) => {
-    const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
+  const onSubmit = (data: CreateProductOutput) => {
+    console.log(data);
+    // const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
     startTransition(async () => {
-      const { success, message } = await updateArticle(product.id, dirtyData);
-      if (!success) toast.error(message);
-      else {
-        toast.success(message);
-      }
+      // const { success, message } = await updateArticle(product.id, dirtyData);
+      // if (!success) toast.error(message);
+      // else {
+      //   toast.success(message);
+      // }
     });
   };
 

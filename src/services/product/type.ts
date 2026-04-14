@@ -45,18 +45,47 @@ export type CreateProduct =
     });
 
 export interface Product {
+  thumbnail: Media | null;
   categoryIds: string[];
   id: string;
+  type: ProductType | null;
   name: string;
   content: ProseMirror;
   slug: string;
   excerpt: string;
   createdAt: Date;
   updatedAt: Date;
-  thumbnail: Media;
   authorId: string;
   status: ProductStatus;
-  type: ProductType;
+  thumbnailId: string | null;
+  productMeta: {
+    id: string;
+    thumbnailId: string | null;
+    productId: string;
+    price: ProductPrice;
+    stock: number;
+    optionItemIds: string | null;
+  }[];
+  categories: {
+    categoryId: string;
+  }[];
+  gallery: Media[];
+  optionItems: {
+    productId: string;
+    optionItemId: string;
+  }[];
+  // categoryIds: string[];
+  // id: string;
+  // name: string;
+  // content: ProseMirror;
+  // slug: string;
+  // excerpt: string;
+  // createdAt: Date;
+  // updatedAt: Date;
+  // thumbnail: Media;
+  // authorId: string;
+  // status: ProductStatus;
+  // type: ProductType;
 }
 export interface CreateCategory {
   name: string;

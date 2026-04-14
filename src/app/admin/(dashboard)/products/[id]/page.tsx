@@ -1,8 +1,8 @@
-import EditArticle from "@/features/article/containers/editArticle";
+import EditProduct from "@/features/product/containers/editProduct";
 
-const EditArticlePage = async ({ params }: PageProps<"/admin/blog/[id]">) => {
+const EditProductPage = async ({ params }: PageProps<"/admin/blog/[id]">) => {
   const { id } = await params;
-  return <EditArticle id={id} />;
+  return <EditProduct id={id} />;
 };
 
-export default EditArticlePage;
+export default EditProductPage;

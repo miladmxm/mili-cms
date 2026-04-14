@@ -25,6 +25,9 @@ export const findProductById = async (id: string, tx?: Transaction) => {
     with: {
       categories: { columns: { categoryId: true } },
       thumbnail: true,
+      gallery: { with: { media: true } },
+      optionItems: true,
+      productMeta: true,
     },
   });
   if (!findedProduct) return findedProduct;

@@ -12,13 +12,15 @@ import {
 import { Field, FieldGroup } from "@/components/dashboard/ui/field";
 import { Spinner } from "@/components/dashboard/ui/spinner";
 
-import type { Category, Product } from "../../../services/product/type";
+import type { Category, Option, Product } from "../../../services/product/type";
 
 import { useEditProduct } from "../hooks/useEditProduct";
 import {
   ProductCategories,
   ProductContent,
   ProductExcerpt,
+  ProductGallery,
+  ProductMeta,
   ProductName,
   ProductSlug,
   ProductStatus,
@@ -28,8 +30,10 @@ import {
 const EditProductForm = ({
   categories,
   product,
+  options,
 }: {
   product: Product;
+  options: Promise<Option[]>;
   categories: Promise<Category[]>;
 }) => {
   const { isPending, submit, form } = useEditProduct(product);
@@ -40,7 +44,7 @@ const EditProductForm = ({
           <div className="lg:col-span-4">
             <Card className="w-full lg:sticky lg:top-2">
               <CardHeader>
-                <CardTitle>ایجاد مقاله جدید</CardTitle>
+                <CardTitle>ایجاد محصول جدید</CardTitle>
               </CardHeader>
               <CardContent>
                 <FieldGroup>
@@ -49,15 +53,16 @@ const EditProductForm = ({
                   <ProductExcerpt />
                   <ProductCategories categories={categories} />
                   <ProductThumbnail />
+                  <ProductGallery />
                   <div className="flex gap-2">
                     <ProductStatus isPending={isPending} />
                     <Field>
                       <Button
                         className="flex-auto"
-                        disabled={isPending || !form.formState.isDirty}
+                        disabled={isPending}
                         type="submit"
                       >
-                        بروزرسانی
+                        ذخیره
                         {isPending && <Spinner />}
                       </Button>
                     </Field>
@@ -66,7 +71,17 @@ const EditProductForm = ({
               </CardContent>
             </Card>
           </div>
-          <ProductContent key={Product.id} />
+          <div className="lg:col-span-8 flex flex-col gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>داده های محصول</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProductMeta options={options} />
+              </CardContent>
+            </Card>
+            <ProductContent key="create" />
+          </div>
         </div>
       </form>
     </FormProvider>
