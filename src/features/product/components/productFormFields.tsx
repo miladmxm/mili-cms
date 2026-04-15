@@ -329,7 +329,13 @@ export const ProductThumbnail = () => {
   return <SingleImagePicker name="thumbnail" />;
 };
 
-export const ProductStatus = ({ isPending }: { isPending: boolean }) => {
+export const ProductStatus = ({
+  isPending,
+  className,
+}: {
+  isPending: boolean;
+  className?: string;
+}) => {
   const { setValue, control } = useProductFormContext();
   return (
     <Controller
@@ -337,7 +343,10 @@ export const ProductStatus = ({ isPending }: { isPending: boolean }) => {
       control={control}
       render={({ fieldState, field: { value } }) => {
         return (
-          <Field aria-invalid={fieldState.invalid} className="w-max">
+          <Field
+            aria-invalid={fieldState.invalid}
+            className={cn("w-max", className)}
+          >
             <StatusDropdown
               value={value}
               onChange={(v) => setValue("status", v, { shouldDirty: true })}

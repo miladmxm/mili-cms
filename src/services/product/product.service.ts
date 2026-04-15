@@ -67,6 +67,7 @@ export const createProduct = async (productData: CreateProduct) => {
   if (productData.thumbnailId) {
     await checkMediaType(productData.thumbnailId, "image");
   }
+  console.log(productData);
   const categories = await productRepo.findCategoriesByIds(
     productData.categoryIds,
   );

@@ -52,12 +52,12 @@ const EditProductForm = ({
                   <ProductCategories categories={categories} />
                   <ProductThumbnail />
                   <ProductGallery />
-                  <div className="flex gap-2">
-                    <ProductStatus isPending={isPending} />
-                    <Field>
+                  <div className="flex gap-2 lg:sticky lg:bottom-2 backdrop-blur-xs flex-wrap">
+                    <ProductStatus className="flex-1" isPending={isPending} />
+                    <Field className="flex-auto">
                       <Button
                         className="flex-auto"
-                        disabled={isPending}
+                        disabled={isPending || !form.formState.isDirty}
                         type="submit"
                       >
                         بروزرسانی

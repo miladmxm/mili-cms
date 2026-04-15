@@ -31,16 +31,24 @@ export const createProductAction = async (
   if (!successValidation) {
     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
-
+  let { metadata } = output;
+  if (output.type === "variable") {
+    metadata = output.metadata.map((meta) => ({
+      ...meta,
+      thumbnailId: meta.thumbnail,
+    }));
+  }
   try {
     const createdProductOutput = await createProduct({
       ...output,
       authorId: session.user.id,
-    });
+      thumbnailId: output.thumbnail,
+      metadata,
+    } as CreateProduct);
     if (!createdProductOutput.success) {
       return { success: false, message: "خطا در ایجاد محصول" };
     }
-    updateTag(CacheKeys.articles);
+    updateTag(CacheKeys.product);
     return { success: successValidation, message: "محصول با موفقیت ایجاد شد" };
   } catch (error) {
     console.log(error);

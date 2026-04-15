@@ -10,12 +10,11 @@ import { getCategories, getOptions, getProduct } from "../dal/query";
 
 const EditProduct = async ({ id }: { id: string }) => {
   const product = dalVerifySuccess(await getProduct(id));
-  if (!product) redirect("/admin");
+  if (!product) redirect("/admin/products");
   const images = getMediasByType(["image"]);
   const audios = getMediasByType(["audio"]);
   const categories = getCategories();
   const options = getOptions();
-  console.log(product);
   return (
     <MediaContextProvider media={{ image: images, audio: audios }}>
       <EditProductContextProvider product={product}>

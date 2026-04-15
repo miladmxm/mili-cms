@@ -25,22 +25,12 @@ export const useCreateProduct = () => {
       categoryIds: [],
     },
   });
-  console.log(form.formState.errors);
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = (data: CreateProductOutput) => {
     startTransition(async () => {
-      let metadata = data.metadata;
-      if (data.type === "variable") {
-        metadata = data.metadata.map((meta) => ({
-          ...meta,
-          thumbnailId: meta.thumbnail,
-        }));
-      }
       const { success, message } = await createProductAction({
         ...data,
-        thumbnailId: data.thumbnail,
-        metadata,
       });
       if (!success) toast.error(message);
       else {
