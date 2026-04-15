@@ -1,6 +1,6 @@
 "use client";
 import type { ComponentProps, PropsWithChildren } from "react";
-import type { FieldPath } from "react-hook-form";
+import type { FieldPath, FieldPathValue } from "react-hook-form";
 
 import { ChevronDown, Plus, Trash } from "lucide-react";
 import Image from "next/image";
@@ -15,7 +15,12 @@ import {
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
-import type { Category, Option, ProductType } from "@/services/product/type";
+import type {
+  Category,
+  Option,
+  ProductType,
+  ProductVariableMeta,
+} from "@/services/product/type";
 
 import RichEditor from "@/components/dashboard/rich-editor";
 import { Button } from "@/components/dashboard/ui/button";
@@ -49,6 +54,7 @@ import { StatusDictionary } from "@/services/product/type";
 
 import type { CreateProductInput } from "../validations/product.schema";
 
+import { useEditProductContext } from "../context/editProduct";
 import SelectMultipleOptionItem from "./options/selectMultipleOptionItem";
 import SelectMultipleCategories, {
   SelectMultipleCategoriesSkeleton,
@@ -198,7 +204,6 @@ export const ProductGallery = () => {
                       shouldDirty: true,
                     });
                   }
-                  // sheetControllerRef.current?.close();
                 }}
               />
             </Suspense>
@@ -246,15 +251,17 @@ export const ProductGallery = () => {
 const SingleImagePicker = ({
   name,
   className,
+  defaultValue,
 }: {
   name: FieldPath<CreateProductInput>;
+  defaultValue?: FieldPathValue<CreateProductInput, "thumbnail">;
   className?: string;
 }) => {
   const sheetControllerRef = useRef<SheetController>(null);
-
   const { control, setValue } = useProductFormContext();
   return (
     <Controller
+      defaultValue={defaultValue}
       name={name}
       control={control}
       render={({ fieldState, field: { value } }) => {
@@ -319,7 +326,7 @@ const SingleImagePicker = ({
 };
 
 export const ProductThumbnail = () => {
-  return <SingleImagePicker name="thumbnailId" />;
+  return <SingleImagePicker name="thumbnail" />;
 };
 
 export const ProductStatus = ({ isPending }: { isPending: boolean }) => {
@@ -375,11 +382,19 @@ interface MetaProps {
   metaIndex: number;
 }
 
-const ProductPriceCurrencty = ({ metaIndex }: MetaProps) => {
+const ProductPriceCurrencty = ({
+  metaIndex,
+  defaultValue = "IRR",
+}: MetaProps & {
+  defaultValue?: FieldPathValue<
+    CreateProductInput,
+    "metadata.0.price.currency"
+  >;
+}) => {
   const { control } = useProductFormContext();
   return (
     <Controller
-      defaultValue="IRR"
+      defaultValue={defaultValue}
       name={`metadata.${metaIndex}.price.currency`}
       control={control}
       render={({ field: currencyField, fieldState: currencyState }) => (
@@ -407,11 +422,19 @@ const ProductPriceCurrencty = ({ metaIndex }: MetaProps) => {
 const ProductPriceAmount = ({
   metaIndex,
   children,
-}: PropsWithChildren<MetaProps>) => {
+  defaultValue = 0,
+}: PropsWithChildren<
+  MetaProps & {
+    defaultValue?: FieldPathValue<
+      CreateProductInput,
+      "metadata.0.price.amount"
+    >;
+  }
+>) => {
   const { control } = useProductFormContext();
   return (
     <Controller
-      defaultValue={0}
+      defaultValue={defaultValue}
       name={`metadata.${metaIndex}.price.amount`}
       control={control}
       render={({ field, fieldState }) => (
@@ -428,19 +451,34 @@ const ProductPriceAmount = ({
   );
 };
 
-const ProductPriceFields = ({ metaIndex }: MetaProps) => {
+const ProductPriceFields = ({
+  metaIndex,
+  defaultValue,
+}: MetaProps & {
+  defaultValue?: FieldPathValue<CreateProductInput, "metadata.0.price">;
+}) => {
   return (
-    <ProductPriceAmount metaIndex={metaIndex}>
-      <ProductPriceCurrencty metaIndex={metaIndex} />
+    <ProductPriceAmount
+      defaultValue={defaultValue?.amount}
+      metaIndex={metaIndex}
+    >
+      <ProductPriceCurrencty
+        defaultValue={defaultValue?.currency}
+        metaIndex={metaIndex}
+      />
     </ProductPriceAmount>
   );
 };
-
-const ProductStock = ({ metaIndex }: MetaProps) => {
+const ProductStock = ({
+  metaIndex,
+  defaultValue = -1,
+}: MetaProps & {
+  defaultValue?: FieldPathValue<CreateProductInput, "metadata.0.stock">;
+}) => {
   const { control } = useProductFormContext();
   return (
     <Controller
-      defaultValue={-1}
+      defaultValue={defaultValue}
       name={`metadata.${metaIndex}.stock`}
       control={control}
       render={({ field, fieldState }) => (
@@ -459,11 +497,16 @@ const ProductStock = ({ metaIndex }: MetaProps) => {
 const ProductVariantThumbnail = ({
   metaIndex,
   className,
-}: MetaProps & { className?: string }) => {
+  defaultValue,
+}: MetaProps & {
+  className?: string;
+  defaultValue?: FieldPathValue<CreateProductInput, "thumbnail">;
+}) => {
   return (
     <SingleImagePicker
       className={className}
-      name={`metadata.${metaIndex}.thumbnailId`}
+      defaultValue={defaultValue}
+      name={`metadata.${metaIndex}.thumbnail`}
     />
   );
 };
@@ -519,7 +562,50 @@ const HiddenOptionItemIdsInput = ({
     />
   );
 };
-
+const VariableOptionItemFields = ({
+  index,
+  optionItemIds,
+  label,
+}: {
+  index: number;
+  optionItemIds: string;
+  label: string;
+}) => {
+  const { product } = useEditProductContext();
+  let metadata: ProductVariableMeta[] | undefined;
+  if (product && product.type === "variable") {
+    metadata = Object.groupBy(
+      product.metadata,
+      ({ optionItemIds: oii }) => oii,
+    )[optionItemIds];
+  }
+  return (
+    <VariableSection data-key={index}>
+      <p className="mb-3">{label}</p>
+      <FieldGroup>
+        <ProductPriceFields
+          defaultValue={metadata ? metadata[0].price : undefined}
+          metaIndex={index}
+        />
+        <HiddenOptionItemIdsInput
+          metaIndex={index}
+          optionItemIds={optionItemIds}
+        />
+        <div className="flex gap-4 @sm:flex-row flex-col">
+          <ProductStock
+            defaultValue={metadata ? metadata[0].stock : undefined}
+            metaIndex={index}
+          />
+          <ProductVariantThumbnail
+            className="flex-1/3"
+            defaultValue={metadata ? metadata[0].thumbnail : undefined}
+            metaIndex={index}
+          />
+        </div>
+      </FieldGroup>
+    </VariableSection>
+  );
+};
 const VariableItemLoop = ({
   items,
   counterToZiro,
@@ -543,23 +629,12 @@ const VariableItemLoop = ({
             ? [...parrentId, id].sort().join("|")
             : id;
           return (
-            <VariableSection data-key={regularIndex} key={id}>
-              <p className="mb-3">{label}</p>
-              <FieldGroup>
-                <ProductPriceFields metaIndex={regularIndex} />
-                <HiddenOptionItemIdsInput
-                  metaIndex={regularIndex}
-                  optionItemIds={optionItemIds}
-                />
-                <div className="flex gap-4 @sm:flex-row flex-col">
-                  <ProductStock metaIndex={regularIndex} />
-                  <ProductVariantThumbnail
-                    className="flex-1/3"
-                    metaIndex={regularIndex}
-                  />
-                </div>
-              </FieldGroup>
-            </VariableSection>
+            <VariableOptionItemFields
+              index={regularIndex}
+              key={id}
+              label={label}
+              optionItemIds={optionItemIds}
+            />
           );
         })}
       </>
@@ -607,9 +682,15 @@ const VariableMapHanlder = ({
     />
   );
 };
-const ProductVariableMeta = ({ options }: { options: Option[] }) => {
+const ProductVariableMetaFieldGroup = ({
+  options,
+  defaultItems,
+}: {
+  options: Option[];
+  defaultItems?: SelectOptionState;
+}) => {
   const [selectedOptionItem, setSelectedOptionItem] =
-    useState<SelectOptionState>({});
+    useState<SelectOptionState>(defaultItems ? defaultItems : {});
   const selectedIds: string[] = Object.values(selectedOptionItem)
     .flat()
     .map(({ id }) => id);
@@ -645,6 +726,7 @@ const ProductVariableMeta = ({ options }: { options: Option[] }) => {
   );
 };
 export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
+  const { product } = useEditProductContext();
   const optionsData = use(options);
   const { control, setValue } = useProductFormContext();
   const typeValue = useWatch({ control, name: "type" });
@@ -669,7 +751,17 @@ export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
         </TabsContent>
         <TabsContent value="variable">
           <FieldGroup>
-            <ProductVariableMeta options={optionsData} />
+            <ProductVariableMetaFieldGroup
+              options={optionsData}
+              defaultItems={
+                product
+                  ? (Object.groupBy(
+                      product.optionItems,
+                      ({ optionId }) => optionId,
+                    ) as SelectOptionState)
+                  : undefined
+              }
+            />
           </FieldGroup>
         </TabsContent>
       </Tabs>

@@ -30,8 +30,18 @@ export const useCreateProduct = () => {
 
   const onSubmit = (data: CreateProductOutput) => {
     startTransition(async () => {
-      console.log(data);
-      const { success, message } = await createProductAction(data);
+      let metadata = data.metadata;
+      if (data.type === "variable") {
+        metadata = data.metadata.map((meta) => ({
+          ...meta,
+          thumbnailId: meta.thumbnail,
+        }));
+      }
+      const { success, message } = await createProductAction({
+        ...data,
+        thumbnailId: data.thumbnail,
+        metadata,
+      });
       if (!success) toast.error(message);
       else {
         form.reset();

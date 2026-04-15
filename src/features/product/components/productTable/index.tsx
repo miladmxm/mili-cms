@@ -35,12 +35,12 @@ import {
 } from "@/components/dashboard/ui/table";
 import { useDirection } from "@/hooks/useDirection";
 
-import type { Product } from "./type";
+import type { ProductTable } from "./type";
 
 import { columns } from "./cols";
 import { ProductDictionary } from "./type";
 
-export function ProductTable({ data }: { data: Product[] }) {
+export function ProductTable({ data }: { data: ProductTable[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -101,7 +101,7 @@ export function ProductTable({ data }: { data: Product[] }) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {ProductDictionary[column.id as keyof Product]}
+                    {ProductDictionary[column.id as keyof ProductTable]}
                   </DropdownMenuCheckboxItem>
                 );
               })}

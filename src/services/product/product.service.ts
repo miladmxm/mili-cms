@@ -7,7 +7,7 @@ import * as productRepo from "@/repositories/product.repo";
 
 import type { Media } from "../media/type";
 import type { LimitAndOffset } from "../type";
-import type { CreateProduct } from "./type";
+import type { CreateProduct, Product } from "./type";
 
 import { checkMediaType, filterMediaIdsByTypes } from "../media";
 import { DTOconvertMediaPathToRealUrl } from "../media/dto";
@@ -38,8 +38,27 @@ export const getProduct = async (id: string) => {
       };
     });
   }
-
-  return { ...product, thumbnail, gallery };
+  let productMetadata = product.metadata;
+  if (productMetadata && productMetadata.length > 0) {
+    productMetadata = productMetadata.map((meta) => {
+      if (!meta.thumbnail) return meta;
+      return {
+        ...meta,
+        thumbnail: {
+          ...meta.thumbnail,
+          url: DTOconvertMediaPathToRealUrl(meta.thumbnail.url),
+        },
+      };
+    });
+  }
+  const optionItems = product.optionItems.map(({ optionItem }) => optionItem);
+  return {
+    ...product,
+    thumbnail,
+    gallery,
+    metadata: productMetadata,
+    optionItems,
+  } as unknown as Product;
 };
 
 // * CREATE

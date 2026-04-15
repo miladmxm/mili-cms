@@ -49,6 +49,7 @@ export const product = MainSchema.table(
       .$type<ProductStatus>()
       .default("draft"),
     type: text({ enum: ["default", "variable"] })
+      .notNull()
       .$type<ProductType>()
       .default("default"),
   },

@@ -129,7 +129,7 @@ export const productRelations = relations(product, ({ many, one }) => ({
   rates: many(productToRate),
   gallery: many(productGallery),
   optionItems: many(productToOptionItem),
-  productMeta: many(productMeta),
+  metadata: many(productMeta),
 }));
 
 export const categoryRelations = relations(

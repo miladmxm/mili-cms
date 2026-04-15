@@ -12,7 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/dashboard/ui/field";
 import { Spinner } from "@/components/dashboard/ui/spinner";
 
-import type { Category, Option, Product } from "../../../services/product/type";
+import type { Category, Option } from "../../../services/product/type";
 
 import { useEditProduct } from "../hooks/useEditProduct";
 import {
@@ -29,14 +29,12 @@ import {
 
 const EditProductForm = ({
   categories,
-  product,
   options,
 }: {
-  product: Product;
   options: Promise<Option[]>;
   categories: Promise<Category[]>;
 }) => {
-  const { isPending, submit, form } = useEditProduct(product);
+  const { isPending, submit, form } = useEditProduct();
   return (
     <FormProvider {...form}>
       <form onSubmit={submit}>
@@ -62,7 +60,7 @@ const EditProductForm = ({
                         disabled={isPending}
                         type="submit"
                       >
-                        ذخیره
+                        بروزرسانی
                         {isPending && <Spinner />}
                       </Button>
                     </Field>

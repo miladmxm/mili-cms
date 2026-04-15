@@ -43,7 +43,7 @@ export const CreateProductBaseSchema = v.object({
   content: ProseMirrorSchema,
   slug: v.pipe(v.string(), v.nonEmpty("مقدار slug را وارد کنید")),
   status: StatusSchema,
-  thumbnailId: ThumbnailSchema,
+  thumbnail: ThumbnailSchema,
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
   gallery: v.pipe(v.optional(v.array(ThumbnailNotNullSchema), [])),
 });
@@ -70,7 +70,7 @@ export const CreateProductSchema = v.variant("type", [
         v.object({
           price: PriceSchema,
           stock: StockSchema,
-          thumbnailId: ThumbnailSchema,
+          thumbnail: ThumbnailSchema,
           optionItemIds: v.string(),
         }),
       ),

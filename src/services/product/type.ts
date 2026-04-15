@@ -14,11 +14,11 @@ export interface ProductPrice {
   currency: Currency;
   amount: number;
 }
-export interface ProductMetadata {
+export interface CreateProductMetadata {
   price: ProductPrice;
   stock?: number;
 }
-export interface VariableProductMetadata extends ProductMetadata {
+export interface VariableCreateProductMetadata extends CreateProductMetadata {
   thumbnailId?: string | null | undefined;
   optionItemIds: string;
 }
@@ -37,18 +37,34 @@ interface CreateProductBaseData {
 export type CreateProduct =
   | (CreateProductBaseData & {
       type: "default";
-      metadata: ProductMetadata[];
+      metadata: CreateProductMetadata[];
     })
   | (CreateProductBaseData & {
       type: "variable";
-      metadata: VariableProductMetadata[];
+      metadata: VariableCreateProductMetadata[];
     });
 
-export interface Product {
+interface ProductDefaultMeta {
+  id: string;
+  productId: string;
+  price: ProductPrice;
+  stock: number;
+}
+export interface ProductVariableMeta {
+  id: string;
+  thumbnailId: string | null;
   thumbnail: Media | null;
+  productId: string;
+  price: ProductPrice;
+  stock: number;
+  optionItemIds: string;
+}
+interface ProductBase {
+  thumbnail: Media | null;
+  thumbnailId: string | null;
   categoryIds: string[];
   id: string;
-  type: ProductType | null;
+  type: ProductType;
   name: string;
   content: ProseMirror;
   slug: string;
@@ -57,36 +73,15 @@ export interface Product {
   updatedAt: Date;
   authorId: string;
   status: ProductStatus;
-  thumbnailId: string | null;
-  productMeta: {
-    id: string;
-    thumbnailId: string | null;
-    productId: string;
-    price: ProductPrice;
-    stock: number;
-    optionItemIds: string | null;
-  }[];
   categories: {
     categoryId: string;
   }[];
   gallery: Media[];
-  optionItems: {
-    productId: string;
-    optionItemId: string;
-  }[];
-  // categoryIds: string[];
-  // id: string;
-  // name: string;
-  // content: ProseMirror;
-  // slug: string;
-  // excerpt: string;
-  // createdAt: Date;
-  // updatedAt: Date;
-  // thumbnail: Media;
-  // authorId: string;
-  // status: ProductStatus;
-  // type: ProductType;
+  optionItems: OptionItem[];
 }
+export type Product =
+  | (ProductBase & { metadata: ProductDefaultMeta[]; type: "default" })
+  | (ProductBase & { metadata: ProductVariableMeta[]; type: "variable" });
 export interface CreateCategory {
   name: string;
   slug: string;
@@ -122,6 +117,7 @@ export interface OptionItem {
   value: string;
   id: string;
   label: string;
+  optionId: string;
 }
 export interface UpdateOption extends Partial<CreateOption> {
   deletedOptionItemIds?: string[];

@@ -26,8 +26,10 @@ export const findProductById = async (id: string, tx?: Transaction) => {
       categories: { columns: { categoryId: true } },
       thumbnail: true,
       gallery: { with: { media: true } },
-      optionItems: true,
-      productMeta: true,
+      optionItems: {
+        with: { optionItem: true },
+      },
+      metadata: { with: { thumbnail: true } },
     },
   });
   if (!findedProduct) return findedProduct;
@@ -64,7 +66,7 @@ export const findProductByIdWithAll = (id: string, tx?: Transaction) =>
       comments: true,
       gallery: true,
       optionItems: true,
-      productMeta: true,
+      metadata: true,
       rates: true,
       thumbnail: true,
     },
@@ -142,12 +144,12 @@ export const updateCategoryById = (
 
 export const findOptionByIdWithItems = (id: string, tx?: Transaction) =>
   getDBorTX(tx).query.productOption.findFirst({
-    with: { items: { columns: { optionId: false } } },
+    with: { items: true },
     where: eq(productOption.id, id),
   });
 export const findOptionsWithItems = (tx?: Transaction) =>
   getDBorTX(tx).query.productOption.findMany({
-    with: { items: { columns: { optionId: false } } },
+    with: { items: true },
   });
 
 export const createOption = (

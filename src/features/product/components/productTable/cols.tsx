@@ -14,13 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/dashboard/ui/dropdown-menu";
 
-import type { Product } from "./type";
+import type { ProductTable } from "./type";
 
 import ChangeStatusDropdown from "../changeStatusDropdown";
 import DeleteProduct from "../deleteProduct";
 import { ProductDictionary } from "./type";
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<ProductTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
