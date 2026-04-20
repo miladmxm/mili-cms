@@ -1,6 +1,7 @@
 import { cacheTag } from "next/cache";
 
 import { CacheKeys } from "@/constant/cacheKeys";
+import { OPTION_ITEM_IDS_SEPARATOR } from "@/features/product/constant";
 import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import { withTransaction } from "@/repositories";
 import * as productRepo from "@/repositories/product.repo";
@@ -103,7 +104,9 @@ export const createProduct = async (productData: CreateProduct) => {
       const optionIds = Array.from(
         new Set(
           productData.metadata
-            .map(({ optionItemIds }) => optionItemIds.split("|"))
+            .map(({ optionItemIds }) =>
+              optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR),
+            )
             .flat(),
         ),
       );

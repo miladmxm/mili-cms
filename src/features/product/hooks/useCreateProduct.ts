@@ -21,12 +21,11 @@ export const useCreateProduct = () => {
       slug: "",
       status: "draft",
       type: "default",
-      metadata: [],
+      metadata: {},
       categoryIds: [],
     },
   });
   const [isPending, startTransition] = useTransition();
-
   const onSubmit = (data: CreateProductOutput) => {
     startTransition(async () => {
       const { success, message } = await createProductAction({

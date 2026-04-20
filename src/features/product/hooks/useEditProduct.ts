@@ -6,18 +6,29 @@ import { getItemsDirtyData } from "@/utils/dirtyValues";
 
 import type { CreateProductOutput } from "../validations/product.schema";
 
-import { useEditProductContext } from "../context/editProduct";
+import { useEditProductContextRequire } from "../context/editProduct";
 import { CreateProductSchema } from "../validations/product.schema";
 
 export const useEditProduct = () => {
-  const { product } = useEditProductContext();
+  const { product } = useEditProductContextRequire();
+
   const form = useForm({
     resolver: valibotResolver(CreateProductSchema),
     defaultValues: {
       ...product,
-      metadata: [],
+      metadata:
+        product.type === "variable"
+          ? product.metadata.reduce(
+              (prev, current) => ({
+                ...prev,
+                [current.optionItemIds]: current,
+              }),
+              {},
+            )
+          : { "0": product.metadata[0] },
     },
   });
+  // console.log(form.formState.defaultValues);
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = (data: CreateProductOutput) => {

@@ -54,6 +54,7 @@ import { StatusDictionary } from "@/services/product/type";
 
 import type { CreateProductInput } from "../validations/product.schema";
 
+import { OPTION_ITEM_IDS_SEPARATOR } from "../constant";
 import { useEditProductContext } from "../context/editProduct";
 import SelectMultipleOptionItem from "./options/selectMultipleOptionItem";
 import SelectMultipleCategories, {
@@ -388,7 +389,7 @@ export const ProductContent = () => {
 };
 
 interface MetaProps {
-  metaIndex: number;
+  metaIndex: number | string;
 }
 
 const ProductPriceCurrencty = ({
@@ -440,22 +441,34 @@ const ProductPriceAmount = ({
     >;
   }
 >) => {
-  const { control } = useProductFormContext();
+  const {
+    control,
+    getValues,
+    formState: { defaultValues },
+  } = useProductFormContext();
+  console.log(metaIndex);
+  console.log(
+    getValues(`metadata.${metaIndex}.price.amount`),
+    defaultValues?.metadata,
+  );
   return (
     <Controller
+      // defaultValue={formState.defaultValues?.metadata[metaIndex]?.price?.amount}
       defaultValue={defaultValue}
       name={`metadata.${metaIndex}.price.amount`}
       control={control}
-      render={({ field, fieldState }) => (
-        <Field aria-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={field.name}>قیمت محصول</FieldLabel>
-          <div className="flex gap-2">
-            <Input {...field} id={field.name} placeholder="120000" />
-            {children}
-          </div>
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
-      )}
+      render={({ field, fieldState }) => {
+        return (
+          <Field aria-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>قیمت محصول</FieldLabel>
+            <div className="flex gap-2">
+              <Input {...field} id={field.name} placeholder="120000" />
+              {children}
+            </div>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        );
+      }}
     />
   );
 };
@@ -522,8 +535,8 @@ const ProductVariantThumbnail = ({
 const ProductDefaultMeta = () => {
   return (
     <FieldGroup>
-      <ProductPriceFields metaIndex={0} />
-      <ProductStock metaIndex={0} />
+      <ProductPriceFields metaIndex="0" />
+      <ProductStock metaIndex="0" />
     </FieldGroup>
   );
 };
@@ -548,9 +561,8 @@ const VariableSection = ({
 const HiddenOptionItemIdsInput = ({
   optionItemIds,
   metaIndex,
-}: {
+}: MetaProps & {
   optionItemIds: string;
-  metaIndex: number;
 }) => {
   const { control, setValue } = useProductFormContext();
   const fieldName = `metadata.${metaIndex}.optionItemIds` as const;
@@ -572,7 +584,7 @@ const HiddenOptionItemIdsInput = ({
   );
 };
 const VariableOptionItemFields = ({
-  index,
+  // index,
   optionItemIds,
   label,
 }: {
@@ -580,35 +592,35 @@ const VariableOptionItemFields = ({
   optionItemIds: string;
   label: string;
 }) => {
-  const { product } = useEditProductContext();
+  // const { product } = useEditProductContext();
   let metadata: ProductVariableMeta[] | undefined;
-  if (product && product.type === "variable") {
-    metadata = Object.groupBy(
-      product.metadata,
-      ({ optionItemIds: oii }) => oii,
-    )[optionItemIds];
-  }
+  // if (product && product.type === "variable") {
+  //   metadata = Object.groupBy(
+  //     product.metadata,
+  //     ({ optionItemIds: oii }) => oii,
+  //   )[optionItemIds];
+  // }
   return (
-    <VariableSection data-key={index}>
+    <VariableSection data-key={optionItemIds}>
       <p className="mb-3">{label}</p>
       <FieldGroup>
         <ProductPriceFields
           defaultValue={metadata ? metadata[0].price : undefined}
-          metaIndex={index}
+          metaIndex={optionItemIds}
         />
         <HiddenOptionItemIdsInput
-          metaIndex={index}
+          metaIndex={optionItemIds}
           optionItemIds={optionItemIds}
         />
         <div className="flex gap-4 @sm:flex-row flex-col">
           <ProductStock
             defaultValue={metadata ? metadata[0].stock : undefined}
-            metaIndex={index}
+            metaIndex={optionItemIds}
           />
           <ProductVariantThumbnail
             className="flex-1/3"
             defaultValue={metadata ? metadata[0].thumbnail : undefined}
-            metaIndex={index}
+            metaIndex={optionItemIds}
           />
         </div>
       </FieldGroup>
@@ -635,7 +647,7 @@ const VariableItemLoop = ({
             ? items[counterToZiro].length * index + i
             : i;
           const optionItemIds = parrentId
-            ? [...parrentId, id].sort().join("|")
+            ? [...parrentId, id].sort().join(OPTION_ITEM_IDS_SEPARATOR)
             : id;
           return (
             <VariableOptionItemFields
@@ -698,6 +710,7 @@ const ProductVariableMetaFieldGroup = ({
   options: Option[];
   defaultItems?: SelectOptionState;
 }) => {
+  const { setValue } = useProductFormContext();
   const [selectedOptionItem, setSelectedOptionItem] =
     useState<SelectOptionState>(defaultItems ? defaultItems : {});
   const selectedIds: string[] = Object.values(selectedOptionItem)
@@ -708,6 +721,7 @@ const ProductVariableMetaFieldGroup = ({
       <SelectMultipleOptionItem
         selectedItems={selectedIds}
         onSelect={({ id, optionId, label }) => {
+          setValue("metadata", {});
           if (selectedIds.indexOf(id) === -1) {
             setSelectedOptionItem((prev) => {
               const prevOptionData = prev[optionId] || [];
@@ -739,13 +753,17 @@ export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
   const optionsData = use(options);
   const { control, setValue } = useProductFormContext();
   const typeValue = useWatch({ control, name: "type" });
+  const handleChangeTabType = (t: ProductType) => {
+    setValue("type", t);
+    setValue("metadata", {});
+  };
   return (
     <div className="flex flex-col gap-3">
       <h4>نوع محصول</h4>
       <Tabs
         defaultValue="default"
         value={typeValue}
-        onValueChange={(v) => setValue("type", v as ProductType)}
+        onValueChange={(v) => handleChangeTabType(v as ProductType)}
       >
         <TabsList className="w-full">
           <TabsTrigger defaultChecked value="default">

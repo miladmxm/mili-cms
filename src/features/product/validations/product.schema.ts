@@ -47,35 +47,33 @@ export const CreateProductBaseSchema = v.object({
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
   gallery: v.pipe(v.optional(v.array(ThumbnailNotNullSchema), [])),
 });
+const metadataSchemaGenerator = <T extends Record<string, v.GenericSchema>>(
+  schema: T,
+) => {
+  return v.pipe(
+    v.record(v.string(), v.object(schema)),
+    v.transform((data) => Object.values(data)),
+    v.minLength(1),
+  );
+};
 export const CreateProductSchema = v.variant("type", [
   v.object({
     ...CreateProductBaseSchema.entries,
     type: v.literal("default"),
-    metadata: v.pipe(
-      v.array(
-        v.object({
-          price: PriceSchema,
-          stock: StockSchema,
-        }),
-      ),
-      v.minLength(1),
-      v.maxLength(1),
-    ),
+    metadata: metadataSchemaGenerator({
+      price: PriceSchema,
+      stock: StockSchema,
+    }),
   }),
   v.object({
     ...CreateProductBaseSchema.entries,
     type: v.literal("variable"),
-    metadata: v.pipe(
-      v.array(
-        v.object({
-          price: PriceSchema,
-          stock: StockSchema,
-          thumbnail: ThumbnailSchema,
-          optionItemIds: v.string(),
-        }),
-      ),
-      v.minLength(1),
-    ),
+    metadata: metadataSchemaGenerator({
+      price: PriceSchema,
+      stock: StockSchema,
+      thumbnail: ThumbnailSchema,
+      optionItemIds: v.string("الان مثلا استرینگ نیست؟"),
+    }),
   }),
 ]);
 export type CreateProductInput = v.InferInput<typeof CreateProductSchema>;

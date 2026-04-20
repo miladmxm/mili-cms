@@ -35,6 +35,7 @@ const EditProductForm = ({
   categories: Promise<Category[]>;
 }) => {
   const { isPending, submit, form } = useEditProduct();
+
   return (
     <FormProvider {...form}>
       <form onSubmit={submit}>
