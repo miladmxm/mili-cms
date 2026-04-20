@@ -63,7 +63,11 @@ const sliceUpdatingOptionItemsWithNewOptionItems = (
   if (!items) return { update, create };
   for (const item of items) {
     if (item.id) {
-      update.push({ ...item, id: item.id });
+      update.push({
+        ...item,
+        id: item.id,
+        optionId: "",
+      });
     } else {
       create.push(item);
     }
