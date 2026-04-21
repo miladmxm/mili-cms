@@ -441,19 +441,10 @@ const ProductPriceAmount = ({
     >;
   }
 >) => {
-  const {
-    control,
-    getValues,
-    formState: { defaultValues },
-  } = useProductFormContext();
-  console.log(metaIndex);
-  console.log(
-    getValues(`metadata.${metaIndex}.price.amount`),
-    defaultValues?.metadata,
-  );
+  const { control } = useProductFormContext();
+
   return (
     <Controller
-      // defaultValue={formState.defaultValues?.metadata[metaIndex]?.price?.amount}
       defaultValue={defaultValue}
       name={`metadata.${metaIndex}.price.amount`}
       control={control}
@@ -592,14 +583,8 @@ const VariableOptionItemFields = ({
   optionItemIds: string;
   label: string;
 }) => {
-  // const { product } = useEditProductContext();
   let metadata: ProductVariableMeta[] | undefined;
-  // if (product && product.type === "variable") {
-  //   metadata = Object.groupBy(
-  //     product.metadata,
-  //     ({ optionItemIds: oii }) => oii,
-  //   )[optionItemIds];
-  // }
+
   return (
     <VariableSection data-key={optionItemIds}>
       <p className="mb-3">{label}</p>
@@ -703,6 +688,63 @@ const VariableMapHanlder = ({
     />
   );
 };
+
+const recersiveVariable = ({
+  items,
+  counterToZiro,
+  index,
+  parrentId,
+}: {
+  items: { id: string; label: string }[][];
+  counterToZiro: number;
+  index?: number;
+  parrentId?: string[];
+}): {
+  id: string;
+  label: string;
+  optionItemIds: string;
+  regularIndex: number;
+}[] => {
+  if (items.length === 0) return [];
+  if (counterToZiro === 0) {
+    return items[counterToZiro].map(({ id, label }, i) => {
+      const regularIndex = index ? items[counterToZiro].length * index + i : i;
+      const optionItemIds = parrentId
+        ? [...parrentId, id].sort().join(OPTION_ITEM_IDS_SEPARATOR)
+        : id;
+      return { regularIndex, id, label, optionItemIds };
+    });
+  }
+  return items[counterToZiro]
+    .map(({ id }, i) => {
+      const regularIndex = index ? items[counterToZiro].length * index + i : i;
+      const idList = parrentId ? [...parrentId, id] : [id];
+      return recersiveVariable({
+        index: regularIndex,
+        items,
+        parrentId: idList,
+        counterToZiro: counterToZiro - 1,
+      });
+    })
+    .flat();
+};
+const createVariableFromOptionItems = ({
+  selectedOptionItem,
+}: {
+  selectedOptionItem: SelectOptionState;
+}): string[] => {
+  const valueOfSelectedOptionItems = Object.values(selectedOptionItem).filter(
+    (option) => option.length > 0,
+  );
+  return recersiveVariable({
+    items: valueOfSelectedOptionItems,
+    counterToZiro: valueOfSelectedOptionItems.length - 1,
+  }).map(({ optionItemIds }) => optionItemIds);
+};
+
+type ReturnOptionItemSelect = Parameters<
+  ComponentProps<typeof SelectMultipleOptionItem>["onSelect"]
+>[0];
 const ProductVariableMetaFieldGroup = ({
   options,
   defaultItems,
@@ -710,44 +752,73 @@ const ProductVariableMetaFieldGroup = ({
   options: Option[];
   defaultItems?: SelectOptionState;
 }) => {
-  const { setValue } = useProductFormContext();
+  const {
+    setValue,
+    formState: { defaultValues },
+  } = useProductFormContext();
   const [selectedOptionItem, setSelectedOptionItem] =
     useState<SelectOptionState>(defaultItems ? defaultItems : {});
   const selectedIds: string[] = Object.values(selectedOptionItem)
     .flat()
     .map(({ id }) => id);
+
+  const handleRemoveItemData = ({ optionId, id }: ReturnOptionItemSelect) => {
+    const prevOptionData = selectedOptionItem[optionId].filter(
+      ({ id: prevId }) => id !== prevId,
+    );
+    return {
+      ...selectedOptionItem,
+      [optionId]: prevOptionData,
+    };
+  };
+  const handleAddItemData = ({
+    optionId,
+    label,
+    id,
+  }: ReturnOptionItemSelect) => {
+    const prevOptionData = selectedOptionItem[optionId] || [];
+    return {
+      ...selectedOptionItem,
+      [optionId]: [...prevOptionData, { id, label }],
+    };
+  };
+  const handleSelectedOptionItem = (selectedItem: ReturnOptionItemSelect) => {
+    let newSelectedOptionItems;
+    const { id } = selectedItem;
+    if (selectedIds.indexOf(id) === -1) {
+      newSelectedOptionItems = handleAddItemData(selectedItem);
+    } else {
+      newSelectedOptionItems = handleRemoveItemData(selectedItem);
+    }
+    setSelectedOptionItem(newSelectedOptionItems);
+    const abcd = createVariableFromOptionItems({
+      selectedOptionItem: newSelectedOptionItems,
+    }).reduce(
+      (prev, current) => ({
+        ...prev,
+        [current]: {
+          optionItemIds: current,
+          price: { amount: "0", currencty: "IRR" },
+          stock: -1,
+          ...(defaultValues?.metadata ? defaultValues.metadata[current] : {}),
+        },
+      }),
+      {},
+    );
+    setValue("metadata", abcd);
+  };
   return (
     <FieldGroup>
       <SelectMultipleOptionItem
         selectedItems={selectedIds}
-        onSelect={({ id, optionId, label }) => {
-          setValue("metadata", {});
-          if (selectedIds.indexOf(id) === -1) {
-            setSelectedOptionItem((prev) => {
-              const prevOptionData = prev[optionId] || [];
-              return {
-                ...prev,
-                [optionId]: [...prevOptionData, { id, label }],
-              };
-            });
-          } else {
-            setSelectedOptionItem((prev) => {
-              const prevOptionData = prev[optionId].filter(
-                ({ id: prevId }) => id !== prevId,
-              );
-              return {
-                ...prev,
-                [optionId]: prevOptionData,
-              };
-            });
-          }
-        }}
+        onSelect={handleSelectedOptionItem}
         options={options}
       />
       <VariableMapHanlder selectedOptionItem={selectedOptionItem} />
     </FieldGroup>
   );
 };
+
 export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
   const { product } = useEditProductContext();
   const optionsData = use(options);
@@ -757,6 +828,7 @@ export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
     setValue("type", t);
     setValue("metadata", {});
   };
+
   return (
     <div className="flex flex-col gap-3">
       <h4>نوع محصول</h4>
