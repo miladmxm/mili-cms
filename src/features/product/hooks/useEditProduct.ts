@@ -4,16 +4,16 @@ import { useForm } from "react-hook-form";
 
 import { getItemsDirtyData } from "@/utils/dirtyValues";
 
-import type { CreateProductOutput } from "../validations/product.schema";
+import type { UpdateProductOutput } from "../validations/product.schema";
 
 import { useEditProductContextRequire } from "../context/editProduct";
-import { CreateProductSchema } from "../validations/product.schema";
+import { EditProductSchema } from "../validations/product.schema";
 
 export const useEditProduct = () => {
   const { product } = useEditProductContextRequire();
 
   const form = useForm({
-    resolver: valibotResolver(CreateProductSchema),
+    resolver: valibotResolver(EditProductSchema),
     defaultValues: {
       ...product,
       metadata:
@@ -31,7 +31,7 @@ export const useEditProduct = () => {
   // console.log(form.formState.defaultValues);
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = (data: CreateProductOutput) => {
+  const onSubmit = (data: UpdateProductOutput) => {
     console.log(form.formState.dirtyFields);
     const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
     console.log(data, dirtyData);

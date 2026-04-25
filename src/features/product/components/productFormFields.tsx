@@ -284,41 +284,43 @@ const SingleImagePicker = ({
                   }
                 />
               </Suspense>
-              <Button
-                className="w-full h-32"
-                id={name}
-                variant="outline"
-                onClick={() => sheetControllerRef.current?.open()}
-              >
-                {validImageUrl && (
-                  <Image
-                    alt="image preview"
-                    className="size-full object-contain"
-                    src={{
-                      src: value.url,
-                      width: 128,
-                      height: 128,
-                    }}
-                  />
+              <div className="relative">
+                <Button
+                  className="w-full h-32"
+                  id={name}
+                  variant="outline"
+                  onClick={() => sheetControllerRef.current?.open()}
+                >
+                  {validImageUrl && (
+                    <Image
+                      alt="image preview"
+                      className="size-full object-contain"
+                      src={{
+                        src: value.url,
+                        width: 128,
+                        height: 128,
+                      }}
+                    />
+                  )}
+                </Button>
+                {value && (
+                  <Button
+                    size="icon-sm"
+                    className="absolute end-2 top-2 z-20 text-destructive"
+                    variant="outline"
+                    onClick={() =>
+                      setValue(name, null, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      })
+                    }
+                  >
+                    <Trash />
+                  </Button>
                 )}
-              </Button>
+              </div>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
-            {value && (
-              <Button
-                size="icon-sm"
-                className="absolute end-4 top-10 z-20 text-destructive"
-                variant="outline"
-                onClick={() =>
-                  setValue(name, null, {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  })
-                }
-              >
-                <Trash />
-              </Button>
-            )}
           </div>
         );
       }}
@@ -805,7 +807,7 @@ const ProductVariableMetaFieldGroup = ({
       }),
       {},
     );
-    setValue("metadata", abcd);
+    setValue("metadata", abcd, { shouldDirty: true });
   };
   return (
     <FieldGroup>
@@ -825,8 +827,8 @@ export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
   const { control, setValue } = useProductFormContext();
   const typeValue = useWatch({ control, name: "type" });
   const handleChangeTabType = (t: ProductType) => {
-    setValue("type", t);
-    setValue("metadata", {});
+    setValue("type", t, { shouldDirty: true });
+    setValue("metadata", {}, { shouldDirty: true });
   };
 
   return (
