@@ -3,7 +3,7 @@ services:
     env_file:
       - .env
     image: postgres:18.1-alpine
-    container_name: yatak_db
+    container_name: mili_db
     restart: always
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -15,7 +15,7 @@ services:
       - pgdata:/var/lib/postgresql/data
   minio:
     image: quay.io/minio/minio
-    container_name: yatak_minio
+    container_name: mili_minio
     env_file:
       - .env
     ports:
