@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import type { Option, OptionItem } from "@/services/product/type";
 
+import { IconLinkLoading } from "@/components/dashboard/link-loading";
 import {
   Accordion,
   AccordionContent,
@@ -79,6 +80,7 @@ const OptionItemsAccordion = ({
     </>
   );
 };
+
 const OptionCard = ({ name, description, slug, items, id }: Option) => {
   return (
     <Card className="h-max">
@@ -96,7 +98,9 @@ const OptionCard = ({ name, description, slug, items, id }: Option) => {
           <DeleteOptionButton id={id} name={name} />
           <Button size="sm" variant="ghost">
             <Link href={`/admin/products/options/${id}`}>
-              <Edit2 />
+              <IconLinkLoading>
+                <Edit2 />
+              </IconLinkLoading>
             </Link>
           </Button>
         </CardAction>
@@ -104,6 +108,7 @@ const OptionCard = ({ name, description, slug, items, id }: Option) => {
     </Card>
   );
 };
+
 const OptionList = ({ options }: { options: Option[] }) => {
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">

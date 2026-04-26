@@ -24,7 +24,7 @@ import {
 import { useActiveRoute } from "@/hooks/useActiveRoute";
 import { cn } from "@/lib/utils";
 
-import LinkLoading from "./link-loading";
+import { NavLinkLoading } from "./link-loading";
 import {
   Collapsible,
   CollapsibleContent,
@@ -42,7 +42,7 @@ const SubMenuItem = ({ title, url }: AdminNavItemWithSubMenu["items"][0]) => {
           >
             {title}
           </span>
-          <LinkLoading />
+          <NavLinkLoading />
         </Link>
       </SidebarMenuSubButton>
     </SidebarMenuSubItem>
@@ -95,7 +95,7 @@ const NavItemWithoutSubMenu = (item: AdminNavItem) => {
         <Link href={url}>
           {Icon && <Icon className={cn({ "text-primary": isActiveRoute })} />}
           <span>{title}</span>
-          <LinkLoading />
+          <NavLinkLoading />
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
