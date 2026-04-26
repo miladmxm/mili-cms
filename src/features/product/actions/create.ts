@@ -8,6 +8,7 @@ import type { ActionResult } from "@/types/actions";
 
 import { CacheKeys } from "@/constant/cacheKeys";
 import { getSession } from "@/lib/auth";
+import { renameObjectItemInArray } from "@/utils/renameObjectitem";
 import { validator } from "@/validations";
 
 import type { CreateCategoryOutput } from "../validations/category.schema";
@@ -33,10 +34,11 @@ export const createProductAction = async (
   }
   let { metadata } = output;
   if (output.type === "variable") {
-    metadata = output.metadata.map((meta) => ({
-      ...meta,
-      thumbnailId: meta.thumbnail,
-    }));
+    metadata = renameObjectItemInArray(
+      output.metadata,
+      "thumbnail",
+      "thumbnailId",
+    );
   }
   try {
     const createdProductOutput = await createProduct({

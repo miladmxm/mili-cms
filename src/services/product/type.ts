@@ -44,6 +44,8 @@ export type CreateProduct =
       metadata: VariableCreateProductMetadata[];
     });
 
+export type UpdateProduct = Omit<CreateProduct, "authorId">;
+export type ChangedKeys = Set<keyof UpdateProduct>;
 interface ProductDefaultMeta {
   id: string;
   productId: string;

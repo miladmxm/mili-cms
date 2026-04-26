@@ -8,7 +8,7 @@ import * as productRepo from "@/repositories/product.repo";
 
 import type { Media } from "../media/type";
 import type { LimitAndOffset } from "../type";
-import type { CreateProduct, Product } from "./type";
+import type { CreateProduct, Product, UpdateProduct } from "./type";
 
 import { checkMediaType, filterMediaIdsByTypes } from "../media";
 import { DTOconvertMediaPathToRealUrl } from "../media/dto";
@@ -131,7 +131,74 @@ export const createProduct = async (productData: CreateProduct) => {
 };
 
 // * UPDATE
+export const updateProduct = async (id: string, productData: UpdateProduct) => {
+  // const product = await productRepo.findProductById(id);
+  // if (!product) return product;
 
+  // if (productData.thumbnailId) {
+  //   await checkMediaType(productData.thumbnailId, "image");
+  // }
+  // console.log(productData);
+  // const categories = await productRepo.findCategoriesByIds(
+  //   productData.categoryIds,
+  // );
+  // let slug: string = convertToSlug(productData.slug);
+  // const existingArticleBySlug =
+  //   await productRepo.findProductByStartedSlugWith(slug);
+  // slug = generateUniqueSlug(
+  //   slug,
+  //   existingArticleBySlug.map((a) => a.slug),
+  // );
+  // const filteredGalleryByAcceptionType = await filterMediaIdsByTypes(
+  //   productData.gallery || [],
+  //   ["image"],
+  // );
+  // const resultId = await withTransaction(async (tx) => {
+  //   const product = (
+  //     await productRepo.createProduct({ ...productData, slug }, tx)
+  //   )[0];
+  //   if (!product) throw new Error("DB error to create article");
+  //   // if (categories.length)
+  //   //   await productRepo.addProductToCategories(
+  //   //     categories.map(({ id }) => ({ categoryId: id, productId: product.id })),
+  //   //     tx,
+  //   //   );
+  //   await productRepo.createProductMetadata(
+  //     productData.metadata.map((metadata) => ({
+  //       ...metadata,
+  //       productId: product.id,
+  //     })),
+  //     tx,
+  //   );
+  //   if (productData.type === "variable") {
+  //     const optionIds = Array.from(
+  //       new Set(
+  //         productData.metadata
+  //           .map(({ optionItemIds }) =>
+  //             optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR),
+  //           )
+  //           .flat(),
+  //       ),
+  //     );
+
+  //     // await productRepo.createProductToOptionItem(
+  //     //   optionIds.map((id) => ({ optionItemId: id, productId: product.id })),
+  //     //   tx,
+  //     // );
+  //   }
+  //   if (filteredGalleryByAcceptionType.length > 0) {
+  //     await productRepo.addMediaToProductGallery(
+  //       filteredGalleryByAcceptionType.map((mediaId) => ({
+  //         mediaId,
+  //         productId: product.id,
+  //       })),
+  //       tx,
+  //     );
+  //   }
+  //   return product;
+  // });
+  return "resultId";
+};
 // * DELETE
 
 export const deleteProduct = (id: string) => {

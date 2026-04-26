@@ -9,42 +9,51 @@ import type { ActionResult } from "@/types/actions";
 //   UpdateStatus,
 // } from "../validations/product.schema";
 import { CacheKeys } from "@/constant/cacheKeys";
+import { renameObjectItemInArray } from "@/utils/renameObjectitem";
 import { validator } from "@/validations";
 
 import type { UpdateCategoryOutput } from "../validations/category.schema";
 import type { EditOptionInput } from "../validations/option.schema";
+import type { UpdateProductOutput } from "../validations/product.schema";
 
 import * as productMutation from "../dal/mutation";
 import { UpdateCategorySchema } from "../validations/category.schema";
 import { EditOptionSchema } from "../validations/option.schema";
-// import { UpdateCategorySchema } from "../validations/category.schema";
-// import {
-//   UpdateArticleSchema,
-//   UpdateStatusSchema,
-// } from "../validations/product.schema";
+import { CreateProductSchema } from "../validations/product.schema";
 
-// export const updateArticle = async (
-//   id: string,
-//   data: unknown,
-// ): Promise<ActionResult<UpdateArticle>> => {
-//   const {
-//     errors,
-//     output,
-//     success: successValidation,
-//   } = validator(UpdateArticleSchema, data);
-//   if (!successValidation)
-//     return { success: successValidation, message: "خطای اعتبار سنجی", errors };
-//   try {
-//     const { success } = await articleMutation.updateArticle(id, output);
-//     if (!success) return { success, message: "خطا در ویرایش مقاله" };
-//     updateTag(CacheKeys.articles);
-//     updateTag(`${CacheKeys.articles}-${id}`);
-//     return { success, message: "ویرایش انجام شد" };
-//   } catch (error) {
-//     console.log(error);
-//     return { success: false, message: "خطا در ویرایش" };
-//   }
-// };
+export const updateProductAction = async (
+  id: string,
+  data: unknown,
+  changedData: Partial<UpdateProductOutput>,
+): Promise<ActionResult<UpdateProductOutput>> => {
+  const {
+    errors,
+    output,
+    success: successValidation,
+  } = validator(CreateProductSchema, data);
+  if (!successValidation)
+    return { success: successValidation, message: "خطای اعتبار سنجی", errors };
+  try {
+    let { metadata } = output;
+    if (output.type === "variable") {
+      metadata = renameObjectItemInArray(
+        output.metadata,
+        "thumbnail",
+        "thumbnailId",
+      );
+    }
+    const { success } = await productMutation.updateProduct(id, {
+      ...output,
+      metadata,
+    });
+    updateTag(CacheKeys.product);
+    updateTag(`${CacheKeys.product}-${id}`);
+    return { success, message: "ویرایش انجام شد" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "خطا در ویرایش" };
+  }
+};
 
 // export const updateArticleStatus = async (
 //   id: string,

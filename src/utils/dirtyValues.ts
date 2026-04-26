@@ -11,7 +11,7 @@ export const getItemsDirtyData = <
     if (typeof value !== "object") {
       return { ...dirtyData, [name]: data[name] };
     }
-
+    if (!data[name]) return dirtyData;
     return {
       ...dirtyData,
       [name]: getItemsDirtyData(

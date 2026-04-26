@@ -47,23 +47,50 @@ export const CreateProductBaseSchema = v.object({
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
   gallery: v.pipe(v.optional(v.array(ThumbnailNotNullSchema), [])),
 });
-const metadataSchemaGenerator = <T extends Record<string, v.GenericSchema>>(
+
+const metadataArraySchemaGenerator = <
+  T extends Record<string, v.GenericSchema>,
+>(
   schema: T,
-  withTransform: boolean = true,
 ) => {
-  if (!withTransform) {
-    return v.pipe(
-      v.record(v.string(), v.object(schema)),
-      v.custom((t) => Object.keys(t as object).length > 0),
-    );
-  }
   return v.pipe(
     v.record(v.string(), v.object(schema)),
     v.transform((data) => Object.values(data)),
     v.minLength(1),
   );
 };
+const metadataSchemaGenerator = <T extends Record<string, v.GenericSchema>>(
+  schema: T,
+) => {
+  return v.pipe(
+    v.record(v.string(), v.object(schema)),
+    v.custom((t) => Object.keys(t as object).length > 0),
+  );
+};
 export const CreateProductSchema = v.variant("type", [
+  v.object({
+    ...CreateProductBaseSchema.entries,
+    type: v.literal("default"),
+    metadata: metadataArraySchemaGenerator({
+      price: PriceSchema,
+      stock: StockSchema,
+    }),
+  }),
+  v.object({
+    ...CreateProductBaseSchema.entries,
+    type: v.literal("variable"),
+    metadata: metadataArraySchemaGenerator({
+      price: PriceSchema,
+      stock: StockSchema,
+      thumbnail: ThumbnailSchema,
+      optionItemIds: v.string(),
+    }),
+  }),
+]);
+export type CreateProductInput = v.InferInput<typeof CreateProductSchema>;
+export type CreateProductOutput = v.InferOutput<typeof CreateProductSchema>;
+
+export const EditProductSchema = v.variant("type", [
   v.object({
     ...CreateProductBaseSchema.entries,
     type: v.literal("default"),
@@ -83,36 +110,6 @@ export const CreateProductSchema = v.variant("type", [
     }),
   }),
 ]);
-export type CreateProductInput = v.InferInput<typeof CreateProductSchema>;
-export type CreateProductOutput = v.InferOutput<typeof CreateProductSchema>;
-
-export const EditProductSchema = v.variant("type", [
-  v.object({
-    ...CreateProductBaseSchema.entries,
-    type: v.literal("default"),
-    metadata: metadataSchemaGenerator(
-      {
-        price: PriceSchema,
-        stock: StockSchema,
-      },
-      false,
-    ),
-  }),
-  v.object({
-    ...CreateProductBaseSchema.entries,
-    type: v.literal("variable"),
-    metadata: metadataSchemaGenerator(
-      {
-        price: PriceSchema,
-        stock: StockSchema,
-        thumbnail: ThumbnailSchema,
-        optionItemIds: v.string(),
-      },
-      false,
-    ),
-  }),
-]);
-// export const UpdateProductSchema = v.partial(CreateProductSchema);
 export type UpdateProductOutput = v.InferOutput<typeof EditProductSchema>;
 
 // export const UpdateStatusSchema = v.object({
