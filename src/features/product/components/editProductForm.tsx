@@ -55,7 +55,7 @@ const EditProductForm = ({
                   <ProductGallery />
                   <div className="flex gap-2 lg:sticky lg:bottom-2 backdrop-blur-xs flex-wrap">
                     <ProductStatus className="flex-1" isPending={isPending} />
-                    <Field className="flex-auto">
+                    <Field className="flex-1">
                       <Button
                         className="flex-auto"
                         disabled={isPending || !form.formState.isDirty}

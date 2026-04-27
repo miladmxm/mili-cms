@@ -214,7 +214,7 @@ export const ProductGallery = () => {
                 <div className="relative group" key={id}>
                   <Button
                     size="icon-sm"
-                    className="absolute end-1.5 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:scale-100 opacity-0 invisible pointer-events-none scale-75 transition-all top-1.5 z-20 text-destructive"
+                    className="absolute end-1.5 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:scale-100 opacity-0 invisible pointer-events-none scale-75 transition-all top-1.5 z-20 text-destructive backdrop-blur-xs "
                     variant="outline"
                     onClick={() => removeItem(id)}
                   >
