@@ -1,7 +1,7 @@
 import { Edit2 } from "lucide-react";
 import Link from "next/link";
 
-import NavLinkLoading from "@/components/dashboard/link-loading";
+import { NavLinkLoading } from "@/components/dashboard/link-loading";
 import { Button } from "@/components/dashboard/ui/button";
 
 const LinkToEdit = ({ id }: { id: string }) => {
