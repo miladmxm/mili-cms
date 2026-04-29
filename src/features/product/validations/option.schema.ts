@@ -12,7 +12,10 @@ export const CreateOptionSchema = v.object({
   name: v.pipe(v.string("نام اجباری است"), v.nonEmpty("نام نباید خالی باشد")),
   slug: v.pipe(v.string("slug اجباری است"), v.nonEmpty("slug نباید خالی باشد")),
   description: v.optional(
-    v.pipe(v.string("slug اجباری است"), v.nonEmpty("slug نباید خالی باشد")),
+    v.pipe(
+      v.string("مقدار توضیحات را وارد کنید"),
+      v.nonEmpty("مقدار توضیحات نباید خالی باشد"),
+    ),
   ),
   items: v.array(OptionItemSchema),
 });
