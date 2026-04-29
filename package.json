@@ -84,12 +84,12 @@
     "jsdom": "^27.0.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.554.0",
-    "next": "^16.1.6",
+    "next": "16.2.4",
     "next-themes": "^0.4.6",
     "pg": "^8.16.3",
     "radix-ui": "^1.4.3",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
     "react-dropzone": "^14.3.8",
     "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.68.0",
@@ -108,8 +108,8 @@
     "@types/lodash": "^4.17.21",
     "@types/node": "^20",
     "@types/pg": "^8.15.6",
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
     "baseline-browser-mapping": "^2.9.19",
     "drizzle-kit": "^0.31.9",
@@ -122,7 +122,7 @@
     "typescript": "^5"
   },
   "overrides": {
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2"
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
   }
 }
