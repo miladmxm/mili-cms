@@ -1,8 +1,9 @@
-import { Edit2 } from "lucide-react";
+import { Edit2, OptionIcon } from "lucide-react";
 import Link from "next/link";
 
 import type { Option, OptionItem } from "@/services/product/type";
 
+import EmptyPlaceholder from "@/components/dashboard/empty";
 import { IconLinkLoading } from "@/components/dashboard/link-loading";
 import {
   Accordion,
@@ -110,6 +111,18 @@ const OptionCard = ({ name, description, slug, items, id }: Option) => {
 };
 
 const OptionList = ({ options }: { options: Option[] }) => {
+  if (options.length === 0) {
+    return (
+      <EmptyPlaceholder
+        className="h-full"
+        link="/admin/products/options/add"
+        title="هیچ ویژگی ای وجود ندارد"
+        type="link"
+        actionTitle="افزودن"
+        icon={OptionIcon}
+      />
+    );
+  }
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
       {options.map((opt) => (

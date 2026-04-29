@@ -6,7 +6,7 @@ import Options from "@/features/product/containers/options";
 
 const OptionsPage = () => {
   return (
-    <div className="flex gap-10 flex-col">
+    <div className="flex gap-10 flex-col min-h-full">
       <div className="flex gap-4 justify-between">
         <h4 className="font-semibold text-xl">ویژگی ها</h4>
         <Button asChild>
