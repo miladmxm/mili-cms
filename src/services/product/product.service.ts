@@ -1,6 +1,7 @@
 import { cacheTag } from "next/cache";
 
 import { CacheKeys } from "@/constant/cacheKeys";
+import { ThrowableDalError } from "@/dal/types";
 import { OPTION_ITEM_IDS_SEPARATOR } from "@/features/product/constant";
 import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import { withTransaction } from "@/repositories";
@@ -68,7 +69,6 @@ export const createProduct = async (productData: CreateProduct) => {
   if (productData.thumbnailId) {
     await checkMediaType(productData.thumbnailId, "image");
   }
-  console.log(productData);
   const categories = await productRepo.findCategoriesByIds(
     productData.categoryIds,
   );
@@ -131,14 +131,54 @@ export const createProduct = async (productData: CreateProduct) => {
 };
 
 // * UPDATE
-export const updateProduct = async (id: string, productData: UpdateProduct) => {
-  // const product = await productRepo.findProductById(id);
-  // if (!product) return product;
+export const updateProduct = async (
+  productId: string,
+  productData: UpdateProduct,
+) => {
+  const product = await productRepo.findProductById(productId);
+  if (!product)
+    throw new ThrowableDalError({
+      type: "not-found",
+    });
 
-  // if (productData.thumbnailId) {
-  //   await checkMediaType(productData.thumbnailId, "image");
-  // }
-  // console.log(productData);
+  if (productData.thumbnailId) {
+    await checkMediaType(productData.thumbnailId, "image");
+  }
+
+  const prevCategoryIdsSet = new Set(product.categoryIds);
+  const newCategoryIdsSet = new Set(productData.categoryIds);
+  const addCategoryIds = productData.categoryIds.filter(
+    (id) => !prevCategoryIdsSet.has(id),
+  );
+  const removeCategoryIds = product.categoryIds.filter(
+    (id) => !newCategoryIdsSet.has(id),
+  );
+
+  const resultId = await withTransaction(async (tx) => {
+    // delete category
+    const deletCategoryPromises: ReturnType<
+      typeof productRepo.deleteProductToCategories
+    >[] = [];
+    removeCategoryIds.forEach((id) => {
+      deletCategoryPromises.push(
+        productRepo.deleteProductToCategories(
+          { productId, categoryId: id },
+          tx,
+        ),
+      );
+    });
+    await Promise.all(deletCategoryPromises);
+
+    // add category
+    if (addCategoryIds.length)
+      await productRepo.addProductToCategories(
+        addCategoryIds.map((id) => ({ categoryId: id, productId: product.id })),
+        tx,
+      );
+
+    return productId;
+  });
+  return resultId;
   // const categories = await productRepo.findCategoriesByIds(
   //   productData.categoryIds,
   // );
@@ -197,7 +237,7 @@ export const updateProduct = async (id: string, productData: UpdateProduct) => {
   //   }
   //   return product;
   // });
-  return "resultId";
+  // return "resultId";
 };
 // * DELETE
 

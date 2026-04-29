@@ -3,8 +3,6 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { getItemsDirtyData } from "@/utils/dirtyValues";
-
 import type { UpdateProductOutput } from "../validations/product.schema";
 
 import { updateProductAction } from "../actions/update";
@@ -33,14 +31,10 @@ export const useEditProduct = () => {
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = (data: UpdateProductOutput) => {
-    const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
+    // const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
 
     startTransition(async () => {
-      const { success, message } = await updateProductAction(
-        product.id,
-        data,
-        dirtyData,
-      );
+      const { success, message } = await updateProductAction(product.id, data);
       if (!success) toast.error(message);
       else {
         toast.success(message);

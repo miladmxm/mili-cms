@@ -1,6 +1,7 @@
 import { cacheTag } from "next/cache";
 
 import { CacheKeys } from "@/constant/cacheKeys";
+import { ThrowableDalError } from "@/dal/types";
 import * as fileManager from "@/lib/fileManager";
 import * as mediaRepo from "@/repositories/media.repo";
 import { getToDayString } from "@/utils/getToDayString";
@@ -36,7 +37,7 @@ export const checkMediaType = async (id: string, type: MediaTypes) => {
   "use cache: private";
   cacheTag(`${CacheKeys.media}-${id}`, type);
   const media = await mediaRepo.findMediaByIdAndType(id, type);
-  if (!media) throw new Error("not ok");
+  if (!media) throw new ThrowableDalError({ type: "no-access" });
 };
 export const filterMediaIdsByTypes = async (
   ids: string[],

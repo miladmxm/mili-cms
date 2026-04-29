@@ -24,7 +24,6 @@ import { CreateProductSchema } from "../validations/product.schema";
 export const updateProductAction = async (
   id: string,
   data: unknown,
-  changedData: Partial<UpdateProductOutput>,
 ): Promise<ActionResult<UpdateProductOutput>> => {
   const {
     errors,

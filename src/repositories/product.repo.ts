@@ -1,4 +1,4 @@
-import { desc, eq, inArray, like } from "drizzle-orm";
+import { and, desc, eq, inArray, like } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
@@ -99,6 +99,19 @@ export const addProductToCategories = (
     .insert(productToCategory)
     .values(productToCategories)
     .onConflictDoNothing();
+
+export const deleteProductToCategories = (
+  { categoryId, productId }: typeof productToCategory.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .delete(productToCategory)
+    .where(
+      and(
+        eq(productToCategory.categoryId, categoryId),
+        eq(productToCategory.productId, productId),
+      ),
+    );
 
 export const createProductMetadata = (
   metadata: (typeof productMeta.$inferInsert)[],
