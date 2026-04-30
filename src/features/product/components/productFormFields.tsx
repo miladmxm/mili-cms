@@ -306,7 +306,7 @@ const SingleImagePicker = ({
                 {value && (
                   <Button
                     size="icon-sm"
-                    className="absolute end-2 top-2 z-20 text-destructive"
+                    className="absolute end-2 top-2 z-20 text-destructive backdrop-blur-xs"
                     variant="outline"
                     onClick={() =>
                       setValue(name, null, {
@@ -577,11 +577,9 @@ const HiddenOptionItemIdsInput = ({
   );
 };
 const VariableOptionItemFields = ({
-  // index,
   optionItemIds,
   label,
 }: {
-  index: number;
   optionItemIds: string;
   label: string;
 }) => {
@@ -629,16 +627,12 @@ const VariableItemLoop = ({
   if (counterToZiro === 0) {
     return (
       <>
-        {items[counterToZiro].map(({ id, label }, i) => {
-          const regularIndex = index
-            ? items[counterToZiro].length * index + i
-            : i;
+        {items[counterToZiro].map(({ id, label }) => {
           const optionItemIds = parrentId
             ? [...parrentId, id].sort().join(OPTION_ITEM_IDS_SEPARATOR)
             : id;
           return (
             <VariableOptionItemFields
-              index={regularIndex}
               key={id}
               label={label}
               optionItemIds={optionItemIds}
