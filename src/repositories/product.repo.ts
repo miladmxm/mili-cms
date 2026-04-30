@@ -42,6 +42,35 @@ export const findProductById = async (id: string, tx?: Transaction) => {
     categoryIds,
   };
 };
+
+export const findProductByIdForUpdate = async (
+  id: string,
+  tx?: Transaction,
+) => {
+  const findedProduct = await getDBorTX(tx).query.product.findFirst({
+    where: eq(product.id, id),
+    with: {
+      categories: { columns: { categoryId: true } },
+
+      gallery: { columns: { mediaId: true } },
+      optionItems: {
+        with: { optionItem: true },
+      },
+      metadata: { with: { thumbnail: true } },
+    },
+  });
+  if (!findedProduct) return findedProduct;
+  const categoryIds = findedProduct.categories.map(
+    ({ categoryId }) => categoryId,
+  );
+  const galleryIds = findedProduct.gallery.map(({ mediaId }) => mediaId);
+  return {
+    ...findedProduct,
+    galleryIds,
+    categoryIds,
+  };
+};
+
 export const findProductsByLimitAndOffset = (
   options?: OffsetLimit,
   tx?: Transaction,
@@ -122,6 +151,19 @@ export const addMediaToProductGallery = (
   data: (typeof productGallery.$inferInsert)[],
   tx?: Transaction,
 ) => getDBorTX(tx).insert(productGallery).values(data);
+
+export const deleteMediaToProductGallery = (
+  { mediaId, productId }: typeof productGallery.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .delete(productGallery)
+    .where(
+      and(
+        eq(productGallery.mediaId, mediaId),
+        eq(productGallery.productId, productId),
+      ),
+    );
 
 export const createCategory = (
   data: typeof productCategory.$inferInsert,

@@ -135,7 +135,7 @@ export const updateProduct = async (
   productId: string,
   productData: UpdateProduct,
 ) => {
-  const product = await productRepo.findProductById(productId);
+  const product = await productRepo.findProductByIdForUpdate(productId);
   if (!product)
     throw new ThrowableDalError({
       type: "not-found",
@@ -152,6 +152,19 @@ export const updateProduct = async (
   );
   const removeCategoryIds = product.categoryIds.filter(
     (id) => !newCategoryIdsSet.has(id),
+  );
+
+  const prevGalleryIdsSet = new Set(product.galleryIds);
+  const newGalleryIdsSet = new Set(productData.gallery);
+  const addGalleryIds = productData.gallery?.filter(
+    (id) => !prevGalleryIdsSet.has(id),
+  );
+  const removeGalleryIds = product.galleryIds.filter(
+    (id) => !newGalleryIdsSet.has(id),
+  );
+  const filteredGalleryByAcceptionType = await filterMediaIdsByTypes(
+    addGalleryIds || [],
+    ["image"],
   );
 
   const resultId = await withTransaction(async (tx) => {
@@ -176,68 +189,30 @@ export const updateProduct = async (
         tx,
       );
 
+    // remove gallery item
+    const deletGalleryPromises: ReturnType<
+      typeof productRepo.deleteMediaToProductGallery
+    >[] = [];
+    removeGalleryIds.forEach((id) => {
+      deletGalleryPromises.push(
+        productRepo.deleteMediaToProductGallery({ productId, mediaId: id }, tx),
+      );
+    });
+    await Promise.all(deletGalleryPromises);
+
+    if (filteredGalleryByAcceptionType.length > 0) {
+      await productRepo.addMediaToProductGallery(
+        filteredGalleryByAcceptionType.map((mediaId) => ({
+          mediaId,
+          productId: product.id,
+        })),
+        tx,
+      );
+    }
+
     return productId;
   });
   return resultId;
-  // const categories = await productRepo.findCategoriesByIds(
-  //   productData.categoryIds,
-  // );
-  // let slug: string = convertToSlug(productData.slug);
-  // const existingArticleBySlug =
-  //   await productRepo.findProductByStartedSlugWith(slug);
-  // slug = generateUniqueSlug(
-  //   slug,
-  //   existingArticleBySlug.map((a) => a.slug),
-  // );
-  // const filteredGalleryByAcceptionType = await filterMediaIdsByTypes(
-  //   productData.gallery || [],
-  //   ["image"],
-  // );
-  // const resultId = await withTransaction(async (tx) => {
-  //   const product = (
-  //     await productRepo.createProduct({ ...productData, slug }, tx)
-  //   )[0];
-  //   if (!product) throw new Error("DB error to create article");
-  //   // if (categories.length)
-  //   //   await productRepo.addProductToCategories(
-  //   //     categories.map(({ id }) => ({ categoryId: id, productId: product.id })),
-  //   //     tx,
-  //   //   );
-  //   await productRepo.createProductMetadata(
-  //     productData.metadata.map((metadata) => ({
-  //       ...metadata,
-  //       productId: product.id,
-  //     })),
-  //     tx,
-  //   );
-  //   if (productData.type === "variable") {
-  //     const optionIds = Array.from(
-  //       new Set(
-  //         productData.metadata
-  //           .map(({ optionItemIds }) =>
-  //             optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR),
-  //           )
-  //           .flat(),
-  //       ),
-  //     );
-
-  //     // await productRepo.createProductToOptionItem(
-  //     //   optionIds.map((id) => ({ optionItemId: id, productId: product.id })),
-  //     //   tx,
-  //     // );
-  //   }
-  //   if (filteredGalleryByAcceptionType.length > 0) {
-  //     await productRepo.addMediaToProductGallery(
-  //       filteredGalleryByAcceptionType.map((mediaId) => ({
-  //         mediaId,
-  //         productId: product.id,
-  //       })),
-  //       tx,
-  //     );
-  //   }
-  //   return product;
-  // });
-  // return "resultId";
 };
 // * DELETE
 
