@@ -184,6 +184,12 @@ export const deleteProductMetadataByOptionItemIds = (
     .delete(productMeta)
     .where(eq(productMeta.optionItemIds, optionItemIds));
 
+export const deleteAllProductMetadataByProductId = (
+  productId: string,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).delete(productMeta).where(eq(productMeta.productId, productId));
+
 export const updateProductMetadataByOptionItemIds = (
   metadata: typeof productMeta.$inferInsert,
   tx?: Transaction,
@@ -324,6 +330,14 @@ export const deleteProductToOptionItem = (
         eq(productToOptionItem.optionItemId, optionItemId),
       ),
     );
+
+export const deleteAllProductToOptionItemByProductId = (
+  productId: string,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .delete(productToOptionItem)
+    .where(eq(productToOptionItem.productId, productId));
 
 export const deleteProductById = (id: string, tx?: Transaction) =>
   getDBorTX(tx)

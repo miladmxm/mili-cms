@@ -321,8 +321,14 @@ export const updateProduct = async (
         tx,
       );
     }
-
     if (productData.type === "default") {
+      if (product.type === "variable") {
+        await productRepo.deleteAllProductToOptionItemByProductId(
+          productId,
+          tx,
+        );
+        await productRepo.deleteAllProductMetadataByProductId(productId, tx);
+      }
       const prevMetadata = await productRepo.findFirstProductMeta(
         productId,
         tx,
