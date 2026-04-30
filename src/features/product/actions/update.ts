@@ -1,14 +1,13 @@
 "use server";
 
 import { updateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
+import type { CreateProduct } from "@/services/product/type";
 import type { ActionResult } from "@/types/actions";
 
-// import type {
-//   UpdateArticle,
-//   UpdateStatus,
-// } from "../validations/product.schema";
 import { CacheKeys } from "@/constant/cacheKeys";
+import { getSession } from "@/lib/auth";
 import { renameObjectItemInArray } from "@/utils/renameObjectitem";
 import { validator } from "@/validations";
 
@@ -25,6 +24,8 @@ export const updateProductAction = async (
   id: string,
   data: unknown,
 ): Promise<ActionResult<UpdateProductOutput>> => {
+  const session = await getSession();
+  if (!session) redirect("/");
   const {
     errors,
     output,
@@ -44,7 +45,9 @@ export const updateProductAction = async (
     const { success } = await productMutation.updateProduct(id, {
       ...output,
       metadata,
-    });
+      thumbnailId: output.thumbnail,
+      authorId: session.user.id,
+    } as CreateProduct);
     updateTag(CacheKeys.product);
     updateTag(`${CacheKeys.product}-${id}`);
     return { success, message: "ویرایش انجام شد" };

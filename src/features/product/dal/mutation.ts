@@ -5,7 +5,6 @@ import type {
   CreateOption,
   CreateProduct,
   UpdateOption,
-  UpdateProduct,
 } from "@/services/product/type";
 
 import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
@@ -39,7 +38,7 @@ export const updateOption = (id: string, data: UpdateOption) => {
     { product: ["update"] },
   );
 };
-export const updateProduct = (id: string, data: UpdateProduct) => {
+export const updateProduct = (id: string, data: CreateProduct) => {
   return dalRequireAuth(
     () => dalDbOperation(() => productService.updateProduct(id, data)),
     { product: ["update"] },

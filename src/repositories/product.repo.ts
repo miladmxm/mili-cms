@@ -54,9 +54,9 @@ export const findProductByIdForUpdate = async (
 
       gallery: { columns: { mediaId: true } },
       optionItems: {
-        with: { optionItem: true },
+        columns: { optionItemId: true },
       },
-      metadata: { with: { thumbnail: true } },
+      metadata: { columns: { optionItemIds: true } },
     },
   });
   if (!findedProduct) return findedProduct;
@@ -64,10 +64,18 @@ export const findProductByIdForUpdate = async (
     ({ categoryId }) => categoryId,
   );
   const galleryIds = findedProduct.gallery.map(({ mediaId }) => mediaId);
+  const metadataOptioItemIds = findedProduct.metadata.map(
+    ({ optionItemIds }) => optionItemIds,
+  );
+  const optionItemIds = findedProduct.optionItems.map(
+    ({ optionItemId }) => optionItemId,
+  );
   return {
     ...findedProduct,
     galleryIds,
     categoryIds,
+    metadataOptioItemIds,
+    optionItemIds,
   };
 };
 
@@ -114,6 +122,16 @@ export const createProduct = (
   tx?: Transaction,
 ) => getDBorTX(tx).insert(product).values(data).returning({ id: product.id });
 
+export const updateProductById = (
+  { data, id }: { id: string; data: typeof product.$inferInsert },
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .update(product)
+    .set(data)
+    .where(eq(product.id, id))
+    .returning({ id: product.id });
+
 export const findCategoriesByIds = async (ids: string[], tx?: Transaction) => {
   return await getDBorTX(tx).query.productCategory.findMany({
     where: inArray(productCategory.id, ids),
@@ -146,6 +164,34 @@ export const createProductMetadata = (
   metadata: (typeof productMeta.$inferInsert)[],
   tx?: Transaction,
 ) => getDBorTX(tx).insert(productMeta).values(metadata);
+
+export const findFirstProductMeta = (productId: string, tx?: Transaction) =>
+  getDBorTX(tx).query.productMeta.findFirst({
+    where: eq(productMeta.productId, productId),
+  });
+
+export const updateProductMetadatById = (
+  { id, metadata }: { id: string; metadata: typeof productMeta.$inferInsert },
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).update(productMeta).set(metadata).where(eq(productMeta.id, id));
+
+export const deleteProductMetadataByOptionItemIds = (
+  optionItemIds: string,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .delete(productMeta)
+    .where(eq(productMeta.optionItemIds, optionItemIds));
+
+export const updateProductMetadataByOptionItemIds = (
+  metadata: typeof productMeta.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .update(productMeta)
+    .set(metadata)
+    .where(eq(productMeta.optionItemIds, metadata.optionItemIds || ""));
 
 export const addMediaToProductGallery = (
   data: (typeof productGallery.$inferInsert)[],
@@ -259,10 +305,25 @@ export const deleteOptionItemsByIds = (ids: string[], tx?: Transaction) =>
   getDBorTX(tx)
     .delete(productOptionItem)
     .where(inArray(productOptionItem.id, ids));
+
 export const createProductToOptionItem = (
   data: (typeof productToOptionItem.$inferInsert)[],
   tx?: Transaction,
-) => getDBorTX(tx).insert(productToOptionItem).values(data);
+) =>
+  getDBorTX(tx).insert(productToOptionItem).values(data).onConflictDoNothing();
+
+export const deleteProductToOptionItem = (
+  { optionItemId, productId }: typeof productToOptionItem.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .delete(productToOptionItem)
+    .where(
+      and(
+        eq(productToOptionItem.productId, productId),
+        eq(productToOptionItem.optionItemId, optionItemId),
+      ),
+    );
 
 export const deleteProductById = (id: string, tx?: Transaction) =>
   getDBorTX(tx)

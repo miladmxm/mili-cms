@@ -9,7 +9,7 @@ import * as productRepo from "@/repositories/product.repo";
 
 import type { Media } from "../media/type";
 import type { LimitAndOffset } from "../type";
-import type { CreateProduct, Product, UpdateProduct } from "./type";
+import type { CreateProduct, Product } from "./type";
 
 import { checkMediaType, filterMediaIdsByTypes } from "../media";
 import { DTOconvertMediaPathToRealUrl } from "../media/dto";
@@ -131,9 +131,10 @@ export const createProduct = async (productData: CreateProduct) => {
 };
 
 // * UPDATE
+// eslint-disable-next-line max-lines-per-function
 export const updateProduct = async (
   productId: string,
-  productData: UpdateProduct,
+  productData: CreateProduct,
 ) => {
   const product = await productRepo.findProductByIdForUpdate(productId);
   if (!product)
@@ -167,6 +168,53 @@ export const updateProduct = async (
     ["image"],
   );
 
+  let updateMetadataIds: string[] = [];
+  let addMetadataIds: string[] = [];
+  let removeMetadataIds: string[] = [];
+  const metadataByOptionItemIds = new Map<
+    string,
+    (typeof productData)["metadata"][number]
+  >();
+  if (productData.type === "variable") {
+    const newMetadataOptionItemIds = productData.metadata.map(
+      ({ optionItemIds }) => optionItemIds,
+    );
+    const oldMetadataOptionItemIds = product.metadataOptioItemIds.filter(
+      (id) => id !== null,
+    );
+    const prevMetadataIdsSet = new Set(oldMetadataOptionItemIds);
+    const newMetadataIdsSet = new Set(newMetadataOptionItemIds);
+
+    updateMetadataIds = oldMetadataOptionItemIds.filter((id) =>
+      newMetadataIdsSet.has(id),
+    );
+
+    addMetadataIds = newMetadataOptionItemIds.filter(
+      (id) => !prevMetadataIdsSet.has(id),
+    );
+
+    removeMetadataIds = oldMetadataOptionItemIds.filter(
+      (id) => !newMetadataIdsSet.has(id),
+    );
+    for (const metadata of productData.metadata) {
+      metadataByOptionItemIds.set(metadata.optionItemIds, metadata);
+    }
+  }
+  const metadataOptionItemIds = addMetadataIds.concat(updateMetadataIds);
+  const newOptionItemIdsSet = new Set(
+    metadataOptionItemIds
+      .map((optionItemIds) => optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR))
+      .flat(),
+  );
+  const newOptionItemIds = Array.from(newOptionItemIdsSet);
+  const oldOptionItemIdsSet = new Set(product.optionItemIds);
+
+  const removeOptionItem = product.optionItemIds.filter(
+    (id) => !newOptionItemIdsSet.has(id),
+  );
+  const addOptionItem = newOptionItemIds.filter(
+    (id) => !oldOptionItemIdsSet.has(id),
+  );
   const resultId = await withTransaction(async (tx) => {
     // delete category
     const deletCategoryPromises: ReturnType<
@@ -210,7 +258,92 @@ export const updateProduct = async (
       );
     }
 
-    return productId;
+    // remove metadata
+    const deletMetadataPromises: ReturnType<
+      typeof productRepo.deleteProductMetadataByOptionItemIds
+    >[] = [];
+    removeMetadataIds.forEach((id) => {
+      deletMetadataPromises.push(
+        productRepo.deleteProductMetadataByOptionItemIds(id, tx),
+      );
+    });
+    await Promise.all(deletMetadataPromises);
+
+    //update metadata
+    const updateMetadataPromises: ReturnType<
+      typeof productRepo.updateProductMetadataByOptionItemIds
+    >[] = [];
+    for (const id of updateMetadataIds) {
+      const metadata = metadataByOptionItemIds.get(id);
+      if (metadata) {
+        updateMetadataPromises.push(
+          productRepo.updateProductMetadataByOptionItemIds(
+            {
+              ...metadata,
+              productId,
+            },
+            tx,
+          ),
+        );
+      }
+    }
+    await Promise.all(updateMetadataPromises);
+
+    //add new metadata
+    const addMetadata: Parameters<
+      (typeof productRepo)["createProductMetadata"]
+    >[0] = [];
+    for (const id of addMetadataIds) {
+      const metadata = metadataByOptionItemIds.get(id);
+      if (metadata) {
+        addMetadata.push({ ...metadata, productId });
+      }
+    }
+    if (addMetadata.length > 0) {
+      await productRepo.createProductMetadata(addMetadata, tx);
+    }
+
+    // remove option item
+    const deleteOptionItemPromises: ReturnType<
+      typeof productRepo.deleteProductToOptionItem
+    >[] = [];
+    removeOptionItem.forEach((optionItemId) => {
+      deleteOptionItemPromises.push(
+        productRepo.deleteProductToOptionItem({ optionItemId, productId }, tx),
+      );
+    });
+    await Promise.all(deleteOptionItemPromises);
+    // add option item
+
+    if (addOptionItem.length > 0) {
+      await productRepo.createProductToOptionItem(
+        addOptionItem.map((optionItemId) => ({ optionItemId, productId })),
+        tx,
+      );
+    }
+
+    if (productData.type === "default") {
+      const prevMetadata = await productRepo.findFirstProductMeta(
+        productId,
+        tx,
+      );
+      const metadata = { ...productData.metadata[0], productId };
+      if (prevMetadata) {
+        await productRepo.updateProductMetadatById(
+          { id: prevMetadata.id, metadata },
+          tx,
+        );
+      } else {
+        await productRepo.createProductMetadata([metadata], tx);
+      }
+    }
+
+    return (
+      await productRepo.updateProductById(
+        { data: productData, id: productId },
+        tx,
+      )
+    )[0].id;
   });
   return resultId;
 };
