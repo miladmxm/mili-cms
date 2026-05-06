@@ -17,18 +17,17 @@
 
 ## 🛠️ Tech Stack
 
-| Category       | Technology                                      |
-|----------------|-------------------------------------------------|
-| **Framework**  | Next.js (v16+) with App Router & Partial Prerendering (PPR) |
-| **Language**   | TypeScript                                      |
-| **Database**   | PostgreSQL (via Drizzle ORM)                    |
-| **Styling**    | Tailwind CSS + CSS Modules                      |
-| **Editor**     | Rich text editor (integrated)                   |
-| **Dev Tools**  | ESLint, Husky                                   |
+| Category      | Technology                                                  |
+| ------------- | ----------------------------------------------------------- |
+| **Framework** | Next.js (v16+) with App Router & Partial Prerendering (PPR) |
+| **Language**  | TypeScript                                                  |
+| **Database**  | PostgreSQL (via Drizzle ORM)                                |
+| **Styling**   | Tailwind CSS + CSS Modules                                  |
+| **Editor**    | Rich text editor (integrated)                               |
+| **Dev Tools** | ESLint, Husky                                               |
 
 ## 📋 Prerequisites
 
 - Node.js (v18 or later)
 - PostgreSQL database
 - npm / yarn / pnpm / bun
-

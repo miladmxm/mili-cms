@@ -45,3 +45,34 @@ export const FontDashboard = localFont({
     },
   ],
 });
+
+export const FontMain = localFont({
+  variable: "--font-display",
+  src: [
+    {
+      path: "../assets/fonts/dana/woff2/dana-fanum-bold.woff2",
+      style: "normal",
+      weight: "700",
+    },
+    {
+      path: "../assets/fonts/dana/woff2/dana-fanum-light.woff2",
+      style: "normal",
+      weight: "300",
+    },
+    {
+      path: "../assets/fonts/dana/woff2/dana-fanum-medium.woff2",
+      style: "normal",
+      weight: "500",
+    },
+    {
+      path: "../assets/fonts/dana/woff2/dana-fanum-regular.woff2",
+      style: "normal",
+      weight: "400",
+    },
+    {
+      path: "../assets/fonts/dana/woff2/dana-fanum-semibold.woff2",
+      style: "normal",
+      weight: "600",
+    },
+  ],
+});
