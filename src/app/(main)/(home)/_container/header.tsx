@@ -1,9 +1,11 @@
 import BeforeHeader from "./beforeHeader";
+import MainHeader from "./mainHeader";
 
 const Header = () => {
   return (
-    <header className="text-black">
+    <header className="container">
       <BeforeHeader />
+      <MainHeader />
     </header>
   );
 };

@@ -3,7 +3,7 @@ import PhoneNumber from "@/components/ui/headerPhoneNumber";
 
 const BeforeHeader = () => {
   return (
-    <div className="flex justify-between gap-4 items-center container py-2">
+    <div className="flex justify-between gap-4 items-center py-2">
       <PhoneNumber />
       <UserFastLinks />
     </div>
