@@ -38,6 +38,12 @@ export const getCategories = async () => {
   return categories;
 };
 
+export const getPublicCategories = async () => {
+  return dalVerifySuccess(
+    await dalDbOperation(productCategoryService.getCategoriesWithThumbnail),
+  );
+};
+
 export const getOptions = async () => {
   return dalVerifySuccess(
     await dalRequireAuth(

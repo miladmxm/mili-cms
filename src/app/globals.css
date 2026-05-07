@@ -5,6 +5,9 @@
   --color-primary-25: var(--primary-25);
   --color-primary-900: var(--primary-900);
   --color-secondary-500: var(--secondary-500);
+  --color-thready-800: var(--thready-800);
+  --color-thready-400: var(--thready-400);
+  --color-thready-500: var(--thready-500);
   --color-white: var(--white);
   --color-black: var(--black);
   --font-display: var(--font-display);
@@ -21,6 +24,9 @@
   --primary-25: #fbfbfb;
   --primary-900: #66605e;
   --secondary-500: #3a6ea5;
+  --thready-800:#A18F7E;
+  --thready-400:#E3DDD8;
+  --thready-500:#EFE8E2;
   --white: #ffffff;
   --black: #000000;
   --error: #ff4949;
@@ -40,7 +46,7 @@
 
 @layer components {
   .mega-menu-wrapper:has(.product-nav-trigger:hover) .mega-menu {
-    @apply !visible !h-[70vh] !pointer-events-auto !opacity-100 !translate-y-0 !z-10;
+    @apply !visible !h-max !pointer-events-auto !opacity-100 !translate-y-0 !z-10;
   }
 }
 
