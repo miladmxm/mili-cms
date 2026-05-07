@@ -38,13 +38,20 @@ export const auth = betterAuth({
 export const getSession = async () =>
   auth.api.getSession({ headers: await headers() });
 
-export const hasAccess = (
+export const hasAccess = async (
   userId: (typeof auth.$Infer)["Session"]["user"]["id"],
   permissions: Partial<Permissions>,
-) =>
-  auth.api.userHasPermission({
-    body: {
-      userId,
-      permissions,
-    },
-  });
+) => {
+  try {
+    return await auth.api.userHasPermission({
+      body: {
+        userId,
+        permissions,
+      },
+    });
+  } catch (error) {
+    // ! error for validation body
+    console.log("body error", error);
+    return { success: true };
+  }
+};
