@@ -34,11 +34,11 @@ const CategoryItem = ({
               height={32}
               width={32}
               alt={thumbnail.alt}
-              className="size-8 object-cover rounded-full"
+              className="size-10 object-contain ring-2 ring-border p-1 rounded-full"
               src={thumbnail.url}
             />
           ) : (
-            <div className="size-8 dark:bg-gray-900 bg-gray-200 rounded-full p-1 center text-accent-foreground/70">
+            <div className="size-10 ring-2 ring-border dark:bg-gray-900 bg-gray-200 rounded-full p-1 center text-accent-foreground/70">
               <ImageOff />
             </div>
           )}
