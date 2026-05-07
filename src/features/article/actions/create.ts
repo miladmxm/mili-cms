@@ -26,17 +26,21 @@ export const createArticleAction = async (
     output,
     success: successValidation,
   } = validator(CreateArticleSchema, inputData);
+
   if (!successValidation) {
     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
+
   try {
     const createdArticleOutput = await createArticle({
       ...output,
       authorId: session.user.id,
     });
+
     if (!createdArticleOutput.success) {
       return { success: false, message: "خطا در ایجاد مقاله" };
     }
+
     updateTag(CacheKeys.articles);
     return { success: successValidation, message: "مثاله با موفقیت ایجاد شد" };
   } catch (error) {

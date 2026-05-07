@@ -38,6 +38,7 @@ export const getArticle = async (id: string) => {
   let thumbnail: Media | undefined;
 
   if (article.thumbnail && typeof article.thumbnail !== "string") {
+    // eslint-disable-next-line prefer-destructuring
     thumbnail = article.thumbnail;
   }
   if (thumbnail) {

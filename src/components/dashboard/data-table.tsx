@@ -407,6 +407,7 @@ export function DataTable({
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
+
     if (active && over && active.id !== over.id) {
       // eslint-disable-next-line @typescript-eslint/no-shadow
       setData((data) => {
@@ -629,16 +630,16 @@ export function DataTable({
         className="flex flex-col px-4 lg:px-6"
         value="past-performance"
       >
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
       </TabsContent>
       <TabsContent className="flex flex-col px-4 lg:px-6" value="key-personnel">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
       </TabsContent>
       <TabsContent
         className="flex flex-col px-4 lg:px-6"
         value="focus-documents"
       >
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
       </TabsContent>
     </Tabs>
   );

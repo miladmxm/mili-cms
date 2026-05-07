@@ -29,10 +29,13 @@ export const createProductAction = async (
     output,
     success: successValidation,
   } = validator(CreateProductSchema, inputData);
+
   if (!successValidation) {
     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
+
   let { metadata } = output;
+
   if (output.type === "variable") {
     metadata = renameObjectItemInArray(
       output.metadata,
@@ -40,6 +43,7 @@ export const createProductAction = async (
       "thumbnailId",
     );
   }
+
   try {
     const createdProductOutput = await createProduct({
       ...output,
@@ -47,9 +51,11 @@ export const createProductAction = async (
       thumbnailId: output.thumbnail,
       metadata,
     } as CreateProduct);
+
     if (!createdProductOutput.success) {
       return { success: false, message: "خطا در ایجاد محصول" };
     }
+
     updateTag(CacheKeys.product);
     return { success: successValidation, message: "محصول با موفقیت ایجاد شد" };
   } catch (error) {
@@ -95,6 +101,7 @@ export const createOptionAction = async (
   } = validator(CreateOptionSchema, inputData);
   if (!isSuccessValidation)
     return { success: false, errors, message: "خطای اعتبار سنجی" };
+
   try {
     const { success } = await createOption(output);
     if (!success) return { success, message: "خطا در ایجاد ویژگی" };

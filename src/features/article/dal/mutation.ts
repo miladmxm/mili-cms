@@ -16,18 +16,21 @@ export const createArticle = async (data: CreateArticle) => {
   );
   return article;
 };
+
 export const updateArticle = (id: string, data: Partial<CreateArticle>) => {
   return dalRequireAuth(
     () => dalDbOperation(() => articleService.updateArticle(id, data)),
     { blog: ["update"] },
   );
 };
+
 export const updateCategory = (id: string, data: Partial<CreateCategory>) => {
   return dalRequireAuth(
     () => dalDbOperation(() => articleService.updateCategory(id, data)),
     { blog: ["update"] },
   );
 };
+
 export const updateStatus = (id: string, status: ArticleStatus) => {
   const article = dalRequireAuth(
     () => dalDbOperation(() => articleService.updateArticleStatus(id, status)),
@@ -35,6 +38,7 @@ export const updateStatus = (id: string, status: ArticleStatus) => {
   );
   return article;
 };
+
 export const deleteArticle = (id: string) => {
   return dalRequireAuth(
     () => dalDbOperation(() => articleService.deleteArticle(id)),
@@ -50,6 +54,7 @@ export const createCategory = async (categoryData: CreateCategory) => {
     { blog: ["create"] },
   );
 };
+
 export const deleteCategory = (id: string) => {
   return dalRequireAuth(
     () => dalDbOperation(() => articleService.deleteCategory(id)),

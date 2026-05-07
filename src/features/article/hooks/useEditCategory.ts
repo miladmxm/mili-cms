@@ -35,10 +35,12 @@ export const useEditCategory = ({
   });
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
   const handleSubmit = (data: UpdateCategoryOutput) => {
     startTransition(async () => {
       const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
       const { success, message } = await updateCategory(id, dirtyData);
+
       if (!success) toast.error(message);
       else {
         toast.success(message);

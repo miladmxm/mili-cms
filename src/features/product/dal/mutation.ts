@@ -19,6 +19,7 @@ export const createProduct = async (data: CreateProduct) => {
   );
   return product;
 };
+
 export const createOption = async (data: CreateOption) => {
   const product = dalRequireAuth(
     () => dalDbOperation(() => optionService.createOption(data)),
@@ -26,30 +27,35 @@ export const createOption = async (data: CreateOption) => {
   );
   return product;
 };
+
 export const deleteOption = (id: string) => {
   return dalRequireAuth(
     () => dalDbOperation(() => optionService.deleteOption(id)),
     { product: ["delete"] },
   );
 };
+
 export const updateOption = (id: string, data: UpdateOption) => {
   return dalRequireAuth(
     () => dalDbOperation(() => optionService.updateOption(id, data)),
     { product: ["update"] },
   );
 };
+
 export const updateProduct = (id: string, data: CreateProduct) => {
   return dalRequireAuth(
     () => dalDbOperation(() => productService.updateProduct(id, data)),
     { product: ["update"] },
   );
 };
+
 export const updateCategory = (id: string, data: Partial<CreateCategory>) => {
   return dalRequireAuth(
     () => dalDbOperation(() => categoryService.updateCategory(id, data)),
     { product: ["update"] },
   );
 };
+
 // export const updateStatus = (id: string, status: ArticleStatus) => {
 //   const article = dalRequireAuth(
 //     () => dalDbOperation(() => articleService.updateArticleStatus(id, status)),
@@ -72,6 +78,7 @@ export const createCategory = async (categoryData: CreateCategory) => {
     { product: ["create"] },
   );
 };
+
 export const deleteCategory = (id: string) => {
   return dalRequireAuth(
     () => dalDbOperation(() => categoryService.deleteCategory(id)),

@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/purity */
-/* eslint-disable @eslint-react/no-unnecessary-use-memo */
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
@@ -53,6 +52,7 @@ SidebarContext.displayName = "SidebarContext";
 
 function useSidebar() {
   const context = React.use(SidebarContext);
+
   if (!context) {
     throw new Error("useSidebar must be used within a SidebarProvider.");
   }
@@ -84,6 +84,7 @@ function SidebarProvider({
   const setOpen = React.useCallback(
     (value: ((value: boolean) => boolean) | boolean) => {
       const openState = typeof value === "function" ? value(open) : value;
+
       if (setOpenProp) {
         setOpenProp(openState);
       } else {

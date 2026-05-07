@@ -12,27 +12,33 @@ const ColorPicker = () => {
   const { editor, isReady } = useTiptap();
   const color = useTiptapState((ctx) => {
     const nodeColor = ctx.editor.getAttributes("textStyle").color;
+
     if (nodeColor && typeof nodeColor === "string") {
       return nodeColor;
     }
+
     return "";
   });
 
   const timeoutRef = useRef<NodeJS.Timeout>(null);
   if (!editor || !isReady) return;
+
   const handleChangeColor = (value: string) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
+
     timeoutRef.current = setTimeout(() => {
       editor.chain().focus().setColor(value).run();
     }, 100);
   };
+
   const clearColor = (e: MouseEvent<HTMLButtonElement>) => {
     if (!color) return;
     e.preventDefault();
     editor.chain().focus().unsetColor().run();
   };
+
   return (
     <div className="relative">
       <input
@@ -74,23 +80,28 @@ export const BackGroundColorPicker = () => {
     if (nodeColor && typeof nodeColor === "string") {
       return nodeColor;
     }
+
     return "";
   });
   const timeoutRef = useRef<NodeJS.Timeout>(null);
   if (!editor) return;
+
   const handleChangeColor = (value: string) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
+
     timeoutRef.current = setTimeout(() => {
       editor.chain().focus().setHighlight({ color: value }).run();
     }, 100);
   };
+
   const clearColor = (e: MouseEvent<HTMLButtonElement>) => {
     if (!color) return;
     e.preventDefault();
     editor.chain().focus().unsetHighlight().run();
   };
+
   return (
     <div className="relative">
       <input
@@ -123,4 +134,5 @@ export const BackGroundColorPicker = () => {
     </div>
   );
 };
+
 export default ColorPicker;

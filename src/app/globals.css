@@ -9,25 +9,23 @@
   --color-black: var(--black);
   --font-display: var(--font-display);
 
-  --color-error:var(--error);
-  --color-warning:var(--warning);
-  --color-success:var(--success);
-  --shadow-lg-gray:0px 0px 30px -8px #0000002E;
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --shadow-lg-gray: 0px 0px 30px -8px #0000002e;
   --radius-4xl: 28px;
-  --radius-5xl:32px;
-  --radius-6xl:42px;
-
-
+  --radius-5xl: 32px;
+  --radius-6xl: 42px;
 }
 :root {
   --primary-25: #fbfbfb;
-  --primary-900: #66605E;
-  --secondary-500:#3A6EA5;
+  --primary-900: #66605e;
+  --secondary-500: #3a6ea5;
   --white: #ffffff;
   --black: #000000;
-  --error:#FF4949;
-  --success:#13CE66;
-  --warning:#FFCC3D;
+  --error: #ff4949;
+  --success: #13ce66;
+  --warning: #ffcc3d;
 }
 
 @layer base {
@@ -35,14 +33,14 @@
     @apply bg-primary-25 font-display font-medium text-primary-900;
   }
   a,
-  button{
-    @apply cursor-pointer
+  button {
+    @apply cursor-pointer;
   }
 }
 
-@layer components{
-  .mega-menu-wrapper:has(.product-nav-trigger:hover) .mega-menu{
-        @apply !visible !h-[70vh] !pointer-events-auto !opacity-100 !translate-y-0 !z-10
+@layer components {
+  .mega-menu-wrapper:has(.product-nav-trigger:hover) .mega-menu {
+    @apply !visible !h-[70vh] !pointer-events-auto !opacity-100 !translate-y-0 !z-10;
   }
 }
 
@@ -53,4 +51,3 @@
 @utility center {
   @apply flex items-center justify-center;
 }
-

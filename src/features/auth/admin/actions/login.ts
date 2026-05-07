@@ -13,9 +13,11 @@ export const login = async (
   input: unknown,
 ): Promise<ActionResult<LoginInput>> => {
   const { output, success, errors } = validator(LoginInputSchema, input);
+
   if (!success) {
     return { success, errors, message: "Validation Error" };
   }
+
   try {
     await auth.api.signInEmail({
       body: output,
@@ -25,6 +27,7 @@ export const login = async (
     if (error instanceof Error) {
       return { success: false, message: error.message };
     }
+
     return {
       success: false,
       message: "خطا در احراز هویت",

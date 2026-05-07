@@ -12,6 +12,7 @@ import { DTOconvertMediaPathToRealUrl } from "../media/dto";
 // * READ
 export const getCategoriesWithThumbnail = async () => {
   "use cache";
+
   cacheTag(CacheKeys.productCategories);
   const categories = await productRepo.findCategories();
 
@@ -25,6 +26,7 @@ export const getCategoriesWithThumbnail = async () => {
         alt: category.thumbnail.meta.alt,
       };
     }
+
     return newCategory;
   });
   return categoriesWithThumbnail;
@@ -35,6 +37,7 @@ export const createCategory = async (data: CreateCategory) => {
   if (data.thumbnailId) {
     await checkMediaType(data.thumbnailId, "image");
   }
+
   let slug: string = convertToSlug(data.slug);
   const existingArticleBySlug =
     await productRepo.findCategoryByStartedSlugWith(slug);
@@ -45,12 +48,14 @@ export const createCategory = async (data: CreateCategory) => {
   const category = (await productRepo.createCategory({ ...data, slug }))[0];
   return category;
 };
+
 // * UPDATE
 export const updateCategory = async (
   id: string,
   input: Partial<CreateCategory>,
 ) => {
   const data = input;
+
   if (data.thumbnailId) {
     await checkMediaType(data.thumbnailId, "image");
   }
@@ -63,6 +68,7 @@ export const updateCategory = async (
       existingArticleBySlug.map((a) => a.slug),
     );
   }
+
   return productRepo.updateCategoryById(id, data);
 };
 

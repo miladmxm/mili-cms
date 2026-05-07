@@ -24,14 +24,17 @@ const getActiveTextAlign = (edito: Editor) => {
   });
   return align;
 };
+
 const Alignments = () => {
   const { editor, isReady } = useTiptap();
   const activeAlign = useTiptapState((ctx) => getActiveTextAlign(ctx.editor));
 
   if (!editor || !isReady) return;
+
   const handleSetAlign = (align: string) => {
     editor.chain().focus().setTextAlign(align).run();
   };
+
   return (
     <ToggleGroup
       type="single"

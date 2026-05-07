@@ -1,5 +1,4 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -26,7 +25,6 @@ export const useEditOption = ({
   slug,
 }: Option) => {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   const form = useForm({
     resolver: valibotResolver(CreateOptionSchema),
     defaultValues: {
@@ -36,6 +34,7 @@ export const useEditOption = ({
       slug,
     },
   });
+
   const submit = (data: CreateOptionInput) => {
     startTransition(async () => {
       const deletedItemIds = getDeletedId(
@@ -49,5 +48,6 @@ export const useEditOption = ({
       toast[success ? "success" : "error"](message);
     });
   };
+
   return { form, onSubmit: form.handleSubmit(submit), isPending };
 };

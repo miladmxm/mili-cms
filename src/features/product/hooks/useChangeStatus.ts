@@ -6,8 +6,9 @@ import type { ArticleStatus } from "../../../services/article/types";
 
 export const useChangeStatus = (id: string, defaultValue: ArticleStatus) => {
   const [isPending, startTransition] = useTransition();
-  const [value, setValue] = useState<ArticleStatus>(defaultValue);
-  const handleChange = (status: ArticleStatus) => {
+  const [value] = useState<ArticleStatus>(defaultValue);
+
+  const handleChange = () => {
     if (isPending) return;
     startTransition(async () => {
       // const { message, success } = await updateArticleStatus(id, status);
@@ -19,5 +20,6 @@ export const useChangeStatus = (id: string, defaultValue: ArticleStatus) => {
       // }
     });
   };
+
   return { handleChange, isPending, value };
 };

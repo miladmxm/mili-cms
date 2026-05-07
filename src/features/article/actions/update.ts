@@ -31,6 +31,7 @@ export const updateArticle = async (
   } = validator(UpdateArticleSchema, data);
   if (!successValidation)
     return { success: successValidation, message: "خطای اعتبار سنجی", errors };
+
   try {
     const { success } = await articleMutation.updateArticle(id, output);
     if (!success) return { success, message: "خطا در ویرایش مقاله" };
@@ -52,9 +53,11 @@ export const updateArticleStatus = async (
     output,
     success: successValidation,
   } = validator(UpdateStatusSchema, { status });
+
   if (!successValidation) {
     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
+
   try {
     const { success } = await articleMutation.updateStatus(id, output.status);
     if (!success) return { success, message: "خطا در ویرایش مقاله" };
@@ -82,8 +85,10 @@ export const updateCategory = async (
       errors,
       message: "خطا در اعتبارسنجی",
     };
+
   try {
     const { success } = await articleMutation.updateCategory(id, output);
+
     if (success) {
       updateTag(CacheKeys.articleCategories);
       return { success: true, message: "با موفقیت ویرایش شد" };

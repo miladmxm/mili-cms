@@ -35,6 +35,7 @@ export const CategoryNameField = () => {
     />
   );
 };
+
 export const CategorySlugField = () => {
   const { control, setValue, getValues } = useCategoryFormContext();
   return (
@@ -61,6 +62,7 @@ export const CategorySlugField = () => {
     />
   );
 };
+
 export const CategorySelectParrent = ({
   categories,
 }: {
@@ -90,6 +92,7 @@ export const CategorySelectParrent = ({
     />
   );
 };
+
 export const CategoryDescriptionField = () => {
   const { control } = useCategoryFormContext();
   return (
@@ -110,6 +113,7 @@ export const CategoryDescriptionField = () => {
     />
   );
 };
+
 export const CategoryThumbnailSelector = () => {
   const { control, setValue } = useCategoryFormContext();
   const mediaPickerSheetControllerRef = useRef<SheetController>(null);

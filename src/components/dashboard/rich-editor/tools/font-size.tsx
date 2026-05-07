@@ -8,20 +8,25 @@ import { Input } from "../../ui/input";
 const DEFAULT_FONT_SIZE = 16;
 const MIN_FONT_SIZE = 1;
 const MAX_FONT_SIZE = 72;
+
 const FontSize = () => {
   const { editor } = useCurrentEditor();
   const fontSize = useTiptapState((ctx) => {
     const nodeFontSize = ctx.editor.getAttributes("textStyle")?.fontSize;
+
     if (nodeFontSize && typeof nodeFontSize === "string") {
       const convertFontSizeToNumberFromPX = Number(
         nodeFontSize.replace("px", ""),
       );
+
       if (!isNaN(convertFontSizeToNumberFromPX)) {
         return convertFontSizeToNumberFromPX;
       }
     }
+
     return DEFAULT_FONT_SIZE;
   });
+
   const updateFontSize = (size: number) => {
     if (!editor) return;
     editor.chain().focus().setFontSize(`${size}px`).run();

@@ -39,6 +39,7 @@ const getCurrentBlock = (editor: Editor) => {
   });
   return activedFormats;
 };
+
 const FontFormat = () => {
   const { editor, isReady } = useTiptap();
   const editorState = useTiptapState(({ editor: selectorEditor }) => {

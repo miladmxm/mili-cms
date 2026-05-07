@@ -1,4 +1,5 @@
 "use client";
+
 import type { ComponentProps, PropsWithChildren } from "react";
 import type { FieldPath, FieldPathValue } from "react-hook-form";
 
@@ -166,6 +167,7 @@ export const ProductCategories = ({
     />
   );
 };
+
 export const ProductGallery = () => {
   const { control, setValue } = useProductFormContext();
   const sheetControllerRef = useRef<SheetController>(null);
@@ -189,6 +191,7 @@ export const ProductGallery = () => {
             },
           );
         };
+
         return (
           <Field aria-invalid={invalid}>
             <FieldLabel htmlFor={name}>انتخاب تصویر گالری</FieldLabel>
@@ -249,6 +252,7 @@ export const ProductGallery = () => {
     />
   );
 };
+
 const SingleImagePicker = ({
   name,
   className,
@@ -431,6 +435,7 @@ const ProductPriceCurrencty = ({
     />
   );
 };
+
 const ProductPriceAmount = ({
   metaIndex,
   children,
@@ -484,6 +489,7 @@ const ProductPriceFields = ({
     </ProductPriceAmount>
   );
 };
+
 const ProductStock = ({
   metaIndex,
   defaultValue = -1,
@@ -509,6 +515,7 @@ const ProductStock = ({
     />
   );
 };
+
 const ProductVariantThumbnail = ({
   metaIndex,
   className,
@@ -525,6 +532,7 @@ const ProductVariantThumbnail = ({
     />
   );
 };
+
 const ProductDefaultMeta = () => {
   return (
     <FieldGroup>
@@ -533,6 +541,7 @@ const ProductDefaultMeta = () => {
     </FieldGroup>
   );
 };
+
 const VariableSection = ({
   children,
   className,
@@ -576,6 +585,7 @@ const HiddenOptionItemIdsInput = ({
     />
   );
 };
+
 const VariableOptionItemFields = ({
   optionItemIds,
   label,
@@ -612,6 +622,7 @@ const VariableOptionItemFields = ({
     </VariableSection>
   );
 };
+
 const VariableItemLoop = ({
   items,
   counterToZiro,
@@ -642,6 +653,7 @@ const VariableItemLoop = ({
       </>
     );
   }
+
   return (
     <>
       {items[counterToZiro].map(({ id, label }, i) => {
@@ -668,7 +680,9 @@ const VariableItemLoop = ({
     </>
   );
 };
+
 type SelectOptionState = Record<string, { id: string; label: string }[]>;
+
 const VariableMapHanlder = ({
   selectedOptionItem,
 }: {
@@ -711,6 +725,7 @@ const recersiveVariable = ({
       return { regularIndex, id, label, optionItemIds };
     });
   }
+
   return items[counterToZiro]
     .map(({ id }, i) => {
       const regularIndex = index ? items[counterToZiro].length * index + i : i;
@@ -724,6 +739,7 @@ const recersiveVariable = ({
     })
     .flat();
 };
+
 const createVariableFromOptionItems = ({
   selectedOptionItem,
 }: {
@@ -741,6 +757,7 @@ const createVariableFromOptionItems = ({
 type ReturnOptionItemSelect = Parameters<
   ComponentProps<typeof SelectMultipleOptionItem>["onSelect"]
 >[0];
+
 const ProductVariableMetaFieldGroup = ({
   options,
   defaultItems,
@@ -767,6 +784,7 @@ const ProductVariableMetaFieldGroup = ({
       [optionId]: prevOptionData,
     };
   };
+
   const handleAddItemData = ({
     optionId,
     label,
@@ -778,14 +796,17 @@ const ProductVariableMetaFieldGroup = ({
       [optionId]: [...prevOptionData, { id, label }],
     };
   };
+
   const handleSelectedOptionItem = (selectedItem: ReturnOptionItemSelect) => {
     let newSelectedOptionItems;
     const { id } = selectedItem;
+
     if (selectedIds.indexOf(id) === -1) {
       newSelectedOptionItems = handleAddItemData(selectedItem);
     } else {
       newSelectedOptionItems = handleRemoveItemData(selectedItem);
     }
+
     setSelectedOptionItem(newSelectedOptionItems);
     const abcd = createVariableFromOptionItems({
       selectedOptionItem: newSelectedOptionItems,
@@ -803,6 +824,7 @@ const ProductVariableMetaFieldGroup = ({
     );
     setValue("metadata", abcd, { shouldDirty: true });
   };
+
   return (
     <FieldGroup>
       <SelectMultipleOptionItem
@@ -820,6 +842,7 @@ export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
   const optionsData = use(options);
   const { control, setValue } = useProductFormContext();
   const typeValue = useWatch({ control, name: "type" });
+
   const handleChangeTabType = (t: ProductType) => {
     setValue("type", t, { shouldDirty: true });
     setValue("metadata", {}, { shouldDirty: true });

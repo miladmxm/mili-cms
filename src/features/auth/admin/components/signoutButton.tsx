@@ -19,11 +19,13 @@ import { signOut } from "@/lib/auth-client";
 const SignoutButton = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
   const handleSignOut = () => {
     startTransition(async () => {
       await signOut(() => router.push("/admin/login"));
     });
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>

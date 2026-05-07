@@ -1,4 +1,5 @@
 "use client";
+
 import type { Content, JSONContent } from "@tiptap/react";
 
 import { Tiptap } from "@tiptap/react";

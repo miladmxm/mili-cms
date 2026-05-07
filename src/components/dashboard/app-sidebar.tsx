@@ -18,6 +18,7 @@ import SidebarHeader from "./app-sidebar-header";
 import { ScrollArea } from "./ui/scroll-area";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & { user: User };
+
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const dir = useDirection();
   return (

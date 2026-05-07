@@ -24,6 +24,7 @@ import { Skeleton } from "@/components/dashboard/ui/skeleton";
 export const SelectMultipleCategoriesSkeleton = () => {
   return <Skeleton className="h-9 border w-full" />;
 };
+
 const SelectMultipleOptionItem: FC<{
   options: Option[];
   onSelect: (selected: {
@@ -117,4 +118,5 @@ const SelectMultipleOptionItem: FC<{
     </Popover>
   );
 };
+
 export default SelectMultipleOptionItem;

@@ -16,6 +16,7 @@ interface FilePreviewProps {
   url?: string;
   className?: string;
 }
+
 const ImagePreview = ({
   url,
   className,
@@ -67,10 +68,13 @@ const FilePreview = ({ type, url, className }: FilePreviewProps) => {
     switch (type) {
       case "image":
         return <ImagePreview className={className} url={url} />;
+
       case "audio":
         return <AudioPreview url={url} />;
+
       case "video":
         return <VideoPreview url={url} />;
+
       default:
         return <DefaultFilePreview className={className} type={type} />;
     }

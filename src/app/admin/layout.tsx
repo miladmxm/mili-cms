@@ -26,4 +26,5 @@ const DashboardLayout = ({ children }: Readonly<LayoutProps<"/admin">>) => {
     </html>
   );
 };
+
 export default DashboardLayout;

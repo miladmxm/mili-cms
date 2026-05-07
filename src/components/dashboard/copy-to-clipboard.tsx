@@ -1,4 +1,5 @@
 "use client";
+
 import { Check, Copy } from "lucide-react";
 import { useState, ViewTransition } from "react";
 
@@ -6,6 +7,7 @@ import { Button } from "./ui/button";
 
 const CopyToClipboard = ({ value }: { value: string }) => {
   const [copied, setCopied] = useState(false);
+
   const copyHandler = async () => {
     try {
       await navigator.clipboard.writeText(value);
@@ -17,6 +19,7 @@ const CopyToClipboard = ({ value }: { value: string }) => {
       console.log(error);
     }
   };
+
   return (
     <Button size="icon-sm" disabled={copied} onClick={copyHandler}>
       <ViewTransition>{copied ? <Check /> : <Copy />}</ViewTransition>

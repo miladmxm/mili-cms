@@ -1,4 +1,5 @@
 "use client";
+
 import type { PropsWithChildren } from "react";
 
 import { useLinkStatus } from "next/link";
@@ -22,6 +23,6 @@ export const NavLinkLoading = ({ className }: { className?: string }) => {
   return (
     <IconLinkLoading
       className={cn("link-loader-spinner absolute end-1", className)}
-    ></IconLinkLoading>
+    />
   );
 };

@@ -59,6 +59,7 @@ const metadataArraySchemaGenerator = <
     v.minLength(1),
   );
 };
+
 const metadataSchemaGenerator = <T extends Record<string, v.GenericSchema>>(
   schema: T,
 ) => {
@@ -67,6 +68,7 @@ const metadataSchemaGenerator = <T extends Record<string, v.GenericSchema>>(
     v.custom((t) => Object.keys(t as object).length > 0),
   );
 };
+
 export const CreateProductSchema = v.variant("type", [
   v.object({
     ...CreateProductBaseSchema.entries,

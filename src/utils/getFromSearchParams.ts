@@ -11,10 +11,12 @@ export const getItemFromSearchParam = ({
 }): string => {
   if (!searchParams) return defaultValue;
   const value = searchParams[selectorKey];
+
   if (value && Object.hasOwn(searchParams, selectorKey)) {
     if (typeof value === "string") return value;
     else return value.join("");
   }
+
   return defaultValue;
 };
 

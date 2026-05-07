@@ -13,6 +13,7 @@ const AddImage = () => {
   const sheetControllerRef = useRef<SheetController>(null);
 
   if (!editor || !isReady) return;
+
   const onClickHandler = ({ url, alt }: { url: string; alt: string }) => {
     editor
       .chain()
@@ -25,6 +26,7 @@ const AddImage = () => {
       .run();
     sheetControllerRef.current?.close();
   };
+
   return (
     <>
       <Button

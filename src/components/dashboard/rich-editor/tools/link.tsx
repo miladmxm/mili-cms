@@ -20,8 +20,10 @@ const AddLink = () => {
   const linkRef = useRef<HTMLInputElement>(null);
   const haveLink = useTiptapState((ctx) => ctx.editor.isActive("link"));
   if (!isReady || !editor) return;
+
   const handleAddLink = () => {
     const linkInput = linkRef.current;
+
     if (linkInput) {
       editor
         .chain()
@@ -32,17 +34,20 @@ const AddLink = () => {
       linkInput.value = "";
     }
   };
+
   const removeLink = (e: MouseEvent<HTMLButtonElement>) => {
     if (haveLink) {
       e.preventDefault();
       editor.chain().focus().unsetLink().run();
     }
   };
+
   const handleKeyDownForEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleAddLink();
     }
   };
+
   return (
     <Popover>
       <PopoverTrigger asChild>

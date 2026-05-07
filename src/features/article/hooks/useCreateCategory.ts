@@ -21,6 +21,7 @@ export const useCreateCategory = () => {
   const handleSubmit = (data: CreateCategoryOutput) => {
     startTransition(async () => {
       const { success, message } = await createCategoryAction(data);
+
       if (!success) toast.error(message);
       else {
         toast.success(message);

@@ -29,6 +29,7 @@ export const useCreateArticle = () => {
   const onSubmit = (data: CreateArticleOutput) => {
     startTransition(async () => {
       const { success, message } = await createArticleAction(data);
+
       if (!success) toast.error(message);
       else {
         form.reset();

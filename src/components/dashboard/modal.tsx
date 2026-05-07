@@ -16,6 +16,7 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
 }
+
 const Modal: FC<ModalProps & PropsWithChildren> = ({
   children,
   onClose,
@@ -27,7 +28,7 @@ const Modal: FC<ModalProps & PropsWithChildren> = ({
         className="inset-0 bg-black/40 -z-10 absolute"
         type="button"
         onClick={onClose}
-      ></button>
+      />
       <Card className="md:h-4/5 overflow-auto md:w-4/6 sm:size-5/6 size-11/12 max-w-6xl max-h-max">
         <CardHeader>
           {title && (

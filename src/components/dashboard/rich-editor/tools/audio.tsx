@@ -12,10 +12,12 @@ const AddAudio = () => {
   const { editor, isReady } = useTiptap();
   const sheetControllerRef = useRef<SheetController>(null);
   if (!editor || !isReady) return;
+
   const handleAddAudio = ({ url }: { url: string }) => {
     editor.chain().focus().setAudio({ src: url }).run();
     sheetControllerRef.current?.close();
   };
+
   return (
     <>
       <Button

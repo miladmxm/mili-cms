@@ -34,6 +34,7 @@ interface CreateProductBaseData {
   gallery?: string[];
   type: ProductType;
 }
+
 export type CreateProduct =
   | (CreateProductBaseData & {
       type: "default";
@@ -50,6 +51,7 @@ interface ProductDefaultMeta {
   price: ProductPrice;
   stock: number;
 }
+
 export interface ProductVariableMeta {
   id: string;
   thumbnailId: string | null;
@@ -79,6 +81,7 @@ interface ProductBase {
   gallery: Media[];
   optionItems: OptionItem[];
 }
+
 export type Product =
   | (ProductBase & { metadata: ProductDefaultMeta[]; type: "default" })
   | (ProductBase & { metadata: ProductVariableMeta[]; type: "variable" });

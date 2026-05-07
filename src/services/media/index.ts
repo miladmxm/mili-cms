@@ -17,6 +17,7 @@ export const getMediaByTypes = async (
   options?: LimitAndOffset,
 ) => {
   "use cache";
+
   cacheTag(CacheKeys.media, ...types.map((t) => `media-type-${t}`, options));
 
   const media = await mediaRepo.findMediaByTypesAndLimit({
@@ -25,8 +26,10 @@ export const getMediaByTypes = async (
   });
   return DTOconvertMediaToRealUrlMedia(media);
 };
+
 export const getMedia = async (options?: LimitAndOffset) => {
   "use cache";
+
   cacheTag(CacheKeys.media);
 
   const media = await mediaRepo.findMediaByLimit(options);
@@ -35,21 +38,26 @@ export const getMedia = async (options?: LimitAndOffset) => {
 
 export const checkMediaType = async (id: string, type: MediaTypes) => {
   "use cache: private";
+
   cacheTag(`${CacheKeys.media}-${id}`, type);
   const media = await mediaRepo.findMediaByIdAndType(id, type);
   if (!media) throw new ThrowableDalError({ type: "no-access" });
 };
+
 export const filterMediaIdsByTypes = async (
   ids: string[],
   types: MediaTypes[],
 ) => {
   "use cache";
+
   cacheTag(`${CacheKeys.media}-${ids.join("-")}`, types.sort().join("-"));
   const media = await mediaRepo.findMediaByIdsAndTypes(ids, types);
   return media.map(({ id }) => id);
 };
+
 export const getMediaById = async (id: string) => {
   "use cache";
+
   cacheTag(`${CacheKeys.media}-${id}`);
   const media = await mediaRepo.findMediaById(id);
   if (!media) return;

@@ -15,12 +15,15 @@ import type {
 // * READ
 export const getOptionsWithItems = async () => {
   "use cache";
+
   cacheTag(CacheKeys.productOption);
 
   return productRepo.findOptionsWithItems();
 };
+
 export const getOptionWithItems = async (id: string) => {
   "use cache";
+
   cacheTag(`${CacheKeys.productOption}-${id}`);
 
   return productRepo.findOptionByIdWithItems(id);
@@ -43,12 +46,14 @@ export const createOption = async (optionData: CreateOption) => {
     const { id: optionId } = (
       await productRepo.createOption({ name, slug, description }, tx)
     )[0];
+
     if (items.length > 0) {
       await productRepo.createOptionItems(
         items.map((item) => ({ ...item, optionId })),
         tx,
       );
     }
+
     return optionId;
   });
   return result;
@@ -61,6 +66,7 @@ const sliceUpdatingOptionItemsWithNewOptionItems = (
   const update: OptionItem[] = [];
   const create: CreateOptionItem[] = [];
   if (!items) return { update, create };
+
   for (const item of items) {
     if (item.id) {
       update.push({
@@ -72,8 +78,10 @@ const sliceUpdatingOptionItemsWithNewOptionItems = (
       create.push(item);
     }
   }
+
   return { update, create };
 };
+
 export const updateOption = async (id: string, input: UpdateOption) => {
   const data = input;
 
@@ -90,6 +98,7 @@ export const updateOption = async (id: string, input: UpdateOption) => {
 
   return withTransaction(async (tx) => {
     await productRepo.updateOptionById({ id, data }, tx);
+
     if (data.items && data.items.length > 0) {
       const itemsUpdatePromise: ReturnType<
         (typeof productRepo)["updateOptionItemById"]
@@ -106,6 +115,7 @@ export const updateOption = async (id: string, input: UpdateOption) => {
           ),
         );
       }
+
       await Promise.all(itemsUpdatePromise);
 
       if (create.length > 0) {

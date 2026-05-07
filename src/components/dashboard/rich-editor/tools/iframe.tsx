@@ -15,10 +15,12 @@ import { Field, FieldError } from "../../ui/field";
 import { Input } from "../../ui/input";
 
 const URLschema = v.pipe(v.string(), v.url());
+
 const validateUrl = (input?: string) => {
   const { success, output } = v.safeParse(URLschema, input);
   if (success) return output;
 };
+
 const getSafeURLfromInputValue = (input?: string) => {
   const isValidData = validateUrl(input);
   if (isValidData) return isValidData;
@@ -36,8 +38,10 @@ const AddIFrame = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState<boolean>(false);
   if (!editor || !isReady) return;
+
   const handleAddIframe = () => {
     const value = getSafeURLfromInputValue(inputRef.current?.value);
+
     if (value) {
       editor.chain().focus().setIframe({ src: value }).run();
       setOpen(false);
@@ -45,6 +49,7 @@ const AddIFrame = () => {
       setErrorMessage("این محتوا قابل تبدیل شدن نیست");
     }
   };
+
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>

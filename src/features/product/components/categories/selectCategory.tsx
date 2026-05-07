@@ -24,6 +24,7 @@ import { Skeleton } from "@/components/dashboard/ui/skeleton";
 export const SelectCategorySkeleton = () => {
   return <Skeleton className="h-9 border w-full" />;
 };
+
 const SelectCategory: FC<{
   categories: Category[];
   onSelect: (selected: { id: string; name: string } | null) => void;

@@ -29,6 +29,7 @@ interface EmptyPlaceholderProps {
   htmlFor?: string;
   onClick?: () => void;
 }
+
 type ActionProp =
   | {
       type: "button";
@@ -42,6 +43,7 @@ type ActionProp =
       type: "link";
       link: Route;
     };
+
 const EmptyPlaceholder = ({
   description,
   icon: IconComponent = CandyOff,

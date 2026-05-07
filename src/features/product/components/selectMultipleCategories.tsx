@@ -25,6 +25,7 @@ import type { Category } from "../../../services/article/types";
 export const SelectMultipleCategoriesSkeleton = () => {
   return <Skeleton className="h-9 border w-full" />;
 };
+
 const SelectMultipleCategories: FC<{
   categories: Promise<Category[]>;
   onSelect: (selected: { id: string; name: string }) => void;

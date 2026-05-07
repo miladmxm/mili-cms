@@ -53,6 +53,7 @@ export const findMediaByTypesAndLimit = (
     where: inArray(media.type, types),
     orderBy: [desc(media.createdAt)],
   });
+
 export const deleteMedia = async (id: string, tx?: Transaction) => {
   const result = await getDBorTX(tx)
     .delete(media)
@@ -60,6 +61,7 @@ export const deleteMedia = async (id: string, tx?: Transaction) => {
     .returning();
   return result[0];
 };
+
 export const findMediaById = (id: string, tx?: Transaction) =>
   getDBorTX(tx).query.media.findFirst({ where: eq(media.id, id) });
 

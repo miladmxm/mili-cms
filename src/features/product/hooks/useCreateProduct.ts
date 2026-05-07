@@ -26,11 +26,13 @@ export const useCreateProduct = () => {
     },
   });
   const [isPending, startTransition] = useTransition();
+
   const onSubmit = (data: CreateProductOutput) => {
     startTransition(async () => {
       const { success, message } = await createProductAction({
         ...data,
       });
+
       if (!success) toast.error(message);
       else {
         form.reset();

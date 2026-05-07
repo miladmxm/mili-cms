@@ -35,6 +35,7 @@ export const useEditProduct = () => {
 
     startTransition(async () => {
       const { success, message } = await updateProductAction(product.id, data);
+
       if (!success) toast.error(message);
       else {
         toast.success(message);

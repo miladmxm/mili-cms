@@ -33,8 +33,10 @@ export const updateProductAction = async (
   } = validator(CreateProductSchema, data);
   if (!successValidation)
     return { success: successValidation, message: "خطای اعتبار سنجی", errors };
+
   try {
     let { metadata } = output;
+
     if (output.type === "variable") {
       metadata = renameObjectItemInArray(
         output.metadata,
@@ -42,6 +44,7 @@ export const updateProductAction = async (
         "thumbnailId",
       );
     }
+
     const { success } = await productMutation.updateProduct(id, {
       ...output,
       metadata,
@@ -96,11 +99,13 @@ export const updateCategory = async (
       errors,
       message: "خطا در اعتبارسنجی",
     };
+
   try {
     const { success } = await productMutation.updateCategory(id, {
       ...output,
       thumbnailId: output.thumbnail,
     });
+
     if (success) {
       updateTag(CacheKeys.productCategories);
       return { success: true, message: "با موفقیت ویرایش شد" };
@@ -131,8 +136,10 @@ export const updateOptionAction = async (
       errors,
       message: "خطا در اعتبارسنجی",
     };
+
   try {
     const { success } = await productMutation.updateOption(id, output);
+
     if (success) {
       updateTag(`${CacheKeys.productOption}-${id}`);
       updateTag(CacheKeys.productOption);

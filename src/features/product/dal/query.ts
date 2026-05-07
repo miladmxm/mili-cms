@@ -17,12 +17,14 @@ export const getProducts = async () => {
     },
   );
 };
+
 export const getProduct = async (id: string) => {
   return dalRequireAuth(
     () => dalDbOperation(() => productService.getProduct(id)),
     { product: ["read"] },
   );
 };
+
 export const getCategories = async () => {
   const categories = dalVerifySuccess(
     await dalRequireAuth(

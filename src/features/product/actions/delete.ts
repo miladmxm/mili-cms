@@ -22,6 +22,7 @@ export const deleteProductAction = async (
     return { success: false, message: "در حذف محصول مشکلی رخ داد" };
   }
 };
+
 export const deleteCategoryAction = async (
   id: string,
 ): Promise<ActionResult<unknown>> => {
@@ -35,6 +36,7 @@ export const deleteCategoryAction = async (
     return { success: false, message: "در حذف دسته بندی مشکلی رخ داد" };
   }
 };
+
 export const deleteOptionAction = async (
   id: string,
 ): Promise<ActionResult<unknown>> => {

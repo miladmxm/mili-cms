@@ -20,6 +20,7 @@ export const useLoginForm = () => {
     },
   });
   const [isPending, startTransition] = useTransition();
+
   const handleSubmit = ({ email, password, rememberMe }: LoginInput) => {
     startTransition(async () => {
       const { success, message } = await login({
@@ -27,6 +28,7 @@ export const useLoginForm = () => {
         password,
         rememberMe,
       });
+
       if (success) {
         toast.success("با موفقیت وارد شدید");
         router.replace("/admin");
@@ -35,6 +37,7 @@ export const useLoginForm = () => {
       }
     });
   };
+
   return {
     isPending,
     control: form.control,

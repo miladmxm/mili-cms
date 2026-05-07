@@ -27,6 +27,7 @@ export const useUpload = (accept?: Accept) => {
   const { addToUploadingMedia, setProgressById, removeFromUploadingMedia } =
     useMediaStore();
   const router = useRouter();
+
   const onDrop = (acceptedFiles: File[]) => {
     acceptedFiles.forEach(async (file) => {
       const inputsData = { file };
@@ -46,6 +47,7 @@ export const useUpload = (accept?: Accept) => {
         progress: 0,
         abort,
       };
+
       if (output.type === "image") {
         storData = {
           ...storData,
@@ -54,6 +56,7 @@ export const useUpload = (accept?: Accept) => {
       }
 
       addToUploadingMedia(storData);
+
       try {
         await send();
         router.refresh();
@@ -66,6 +69,7 @@ export const useUpload = (accept?: Accept) => {
       }
     });
   };
+
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
     accept,

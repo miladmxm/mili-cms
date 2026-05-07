@@ -141,13 +141,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+// eslint-disable-next-line max-lines-per-function
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState("90d");
 
   React.useEffect(() => {
     if (isMobile) {
-      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTimeRange("7d");
     }
   }, [isMobile]);
@@ -156,11 +157,13 @@ export function ChartAreaInteractive() {
     const date = new Date(item.date);
     const referenceDate = new Date("2024-06-30");
     let daysToSubtract = 90;
+
     if (timeRange === "30d") {
       daysToSubtract = 30;
     } else if (timeRange === "7d") {
       daysToSubtract = 7;
     }
+
     const startDate = new Date(referenceDate);
     startDate.setDate(startDate.getDate() - daysToSubtract);
     return date >= startDate;

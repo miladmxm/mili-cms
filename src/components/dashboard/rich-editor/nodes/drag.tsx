@@ -3,6 +3,7 @@ import { useTiptap } from "@tiptap/react";
 import { GripVertical } from "lucide-react";
 
 const NESTED_CONFIG = { edgeDetection: { threshold: -16 } };
+
 const Drag = () => {
   const { editor, isReady } = useTiptap();
   if (!editor || !isReady) return;

@@ -1,4 +1,5 @@
 "use client";
+
 import type { FC, PropsWithChildren } from "react";
 
 import { Trash2 } from "lucide-react";

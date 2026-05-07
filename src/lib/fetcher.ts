@@ -3,6 +3,7 @@ import { ThrowableDalError } from "@/dal/types";
 const isSuccessStatus = (status: number) => {
   return status >= 200 && status < 300;
 };
+
 export const fetcher = async (
   url: RequestInfo | URL,
   options?: RequestInit,
@@ -19,6 +20,7 @@ export const fetcher = async (
   const jsonRes = await res.json();
   return jsonRes;
 };
+
 export const GET = (url: RequestInfo | URL, options?: RequestInit) =>
   fetcher(url, { ...options, method: "GET" });
 

@@ -1,4 +1,5 @@
 "use client";
+
 import type { FC, PropsWithChildren } from "react";
 
 import { Download, X } from "lucide-react";
@@ -73,7 +74,7 @@ export const FileCardForUpload: FC<PropsWithChildren & UploadingFileData> = ({
           <div
             className="h-full rounded-full bg-primary w-0 transition-all"
             style={{ width: `${progress}%` }}
-          ></div>
+          />
         </div>
         <span className="w-6">{progress.toFixed(0)}%</span>
         <Button size="icon-sm" variant="destructive" onClick={abort}>
@@ -83,12 +84,14 @@ export const FileCardForUpload: FC<PropsWithChildren & UploadingFileData> = ({
     </Card>
   );
 };
+
 interface FileData {
   id: string;
   url: string;
   meta: FileMeta;
   type: MediaTypes;
 }
+
 export const FileCardSkeleton = ({ length = 2 }: { length?: number }) => {
   const items = new Array(length).fill("").map((_, i) => i);
   return (
@@ -116,6 +119,7 @@ export const FileCardSkeleton = ({ length = 2 }: { length?: number }) => {
     </>
   );
 };
+
 const FileCard: FC<FileData> = ({ id, type, url, meta }) => {
   return (
     <Card>
@@ -156,4 +160,5 @@ const FileCard: FC<FileData> = ({ id, type, url, meta }) => {
     </Card>
   );
 };
+
 export default FileCard;

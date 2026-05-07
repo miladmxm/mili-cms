@@ -8,10 +8,12 @@ import { updateArticleStatus } from "../actions/update";
 export const useChangeStatus = (id: string, defaultValue: ArticleStatus) => {
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState<ArticleStatus>(defaultValue);
+
   const handleChange = (status: ArticleStatus) => {
     if (isPending) return;
     startTransition(async () => {
       const { message, success } = await updateArticleStatus(id, status);
+
       if (!success) {
         toast.error(message);
       } else {
@@ -20,5 +22,6 @@ export const useChangeStatus = (id: string, defaultValue: ArticleStatus) => {
       }
     });
   };
+
   return { handleChange, isPending, value };
 };

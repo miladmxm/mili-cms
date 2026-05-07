@@ -1,4 +1,5 @@
 "use client";
+
 import { IconInnerShadowTop } from "@tabler/icons-react";
 
 import type { User } from "@/features/auth/admin/types";

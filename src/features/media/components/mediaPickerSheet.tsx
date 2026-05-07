@@ -1,4 +1,5 @@
 "use client";
+
 import type { RefObject } from "react";
 
 import { Upload } from "lucide-react";
@@ -28,6 +29,7 @@ export interface SheetController {
   open: () => void;
   close: () => void;
 }
+
 const MediaPickerSheet = ({
   mediaKey,
   onSelect,

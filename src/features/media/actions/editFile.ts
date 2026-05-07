@@ -19,9 +19,11 @@ export const editFileMeta = async (
     EditFileDataSchema,
     fileData,
   );
+
   if (!successValidation) {
     return { success: successValidation, message: "validation error" };
   }
+
   try {
     const { success } = await updateFileData(id, output);
     if (!success) return { success, message: "ویرایش انجام نشد" };
@@ -32,6 +34,7 @@ export const editFileMeta = async (
     if (error instanceof Error) {
       return { success: false, message: error.message };
     }
+
     return {
       success: false,
       message: "خطا در احراز هویت",

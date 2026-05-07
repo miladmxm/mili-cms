@@ -45,7 +45,7 @@ const VisualTableSelector = ({
                       "bg-primary/60": row <= selected[0] && col <= selected[1],
                     },
                   )}
-                ></td>
+                />
               ))}
             </tr>
           ))}
@@ -63,6 +63,7 @@ const AddTable = () => {
   const [open, setOpen] = useState(false);
   const [hasHeader, setHasHeader] = useState<boolean>(true);
   if (!editor || !isReady) return;
+
   const onClickHandler = ({ cols, rows }: { rows: number; cols: number }) => {
     editor
       .chain()
@@ -71,6 +72,7 @@ const AddTable = () => {
       .run();
     setOpen(false);
   };
+
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>

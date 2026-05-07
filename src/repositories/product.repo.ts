@@ -221,6 +221,7 @@ export const createCategory = (
   data: typeof productCategory.$inferInsert,
   tx?: Transaction,
 ) => getDBorTX(tx).insert(productCategory).values(data).returning();
+
 export const findCategories = async (tx?: Transaction) => {
   const categories = await getDBorTX(tx).query.productCategory.findMany({
     with: { thumbnail: { columns: { url: true, meta: true } } },
@@ -228,6 +229,7 @@ export const findCategories = async (tx?: Transaction) => {
   });
   return categories;
 };
+
 export const findCategoryByStartedSlugWith = async (
   slug: string,
   tx?: Transaction,

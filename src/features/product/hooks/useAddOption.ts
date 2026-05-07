@@ -24,6 +24,7 @@ export const useAddOption = () => {
   const submit = (data: CreateOptionInput) => {
     startTransition(async () => {
       const { success, message } = await createOptionAction(data);
+
       if (!success) toast.error(message);
       else {
         form.reset();
@@ -31,5 +32,6 @@ export const useAddOption = () => {
       }
     });
   };
+
   return { form, onSubmit: form.handleSubmit(submit), isPending };
 };

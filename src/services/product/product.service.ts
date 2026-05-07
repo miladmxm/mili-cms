@@ -7,31 +7,37 @@ import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
 import { withTransaction } from "@/repositories";
 import * as productRepo from "@/repositories/product.repo";
 
-import type { Media } from "../media/type";
 import type { LimitAndOffset } from "../type";
 import type { CreateProduct, Product } from "./type";
 
 import { checkMediaType, filterMediaIdsByTypes } from "../media";
 import { DTOconvertMediaPathToRealUrl } from "../media/dto";
+
 // * READ
 export const getPaginationProduct = async (limitAndOffset?: LimitAndOffset) => {
   "use cache";
+
   cacheTag(CacheKeys.product);
 
   return productRepo.findProductsByLimitAndOffset(limitAndOffset);
 };
+
 export const getAllProducts = () => productRepo.findProducts();
 
 export const getProduct = async (id: string) => {
   "use cache";
+
   cacheTag(`${CacheKeys.product}-${id}`);
   const product = await productRepo.findProductById(id);
   if (!product) return product;
-  const thumbnail: Media | null = product.thumbnail;
+  const { thumbnail } = product;
+
   if (thumbnail) {
     thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
   }
+
   let gallery = product.gallery.map(({ media }) => media);
+
   if (gallery && gallery.length > 0) {
     gallery = gallery.map((img) => {
       return {
@@ -40,7 +46,9 @@ export const getProduct = async (id: string) => {
       };
     });
   }
+
   let productMetadata = product.metadata;
+
   if (productMetadata && productMetadata.length > 0) {
     productMetadata = productMetadata.map((meta) => {
       if (!meta.thumbnail) return meta;
@@ -53,6 +61,7 @@ export const getProduct = async (id: string) => {
       };
     });
   }
+
   const optionItems = product.optionItems.map(({ optionItem }) => optionItem);
   return {
     ...product,
@@ -69,6 +78,7 @@ export const createProduct = async (productData: CreateProduct) => {
   if (productData.thumbnailId) {
     await checkMediaType(productData.thumbnailId, "image");
   }
+
   const categories = await productRepo.findCategoriesByIds(
     productData.categoryIds,
   );
@@ -100,6 +110,7 @@ export const createProduct = async (productData: CreateProduct) => {
       })),
       tx,
     );
+
     if (productData.type === "variable") {
       const optionIds = Array.from(
         new Set(
@@ -125,6 +136,7 @@ export const createProduct = async (productData: CreateProduct) => {
         tx,
       );
     }
+
     return product;
   });
   return resultId;
@@ -175,6 +187,7 @@ export const updateProduct = async (
     string,
     (typeof productData)["metadata"][number]
   >();
+
   if (productData.type === "variable") {
     const newMetadataOptionItemIds = productData.metadata.map(
       ({ optionItemIds }) => optionItemIds,
@@ -196,10 +209,12 @@ export const updateProduct = async (
     removeMetadataIds = oldMetadataOptionItemIds.filter(
       (id) => !newMetadataIdsSet.has(id),
     );
+
     for (const metadata of productData.metadata) {
       metadataByOptionItemIds.set(metadata.optionItemIds, metadata);
     }
   }
+
   const metadataOptionItemIds = addMetadataIds.concat(updateMetadataIds);
   const newOptionItemIdsSet = new Set(
     metadataOptionItemIds
@@ -273,8 +288,10 @@ export const updateProduct = async (
     const updateMetadataPromises: ReturnType<
       typeof productRepo.updateProductMetadataByOptionItemIds
     >[] = [];
+
     for (const id of updateMetadataIds) {
       const metadata = metadataByOptionItemIds.get(id);
+
       if (metadata) {
         updateMetadataPromises.push(
           productRepo.updateProductMetadataByOptionItemIds(
@@ -287,18 +304,22 @@ export const updateProduct = async (
         );
       }
     }
+
     await Promise.all(updateMetadataPromises);
 
     //add new metadata
     const addMetadata: Parameters<
       (typeof productRepo)["createProductMetadata"]
     >[0] = [];
+
     for (const id of addMetadataIds) {
       const metadata = metadataByOptionItemIds.get(id);
+
       if (metadata) {
         addMetadata.push({ ...metadata, productId });
       }
     }
+
     if (addMetadata.length > 0) {
       await productRepo.createProductMetadata(addMetadata, tx);
     }
@@ -329,11 +350,13 @@ export const updateProduct = async (
         );
         await productRepo.deleteAllProductMetadataByProductId(productId, tx);
       }
+
       const prevMetadata = await productRepo.findFirstProductMeta(
         productId,
         tx,
       );
       const metadata = { ...productData.metadata[0], productId };
+
       if (prevMetadata) {
         await productRepo.updateProductMetadatById(
           { id: prevMetadata.id, metadata },

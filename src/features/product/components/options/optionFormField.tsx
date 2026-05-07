@@ -80,6 +80,7 @@ interface OptionItemFieldsProps {
   index: number;
   remove: (index: number) => void;
 }
+
 const OptionItemFields = ({ index, remove }: OptionItemFieldsProps) => {
   const { control } = useOptionFormContext();
   return (
@@ -120,6 +121,7 @@ const OptionItemFields = ({ index, remove }: OptionItemFieldsProps) => {
     </div>
   );
 };
+
 export const OptionItems = () => {
   const { control } = useOptionFormContext();
   const { fields, append, remove } = useFieldArray({

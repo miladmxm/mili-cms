@@ -36,6 +36,7 @@ export const useEditArticle = (article: Article) => {
     const dirtyData = getItemsDirtyData(data, form.formState.dirtyFields);
     startTransition(async () => {
       const { success, message } = await updateArticle(article.id, dirtyData);
+
       if (!success) toast.error(message);
       else {
         toast.success(message);

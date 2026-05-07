@@ -32,6 +32,7 @@ interface WriteFileParameters {
 
 export const ensureBucket = async () => {
   const bucketName = env.S3_BUCKET;
+
   try {
     const { Location } = await s3.send(
       new CreateBucketCommand({
@@ -103,6 +104,7 @@ export const writeFile = async ({
   );
   return pathKey;
 };
+
 export const deleteFile = async (url: string) => {
   await s3.send(new DeleteObjectCommand({ Bucket: env.S3_BUCKET, Key: url }));
 };

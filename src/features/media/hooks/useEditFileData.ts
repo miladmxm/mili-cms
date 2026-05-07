@@ -14,9 +14,11 @@ export const useEditFileData = (id: string, defaultValues: EditFileData) => {
     defaultValues,
   });
   const [isPending, startTransition] = useTransition();
+
   const handleSubmit = (data: EditFileData) => {
     startTransition(async () => {
       const { success, message } = await editFileMeta(id, data);
+
       if (success) {
         toast.success("ویرایش انجام شد");
       } else {
@@ -24,6 +26,7 @@ export const useEditFileData = (id: string, defaultValues: EditFileData) => {
       }
     });
   };
+
   return {
     submit: form.handleSubmit(handleSubmit),
     isPending,

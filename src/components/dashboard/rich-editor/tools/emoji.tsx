@@ -17,9 +17,11 @@ import {
 
 const Emoji = ({ editor }: { editor: Editor }) => {
   const [open, setOpen] = useState<boolean>(false);
+
   const addEmoji = (emojiData: EmojiClickData) => {
     editor.chain().focus().insertContent(emojiData.emoji).run();
   };
+
   return (
     <Popover open={open}>
       <PopoverTrigger asChild>

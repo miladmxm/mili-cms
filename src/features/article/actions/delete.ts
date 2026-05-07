@@ -21,6 +21,7 @@ export const deleteArticleAction = async (
     return { success: false, message: "در حذف مقاله مشکلی رخ داد" };
   }
 };
+
 export const deleteCategoryAction = async (
   id: string,
 ): Promise<ActionResult<unknown>> => {

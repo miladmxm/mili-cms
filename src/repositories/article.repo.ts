@@ -54,6 +54,7 @@ export const findCategoryByStartedSlugWith = async (
   getDBorTX(tx).query.articleCategory.findMany({
     where: like(articleCategory.slug, `${slug}%`),
   });
+
 export const findCategories = async (tx?: Transaction) => {
   const categories = await getDBorTX(tx).query.articleCategory.findMany({
     with: { thumbnail: { columns: { url: true, meta: true } } },
@@ -61,6 +62,7 @@ export const findCategories = async (tx?: Transaction) => {
   });
   return categories;
 };
+
 export const findCategoriesByIds = async (ids: string[], tx?: Transaction) => {
   return await getDBorTX(tx).query.articleCategory.findMany({
     where: inArray(articleCategory.id, ids),

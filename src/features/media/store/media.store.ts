@@ -33,6 +33,7 @@ export const useMediaStore = create<Actions & State>((set) => ({
         if (item.id === id) {
           item.progress = progress;
         }
+
         return item;
       });
       return { uploadingMedia: updatedItem };

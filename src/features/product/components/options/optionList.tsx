@@ -57,6 +57,7 @@ const OptionItems = ({ optionItems }: { optionItems: OptionItem[] }) => {
     </Table>
   );
 };
+
 const OptionItemsAccordion = ({
   optionItems,
 }: {
@@ -123,6 +124,7 @@ const OptionList = ({ options }: { options: Option[] }) => {
       />
     );
   }
+
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
       {options.map((opt) => (

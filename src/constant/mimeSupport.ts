@@ -1,6 +1,7 @@
 import type { MediaTypes } from "@/services/media/type";
 
 type MimeKey = `${string}/${string}`;
+
 type MimeTypes = Record<MediaTypes, Record<MimeKey, string[]>>;
 
 export const MIMETYPES = {
