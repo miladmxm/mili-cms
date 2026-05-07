@@ -23,6 +23,7 @@ export const getPaginationArticles = async (
   limitAndOffset?: LimitAndOffset,
 ) => {
   "use cache";
+
   cacheTag(CacheKeys.articles);
 
   return articleRepo.findArticlesByLimitAndOffset(limitAndOffset);
@@ -30,10 +31,12 @@ export const getPaginationArticles = async (
 
 export const getArticle = async (id: string) => {
   "use cache";
+
   cacheTag(`${CacheKeys.articles}-${id}`);
   const article = await articleRepo.findArticleById(id);
   if (!article) return article;
   let thumbnail: Media | undefined;
+
   if (article.thumbnail && typeof article.thumbnail !== "string") {
     thumbnail = article.thumbnail;
   }
@@ -46,6 +49,7 @@ export const getArticle = async (id: string) => {
 
 export const getCategoriesWithThumbnail = async () => {
   "use cache";
+
   cacheTag(CacheKeys.articleCategories);
   const categories = await articleRepo.findCategories();
 
@@ -59,6 +63,7 @@ export const getCategoriesWithThumbnail = async () => {
         alt: category.thumbnail.meta.alt,
       };
     }
+
     return newCategory;
   });
   return categoriesWithThumbnail;
@@ -69,6 +74,7 @@ export const createArticle = async (data: CreateArticle) => {
   if (data.thumbnail) {
     await checkMediaType(data.thumbnail, "image");
   }
+
   const categories = await articleRepo.findCategoriesByIds(data.categoryIds);
   let slug: string = convertToSlug(data.slug);
   const existingArticleBySlug =
@@ -94,6 +100,7 @@ export const createCategory = async (data: CreateCategory) => {
   if (data.thumbnail) {
     await checkMediaType(data.thumbnail, "image");
   }
+
   let slug: string = convertToSlug(data.slug);
   const existingArticleBySlug =
     await articleRepo.findCategoryByStartedSlugWith(slug);
@@ -106,6 +113,7 @@ export const createCategory = async (data: CreateCategory) => {
   )[0];
   return category;
 };
+
 // UPDATE
 const diffCategoryForUpdate = (prevIds: string[], nextIds: string[]) => {
   const remove: string[] = [];
@@ -122,6 +130,7 @@ const diffCategoryForUpdate = (prevIds: string[], nextIds: string[]) => {
   });
   return { remove, add };
 };
+
 export const updateArticle = async (
   id: string,
   input: Partial<CreateArticle>,
@@ -130,11 +139,13 @@ export const updateArticle = async (
   const article = await articleRepo.findArticleById(id);
   if (!article) throw new Error("not found");
   console.log(data);
+
   if (data.thumbnail) {
     await checkMediaType(data.thumbnail, "image");
   }
 
   let categoryIds: string[] = [];
+
   if (data.categoryIds) {
     categoryIds = (await articleRepo.findCategoriesByIds(data.categoryIds)).map(
       ({ id: categoryId }) => categoryId,
@@ -149,12 +160,14 @@ export const updateArticle = async (
       existingArticleBySlug.map((a) => a.slug),
     );
   }
+
   const result = await withTransaction(async (tx) => {
     if (categoryIds && categoryIds.length > 0) {
       const { add, remove } = diffCategoryForUpdate(
         article.categoryIds,
         categoryIds,
       );
+
       if (remove.length) {
         await articleRepo.deleteRelatedCategoryByArticleId(
           {
@@ -171,6 +184,7 @@ export const updateArticle = async (
         );
       }
     }
+
     return articleRepo.updateArticleById(id, data, tx);
   });
   return result;
@@ -188,6 +202,7 @@ export const updateCategory = async (
   input: Partial<CreateCategory>,
 ) => {
   const data = input;
+
   if (data.slug) {
     data.slug = convertToSlug(data.slug);
     const existingArticleBySlug =
@@ -197,6 +212,7 @@ export const updateCategory = async (
       existingArticleBySlug.map((a) => a.slug),
     );
   }
+
   return articleRepo.updateCategoryById(id, data);
 };
 

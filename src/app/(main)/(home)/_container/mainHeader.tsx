@@ -9,9 +9,8 @@ import HeaderDesktopNavigation from "./headerDesktopNavigation";
 
 const MainHeader = () => {
   const isMobile = useIsMobile();
-  console.log(isMobile);
   return (
-    <div className="shadow-lg-gray px-4 md:px-8 py-1 md:py-2 rounded-full flex items-center">
+    <div className="shadow-lg-gray px-4 md:px-8 py-1 md:py-2 rounded-full flex">
       {isMobile && (
         <div className="flex-1 flex items-center">
           <MobileMenuToggler />

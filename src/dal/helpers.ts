@@ -68,7 +68,9 @@ export const dalRequireAuth = async <T, E extends DalError>(
   if (!session) {
     return createErrorReturn({ type: "no-user" });
   }
+
   const { success } = await hasAccess(session.user.id, permissions);
+
   if (!success) {
     return createErrorReturn({ type: "no-access" });
   }
@@ -87,22 +89,27 @@ export const dalDbOperation = async <T>(operation: () => Promise<T>) => {
     if (e instanceof DrizzleQueryError) {
       return createErrorReturn({ type: "drizzle-error", error: e });
     }
+
     return createErrorReturn({ type: "unknown-error", error: e });
   }
 };
 
 export const dalFormatErrorMessage = (error: DalError) => {
-  const type = error.type;
+  const { type } = error;
 
   switch (error.type) {
     case "no-user":
       return "You must be logged in to perform this action.";
+
     case "no-access":
       return "You do not have permission to perform this action.";
+
     case "drizzle-error":
       return `A database error occurred`;
+
     case "unknown-error":
       return `An unknown error occurred`;
+
     default:
       throw new Error(`Unhandled error type: ${type as never}`);
   }

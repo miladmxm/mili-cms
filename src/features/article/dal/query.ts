@@ -15,12 +15,14 @@ export const getArticles = async () => {
     },
   );
 };
+
 export const getArticle = async (id: string) => {
   return dalRequireAuth(
     () => dalDbOperation(() => articleService.getArticle(id)),
     { blog: ["read"] },
   );
 };
+
 export const getCategories = async () => {
   const categories = dalVerifySuccess(
     await dalRequireAuth(
