@@ -1,22 +1,12 @@
-import Link from "next/link";
-
-import MobileMenu from "./mobileMenu";
+import MobileMenu, { MenuItemLink } from "./mobileMenu";
 
 const HeaderMobileNavigation = () => {
   return (
     <MobileMenu>
-      <li>
-        <Link href="#">پیشنهاد ویژه</Link>
-      </li>
-      <li>
-        <Link href="#">خرید اقساطی</Link>
-      </li>
-      <li>
-        <Link href="#">واقعیت افزوده</Link>
-      </li>
-      <li>
-        <Link href="#">تماس با ما</Link>
-      </li>
+      <MenuItemLink href="#">پیشنهاد ویژه</MenuItemLink>
+      <MenuItemLink href="#">خرید اقساطی</MenuItemLink>
+      <MenuItemLink href="#">واقعیت افزوده</MenuItemLink>
+      <MenuItemLink href="#">تماش با ما</MenuItemLink>
     </MobileMenu>
   );
 };
