@@ -6,6 +6,7 @@ import SearchBoxToggler from "@/components/ui/searchBoxToggler";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 import HeaderDesktopNavigation from "./headerDesktopNavigation";
+import MobileMenu from "./mobileMenu";
 
 const MainHeader = () => {
   const isMobile = useIsMobile();
@@ -17,7 +18,7 @@ const MainHeader = () => {
         </div>
       )}
       <MainLogo className="w-10 md:w-20 object-contain" />
-      {!isMobile && <HeaderDesktopNavigation />}
+      {!isMobile ? <HeaderDesktopNavigation /> : <MobileMenu />}
       <div className="max-md:flex-1 flex items-center justify-end">
         <SearchBoxToggler />
       </div>

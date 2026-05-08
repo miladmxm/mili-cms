@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import MegaMenu from "./megamenu";
+import MegaMenu from "./megaMenu";
 
 const HeaderDesktopNavigation = () => {
   return (
