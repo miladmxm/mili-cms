@@ -1,9 +1,11 @@
 import { AnimatePresence, motion, useMotionValue } from "motion/react";
+import Image from "next/image";
 import { useEffect, useEffectEvent, useRef } from "react";
 
 import type { Category } from "@/services/product/type";
 
 import ArrowToLeft from "@/assets/icons/arrowToLeft.svg";
+import heroCategoryBackground from "@/assets/images/heroCategoryBackground.jpg";
 import DefaultImage from "@/components/ui/defaultImage";
 import { cn } from "@/lib/utils";
 
@@ -83,10 +85,31 @@ const ChildMenu = () => {
   const activeId = useMegaMenuStore((store) => store.activeId);
 
   const { productCategories } = useHomePageContext();
-  const activeChildren = productCategories.find(({ id }) => id === activeId);
-  if (!activeChildren) return null;
-  console.log(activeChildren.children);
-  return null;
+  const activeCategory = productCategories.find(({ id }) => id === activeId);
+  if (!activeCategory || !activeCategory.children?.length) return null;
+
+  return (
+    <div className="flex gap-4 items-stretch flex-auto relative">
+      {activeCategory.children.map(({ id, name }) => (
+        <div className="flex-1/3" key={id}>
+          <strong className="font-bold text-sm text-thready-800">{name}</strong>
+        </div>
+      ))}
+      {activeCategory.thumbnail && (
+        <div className="flex-1/4">
+          <Image
+            alt="hero bg"
+            src={heroCategoryBackground}
+            className="size-full rounded-3xl opacity-25"
+          />
+          <DefaultImage
+            className="absolute bottom-0 end-0 w-1/3"
+            image={activeCategory.thumbnail}
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 const Menu = () => {
@@ -116,9 +139,9 @@ const MegaMenu = () => {
       </span>
       <motion.div
         style={{ top }}
-        className="mega-menu pt-4 container w-full fixed inset-x-0 top-20 transition-all duration-300 invisible h-0 pointer-events-none opacity-0 translate-y-10 -z-10"
+        className="mega-menu pt-4 container w-full fixed inset-x-0 top-20 transition-all duration-300 invisible pointer-events-none opacity-0 translate-y-10 -z-10"
       >
-        <div className="p-4 rounded-6xl shadow-lg-gray h-full">
+        <div className="p-8 xl:p-10 rounded-6xl shadow-lg-gray h-full">
           <Menu />
         </div>
       </motion.div>
