@@ -10,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        horizontal: "h-full w-[1px]",
+        horizontal: "h-full w-[1px] bg-gradient-to-b",
         vertical: "h-[1px] w-full",
       },
     },

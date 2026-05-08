@@ -1,12 +1,14 @@
 import { AnimatePresence, motion, useMotionValue } from "motion/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useEffectEvent, useRef } from "react";
 
-import type { Category } from "@/services/product/type";
+import type { Category, CategoryTree } from "@/services/product/type";
 
 import ArrowToLeft from "@/assets/icons/arrowToLeft.svg";
 import heroCategoryBackground from "@/assets/images/heroCategoryBackground.jpg";
 import DefaultImage from "@/components/ui/defaultImage";
+import SeparatorLine from "@/components/ui/separatorLine";
 import { cn } from "@/lib/utils";
 
 import { useHomePageContext } from "../../_context";
@@ -40,11 +42,10 @@ const ParentMenuItem = ({ name, id, thumbnail }: Category) => {
         />
         <strong className="font-bold text-primary-900">{name}</strong>
       </button>
-      <div
-        className={cn(
-          "flex group-last:hidden h-[1px] w-full bg-gradient-to-l from-transparent via-thready-800/30 to-transparent items-center justify-end",
-          { "to-thready-800/30": isActive },
-        )}
+      <SeparatorLine
+        className={cn("flex items-center justify-end group-last:hidden", {
+          "to-thready-800/30": isActive,
+        })}
       >
         <AnimatePresence>
           {isActive && (
@@ -58,7 +59,7 @@ const ParentMenuItem = ({ name, id, thumbnail }: Category) => {
             </motion.span>
           )}
         </AnimatePresence>
-      </div>
+      </SeparatorLine>
     </li>
   );
 };
@@ -81,20 +82,64 @@ const ParentMenu = () => {
   );
 };
 
+const SubCategoryLinks = ({ categories }: { categories: CategoryTree[] }) => {
+  return (
+    <ul className="pt-8 ps-4">
+      {categories.map(({ name, slug }) => (
+        <li key={slug}>
+          <Link
+            className="text-primary-900 hover:text-secondary-500 w-full block py-2 px-4"
+            href={`#${slug}`}
+          >
+            {name}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 const ChildMenu = () => {
   const activeId = useMegaMenuStore((store) => store.activeId);
 
   const { productCategories } = useHomePageContext();
   const activeCategory = productCategories.find(({ id }) => id === activeId);
   if (!activeCategory || !activeCategory.children?.length) return null;
+  const activeCategoryChildren = activeCategory.children;
 
   return (
-    <div className="flex gap-4 items-stretch flex-auto relative">
-      {activeCategory.children.map(({ id, name }) => (
-        <div className="flex-1/3" key={id}>
-          <strong className="font-bold text-sm text-thready-800">{name}</strong>
-        </div>
-      ))}
+    <motion.div layout className="flex gap-4 items-stretch flex-auto relative">
+      <AnimatePresence>
+        {activeCategoryChildren.map(({ id, name, children }, i) => (
+          <motion.div
+            exit={{
+              y: "20%",
+              position: "absolute",
+              width: `33%`,
+              opacity: 0,
+              insetInlineStart: `${i * (100 / activeCategoryChildren.length)}%`,
+            }}
+            initial={{
+              y: "-10%",
+              opacity: 0,
+            }}
+            animate={{ y: 0, opacity: 1 }}
+            className="flex-1/3 flex inset-y-0"
+            key={id}
+          >
+            <div className="flex-auto">
+              <strong className="font-bold py-2 ps-4 block text-thready-800">
+                {name}
+              </strong>
+              <SeparatorLine />
+              <SubCategoryLinks categories={children || []} />
+            </div>
+            {activeCategoryChildren.length - 1 !== i && (
+              <SeparatorLine variant="horizontal" className="w-0.5" />
+            )}
+          </motion.div>
+        ))}
+      </AnimatePresence>
       {activeCategory.thumbnail && (
         <div className="flex-1/4">
           <Image
@@ -103,21 +148,21 @@ const ChildMenu = () => {
             className="size-full rounded-3xl opacity-25"
           />
           <DefaultImage
-            className="absolute bottom-0 end-0 w-1/3"
+            className="absolute -bottom-5 end-0 w-1/3"
             image={activeCategory.thumbnail}
           />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
 const Menu = () => {
   return (
-    <div className="flex gap-6">
+    <motion.div layout className="flex gap-6">
       <ParentMenu />
       <ChildMenu />
-    </div>
+    </motion.div>
   );
 };
 
