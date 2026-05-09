@@ -6,11 +6,11 @@ import { useEffect, useEffectEvent } from "react";
 
 import Feather from "@/assets/images/heroFeather.png";
 import HeroImage from "@/assets/images/heroSectionImage.png";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobileForAnimation } from "@/hooks/use-mobile";
 
 const HeroImageComponent = () => {
   const [scope, animate] = useAnimate();
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobileForAnimation();
   const startMotion = useEffectEvent(() => {
     animate([
       [

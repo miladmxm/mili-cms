@@ -4,10 +4,10 @@ import { useAnimate } from "motion/react";
 import { useEffect, useEffectEvent } from "react";
 
 import Button from "@/components/ui/button";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobileForAnimation } from "@/hooks/use-mobile";
 
 const HeroTextContent = () => {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobileForAnimation();
   const [scope, animate] = useAnimate();
   const motion = useEffectEvent(() => {
     animate(

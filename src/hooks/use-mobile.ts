@@ -3,7 +3,7 @@ import { useEffect, useEffectEvent, useState } from "react";
 const MOBILE_BREAKPOINT = 768;
 const window = global.window || { innerWidth: 1 };
 
-export function useIsMobile() {
+export function useIsMobileForAnimation() {
   const [isMobile, setIsMobile] = useState<boolean>(
     window.innerWidth < MOBILE_BREAKPOINT,
   );
@@ -20,6 +20,25 @@ export function useIsMobile() {
     };
 
     mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  return !!isMobile;
+}
+
+export function useIsMobile() {
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+
+    const onChange = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
+
+    mql.addEventListener("change", onChange);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     return () => mql.removeEventListener("change", onChange);
   }, []);
 
