@@ -101,7 +101,7 @@ const MobileMenu = ({ children }: PropsWithChildren) => {
         x: open ? "0" : "100%",
       }}
       transition={{ duration: 0.2 }}
-      className="fixed bg-white flex flex-col gap-4 inset-0 px-2 py-8 overflow-hidden"
+      className="fixed bg-white flex flex-col gap-4 inset-0 px-2 py-8 overflow-hidden md:hidden"
     >
       <CloseMenuButton />
       <div className="overflow-auto">

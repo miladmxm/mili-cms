@@ -1,9 +1,12 @@
 import { useEffect, useEffectEvent, useState } from "react";
 
 const MOBILE_BREAKPOINT = 768;
+const window = global.window || { innerWidth: 1 };
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
+  const [isMobile, setIsMobile] = useState<boolean>(
+    window.innerWidth < MOBILE_BREAKPOINT,
+  );
 
   const setIsMobileEvent = useEffectEvent((state: boolean) => {
     setIsMobile(state);
@@ -17,8 +20,6 @@ export function useIsMobile() {
     };
 
     mql.addEventListener("change", onChange);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMobileEvent(window.innerWidth < MOBILE_BREAKPOINT);
     return () => mql.removeEventListener("change", onChange);
   }, []);
 

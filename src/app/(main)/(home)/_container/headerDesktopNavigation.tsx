@@ -4,7 +4,7 @@ import MegaMenu from "./megaMenu";
 
 const HeaderDesktopNavigation = () => {
   return (
-    <nav className="flex-auto justify-center flex relative mega-menu-wrapper">
+    <nav className="flex-auto max-md:hidden justify-center flex relative mega-menu-wrapper">
       <ul className="flex lg:gap-8 gap-4 *:hover:text-secondary-500 h-full *:items-center *:flex">
         <MegaMenu />
         <li>

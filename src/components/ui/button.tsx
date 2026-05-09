@@ -17,7 +17,7 @@ const buttonVariants = cva(
           "bg-transparent ring-3 ring-gray-500 hover:bg-gray-500 text-gray-500 hover:text-white",
       },
       size: {
-        default: "p-3 w-full",
+        default: "p-3 w-full font-bold text-xl",
       },
       shadow: {
         default: "",
