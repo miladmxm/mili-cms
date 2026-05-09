@@ -1,11 +1,11 @@
 import BeforeHeader from "./beforeHeader";
-import HeaderMobileNavigation from "./headerMobileNavigation";
+import MainHeader from "./mainHeader";
 
 const Header = () => {
   return (
     <header className="container">
       <BeforeHeader />
-      <HeaderMobileNavigation />
+      <MainHeader />
     </header>
   );
 };

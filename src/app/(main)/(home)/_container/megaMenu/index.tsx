@@ -108,7 +108,7 @@ const ChildMenu = () => {
   const activeCategoryChildren = activeCategory.children;
 
   return (
-    <motion.div layout className="flex gap-4 items-stretch flex-auto relative">
+    <div className="flex gap-4 items-stretch flex-auto relative">
       <AnimatePresence>
         {activeCategoryChildren.map(({ id, name, children }, i) => (
           <motion.div
@@ -147,22 +147,21 @@ const ChildMenu = () => {
             src={heroCategoryBackground}
             className="size-full rounded-3xl opacity-25"
           />
-          <DefaultImage
-            className="absolute -bottom-5 end-0 w-1/3"
-            image={activeCategory.thumbnail}
-          />
+          <motion.div layout className="absolute -bottom-5 end-0 w-1/3">
+            <DefaultImage image={activeCategory.thumbnail} />
+          </motion.div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 
 const Menu = () => {
   return (
-    <motion.div layout className="flex gap-6">
+    <div className="flex gap-6">
       <ParentMenu />
       <ChildMenu />
-    </motion.div>
+    </div>
   );
 };
 

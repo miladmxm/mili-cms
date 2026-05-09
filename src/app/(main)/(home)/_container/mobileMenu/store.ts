@@ -4,13 +4,9 @@ interface MobileMenuState {
   open: boolean;
 }
 
-interface MegaMenuAction {
-  setOpen: (open: boolean) => void;
-}
+export const useMobileMenuStore = create<MobileMenuState>(() => ({
+  open: false,
+}));
 
-export const useMobileMenuStore = create<MegaMenuAction & MobileMenuState>(
-  (set) => ({
-    open: false,
-    setOpen: (open) => set({ open }),
-  }),
-);
+export const setClose = () => useMobileMenuStore.setState({ open: false });
+export const setOpen = () => useMobileMenuStore.setState({ open: true });
