@@ -71,7 +71,7 @@
 
 @layer components {
   .mega-menu-wrapper:has(.product-nav-trigger:hover) .mega-menu {
-    @apply !visible !h-max !pointer-events-auto !opacity-100 !translate-y-0 !z-10;
+    @apply !visible !h-max !pointer-events-auto !opacity-100 !translate-y-0 !z-40;
   }
 }
 

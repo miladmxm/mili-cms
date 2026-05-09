@@ -185,7 +185,7 @@ const MegaMenu = () => {
         style={{ top }}
         className="mega-menu pt-4 container w-full fixed inset-x-0 top-20 transition-all duration-300 invisible pointer-events-none opacity-0 translate-y-10 -z-10"
       >
-        <div className="p-8 xl:p-10 rounded-6xl shadow-lg-gray h-full">
+        <div className="p-8 xl:p-10 rounded-6xl bg-primary-25 shadow-lg-gray h-full">
           <Menu />
         </div>
       </motion.div>
