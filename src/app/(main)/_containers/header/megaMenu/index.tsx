@@ -11,7 +11,7 @@ import DefaultImage from "@/components/ui/defaultImage";
 import SeparatorLine from "@/components/ui/separatorLine";
 import { cn } from "@/lib/utils";
 
-import { useHomePageContext } from "../../_context";
+import { useMainLayoutContext } from "../../../_context";
 import { useMegaMenuStore } from "./store";
 
 const ParentMenuItem = ({ name, id, thumbnail }: Category) => {
@@ -65,7 +65,7 @@ const ParentMenuItem = ({ name, id, thumbnail }: Category) => {
 };
 
 const ParentMenu = () => {
-  const { productCategories } = useHomePageContext();
+  const { productCategories } = useMainLayoutContext();
   const setActiveIndex = useMegaMenuStore((store) => store.setActiveIndex);
   const setFirstItem = useEffectEvent(() =>
     setActiveIndex(productCategories[0].id),
@@ -102,7 +102,7 @@ const SubCategoryLinks = ({ categories }: { categories: CategoryTree[] }) => {
 const ChildMenu = () => {
   const activeId = useMegaMenuStore((store) => store.activeId);
 
-  const { productCategories } = useHomePageContext();
+  const { productCategories } = useMainLayoutContext();
   const activeCategory = productCategories.find(({ id }) => id === activeId);
   if (!activeCategory || !activeCategory.children?.length) return null;
   const activeCategoryChildren = activeCategory.children;

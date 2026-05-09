@@ -16,7 +16,7 @@ import Accordion, {
 import SeparatorLine from "@/components/ui/separatorLine";
 import { cn } from "@/lib/utils";
 
-import { useHomePageContext } from "../../_context";
+import { useMainLayoutContext } from "../../../_context";
 import { setClose, useMobileMenuStore } from "./store";
 
 export const MenuItemLink = ({
@@ -92,7 +92,7 @@ const CloseMenuButton = () => {
 
 const MobileMenu = ({ children }: PropsWithChildren) => {
   const { open } = useMobileMenuStore();
-  const { productCategories } = useHomePageContext();
+  const { productCategories } = useMainLayoutContext();
   return (
     <motion.nav
       initial={{ width: 0, x: "100%" }}

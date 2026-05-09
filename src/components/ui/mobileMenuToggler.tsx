@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { setOpen } from "@/app/(main)/(home)/_container/mobileMenu/store";
+import { setOpen } from "@/app/(main)/_containers/header/mobileMenu/store";
 import HamburgerMenu from "@/assets/icons/hamburgerMenu.svg";
 import { cn } from "@/lib/utils";
 
