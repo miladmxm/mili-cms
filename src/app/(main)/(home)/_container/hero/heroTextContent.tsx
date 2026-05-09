@@ -28,7 +28,7 @@ const HeroTextContent = () => {
     motion();
   }, [animate]);
   return (
-    <div ref={scope} className="w-max flex flex-col gap-6">
+    <div ref={scope} className="w-max flex flex-col gap-6 *:opacity-0">
       <h1 className="font-black text-5xl text-gray-500 leading-[160%]">
         یاتاک <br /> رویای شیرین <br /> خوابی آرام
       </h1>
