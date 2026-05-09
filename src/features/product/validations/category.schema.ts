@@ -12,6 +12,7 @@ export const CreateCategorySchema = v.object({
     ),
   ),
   thumbnail: ThumbnailSchema,
+  vector: ThumbnailSchema,
   parentId: v.optional(v.nullable(v.pipe(v.string(), v.nonEmpty()))),
 });
 export type CreateCategoryInput = v.InferInput<typeof CreateCategorySchema>;

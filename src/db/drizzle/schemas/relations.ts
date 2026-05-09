@@ -154,6 +154,10 @@ export const productCategoryRelations = relations(
       fields: [productCategory.thumbnailId],
       references: [media.id],
     }),
+    vector: one(media, {
+      fields: [productCategory.vectorId],
+      references: [media.id],
+    }),
     parent: one(productCategory, {
       fields: [productCategory.parentId],
       references: [productCategory.id],

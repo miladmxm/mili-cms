@@ -24,6 +24,7 @@ import {
   CategorySelectParrent,
   CategorySlugField,
   CategoryThumbnailSelector,
+  CategoryVectorSelector,
 } from "./categoryFormFields";
 
 interface CreateCategoryProps {
@@ -47,6 +48,7 @@ const CreateCategory: FC<CreateCategoryProps> = ({ className, categories }) => {
               <CategorySelectParrent categories={categories} />
               <CategoryDescriptionField />
               <CategoryThumbnailSelector />
+              <CategoryVectorSelector />
               <Field>
                 <Button
                   className="flex-auto"

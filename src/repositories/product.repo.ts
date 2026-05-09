@@ -224,7 +224,10 @@ export const createCategory = (
 
 export const findCategories = async (tx?: Transaction) => {
   const categories = await getDBorTX(tx).query.productCategory.findMany({
-    with: { thumbnail: { columns: { url: true, meta: true } } },
+    with: {
+      thumbnail: { columns: { url: true, meta: true } },
+      vector: { columns: { url: true, meta: true } },
+    },
     orderBy: [desc(productCategory.createdAt)],
   });
   return categories;

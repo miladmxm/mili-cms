@@ -21,6 +21,7 @@ export const useEditCategory = ({
   description,
   parentId,
   thumbnail,
+  vector,
 }: Category) => {
   const form = useForm({
     resolver: valibotResolver(UpdateCategorySchema),
@@ -32,6 +33,7 @@ export const useEditCategory = ({
       thumbnail: thumbnail
         ? { id: thumbnail.id, url: thumbnail.url }
         : undefined,
+      vector: vector ? { id: vector.id, url: vector.url } : undefined,
     },
   });
   const [isPending, startTransition] = useTransition();

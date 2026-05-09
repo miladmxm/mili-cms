@@ -104,6 +104,7 @@ export const updateCategory = async (
     const { success } = await productMutation.updateCategory(id, {
       ...output,
       thumbnailId: output.thumbnail,
+      vectorId: output.vector,
     });
 
     if (success) {

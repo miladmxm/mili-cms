@@ -121,17 +121,17 @@ export const CategoryThumbnailSelector = () => {
     <Controller
       name="thumbnail"
       control={control}
-      render={({ fieldState, field: { value } }) => (
+      render={({ fieldState, field: { value, name } }) => (
         <div className="relative">
           <Field aria-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="thumbnail">انتخاب تصویر شاخص</FieldLabel>
+            <FieldLabel htmlFor={name}>انتخاب تصویر شاخص</FieldLabel>
             <Suspense fallback={null}>
               <MediaPickerSheet
                 mediaKey="image"
                 controllerRef={mediaPickerSheetControllerRef}
                 onSelect={({ id, url }) => {
                   setValue(
-                    "thumbnail",
+                    name,
                     { id, url },
                     { shouldDirty: true, shouldValidate: true },
                   );
@@ -164,7 +164,74 @@ export const CategoryThumbnailSelector = () => {
               className="absolute end-4 top-10 z-20 text-destructive"
               variant="outline"
               onClick={() =>
-                setValue("thumbnail", null, {
+                setValue(name, null, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            >
+              <Trash />
+            </Button>
+          )}
+        </div>
+      )}
+    />
+  );
+};
+
+export const CategoryVectorSelector = () => {
+  const { control, setValue } = useCategoryFormContext();
+  const mediaPickerSheetControllerRef = useRef<SheetController>(null);
+  return (
+    <Controller
+      name="vector"
+      control={control}
+      render={({ fieldState, field: { value, name } }) => (
+        <div className="relative">
+          <Field aria-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={name}>
+              یک آیکن یا تصویر برداری انتخاب کنید
+            </FieldLabel>
+            <Suspense fallback={null}>
+              <MediaPickerSheet
+                mediaKey="image"
+                controllerRef={mediaPickerSheetControllerRef}
+                onSelect={({ id, url }) => {
+                  setValue(
+                    name,
+                    { id, url },
+                    { shouldDirty: true, shouldValidate: true },
+                  );
+                  mediaPickerSheetControllerRef.current?.close();
+                }}
+              />
+            </Suspense>
+            <Button
+              className="w-full h-32"
+              variant="outline"
+              onClick={() => mediaPickerSheetControllerRef.current?.open()}
+            >
+              {typeof value !== "string" && value?.url && (
+                <Image
+                  alt="image preview"
+                  className="size-full object-contain"
+                  src={{
+                    src: value.url,
+                    width: 128,
+                    height: 128,
+                  }}
+                />
+              )}
+            </Button>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+          {value && (
+            <Button
+              size="icon-sm"
+              className="absolute end-4 top-10 z-20 text-destructive"
+              variant="outline"
+              onClick={() =>
+                setValue(name, null, {
                   shouldDirty: true,
                   shouldValidate: true,
                 })

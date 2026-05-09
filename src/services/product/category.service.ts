@@ -17,13 +17,24 @@ export const getCategoriesWithThumbnail = async () => {
   const categories = await productRepo.findCategories();
 
   const categoriesWithThumbnail = categories.map((category) => {
-    const newCategory: Category = { ...category, thumbnail: undefined };
+    const newCategory: Category = {
+      ...category,
+      thumbnail: undefined,
+      vector: undefined,
+    };
 
     if (category.thumbnail && category.thumbnail.url) {
       newCategory.thumbnail = {
         url: DTOconvertMediaPathToRealUrl(category.thumbnail.url),
         id: category.id,
         alt: category.thumbnail.meta.alt,
+      };
+    }
+    if (category.vector && category.vector.url) {
+      newCategory.vector = {
+        url: DTOconvertMediaPathToRealUrl(category.vector.url),
+        id: category.id,
+        alt: category.vector.meta.alt,
       };
     }
 
@@ -36,6 +47,9 @@ export const getCategoriesWithThumbnail = async () => {
 export const createCategory = async (data: CreateCategory) => {
   if (data.thumbnailId) {
     await checkMediaType(data.thumbnailId, "image");
+  }
+  if (data.vectorId) {
+    await checkMediaType(data.vectorId, "image");
   }
 
   let slug: string = convertToSlug(data.slug);
@@ -58,6 +72,9 @@ export const updateCategory = async (
 
   if (data.thumbnailId) {
     await checkMediaType(data.thumbnailId, "image");
+  }
+  if (data.vectorId) {
+    await checkMediaType(data.vectorId, "image");
   }
   if (data.slug) {
     data.slug = convertToSlug(data.slug);

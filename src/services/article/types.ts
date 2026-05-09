@@ -42,6 +42,7 @@ export interface Category {
   createdAt: Date;
   updatedAt: Date;
   thumbnail?: { url: string; alt: string; id: string } | null;
+  vector?: { url: string; alt: string; id: string } | null;
   parentId?: string | null;
   description?: string | null;
 }

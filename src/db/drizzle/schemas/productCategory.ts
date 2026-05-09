@@ -26,6 +26,9 @@ export const productCategory = MainSchema.table(
     thumbnailId: uuid("thumbnail_id").references(() => media.id, {
       onDelete: "set null",
     }),
+    vectorId: uuid("vector_id").references(() => media.id, {
+      onDelete: "set null",
+    }),
     parentId: uuid("parent_id").references(
       (): AnyPgColumn => productCategory.id,
       {
