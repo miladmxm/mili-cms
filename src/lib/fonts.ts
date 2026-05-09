@@ -50,6 +50,11 @@ export const FontMain = localFont({
   variable: "--font-display",
   src: [
     {
+      path: "../assets/fonts/dana/woff2/dana-fanum-black.woff2",
+      style: "normal",
+      weight: "900",
+    },
+    {
       path: "../assets/fonts/dana/woff2/dana-fanum-bold.woff2",
       style: "normal",
       weight: "700",
