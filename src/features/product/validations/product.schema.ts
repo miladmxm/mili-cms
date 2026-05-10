@@ -13,29 +13,28 @@ export const StatusSchema = v.picklist<ProductStatus[]>([
   "draft",
   "published",
 ]);
+
+const StringToNumberPipe = v.pipe(
+  v.string(),
+  v.nonEmpty(),
+  v.transform((s) => Number(s)),
+  v.number(),
+);
 const PriceSchema = v.object({
-  amount: v.union([
-    v.number(),
-    v.pipe(
-      v.string(),
-      v.nonEmpty(),
-      v.transform((s) => Number(s)),
-      v.number(),
-    ),
-  ]),
+  amount: v.union([v.number(), StringToNumberPipe]),
   currency: v.optional(v.picklist(["IRR"]), "IRR"),
 });
-const StockSchema = v.optional(
+const StockSchema = v.optional(v.union([v.number(), StringToNumberPipe]), -1);
+const DiscountSchema = v.optional(
   v.union([
     v.number(),
     v.pipe(
-      v.string(),
-      v.nonEmpty(),
-      v.transform((s) => Number(s)),
-      v.number(),
+      StringToNumberPipe,
+      v.maxValue(100, "فقط بین ۰ تا ۱۰۰"),
+      v.minValue(0, "فقط بین ۰ تا ۱۰۰"),
     ),
   ]),
-  -1,
+  0,
 );
 export const CreateProductBaseSchema = v.object({
   name: v.pipe(v.string(), v.nonEmpty("نام نباید خالی باشد")),
@@ -76,6 +75,7 @@ export const CreateProductSchema = v.variant("type", [
     metadata: metadataArraySchemaGenerator({
       price: PriceSchema,
       stock: StockSchema,
+      discount: DiscountSchema,
     }),
   }),
   v.object({
@@ -84,6 +84,7 @@ export const CreateProductSchema = v.variant("type", [
     metadata: metadataArraySchemaGenerator({
       price: PriceSchema,
       stock: StockSchema,
+      discount: DiscountSchema,
       thumbnail: ThumbnailSchema,
       optionItemIds: v.string(),
     }),
@@ -99,6 +100,7 @@ export const EditProductSchema = v.variant("type", [
     metadata: metadataSchemaGenerator({
       price: PriceSchema,
       stock: StockSchema,
+      discount: DiscountSchema,
     }),
   }),
   v.object({
@@ -109,6 +111,7 @@ export const EditProductSchema = v.variant("type", [
       stock: StockSchema,
       thumbnail: ThumbnailSchema,
       optionItemIds: v.string(),
+      discount: DiscountSchema,
     }),
   }),
 ]);

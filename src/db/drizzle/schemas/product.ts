@@ -127,6 +127,7 @@ export const productMeta = MainSchema.table("product_meta", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
   price: jsonb("price").$type<ProductPrice>().notNull(),
   stock: integer("stock").notNull().default(-1),
+  discount: integer("discount").notNull().default(0),
   productId: uuid("product_id")
     .notNull()
     .references(() => product.id, { onDelete: "cascade" }),

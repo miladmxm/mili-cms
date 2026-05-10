@@ -1,7 +1,7 @@
 "use client";
 
 import { IconMail } from "@tabler/icons-react";
-import { ChevronRight, LayoutDashboard } from "lucide-react";
+import { ChevronRight, EyeIcon, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 
 import type {
@@ -106,7 +106,7 @@ export function NavMain({ items }: { items: AdminNavMain[] }) {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-4">
-        <SidebarMenu>
+        <SidebarMenu className="gap-3">
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
               className="bg-secondary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
@@ -123,6 +123,14 @@ export function NavMain({ items }: { items: AdminNavMain[] }) {
               <IconMail />
               <span className="sr-only">Inbox</span>
             </Button>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="/" target="_blank">
+                <EyeIcon />
+                مشاهده وبسایت
+              </Link>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu className="gap-3">

@@ -17,6 +17,7 @@ export interface ProductPrice {
 export interface CreateProductMetadata {
   price: ProductPrice;
   stock?: number;
+  discount: number;
 }
 export interface VariableCreateProductMetadata extends CreateProductMetadata {
   thumbnailId?: string | null | undefined;
@@ -50,6 +51,7 @@ interface ProductDefaultMeta {
   productId: string;
   price: ProductPrice;
   stock: number;
+  discount: number;
 }
 
 export interface ProductVariableMeta {
@@ -59,6 +61,7 @@ export interface ProductVariableMeta {
   productId: string;
   price: ProductPrice;
   stock: number;
+  discount: number;
   optionItemIds: string;
 }
 interface ProductBase {

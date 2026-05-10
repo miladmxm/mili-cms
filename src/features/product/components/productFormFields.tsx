@@ -516,6 +516,32 @@ const ProductStock = ({
   );
 };
 
+const ProductDiscount = ({
+  metaIndex,
+  defaultValue = 0,
+}: MetaProps & {
+  defaultValue?: FieldPathValue<CreateProductInput, "metadata.0.discount">;
+}) => {
+  const { control } = useProductFormContext();
+  return (
+    <Controller
+      defaultValue={defaultValue}
+      name={`metadata.${metaIndex}.discount`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <Field aria-invalid={fieldState.invalid}>
+          <FieldLabel htmlFor={field.name}>تخفیف</FieldLabel>
+          <div className="relative">
+            <Input {...field} id={field.name} placeholder="33" />
+            <span className="absolute end-3 text-xl top-1">%</span>
+          </div>
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+};
+
 const ProductVariantThumbnail = ({
   metaIndex,
   className,
@@ -536,7 +562,10 @@ const ProductVariantThumbnail = ({
 const ProductDefaultMeta = () => {
   return (
     <FieldGroup>
-      <ProductPriceFields metaIndex="0" />
+      <div className="flex gap-4">
+        <ProductPriceFields metaIndex="0" />
+        <ProductDiscount metaIndex="0" />
+      </div>
       <ProductStock metaIndex="0" />
     </FieldGroup>
   );
@@ -599,10 +628,16 @@ const VariableOptionItemFields = ({
     <VariableSection data-key={optionItemIds}>
       <p className="mb-3">{label}</p>
       <FieldGroup>
-        <ProductPriceFields
-          defaultValue={metadata ? metadata[0].price : undefined}
-          metaIndex={optionItemIds}
-        />
+        <div className="flex gap-4">
+          <ProductPriceFields
+            defaultValue={metadata ? metadata[0].price : undefined}
+            metaIndex={optionItemIds}
+          />
+          <ProductDiscount
+            metaIndex={optionItemIds}
+            defaultValue={metadata ? metadata[0].discount : undefined}
+          />
+        </div>
         <HiddenOptionItemIdsInput
           metaIndex={optionItemIds}
           optionItemIds={optionItemIds}
