@@ -15,7 +15,7 @@ const DefaultImage = ({
   if (!image) {
     return (
       <div className={props.className}>
-        <ImageIcon />
+        <ImageIcon className="size-full" />
       </div>
     );
   }

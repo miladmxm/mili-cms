@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 import env from "@/config/env";
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["10.147.247.187"],
   typedRoutes: true,
   reactCompiler: true,
   cacheComponents: true,

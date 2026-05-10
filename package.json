@@ -80,6 +80,7 @@
     "dompurify": "^3.2.7",
     "drizzle-orm": "^0.45.1",
     "drizzle-valibot": "^0.4.2",
+    "embla-carousel": "^8.6.0",
     "emoji-picker-react": "^4.17.1",
     "filesize": "^11.0.13",
     "jsdom": "^27.0.0",

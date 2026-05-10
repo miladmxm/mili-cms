@@ -56,6 +56,7 @@ export const MIMETYPES = {
     "image/png": [".png"],
     "image/webp": [".webp"],
     "image/gif": [".gif"],
+    "image/svg+xml": [".svg"],
   },
   video: {
     "video/mp4": [".mp4", ".mp4v", ".mpg4"],
