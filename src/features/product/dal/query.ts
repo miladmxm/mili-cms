@@ -25,6 +25,9 @@ export const getProduct = async (id: string) => {
   );
 };
 
+export const getDiscountedProducts = async () =>
+  dalVerifySuccess(await dalDbOperation(productService.getDiscountedProducts));
+
 export const getCategories = async () => {
   const categories = dalVerifySuccess(
     await dalRequireAuth(

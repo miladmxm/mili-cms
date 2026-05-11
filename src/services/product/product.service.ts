@@ -24,6 +24,26 @@ export const getPaginationProduct = async (limitAndOffset?: LimitAndOffset) => {
 
 export const getAllProducts = () => productRepo.findProducts();
 
+export const getDiscountedProducts = async () => {
+  "use cache";
+
+  cacheTag(CacheKeys.product);
+  const products = await productRepo.findDiscountedProducts();
+  const normalProducts: Product[] = [];
+
+  for (const product of products) {
+    const { thumbnail } = product;
+
+    if (thumbnail) {
+      thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+    }
+
+    normalProducts.push({ ...(product as Product), thumbnail });
+  }
+
+  return normalProducts;
+};
+
 export const getProduct = async (id: string) => {
   "use cache";
 

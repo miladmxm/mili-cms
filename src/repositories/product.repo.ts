@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, like } from "drizzle-orm";
+import { and, desc, eq, inArray, like, ne } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
@@ -41,6 +41,26 @@ export const findProductById = async (id: string, tx?: Transaction) => {
     ...findedProduct,
     categoryIds,
   };
+};
+
+export const findDiscountedProducts = async (
+  options?: OffsetLimit,
+  tx?: Transaction,
+) => {
+  const productMetas = await getDBorTX(tx).query.productMeta.findMany({
+    where: ne(productMeta.discount, 0),
+    columns: { productId: true },
+  });
+  const productIds = Array.from(
+    new Set<string>(productMetas.map(({ productId }) => productId)),
+  );
+  return getDBorTX(tx).query.product.findMany({
+    where: inArray(product.id, productIds),
+    orderBy: desc(product.updatedAt),
+    with: { thumbnail: true, metadata: true },
+    limit: options?.limit,
+    offset: options?.offset,
+  });
 };
 
 export const findProductByIdForUpdate = async (

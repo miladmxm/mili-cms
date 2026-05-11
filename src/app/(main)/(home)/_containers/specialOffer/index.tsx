@@ -1,38 +1,14 @@
-"use client";
-
-import useEmblaCarousel from "embla-carousel-react";
-
 import H3 from "@/components/ui/h2";
+import { getDiscountedProducts } from "@/features/product/dal/query";
 
-const ProductOfferCard = () => {
-  return null;
-};
+import OfferCarusel from "./offerCarusel";
 
-const SpecialOffer = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    direction: "rtl",
-  });
-  console.log(emblaApi?.slidesInView().length, emblaApi?.slideNodes().length);
+const SpecialOffer = async () => {
+  const products = await getDiscountedProducts();
   return (
-    <section className="container">
+    <section className="container flex flex-col gap-8">
       <H3>پیشنهاد ویژه</H3>
-      <div className="w-full @container">
-        <div className="embla__viewport" ref={emblaRef}>
-          <div className="embla__container gap-1">
-            <div className="flex-size-100 md:flex-size-33 h-60 bg-gray-500">
-              Slide 1
-              <ProductOfferCard />
-            </div>
-            <div className="flex-size-100 md:flex-size-33 h-60 bg-gray-500">
-              Slide 2
-            </div>
-            <div className="flex-size-100 md:flex-size-33 h-60 bg-gray-500">
-              Slide 3
-            </div>
-          </div>
-        </div>
-      </div>
+      <OfferCarusel products={products} />
     </section>
   );
 };

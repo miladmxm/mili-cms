@@ -10,7 +10,7 @@ const DefaultImage = ({
   height,
   ...props
 }: Partial<Omit<ComponentProps<typeof Image>, "src">> & {
-  image?: { url: string; alt: string; id: string } | null;
+  image?: { url: string; alt?: string; id: string } | null;
 }) => {
   if (!image) {
     return (
@@ -23,7 +23,7 @@ const DefaultImage = ({
   return (
     <Image
       src={image.url}
-      alt={alt || image.alt}
+      alt={alt || image.alt || "default image"}
       width={width || 500}
       height={width || 500}
       {...props}
