@@ -21,7 +21,12 @@ const HeroImageComponent = () => {
       [scope.current, { x: 0 }, { type: "spring", damping: 14 }],
       [
         ".first-feather",
-        { opacity: [0, 0.4], rotate: ["20deg", "0"], y: [-30, 0] },
+        {
+          opacity: [0, 0.4],
+          rotate: ["20deg", "0"],
+          y: [-30, 0],
+          x: ["10%", 0],
+        },
         { type: "spring", duration: 1 },
       ],
     ]);
@@ -47,7 +52,7 @@ const HeroImageComponent = () => {
       <Image
         src={Feather}
         alt="Feather"
-        className="absolute first-feather object-contain end-[7px] md:-end-[14px] size-28 md:size-32 opacity-0 max-md:-translate-y-full top-0 md:-top-22"
+        className="absolute first-feather object-contain -end-[5px] size-28 md:size-32 opacity-0 max-md:-translate-y-full top-0 md:-top-22"
       />
     </div>
   );
