@@ -5,7 +5,7 @@ import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-const buttonVariants = cva(
+const separatorLineVariants = cva(
   "bg-gradient-to-l from-transparent via-thready-800/30 to-transparent",
   {
     variants: {
@@ -24,9 +24,11 @@ const SeparatorLine = ({
   children,
   className,
   variant,
-}: ComponentProps<"div"> & VariantProps<typeof buttonVariants>) => {
+}: ComponentProps<"div"> & VariantProps<typeof separatorLineVariants>) => {
   return (
-    <div className={cn(buttonVariants({ className, variant }))}>{children}</div>
+    <div className={cn(separatorLineVariants({ className, variant }))}>
+      {children}
+    </div>
   );
 };
 
