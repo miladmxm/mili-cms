@@ -108,14 +108,14 @@ const ProductCard = ({ thumbnail, name, metadata }: Product) => {
           {metadata[0].discount}%
         </small>
         <del className="font-bold text-lg text-primary-600 before:bg-primary-600 before:h-0.5 before:w-full before:absolute before:start-0 before:top-[calc(50%-2px)] relative">
-          {formatNumber(metadata[0].price.amount)}
+          {formatNumber(metadata[0].price)}
         </del>
       </div>
       <div className="text-2xl font-bold text-primary-900 flex justify-between">
         <strong>قیمت:</strong>
         <strong>
           {formatNumber(
-            (metadata[0].price.amount / 100) * (100 - metadata[0].discount),
+            (metadata[0].price / 100) * (100 - metadata[0].discount),
           )}
         </strong>
       </div>

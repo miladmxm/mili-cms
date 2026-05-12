@@ -44,6 +44,8 @@ export const getDiscountedProducts = async () => {
   return normalProducts;
 };
 
+// export const getLowPriceProducts = async () => {};
+
 export const getProduct = async (id: string) => {
   "use cache";
 

@@ -9,17 +9,13 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type {
-  ProductPrice,
-  ProductStatus,
-  ProductType,
-} from "@/services/product/type";
+import type { ProductStatus, ProductType } from "@/services/product/type";
 import type { ProseMirror } from "@/types/type";
 
 import { articleStatus } from "./article";
 import { user } from "./auth";
 import { comment } from "./comment";
-import { MainSchema, RelationSchema } from "./main";
+import { CurrencyEnum, MainSchema, RelationSchema } from "./main";
 import { media } from "./media";
 import { productCategory } from "./productCategory";
 import { productOptionItem } from "./productOptions";
@@ -125,7 +121,8 @@ export const productToOptionItem = RelationSchema.table(
 
 export const productMeta = MainSchema.table("product_meta", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
-  price: jsonb("price").$type<ProductPrice>().notNull(),
+  price: integer("price").notNull().default(0),
+  currency: CurrencyEnum("currency").default("IRR").notNull(),
   stock: integer("stock").notNull().default(-1),
   discount: integer("discount").notNull().default(0),
   productId: uuid("product_id")

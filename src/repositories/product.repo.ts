@@ -63,6 +63,25 @@ export const findDiscountedProducts = async (
   });
 };
 
+// export const findProductsOrderByPrice = async (
+//   options?: OffsetLimit,
+//   tx?: Transaction,
+// ) => {
+//   const productMetas = await getDBorTX(tx).query.productMeta.findMany({
+//     orderBy:desc(productMeta.price.amount, )
+//     columns: { productId: true },
+//   });
+//   const productIds = Array.from(
+//     new Set<string>(productMetas.map(({ productId }) => productId)),
+//   );
+//   return getDBorTX(tx).query.product.findMany({
+//     where: inArray(product.id, productIds),
+//     orderBy: desc(product.updatedAt),
+//     with: { thumbnail: true, metadata: true },
+//     limit: options?.limit,
+//     offset: options?.offset,
+//   });
+// };
 export const findProductByIdForUpdate = async (
   id: string,
   tx?: Transaction,

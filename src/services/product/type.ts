@@ -10,12 +10,9 @@ export const StatusDictionary: Record<ProductStatus, string> = {
   published: "منتشر شده",
 };
 
-export interface ProductPrice {
-  currency: Currency;
-  amount: number;
-}
 export interface CreateProductMetadata {
-  price: ProductPrice;
+  price: number;
+  currency: Currency;
   stock?: number;
   discount: number;
 }
@@ -49,7 +46,8 @@ export type CreateProduct =
 interface ProductDefaultMeta {
   id: string;
   productId: string;
-  price: ProductPrice;
+  price: number;
+  currency: Currency;
   stock: number;
   discount: number;
 }
@@ -59,7 +57,8 @@ export interface ProductVariableMeta {
   thumbnailId: string | null;
   thumbnail: Media | null;
   productId: string;
-  price: ProductPrice;
+  price: number;
+  currency: Currency;
   stock: number;
   discount: number;
   optionItemIds: string;

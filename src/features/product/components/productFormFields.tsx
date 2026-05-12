@@ -402,16 +402,13 @@ const ProductPriceCurrencty = ({
   metaIndex,
   defaultValue = "IRR",
 }: MetaProps & {
-  defaultValue?: FieldPathValue<
-    CreateProductInput,
-    "metadata.0.price.currency"
-  >;
+  defaultValue?: FieldPathValue<CreateProductInput, "metadata.0.currency">;
 }) => {
   const { control } = useProductFormContext();
   return (
     <Controller
       defaultValue={defaultValue}
-      name={`metadata.${metaIndex}.price.currency`}
+      name={`metadata.${metaIndex}.currency`}
       control={control}
       render={({ field: currencyField, fieldState: currencyState }) => (
         <Field aria-invalid={currencyState.invalid} className="max-w-fit">
@@ -442,10 +439,7 @@ const ProductPriceAmount = ({
   defaultValue = 0,
 }: PropsWithChildren<
   MetaProps & {
-    defaultValue?: FieldPathValue<
-      CreateProductInput,
-      "metadata.0.price.amount"
-    >;
+    defaultValue?: FieldPathValue<CreateProductInput, "metadata.0.price">;
   }
 >) => {
   const { control } = useProductFormContext();
@@ -453,7 +447,7 @@ const ProductPriceAmount = ({
   return (
     <Controller
       defaultValue={defaultValue}
-      name={`metadata.${metaIndex}.price.amount`}
+      name={`metadata.${metaIndex}.price`}
       control={control}
       render={({ field, fieldState }) => {
         return (
@@ -473,17 +467,16 @@ const ProductPriceAmount = ({
 
 const ProductPriceFields = ({
   metaIndex,
-  defaultValue,
+  defaultPrice,
+  defaultCurrency,
 }: MetaProps & {
-  defaultValue?: FieldPathValue<CreateProductInput, "metadata.0.price">;
+  defaultPrice?: FieldPathValue<CreateProductInput, "metadata.0.price">;
+  defaultCurrency?: FieldPathValue<CreateProductInput, "metadata.0.currency">;
 }) => {
   return (
-    <ProductPriceAmount
-      defaultValue={defaultValue?.amount}
-      metaIndex={metaIndex}
-    >
+    <ProductPriceAmount defaultValue={defaultPrice} metaIndex={metaIndex}>
       <ProductPriceCurrencty
-        defaultValue={defaultValue?.currency}
+        defaultValue={defaultCurrency}
         metaIndex={metaIndex}
       />
     </ProductPriceAmount>
@@ -630,7 +623,8 @@ const VariableOptionItemFields = ({
       <FieldGroup>
         <div className="flex gap-4">
           <ProductPriceFields
-            defaultValue={metadata ? metadata[0].price : undefined}
+            defaultPrice={metadata ? metadata[0].price : undefined}
+            defaultCurrency="IRR"
             metaIndex={optionItemIds}
           />
           <ProductDiscount
@@ -850,7 +844,7 @@ const ProductVariableMetaFieldGroup = ({
         ...prev,
         [current]: {
           optionItemIds: current,
-          price: { amount: "0", currencty: "IRR" },
+          price: "0",
           stock: -1,
           ...(defaultValues?.metadata ? defaultValues.metadata[current] : {}),
         },

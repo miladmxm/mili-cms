@@ -20,10 +20,7 @@ const StringToNumberPipe = v.pipe(
   v.transform((s) => Number(s)),
   v.number(),
 );
-const PriceSchema = v.object({
-  amount: v.union([v.number(), StringToNumberPipe]),
-  currency: v.optional(v.picklist(["IRR"]), "IRR"),
-});
+
 const StockSchema = v.optional(v.union([v.number(), StringToNumberPipe]), -1);
 const DiscountSchema = v.optional(
   v.union([
@@ -36,6 +33,14 @@ const DiscountSchema = v.optional(
   ]),
   0,
 );
+
+const DefaultMetaData = v.object({
+  price: v.union([v.number(), StringToNumberPipe]),
+  currency: v.optional(v.picklist(["IRR"]), "IRR"),
+  stock: StockSchema,
+  discount: DiscountSchema,
+});
+
 export const CreateProductBaseSchema = v.object({
   name: v.pipe(v.string(), v.nonEmpty("نام نباید خالی باشد")),
   excerpt: v.pipe(v.string(), v.nonEmpty("خلاصه ای از مقاله بنویسید")),
@@ -73,7 +78,7 @@ export const CreateProductSchema = v.variant("type", [
     ...CreateProductBaseSchema.entries,
     type: v.literal("default"),
     metadata: metadataArraySchemaGenerator({
-      price: PriceSchema,
+      price: v.union([v.number(), StringToNumberPipe]),
       stock: StockSchema,
       discount: DiscountSchema,
     }),
@@ -82,9 +87,7 @@ export const CreateProductSchema = v.variant("type", [
     ...CreateProductBaseSchema.entries,
     type: v.literal("variable"),
     metadata: metadataArraySchemaGenerator({
-      price: PriceSchema,
-      stock: StockSchema,
-      discount: DiscountSchema,
+      ...DefaultMetaData.entries,
       thumbnail: ThumbnailSchema,
       optionItemIds: v.string(),
     }),
@@ -98,17 +101,14 @@ export const EditProductSchema = v.variant("type", [
     ...CreateProductBaseSchema.entries,
     type: v.literal("default"),
     metadata: metadataSchemaGenerator({
-      price: PriceSchema,
-      stock: StockSchema,
-      discount: DiscountSchema,
+      ...DefaultMetaData.entries,
     }),
   }),
   v.object({
     ...CreateProductBaseSchema.entries,
     type: v.literal("variable"),
     metadata: metadataSchemaGenerator({
-      price: PriceSchema,
-      stock: StockSchema,
+      ...DefaultMetaData.entries,
       thumbnail: ThumbnailSchema,
       optionItemIds: v.string(),
       discount: DiscountSchema,
@@ -116,8 +116,3 @@ export const EditProductSchema = v.variant("type", [
   }),
 ]);
 export type UpdateProductOutput = v.InferOutput<typeof EditProductSchema>;
-
-// export const UpdateStatusSchema = v.object({
-//   status: StatusSchema,
-// });
-// export type UpdateStatus = v.InferOutput<typeof UpdateStatusSchema>;
