@@ -6,10 +6,22 @@ import { createStore, useStore } from "zustand";
 
 interface CaruselContextState {
   emblaApi: UseEmblaCarouselType["1"];
+  emblaRef: UseEmblaCarouselType["0"];
 }
 
-const createCaruselStore = (init: CaruselContextState) => {
-  return createStore<CaruselContextState>(() => ({ ...init }));
+interface CaruselStore extends CaruselContextState {
+  canScroll?: boolean;
+  actions: {
+    setCanScroll: (canScroll: boolean) => void;
+  };
+}
+
+const createCaruselStore = (init: Omit<CaruselStore, "actions">) => {
+  return createStore<CaruselStore>((set) => ({
+    canScroll: true,
+    actions: { setCanScroll: (canScroll) => set({ canScroll }) },
+    ...init,
+  }));
 };
 
 type CreateCaruselStore = ReturnType<typeof createCaruselStore>;
@@ -29,9 +41,7 @@ const CaruselContextProvider = ({
 
 export default CaruselContextProvider;
 
-export function useCaruselContext<T>(
-  selector: (state: CaruselContextState) => T,
-): T {
+export function useCaruselContext<T>(selector: (state: CaruselStore) => T): T {
   const store = use(CaruselContext);
   if (!store) throw new Error("Missing Provider in the tree");
   return useStore(store, selector);

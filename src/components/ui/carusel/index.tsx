@@ -3,8 +3,8 @@ import type { PropsWithChildren } from "react";
 import ComingArrowRight from "@/assets/icons/comingArrowRight.svg";
 import { cn } from "@/lib/utils";
 
-import CaruselContextProvider from "./context";
-import { useCarusel, useToNext, useToPrev } from "./useCarusel";
+import CaruselContextProvider, { useCaruselContext } from "./context";
+import { useCarusel, useControllers, useToNext, useToPrev } from "./useCarusel";
 
 const ToNext = () => {
   const { canNext, scrollNext } = useToNext();
@@ -35,7 +35,13 @@ const ToPrev = () => {
   );
 };
 
-export const Controllers = () => {
+export const CaruselControllers = ({
+  dynamicHidden = true,
+}: {
+  dynamicHidden?: boolean;
+}) => {
+  const canScroll = useCaruselContext((state) => state.canScroll);
+  if (!canScroll && dynamicHidden) return null;
   return (
     <div className="flex *:disabled:opacity-40 items-center gap-2">
       <ToPrev />
@@ -45,7 +51,7 @@ export const Controllers = () => {
   );
 };
 
-const Carusel = ({
+export const CaruselContent = ({
   children,
   containerClassName,
   viewportClassName,
@@ -53,19 +59,27 @@ const Carusel = ({
   containerClassName?: string;
   viewportClassName?: string;
 }>) => {
+  const emblaRef = useCaruselContext((state) => state.emblaRef);
+  useControllers();
+  return (
+    <div className={cn("embla__viewport", viewportClassName)} ref={emblaRef}>
+      <div
+        className={cn(
+          "embla__container gap-1 items-stretch",
+          containerClassName,
+        )}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const Carusel = ({ children }: PropsWithChildren) => {
   const { emblaApi, emblaRef } = useCarusel();
   return (
-    <CaruselContextProvider emblaApi={emblaApi}>
-      <div className={cn("embla__viewport", viewportClassName)} ref={emblaRef}>
-        <div
-          className={cn(
-            "embla__container gap-1 items-stretch",
-            containerClassName,
-          )}
-        >
-          {children}
-        </div>
-      </div>
+    <CaruselContextProvider emblaRef={emblaRef} emblaApi={emblaApi}>
+      {children}
     </CaruselContextProvider>
   );
 };

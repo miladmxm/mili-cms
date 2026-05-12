@@ -1,5 +1,5 @@
 import useEmblaCarousel from "embla-carousel-react";
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 
 import { useCaruselContext } from "./context";
 
@@ -13,30 +13,39 @@ export const useCarusel = () => {
 
 export const useControllers = () => {
   const emblaApi = useCaruselContext((state) => state.emblaApi);
-  const [canScroll, setCanScroll] = useState(true);
+  const { setCanScroll } = useCaruselContext((state) => state.actions);
+
+  const setCanScrollEvent = useEffectEvent(
+    (state: Parameters<typeof setCanScroll>[0]) => setCanScroll(state),
+  );
 
   useEffect(() => {
     const calcCanScroll = () => {
       const isActive =
         emblaApi?.containerNode().scrollWidth !==
         emblaApi?.containerNode().offsetWidth;
-      if (isActive) emblaApi?.emit("reInit");
-      else emblaApi?.emit("destroy");
-      setCanScroll(isActive);
+      if (!isActive) emblaApi?.reInit({ active: false });
+      else emblaApi?.reInit({ active: true });
+      setCanScrollEvent(isActive);
     };
 
     calcCanScroll();
-    emblaApi?.on("reInit", calcCanScroll);
-    emblaApi?.on("resize", calcCanScroll);
-    window.addEventListener("resize", calcCanScroll);
+    const resize = emblaApi?.on("resize", calcCanScroll);
+
+    let timer: NodeJS.Timeout;
+
+    const windowResizeHandler = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(calcCanScroll, 300);
+    };
+
+    window.addEventListener("resize", windowResizeHandler);
 
     return () => {
-      emblaApi?.off("reInit", calcCanScroll);
-      window.removeEventListener("resize", calcCanScroll);
-      emblaApi?.off("resize", calcCanScroll);
+      resize?.clear();
+      window.removeEventListener("resize", windowResizeHandler);
     };
   }, [emblaApi]);
-  return { canScroll };
 };
 
 export const useToNext = () => {
