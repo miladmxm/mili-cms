@@ -1,4 +1,5 @@
 import Categories from "./_containers/categories";
+import CropSVG from "./_containers/cropSVG";
 import GoodPriceProducts from "./_containers/goodPrice";
 import Hero from "./_containers/hero";
 import SpecialOffer from "./_containers/specialOffer";
@@ -10,6 +11,8 @@ const Home = async () => {
       <Categories />
       <SpecialOffer />
       <GoodPriceProducts />
+
+      <CropSVG />
     </main>
   );
 };

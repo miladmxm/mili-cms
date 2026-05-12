@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, like, ne } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, like, ne } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
@@ -63,25 +63,37 @@ export const findDiscountedProducts = async (
   });
 };
 
-// export const findProductsOrderByPrice = async (
-//   options?: OffsetLimit,
-//   tx?: Transaction,
-// ) => {
-//   const productMetas = await getDBorTX(tx).query.productMeta.findMany({
-//     orderBy:desc(productMeta.price.amount, )
-//     columns: { productId: true },
-//   });
-//   const productIds = Array.from(
-//     new Set<string>(productMetas.map(({ productId }) => productId)),
-//   );
-//   return getDBorTX(tx).query.product.findMany({
-//     where: inArray(product.id, productIds),
-//     orderBy: desc(product.updatedAt),
-//     with: { thumbnail: true, metadata: true },
-//     limit: options?.limit,
-//     offset: options?.offset,
-//   });
-// };
+export const findProductsOrderByPrice = async (
+  options?: OffsetLimit,
+  tx?: Transaction,
+) => {
+  const productMetas = await getDBorTX(tx).query.productMeta.findMany({
+    orderBy: asc(productMeta.price),
+    columns: { productId: true, price: true },
+  });
+  const removeDuplication = new Set<string>();
+  const productIds = productMetas
+    .filter(({ productId }) => {
+      if (!removeDuplication.has(productId)) {
+        if (options?.limit && options.limit <= removeDuplication.size)
+          return false;
+        removeDuplication.add(productId);
+        return true;
+      }
+
+      return false;
+    })
+    .map(({ productId }) => productId);
+
+  return getDBorTX(tx).query.product.findMany({
+    where: inArray(product.id, productIds),
+    orderBy: desc(product.updatedAt),
+    with: { thumbnail: true, metadata: true },
+    limit: options?.limit,
+    offset: options?.offset,
+  });
+};
+
 export const findProductByIdForUpdate = async (
   id: string,
   tx?: Transaction,
