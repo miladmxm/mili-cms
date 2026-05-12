@@ -65,12 +65,7 @@ export const CaruselContent = ({
   useControllers();
   return (
     <div className={cn("embla__viewport", viewportClassName)} ref={emblaRef}>
-      <div
-        className={cn(
-          "embla__container gap-1 items-stretch",
-          containerClassName,
-        )}
-      >
+      <div className={cn("embla__container items-stretch", containerClassName)}>
         {children}
       </div>
     </div>
