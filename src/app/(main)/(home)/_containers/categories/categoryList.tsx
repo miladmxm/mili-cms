@@ -18,7 +18,7 @@ const CategoryCard = ({ slug, vector, name }: Category) => {
           y: 20,
         }}
         transition={{ y: { type: "spring" } }}
-        className="rounded-3xl md:rounded-7xl center flex-col gap-4 home-category-card p-2 md:p-4 aspect-square bg-white"
+        className="rounded-3xl md:rounded-7xl center flex-col gap-4 home-category-card p-2 md:p-4 xl:aspect-square max-xl:h-full bg-white"
       >
         <DefaultImage
           width={100}

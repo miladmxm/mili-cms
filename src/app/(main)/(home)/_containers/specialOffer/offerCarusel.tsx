@@ -1,5 +1,3 @@
-"use client";
-
 import type { Product } from "@/services/product/type";
 
 import Carusel, {
