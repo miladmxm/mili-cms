@@ -6,7 +6,7 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const sectionCurveVariants = cva(
-  "-z-10 h-28 md:h-40 w-full absolute rounded-[100%]",
+  "-z-10 h-28 md:h-40 w-full absolute rounded-[100%] right-1/2 translate-x-1/2",
   {
     variants: {
       color: {
