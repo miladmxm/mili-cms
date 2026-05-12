@@ -69,7 +69,7 @@ export const findProductsOrderByPrice = async (
 ) => {
   const productMetas = await getDBorTX(tx).query.productMeta.findMany({
     orderBy: asc(productMeta.price),
-    columns: { productId: true, price: true },
+    columns: { productId: true },
   });
   const removeDuplication = new Set<string>();
   const productIds = productMetas

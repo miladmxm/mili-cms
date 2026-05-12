@@ -38,14 +38,18 @@ const ToPrev = () => {
 };
 
 export const CaruselControllers = ({
+  className,
   dynamicHidden = true,
 }: {
+  className?: string;
   dynamicHidden?: boolean;
 }) => {
   const canScroll = useCaruselContext((state) => state.canScroll);
   if (!canScroll && dynamicHidden) return null;
   return (
-    <div className="flex *:disabled:opacity-40 items-center gap-2">
+    <div
+      className={cn("flex *:disabled:opacity-40 items-center gap-2", className)}
+    >
       <ToPrev />
       <div className="border-b border-primary-600 w-full" />
       <ToNext />

@@ -8,7 +8,7 @@ const GoodPriceProducts = async () => {
   return (
     <section className="container @container mt-26">
       <GoodPriceCarusel products={products}>
-        <H3 className="mt-10">کالاهای قیمت مناسب</H3>
+        <H3 className="mt-8 mb-12">کالاهای قیمت مناسب</H3>
       </GoodPriceCarusel>
     </section>
   );

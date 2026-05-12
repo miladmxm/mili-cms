@@ -50,7 +50,7 @@ export const getLowPriceProducts = async () => {
   cacheTag(CacheKeys.product);
 
   const products = await productRepo.findProductsOrderByPrice({
-    limit: 3,
+    limit: 4,
     offset: 0,
   });
   const normalProducts: Product[] = [];

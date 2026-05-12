@@ -7,7 +7,10 @@ import { useEffect, useEffectEvent, useRef, useState } from "react";
 
 import type { Product } from "@/services/product/type";
 
-import { formatNumber } from "@/lib/formatNumber";
+import {
+  DiscountedPrice,
+  FormatedPrice,
+} from "@/features/product/components/ui/finalPrice";
 
 import Button from "./button";
 import DefaultImage from "./defaultImage";
@@ -108,15 +111,13 @@ const ProductCard = ({ thumbnail, name, metadata }: Product) => {
           {metadata[0].discount}%
         </small>
         <del className="font-bold text-lg text-primary-600 before:bg-primary-600 before:h-0.5 before:w-full before:absolute before:start-0 before:top-[calc(50%-2px)] relative">
-          {formatNumber(metadata[0].price)}
+          <FormatedPrice metadata={metadata} />
         </del>
       </div>
       <div className="text-2xl font-bold text-primary-900 flex justify-between">
         <strong>قیمت:</strong>
         <strong>
-          {formatNumber(
-            (metadata[0].price / 100) * (100 - metadata[0].discount),
-          )}
+          <DiscountedPrice metadata={metadata} />
         </strong>
       </div>
       <Button variant="outline">خرید</Button>
