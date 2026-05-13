@@ -9,10 +9,15 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   turbopack: {
     rules: {
-      "*.svg": {
-        loaders: ["@svgr/webpack"],
-        as: "*.js",
-      },
+      "*.svg": [
+        {
+          loaders: ["@svgr/webpack"],
+          condition: {
+            not: { query: /url/ },
+          },
+          as: "*.js",
+        },
+      ],
     },
   },
   images: {

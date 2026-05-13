@@ -1,3 +1,4 @@
+import AugmentedReality from "./_containers/augmentedReality";
 import Categories from "./_containers/categories";
 import CropSVG from "./_containers/cropSVG";
 import GoodPriceProducts from "./_containers/goodPrice";
@@ -11,7 +12,7 @@ const Home = async () => {
       <Categories />
       <SpecialOffer />
       <GoodPriceProducts />
-
+      <AugmentedReality />
       <CropSVG />
     </main>
   );

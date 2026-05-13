@@ -24,7 +24,7 @@ const sectionCurveVariants = cva(
   },
 );
 
-const SectionCurve = ({
+const SectionCurveInside = ({
   color,
   position,
   className,
@@ -38,4 +38,4 @@ const SectionCurve = ({
   );
 };
 
-export default SectionCurve;
+export default SectionCurveInside;

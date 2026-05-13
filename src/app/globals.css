@@ -13,6 +13,7 @@
   --color-thready-400: var(--thready-400);
   --color-thready-500: var(--thready-500);
   --color-thready-200: var(--thready-200);
+  --color-thready-25: var(--thready-25);
   --color-white: var(--white);
   --color-black: var(--black);
   --font-display: var(--font-display);
@@ -52,6 +53,7 @@
   --thready-400: #e3ddd8;
   --thready-500: #efe8e2;
   --thready-200: #f9f6f3;
+  --thready-25: #FDFDFC;
   --thready-900: #87715D;
   --white: #ffffff;
   --black: #000000;
@@ -103,6 +105,13 @@
       @apply flex touch-pan-y touch-pinch-zoom;
     }
   }
+
+  .mask-img {
+    mask-image: radial-gradient(black 30%, transparent 70%);
+    mask-position: var(--mask-position);
+    mask-size: 300px 300px;
+    mask-repeat: no-repeat;
+  }
 }
 @utility flex-size-* {
   flex: 0 0 calc(--value(integer) * 1%);
@@ -122,3 +131,5 @@
 @utility clip-path-url-* {
   clip-path: url(--value([*]));
 }
+
+
