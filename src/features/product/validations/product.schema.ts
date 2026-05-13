@@ -116,3 +116,8 @@ export const EditProductSchema = v.variant("type", [
   }),
 ]);
 export type UpdateProductOutput = v.InferOutput<typeof EditProductSchema>;
+
+export const UpdateStatusSchema = v.object({
+  status: StatusSchema,
+});
+export type UpdateStatus = v.InferOutput<typeof UpdateStatusSchema>;

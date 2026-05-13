@@ -13,12 +13,18 @@ import { validator } from "@/validations";
 
 import type { UpdateCategoryOutput } from "../validations/category.schema";
 import type { EditOptionInput } from "../validations/option.schema";
-import type { UpdateProductOutput } from "../validations/product.schema";
+import type {
+  UpdateProductOutput,
+  UpdateStatus,
+} from "../validations/product.schema";
 
 import * as productMutation from "../dal/mutation";
 import { UpdateCategorySchema } from "../validations/category.schema";
 import { EditOptionSchema } from "../validations/option.schema";
-import { CreateProductSchema } from "../validations/product.schema";
+import {
+  CreateProductSchema,
+  UpdateStatusSchema,
+} from "../validations/product.schema";
 
 export const updateProductAction = async (
   id: string,
@@ -60,29 +66,31 @@ export const updateProductAction = async (
   }
 };
 
-// export const updateArticleStatus = async (
-//   id: string,
-//   status: unknown,
-// ): Promise<ActionResult<{ status: UpdateStatus }>> => {
-//   const {
-//     errors,
-//     output,
-//     success: successValidation,
-//   } = validator(UpdateStatusSchema, { status });
-//   if (!successValidation) {
-//     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
-//   }
-//   try {
-//     const { success } = await articleMutation.updateStatus(id, output.status);
-//     if (!success) return { success, message: "خطا در ویرایش مقاله" };
-//     updateTag(CacheKeys.articles);
-//     updateTag(`${CacheKeys.articles}-${id}`);
-//     return { success, message: "ویرایش انجام شد" };
-//   } catch (error) {
-//     console.log(error);
-//     return { success: false, message: "خطا در ویرایش" };
-//   }
-// };
+export const updateProductStatus = async (
+  id: string,
+  status: unknown,
+): Promise<ActionResult<{ status: UpdateStatus }>> => {
+  const {
+    errors,
+    output,
+    success: successValidation,
+  } = validator(UpdateStatusSchema, { status });
+
+  if (!successValidation) {
+    return { success: successValidation, message: "خطای اعتبارسنجی", errors };
+  }
+
+  try {
+    const { success } = await productMutation.updateStatus(id, output.status);
+    if (!success) return { success, message: "خطا در ویرایش محصول" };
+    updateTag(CacheKeys.product);
+    updateTag(`${CacheKeys.product}-${id}`);
+    return { success, message: "ویرایش انجام شد" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "خطا در ویرایش" };
+  }
+};
 
 export const updateCategory = async (
   id: string,

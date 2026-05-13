@@ -8,7 +8,7 @@ import { withTransaction } from "@/repositories";
 import * as productRepo from "@/repositories/product.repo";
 
 import type { LimitAndOffset } from "../type";
-import type { CreateProduct, Product } from "./type";
+import type { CreateProduct, Product, ProductStatus } from "./type";
 
 import { checkMediaType, filterMediaIdsByTypes } from "../media";
 import { DTOconvertMediaPathToRealUrl } from "../media/dto";
@@ -428,6 +428,14 @@ export const updateProduct = async (
   });
   return resultId;
 };
+
+export const updateProductStatus = async (
+  id: string,
+  status: ProductStatus,
+) => {
+  return productRepo.updateProductPartialDataById({ id, data: { status } });
+};
+
 // * DELETE
 
 export const deleteProduct = (id: string) => {

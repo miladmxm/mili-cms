@@ -200,6 +200,16 @@ export const updateProductById = (
     .where(eq(product.id, id))
     .returning({ id: product.id });
 
+export const updateProductPartialDataById = (
+  { data, id }: { id: string; data: Partial<typeof product.$inferInsert> },
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .update(product)
+    .set(data)
+    .where(eq(product.id, id))
+    .returning({ id: product.id });
+
 export const findCategoriesByIds = async (ids: string[], tx?: Transaction) => {
   return await getDBorTX(tx).query.productCategory.findMany({
     where: inArray(productCategory.id, ids),
