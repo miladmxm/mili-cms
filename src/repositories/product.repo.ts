@@ -55,7 +55,10 @@ export const findDiscountedProducts = async (
     new Set<string>(productMetas.map(({ productId }) => productId)),
   );
   return getDBorTX(tx).query.product.findMany({
-    where: inArray(product.id, productIds),
+    where: and(
+      inArray(product.id, productIds),
+      eq(product.status, "published"),
+    ),
     orderBy: desc(product.updatedAt),
     with: { thumbnail: true, metadata: true },
     limit: options?.limit,
@@ -86,7 +89,10 @@ export const findProductsOrderByPrice = async (
     .map(({ productId }) => productId);
 
   return getDBorTX(tx).query.product.findMany({
-    where: inArray(product.id, productIds),
+    where: and(
+      inArray(product.id, productIds),
+      eq(product.status, "published"),
+    ),
     orderBy: desc(product.updatedAt),
     with: { thumbnail: true, metadata: true },
     limit: options?.limit,
@@ -138,6 +144,17 @@ export const findProductsByLimitAndOffset = (
     orderBy: [desc(product.createdAt)],
     limit: options?.limit,
     offset: options?.offset,
+  });
+
+export const findPublishedProductsByLimitAndOffset = (
+  options?: OffsetLimit,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.product.findMany({
+    where: eq(product.status, "published"),
+    offset: options?.offset,
+    limit: options?.limit,
+    orderBy: [desc(product.createdAt)],
   });
 
 export const findProducts = (tx?: Transaction) =>

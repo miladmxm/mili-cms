@@ -13,7 +13,6 @@ const GoodPriceCarusel = ({
   products,
   children,
 }: PropsWithChildren<{ products: Product[] }>) => {
-  if (products.length <= 0) return;
   return (
     <Carusel>
       <div className="py-8 md:py-18 bg-primary-500 clip-path-url-[#pillow-mobile] xl:clip-path-url-[#pillow-desktop] relative isolate overflow-hidden px-10">

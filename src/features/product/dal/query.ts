@@ -1,5 +1,7 @@
 import "server-only";
 
+import type { LimitAndOffset } from "@/services/type";
+
 import {
   dalDbOperation,
   dalRequireAuth,
@@ -15,6 +17,12 @@ export const getProducts = async () => {
     {
       product: ["read"],
     },
+  );
+};
+
+export const getPublishedProducts = async (config?: LimitAndOffset) => {
+  return dalVerifySuccess(
+    await dalDbOperation(() => productService.getPublishedProducts(config)),
   );
 };
 

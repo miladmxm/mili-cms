@@ -5,6 +5,7 @@ import GoodPriceCarusel from "./goodPriceCarusel";
 
 const GoodPriceProducts = async () => {
   const products = await getLowPriceProducts();
+  if (!products || products.length === 0) return;
   return (
     <section className="container @container mt-26">
       <GoodPriceCarusel products={products}>

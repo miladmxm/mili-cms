@@ -6,12 +6,12 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const sectionCurveVariants = cva(
-  "w-full h-32 md:h-60 bg-gradient-to-b to-thready-200 from-primary-25 absolute inset-x-0 z-20 clip-path-url-[#SectionCurveOutside]",
+  "w-full h-32 md:h-42 bg-gradient-to-b to-thready-200 from-primary-25 absolute inset-x-0 z-20 clip-path-url-[#SectionCurveOutside]",
   {
     variants: {
       position: {
-        top: "bottom-full translate-y-1/3",
-        bottom: "top-full -translate-y-1/3 rotate-180",
+        top: "bottom-full translate-y-4/10",
+        bottom: "top-full -translate-y-4/10 rotate-180",
       },
     },
     defaultVariants: {

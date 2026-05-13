@@ -22,6 +22,14 @@ export const getPaginationProduct = async (limitAndOffset?: LimitAndOffset) => {
   return productRepo.findProductsByLimitAndOffset(limitAndOffset);
 };
 
+export const getPublishedProducts = async (limitAndOffset?: LimitAndOffset) => {
+  "use cache";
+
+  cacheTag(CacheKeys.product);
+
+  return productRepo.findPublishedProductsByLimitAndOffset(limitAndOffset);
+};
+
 export const getAllProducts = () => productRepo.findProducts();
 
 export const getDiscountedProducts = async () => {

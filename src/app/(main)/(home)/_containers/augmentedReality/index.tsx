@@ -4,7 +4,7 @@ import ARproduct from "./product";
 
 const AugmentedReality = () => {
   return (
-    <section>
+    <section className="md:my-32 my-8">
       <div className="container md:hidden">
         <ARcontent />
       </div>
