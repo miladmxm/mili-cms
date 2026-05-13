@@ -8,7 +8,7 @@ import Arrow from "@/assets/icons/comingArrowRight.svg";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "rounded-full py-2 center transition-all duration-300",
+  "rounded-full min-h-12 py-2 center transition-all duration-300",
   {
     variants: {
       variant: {
@@ -33,12 +33,20 @@ const ButtonWithArrow = ({
   className,
   variant,
   children,
+  containerClassName,
   ...props
-}: LinkORButton & VariantProps<typeof buttonVariants>) => {
+}: LinkORButton &
+  VariantProps<typeof buttonVariants> & { containerClassName?: string }) => {
   return (
     <>
       {props.href ? (
-        <Link className="flex gap-0 group items-stretch w-full" {...props}>
+        <Link
+          className={cn(
+            "flex gap-0 group items-stretch w-full",
+            containerClassName,
+          )}
+          {...props}
+        >
           <span
             className={cn(buttonVariants({ variant, className }), "flex-auto")}
           >
@@ -55,7 +63,10 @@ const ButtonWithArrow = ({
         </Link>
       ) : (
         <button
-          className="flex gap-0 group items-stretch w-full"
+          className={cn(
+            "flex gap-0 group items-stretch w-full",
+            containerClassName,
+          )}
           type={props.type}
           {...props}
         >

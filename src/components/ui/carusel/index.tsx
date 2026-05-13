@@ -5,10 +5,12 @@ import type { PropsWithChildren } from "react";
 import ComingArrowRight from "@/assets/icons/comingArrowRight.svg";
 import { cn } from "@/lib/utils";
 
+import type { CaruselInitParams } from "./useCarusel";
+
 import CaruselContextProvider, { useCaruselContext } from "./context";
 import { useCarusel, useControllers, useToNext, useToPrev } from "./useCarusel";
 
-const ToNext = () => {
+export const ToNext = ({ className }: { className?: string }) => {
   const { canNext, scrollNext } = useToNext();
 
   return (
@@ -16,21 +18,27 @@ const ToNext = () => {
       type="button"
       disabled={!canNext}
       onClick={scrollNext}
-      className="size-10 md:size-12 *:size-full p-2.5 border border-primary-600 rounded-full"
+      className={cn(
+        "size-10 aspect-square md:size-12 *:size-full p-2.5 border border-primary-600 rounded-full",
+        className,
+      )}
     >
       <ComingArrowRight className="rotate-180" />
     </button>
   );
 };
 
-const ToPrev = () => {
+export const ToPrev = ({ className }: { className?: string }) => {
   const { canPrev, scrollPrev } = useToPrev();
   return (
     <button
       type="button"
       onClick={scrollPrev}
       disabled={!canPrev}
-      className="size-10 md:size-12 *:size-full p-2.5 border border-primary-600 rounded-full"
+      className={cn(
+        "size-10 aspect-square md:size-12 *:size-full p-2.5 border border-primary-600 rounded-full",
+        className,
+      )}
     >
       <ComingArrowRight />
     </button>
@@ -76,8 +84,12 @@ export const CaruselContent = ({
   );
 };
 
-const Carusel = ({ children }: PropsWithChildren) => {
-  const { emblaApi, emblaRef } = useCarusel();
+const Carusel = ({
+  children,
+  config,
+  plugin,
+}: PropsWithChildren<CaruselInitParams>) => {
+  const { emblaApi, emblaRef } = useCarusel({ config, plugin });
   return (
     <CaruselContextProvider emblaRef={emblaRef} emblaApi={emblaApi}>
       {children}

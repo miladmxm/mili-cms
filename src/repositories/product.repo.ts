@@ -152,6 +152,7 @@ export const findPublishedProductsByLimitAndOffset = (
 ) =>
   getDBorTX(tx).query.product.findMany({
     where: eq(product.status, "published"),
+    with: { thumbnail: true, metadata: true },
     offset: options?.offset,
     limit: options?.limit,
     orderBy: [desc(product.createdAt)],

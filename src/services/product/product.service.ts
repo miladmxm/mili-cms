@@ -27,7 +27,21 @@ export const getPublishedProducts = async (limitAndOffset?: LimitAndOffset) => {
 
   cacheTag(CacheKeys.product);
 
-  return productRepo.findPublishedProductsByLimitAndOffset(limitAndOffset);
+  const products =
+    await productRepo.findPublishedProductsByLimitAndOffset(limitAndOffset);
+  const normalProducts: Product[] = [];
+
+  for (const product of products) {
+    const { thumbnail } = product;
+
+    if (thumbnail) {
+      thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+    }
+
+    normalProducts.push({ ...(product as Product), thumbnail });
+  }
+
+  return normalProducts;
 };
 
 export const getAllProducts = () => productRepo.findProducts();

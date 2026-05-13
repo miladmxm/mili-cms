@@ -3,11 +3,20 @@ import { useEffect, useEffectEvent, useState } from "react";
 
 import { useCaruselContext } from "./context";
 
-export const useCarusel = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    direction: "rtl",
-  });
+export interface CaruselInitParams {
+  config?: Parameters<typeof useEmblaCarousel>[0];
+  plugin?: Parameters<typeof useEmblaCarousel>[1];
+}
+
+export const useCarusel = (params?: CaruselInitParams) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: false,
+      direction: "rtl",
+      ...params?.config,
+    },
+    params?.plugin,
+  );
   return { emblaApi, emblaRef };
 };
 
