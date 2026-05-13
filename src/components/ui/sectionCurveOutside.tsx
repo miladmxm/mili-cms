@@ -6,7 +6,7 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const sectionCurveVariants = cva(
-  "w-full h-40 md:h-60 bg-gradient-to-b to-thready-200 from-thready-25 absolute inset-x-0 z-20 clip-path-url-[#SectionCurveOutside]",
+  "w-full h-32 md:h-60 bg-gradient-to-b to-thready-200 from-primary-25 absolute inset-x-0 z-20 clip-path-url-[#SectionCurveOutside]",
   {
     variants: {
       position: {
