@@ -7,6 +7,7 @@ import InstallmentTerms from "./_containers/installmentTerms";
 import MoreProducts from "./_containers/moreProducts";
 import ProductDetails from "./_containers/productDetails";
 import SpecialOffer from "./_containers/specialOffer";
+import ShopOptionsSection from "./_containers/supOptions";
 
 const Home = async () => {
   return (
@@ -19,6 +20,7 @@ const Home = async () => {
       <MoreProducts />
       <ProductDetails />
       <InstallmentTerms />
+      <ShopOptionsSection />
       <CropSVG />
     </main>
   );
