@@ -10,6 +10,7 @@ import { articleCategory } from "./articleCategory";
 import { account, session, user } from "./auth";
 import { comment } from "./comment";
 import { media } from "./media";
+import { portfolio } from "./portfolio";
 import {
   product,
   productGallery,
@@ -249,6 +250,14 @@ export const productMetaRelation = relations(productMeta, ({ one }) => ({
     references: [media.id],
   }),
 }));
+
+export const portfolioRelation = relations(portfolio, ({ one }) => ({
+  thumbnail: one(media, {
+    fields: [portfolio.thumbnailId],
+    references: [media.id],
+  }),
+}));
+
 // * Better auth relations
 
 export const userRelations = relations(user, ({ many }) => ({

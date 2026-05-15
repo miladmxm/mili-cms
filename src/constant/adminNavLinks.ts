@@ -11,7 +11,7 @@ import {
   IconSearch,
   IconSettings,
 } from "@tabler/icons-react";
-import { Image } from "lucide-react";
+import { BaggageClaim, Image } from "lucide-react";
 
 import type { AdminNavMain } from "@/types/adminNavs";
 
@@ -24,6 +24,7 @@ export const NavDictionary: Record<string, string> = {
   categories: "دسته بندی ها",
   products: "محصولات",
   options: "ویژگی ها",
+  portfolio: "نمونه کار ها",
 };
 export const navMain: AdminNavMain[] = [
   {
@@ -82,18 +83,16 @@ export const navMain: AdminNavMain[] = [
     url: "/admin/media",
     icon: Image,
   },
-  // {
-  //   haveChild: false,
-  //   title: "Projects",
-  //   url: "#",
-  //   icon: IconFolder,
-  // },
-  // {
-  //   haveChild: false,
-  //   title: "Team",
-  //   url: "#",
-  //   icon: IconUsers,
-  // },
+  {
+    title: "نمونه کار ها",
+    haveChild: true,
+    base: "/admin/portfolio",
+    icon: BaggageClaim,
+    items: [
+      { title: "مشاهده همه", url: "/admin/portfolio" },
+      { title: "افزودن", url: "/admin/portfolio/add" },
+    ],
+  },
 ];
 export const AdminNavLinks = {
   navClouds: [
