@@ -17,7 +17,7 @@ const CommentCard = ({ author, content }: Comment) => {
           {author.name}
         </strong>
       </div>
-      <p className="text-thready-900 p-8 bg-white shadow-sm-gray rounded-b-6xl rounded-se-6xl max-md:text-xs font-semibold">
+      <p className="text-justify text-thready-900 p-8 bg-white shadow-sm-gray rounded-b-6xl rounded-se-6xl max-md:text-xs font-semibold">
         {content}
       </p>
     </div>

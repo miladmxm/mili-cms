@@ -2,7 +2,6 @@
 
 import type { ComponentProps } from "react";
 
-import autoheight from "embla-carousel-auto-height";
 import autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 
@@ -50,27 +49,23 @@ const CommentCarusel = () => {
   const [emblaRef] = useEmblaCarousel(
     {
       axis: "y",
-      loop: true,
-      dragFree: false,
-      slidesToScroll: 2,
-      watchResize: true,
+      duration: 10,
+      align: "start",
+      slidesToScroll: 1,
     },
     [
-      autoheight({ active: true }),
       autoplay({
-        active: true,
-        delay: 3000,
         stopOnInteraction: false,
         stopOnMouseEnter: true,
       }),
     ],
   );
   return (
-    <div className="w-full">
-      <div className="overflow-hidden h-full rounded-lg" ref={emblaRef}>
+    <div className="w-full h-[60svh]">
+      <div className="overflow-hidden h-[60svh] rounded-lg" ref={emblaRef}>
         <div className="flex flex-col h-full items-start transition-all">
           {comments.map((comment) => (
-            <div className="py-8" key={comment.id}>
+            <div className="p-8 select-none" key={comment.id}>
               <CommentCard {...comment} />
             </div>
           ))}
