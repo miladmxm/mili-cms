@@ -1,5 +1,7 @@
 import "server-only";
 
+import type { OffsetAndLimit } from "@/repositories/types";
+
 import {
   dalDbOperation,
   dalRequireAuth,
@@ -13,6 +15,12 @@ export const getArticles = async () => {
     {
       blog: ["read"],
     },
+  );
+};
+
+export const getPublicArticles = async (options?: OffsetAndLimit) => {
+  return dalVerifySuccess(
+    await dalDbOperation(() => articleService.getPublishedArticles(options)),
   );
 };
 

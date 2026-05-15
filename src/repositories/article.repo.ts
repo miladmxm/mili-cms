@@ -36,6 +36,17 @@ export const findArticleById = async (id: string, tx?: Transaction) => {
   };
 };
 
+export const findPublishedArticles = async (
+  options?: OffsetLimit,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.article.findMany({
+    where: eq(article.status, "published"),
+    limit: options?.limit,
+    offset: options?.offset,
+    orderBy: desc(article.createdAt),
+    with: { thumbnail: true },
+  });
 export const findArticleBySlug = async (slug: string, tx?: Transaction) =>
   getDBorTX(tx).query.article.findFirst({
     where: eq(article.slug, slug),

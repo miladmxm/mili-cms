@@ -1,4 +1,5 @@
 import AugmentedReality from "./_containers/augmentedReality";
+import BlogSection from "./_containers/blog";
 import Categories from "./_containers/categories";
 import Comments from "./_containers/comments";
 import CropSVG from "./_containers/cropSVG";
@@ -23,6 +24,7 @@ const Home = async () => {
       <InstallmentTerms />
       <ShopOptionsSection />
       <Comments />
+      <BlogSection />
       <CropSVG />
     </main>
   );
