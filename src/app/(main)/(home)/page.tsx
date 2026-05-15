@@ -1,5 +1,6 @@
 import AugmentedReality from "./_containers/augmentedReality";
 import Categories from "./_containers/categories";
+import Comments from "./_containers/comments";
 import CropSVG from "./_containers/cropSVG";
 import GoodPriceProducts from "./_containers/goodPrice";
 import Hero from "./_containers/hero";
@@ -21,6 +22,7 @@ const Home = async () => {
       <ProductDetails />
       <InstallmentTerms />
       <ShopOptionsSection />
+      <Comments />
       <CropSVG />
     </main>
   );
