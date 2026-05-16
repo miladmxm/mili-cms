@@ -1,3 +1,5 @@
+import type { OffsetAndLimit } from "@/repositories/types";
+
 import {
   dalDbOperation,
   dalRequireAuth,
@@ -13,6 +15,14 @@ export const getPaginationPortfolio = async () => {
         portfolio: ["read"],
       },
     ),
+  );
+};
+
+export const getPaginationPublicPortfolio = async (
+  options?: OffsetAndLimit,
+) => {
+  return dalVerifySuccess(
+    await dalDbOperation(() => portfolioService.getPortfolioByLimit(options)),
   );
 };
 

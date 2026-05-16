@@ -7,6 +7,7 @@ import GoodPriceProducts from "./_containers/goodPrice";
 import Hero from "./_containers/hero";
 import InstallmentTerms from "./_containers/installmentTerms";
 import MoreProducts from "./_containers/moreProducts";
+import Portfolio from "./_containers/portfolio";
 import ProductDetails from "./_containers/productDetails";
 import SpecialOffer from "./_containers/specialOffer";
 import ShopOptionsSection from "./_containers/supOptions";
@@ -25,6 +26,7 @@ const Home = async () => {
       <ShopOptionsSection />
       <Comments />
       <BlogSection />
+      <Portfolio />
       <CropSVG />
     </main>
   );
