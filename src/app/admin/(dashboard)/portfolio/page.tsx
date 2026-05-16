@@ -1,5 +1,7 @@
+import AllPortfolio from "@/features/portfolio/containers/allPortfolio";
+
 const PortfolioPage = () => {
-  return <div>portfolio</div>;
+  return <AllPortfolio />;
 };
 
 export default PortfolioPage;

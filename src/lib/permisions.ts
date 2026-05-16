@@ -3,6 +3,7 @@ import { createAccessControl } from "better-auth/plugins/access";
 export const statements = {
   customer: ["create", "read", "update", "delete", "ban"],
   product: ["create", "read", "update", "delete"],
+  portfolio: ["create", "read", "update", "delete"],
   blog: ["create", "read", "update", "delete"],
   comment: ["create", "read", "update", "delete", "spam"],
   settings: ["read", "update"],
@@ -21,6 +22,7 @@ export const roles = {
     blog: ["read"],
     comment: ["read", "create"],
     media: ["read"],
+    portfolio: ["read"],
   }),
 
   moderator: ac.newRole({
@@ -30,6 +32,7 @@ export const roles = {
     settings: ["read"],
     comment: ["spam", "delete", "read", "update", "create"],
     media: ["read", "upload", "update"],
+    portfolio: ["read", "update", "delete", "create"],
   }),
 
   admin: ac.newRole({
@@ -39,5 +42,6 @@ export const roles = {
     comment: ["create", "read", "update", "delete", "spam"],
     settings: ["read", "update"],
     media: ["delete", "read", "upload", "update"],
+    portfolio: ["read", "update", "delete", "create"],
   }),
 };

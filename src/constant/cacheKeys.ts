@@ -5,4 +5,5 @@ export const CacheKeys = {
   productCategories: "product_categories",
   productOption: "product_option",
   media: "media",
+  portfolio: "portfolio",
 };
