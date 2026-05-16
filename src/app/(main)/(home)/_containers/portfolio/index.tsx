@@ -6,7 +6,6 @@ import Catalog from "./catalog";
 
 const Portfolio = async () => {
   const portfolio = await getPaginationPublicPortfolio({ limit: 5 });
-  console.log(portfolio);
   return (
     <section className="py-16 container flex flex-col gap-16">
       <H3>کاتالوگ</H3>

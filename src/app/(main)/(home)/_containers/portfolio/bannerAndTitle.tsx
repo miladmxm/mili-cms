@@ -6,7 +6,7 @@ import ButtonWithArrow from "@/components/ui/buttonWithArrow";
 
 const BannerAndTitle = () => {
   return (
-    <div className="rounded-3xl md:rounded-7xl flex-1/4 min-w-min md:overflow-hidden shadow-sm-gray relative isolate flex flex-col md:gap-4 p-6">
+    <div className="rounded-4xl md:rounded-7xl flex-1/4 min-w-min md:overflow-hidden shadow-sm-gray relative isolate flex flex-col md:gap-4 p-6">
       <h4 className="text-base xl:w-1/2 md:mx-auto md:text-4xl font-bold md:text-center py-4 leading-[160%]">
         کاتالـــوگ محصـولات
       </h4>
@@ -26,7 +26,7 @@ const BannerAndTitle = () => {
         src={banner}
         alt="catalog baner"
         fill
-        className="-z-20 object-cover opacity-20 rounded-3xl md:rounded-7xl"
+        className="-z-20 object-cover opacity-20 rounded-4xl md:rounded-7xl"
       />
     </div>
   );

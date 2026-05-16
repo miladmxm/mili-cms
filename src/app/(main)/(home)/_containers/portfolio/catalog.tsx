@@ -33,7 +33,7 @@ const Catalog = ({
           onPointerDown={() => handleClickToEachItem(id)}
           key={id}
           className={cn(
-            "cursor-pointer shadow-sm-gray max-md:h-20 rounded-3xl md:rounded-7xl overflow-hidden md:flex-1/5 transition-all",
+            "cursor-pointer shadow-sm-gray max-md:h-20 rounded-4xl md:rounded-7xl overflow-hidden md:flex-1/5 transition-all",
             {
               "md:flex-3/5 lg:flex-2/5 max-md:h-60": activeId === id,
             },
