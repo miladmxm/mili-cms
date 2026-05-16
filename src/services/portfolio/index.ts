@@ -15,18 +15,18 @@ export const getPortfolioByLimit = async (options?: OffsetAndLimit) => {
   "use cache";
 
   cacheTag(CacheKeys.portfolio);
-  const portfolios = await portfolioRepo.findPortfolioByOffsetAndLimit(options);
-  const normalPortfolios: Portfolio[] = [];
+  const portfolio = await portfolioRepo.findPortfolioByOffsetAndLimit(options);
+  const normalPortfolio: Portfolio[] = [];
 
-  for (const portfolio of portfolios) {
-    const { thumbnail } = portfolio;
+  for (const eachPortfolio of portfolio) {
+    const { thumbnail } = eachPortfolio;
 
     thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
 
-    normalPortfolios.push({ ...portfolio, thumbnail });
+    normalPortfolio.push({ ...eachPortfolio, thumbnail });
   }
 
-  return normalPortfolios;
+  return normalPortfolio;
 };
 
 export const getPortfolio = async (

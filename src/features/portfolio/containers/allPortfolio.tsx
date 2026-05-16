@@ -3,11 +3,11 @@ import { BaggageClaim } from "lucide-react";
 import EmptyPlaceholder from "@/components/dashboard/empty";
 
 import { PortfolioTable } from "../components/portfolioTable";
-import { getPortfolios } from "../dal/query";
+import { getPaginationPortfolio } from "../dal/query";
 
 const AllPortfolio = async () => {
-  const portfolios = await getPortfolios();
-  if (!portfolios.length)
+  const portfolio = await getPaginationPortfolio();
+  if (!portfolio.length)
     return (
       <EmptyPlaceholder
         link="/admin/portfolio/add"
@@ -18,7 +18,7 @@ const AllPortfolio = async () => {
         icon={BaggageClaim}
       />
     );
-  return <PortfolioTable data={portfolios} />;
+  return <PortfolioTable data={portfolio} />;
 };
 
 export default AllPortfolio;

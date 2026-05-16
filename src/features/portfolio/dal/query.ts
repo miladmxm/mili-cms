@@ -5,7 +5,7 @@ import {
 } from "@/dal/helpers";
 import * as portfolioService from "@/services/portfolio";
 
-export const getPortfolios = async () => {
+export const getPaginationPortfolio = async () => {
   return dalVerifySuccess(
     await dalRequireAuth(
       () => dalDbOperation(() => portfolioService.getPortfolioByLimit()),
