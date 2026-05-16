@@ -18,3 +18,11 @@ export const deletePortfolio = async (id: string) => {
   );
   return portfolio;
 };
+
+export const updatePortfolio = async (id: string, data: CreatePortfolio) => {
+  const portfolio = dalRequireAuth(
+    () => dalDbOperation(() => portfolioService.updatePortfolio(id, data)),
+    { portfolio: ["update"] },
+  );
+  return portfolio;
+};

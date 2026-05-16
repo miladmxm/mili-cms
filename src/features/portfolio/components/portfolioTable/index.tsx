@@ -35,12 +35,12 @@ import {
 } from "@/components/dashboard/ui/table";
 import { useDirection } from "@/hooks/useDirection";
 
-import type { Portfolio } from "./type";
+import type { PortfolioTable } from "./type";
 
 import { columns } from "./cols";
 import { PortfolioDictionary } from "./type";
 
-export function PortfolioTable({ data }: { data: Portfolio[] }) {
+export function PortfolioTable({ data }: { data: PortfolioTable[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -101,7 +101,7 @@ export function PortfolioTable({ data }: { data: Portfolio[] }) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {PortfolioDictionary[column.id as keyof Portfolio]}
+                    {PortfolioDictionary[column.id as keyof PortfolioTable]}
                   </DropdownMenuCheckboxItem>
                 );
               })}

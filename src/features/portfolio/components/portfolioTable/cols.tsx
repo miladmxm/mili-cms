@@ -15,12 +15,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/dashboard/ui/dropdown-menu";
 
-import type { Portfolio } from "./type";
+import type { PortfolioTable } from "./type";
 
 import DeletePortfolio from "../deletePortfolio";
 import { PortfolioDictionary } from "./type";
 
-export const columns: ColumnDef<Portfolio>[] = [
+export const columns: ColumnDef<PortfolioTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -47,7 +47,9 @@ export const columns: ColumnDef<Portfolio>[] = [
     accessorKey: "thumbnail",
     header: PortfolioDictionary["thumbnail"],
     cell: ({ row }) => {
-      const { meta, url } = row.getValue("thumbnail") as Portfolio["thumbnail"];
+      const { meta, url } = row.getValue(
+        "thumbnail",
+      ) as PortfolioTable["thumbnail"];
       return (
         <div>
           <Image

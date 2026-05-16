@@ -29,6 +29,21 @@ export const getPortfolioByLimit = async (options?: OffsetAndLimit) => {
   return normalPortfolios;
 };
 
+export const getPortfolio = async (
+  id: string,
+): Promise<Portfolio | undefined> => {
+  "use cache";
+
+  cacheTag(`${CacheKeys.portfolio}-${id}`);
+  const portfolio = await portfolioRepo.findPortfolioById(id);
+  if (!portfolio) return portfolio;
+  const { thumbnail } = portfolio;
+
+  thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+
+  return { ...portfolio, thumbnail };
+};
+
 // create
 export const createPortfolio = async (portfolioData: CreatePortfolio) => {
   await checkMediaType(portfolioData.thumbnailId, "image");
@@ -36,6 +51,13 @@ export const createPortfolio = async (portfolioData: CreatePortfolio) => {
 };
 
 // update
+export const updatePortfolio = async (
+  id: string,
+  portfolioData: CreatePortfolio,
+) => {
+  await checkMediaType(portfolioData.thumbnailId, "image");
+  return portfolioRepo.editPortfolioById(id, portfolioData);
+};
 
 // delete
 

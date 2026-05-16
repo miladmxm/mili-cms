@@ -15,3 +15,14 @@ export const getPortfolios = async () => {
     ),
   );
 };
+
+export const getPortfolio = async (id: string) => {
+  return dalVerifySuccess(
+    await dalRequireAuth(
+      () => dalDbOperation(() => portfolioService.getPortfolio(id)),
+      {
+        portfolio: ["read"],
+      },
+    ),
+  );
+};
