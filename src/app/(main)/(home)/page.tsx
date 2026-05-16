@@ -3,6 +3,7 @@ import BlogSection from "./_containers/blog";
 import Categories from "./_containers/categories";
 import Comments from "./_containers/comments";
 import CropSVG from "./_containers/cropSVG";
+import FAQsection from "./_containers/fag";
 import GoodPriceProducts from "./_containers/goodPrice";
 import Hero from "./_containers/hero";
 import InstallmentTerms from "./_containers/installmentTerms";
@@ -27,6 +28,7 @@ const Home = async () => {
       <Comments />
       <BlogSection />
       <Portfolio />
+      <FAQsection />
       <CropSVG />
     </main>
   );

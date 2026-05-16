@@ -1,6 +1,6 @@
 "use client";
 
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 
 import { motion } from "motion/react";
 import { createContext, use, useMemo, useState } from "react";
@@ -22,7 +22,10 @@ const useAccordion = () => {
 export const AccordionTrigger = ({
   children,
   className,
-}: PropsWithChildren<{ className?: string }>) => {
+}: {
+  className?: string;
+  children: ((state: { isOpen: boolean }) => ReactNode) | ReactNode;
+}) => {
   const { setIsOpen, isOpen } = useAccordion();
   return (
     <button
@@ -30,7 +33,7 @@ export const AccordionTrigger = ({
       type="button"
       className={cn("group", { opened: isOpen }, className)}
     >
-      {children}
+      {typeof children === "function" ? children({ isOpen }) : children}
     </button>
   );
 };
@@ -58,12 +61,15 @@ export const AccordionContent = ({
   );
 };
 
-const Accordion = ({ children }: PropsWithChildren) => {
+const Accordion = ({
+  children,
+  className,
+}: PropsWithChildren<{ className?: string }>) => {
   const [isOpen, setIsOpen] = useState(false);
   const value = useMemo(() => ({ isOpen, setIsOpen }), [isOpen]);
   return (
     <AccordionContext value={value}>
-      <div>{children}</div>
+      <div className={className}>{children}</div>
     </AccordionContext>
   );
 };
