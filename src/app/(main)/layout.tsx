@@ -5,6 +5,7 @@ import { getPublicCategories } from "@/features/product/dal/query";
 import { buildCategoryTree } from "@/features/product/utils/buildCategoryTree";
 import { FontMain } from "@/lib/fonts";
 
+import Footer from "./_containers/footer";
 import Header from "./_containers/header";
 import MainLayoutContextProvider from "./_context";
 
@@ -23,6 +24,7 @@ export default async function RootLayout({
         <body className={FontMain.variable}>
           <Header />
           {children}
+          <Footer />
         </body>
       </MainLayoutContextProvider>
     </html>

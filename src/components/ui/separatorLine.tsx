@@ -1,5 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import type { ComponentProps } from "react";
+import type { ComponentProps, CSSProperties } from "react";
 
 import { cva } from "class-variance-authority";
 
@@ -10,8 +10,8 @@ const separatorLineVariants = cva(
   {
     variants: {
       variant: {
-        horizontal: "h-full w-[1px] bg-gradient-to-b",
-        vertical: "h-[1px] w-full",
+        horizontal: "h-full w-[var(--separator-line-size)] bg-gradient-to-b",
+        vertical: "h-[var(--separator-line-size)] w-full",
       },
     },
     defaultVariants: {
@@ -20,13 +20,20 @@ const separatorLineVariants = cva(
   },
 );
 
+type Size = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
+
 const SeparatorLine = ({
   children,
   className,
   variant,
-}: ComponentProps<"div"> & VariantProps<typeof separatorLineVariants>) => {
+  size = "1",
+}: ComponentProps<"div"> &
+  VariantProps<typeof separatorLineVariants> & { size?: Size }) => {
   return (
-    <div className={cn(separatorLineVariants({ className, variant }))}>
+    <div
+      style={{ "--separator-line-size": `${size}px` } as CSSProperties}
+      className={cn(separatorLineVariants({ className, variant }))}
+    >
       {children}
     </div>
   );

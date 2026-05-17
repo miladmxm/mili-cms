@@ -45,7 +45,7 @@ const MenuItemAccordion = ({
         <SeparatorLine />
         <AccordionContent className="p-4">
           {children}
-          <SeparatorLine className="h-2" />
+          <SeparatorLine size="8" />
         </AccordionContent>
       </Accordion>
     </li>

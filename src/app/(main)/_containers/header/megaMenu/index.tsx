@@ -135,7 +135,7 @@ const ChildMenu = () => {
               <SubCategoryLinks categories={children || []} />
             </div>
             {activeCategoryChildren.length - 1 !== i && (
-              <SeparatorLine variant="horizontal" className="w-0.5" />
+              <SeparatorLine variant="horizontal" size="2" />
             )}
           </motion.div>
         ))}
