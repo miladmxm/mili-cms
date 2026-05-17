@@ -5,7 +5,7 @@ import SocialLinks from "./socialLinks";
 
 const Footer = () => {
   return (
-    <footer className="container">
+    <footer className="container pb-12">
       <FooterBackground>
         <FooterLogo />
         <FooterMainContent />

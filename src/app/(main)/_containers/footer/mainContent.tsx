@@ -4,6 +4,7 @@ import type { PropsWithChildren, ReactNode } from "react";
 
 import Link from "next/link";
 
+import ArrowDown from "@/assets/icons/footerMenuArrowDown.svg";
 import Accordion, {
   AccordionContent,
   AccordionTrigger,
@@ -11,6 +12,8 @@ import Accordion, {
 import SeparatorLine from "@/components/ui/separatorLine";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+
+import { useMainLayoutContext } from "../../_context";
 
 const FooterContentTitle = ({ children }: PropsWithChildren) => (
   <h6 className="font-bold text-sm md:text-lg">{children}</h6>
@@ -33,11 +36,19 @@ const FooterContentItem = ({
   if (isMobile) {
     return (
       <Accordion>
-        <AccordionTrigger>
-          <FooterContentTitle>{title}</FooterContentTitle>
+        <AccordionTrigger className="border-b w-full text-start py-2 border-primary-900">
+          {({ isOpen }) => (
+            <div className="flex justify-between items-center">
+              <FooterContentTitle>{title}</FooterContentTitle>
+              <ArrowDown
+                className={cn("transition-transform size-3.5", {
+                  "rotate-180": isOpen,
+                })}
+              />
+            </div>
+          )}
         </AccordionTrigger>
-        <SeparatorLine className="my-2" />
-        <AccordionContent>
+        <AccordionContent className="pt-4">
           <FooterContentContent>{content}</FooterContentContent>
         </AccordionContent>
       </Accordion>
@@ -53,32 +64,94 @@ const FooterContentItem = ({
   );
 };
 
+const FooterAboutUs = () => {
+  return (
+    <FooterContentItem
+      title="درباره یاتاک"
+      content={
+        <p className="text-justify">
+          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با
+          استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در
+          ستون و سطرآنچنان که لازم است،
+        </p>
+      }
+    />
+  );
+};
+
+const QuickAccess = () => {
+  return (
+    <FooterContentItem
+      title="دسترسی آسان"
+      content={
+        <ul className="gap-4 flex flex-col">
+          <li>
+            <Link href="#">صفحه اصلی</Link>
+          </li>
+          <li>
+            <Link href="#">مقالات</Link>
+          </li>
+          <li>
+            <Link href="#">فروشگاه</Link>
+          </li>
+          <li>
+            <Link href="#">تماس با ما</Link>
+          </li>
+        </ul>
+      }
+    />
+  );
+};
+
+const ProductCategories = () => {
+  const { productCategories } = useMainLayoutContext();
+
+  return (
+    <FooterContentItem
+      title="دسته بندی محصولات"
+      content={
+        <ul className="gap-4 flex flex-col">
+          {productCategories.map((productCategory) => (
+            <li key={productCategory.slug}>
+              <Link href={`#${productCategory.slug}`}>
+                {productCategory.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      }
+    />
+  );
+};
+
+const ContactUs = () => {
+  return (
+    <FooterContentItem
+      title="تماس با ما"
+      content={
+        <ul className="gap-4 flex flex-col">
+          <li>
+            <Link href="#">۰۲۱-۶۶۶-۲۲۳۳</Link>
+          </li>
+          <li>
+            <Link href="#">۰۹۱۲-۱۵۸-۲۴۴۹</Link>
+          </li>
+          <li>
+            <Link href="#">آدرس: تهران نعمت آباد</Link>
+          </li>
+        </ul>
+      }
+    />
+  );
+};
+
 const FooterMainContent = () => {
   return (
-    <div className="grid md:grid-cols-4 gap-6">
-      <FooterContentItem
-        title="درباره یاتاک"
-        content="لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است،"
-      />
-      <FooterContentItem
-        title="دسترسی آسان"
-        content={
-          <ul>
-            <li>
-              <Link href="#">صفحه اصلی</Link>
-            </li>
-            <li>
-              <Link href="#">مقالات</Link>
-            </li>
-            <li>
-              <Link href="#">فروشگاه</Link>
-            </li>
-            <li>
-              <Link href="#">تماس با ما</Link>
-            </li>
-          </ul>
-        }
-      />
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <FooterAboutUs />
+      <QuickAccess />
+      <ProductCategories />
+      <ContactUs />
     </div>
   );
 };
