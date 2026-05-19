@@ -1,6 +1,5 @@
 import { cacheTag } from "next/cache";
 
-import type { OffsetAndLimit } from "@/repositories/types";
 import type {
   Article,
   ArticleStatus,
@@ -50,7 +49,7 @@ export const getArticle = async (id: string) => {
   return { ...article, thumbnail };
 };
 
-export const getPublishedArticles = async (options?: OffsetAndLimit) => {
+export const getPublishedArticles = async (options?: LimitAndOffset) => {
   "use cache";
 
   cacheTag(CacheKeys.articles);
@@ -69,6 +68,39 @@ export const getPublishedArticles = async (options?: OffsetAndLimit) => {
         categoryIds: [],
         thumbnail: undefined,
       });
+    }
+  }
+
+  return normalArticles;
+};
+
+export const searchPublishedArticles = async (
+  query: string,
+  options?: LimitAndOffset,
+) => {
+  "use cache";
+
+  cacheTag(CacheKeys.articles);
+  const articles = await articleRepo.findPublishedArticlesByTitleSearch({
+    search: query,
+    options,
+  });
+  const normalArticles: Article[] = [];
+
+  for (const article of articles) {
+    const { thumbnail } = article;
+
+    if (thumbnail) {
+      thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+      normalArticles.push({
+        ...article,
+        thumbnail,
+      } as unknown as Article);
+    } else {
+      normalArticles.push({
+        ...article,
+        thumbnail: undefined,
+      } as unknown as Article);
     }
   }
 

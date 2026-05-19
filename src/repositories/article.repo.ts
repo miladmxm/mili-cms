@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, like } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, like } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
@@ -47,6 +47,22 @@ export const findPublishedArticles = async (
     orderBy: desc(article.createdAt),
     with: { thumbnail: true },
   });
+
+export const findPublishedArticlesByTitleSearch = (
+  { search, options }: { search: string; options?: OffsetLimit },
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.article.findMany({
+    offset: options?.offset,
+    limit: options?.limit,
+    where: and(
+      eq(article.status, "published"),
+      ilike(article.title, `%${search}%`),
+    ),
+    with: { thumbnail: true },
+    columns: { createdAt: true, slug: true, title: true },
+  });
+
 export const findArticleBySlug = async (slug: string, tx?: Transaction) =>
   getDBorTX(tx).query.article.findFirst({
     where: eq(article.slug, slug),

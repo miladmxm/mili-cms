@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray, like, ne } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, inArray, like, ne } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
@@ -65,6 +65,21 @@ export const findDiscountedProducts = async (
     offset: options?.offset,
   });
 };
+
+export const findPublishedProductsByNameSearch = (
+  { search, config }: { search: string; config?: OffsetLimit },
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.product.findMany({
+    offset: config?.offset,
+    limit: config?.limit,
+    where: and(
+      eq(product.status, "published"),
+      ilike(product.name, `%${search}%`),
+    ),
+    with: { thumbnail: true },
+    columns: { createdAt: true, slug: true, name: true },
+  });
 
 export const findProductsOrderByPrice = async (
   options?: OffsetLimit,

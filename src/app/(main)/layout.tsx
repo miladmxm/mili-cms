@@ -7,6 +7,7 @@ import { FontMain } from "@/lib/fonts";
 
 import Footer from "./_containers/footer";
 import Header from "./_containers/header";
+import Searchbar from "./_containers/search";
 import MainLayoutContextProvider from "./_context";
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default async function RootLayout({
         <body className={FontMain.variable}>
           <Header />
           {children}
+          <Searchbar />
           <Footer />
         </body>
       </MainLayoutContextProvider>

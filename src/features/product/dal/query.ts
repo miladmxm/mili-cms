@@ -33,6 +33,17 @@ export const getProduct = async (id: string) => {
   );
 };
 
+export const searchProducts = async (
+  query: string,
+  config?: LimitAndOffset,
+) => {
+  return dalVerifySuccess(
+    await dalDbOperation(() =>
+      productService.searchPublishedProducts(query, config),
+    ),
+  );
+};
+
 export const getDiscountedProducts = async () =>
   dalVerifySuccess(await dalDbOperation(productService.getDiscountedProducts));
 

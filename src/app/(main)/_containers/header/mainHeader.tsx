@@ -4,6 +4,7 @@ import MainLogo from "@/components/ui/mainLogo";
 import MobileMenuToggler from "@/components/ui/mobileMenuToggler";
 import SearchBoxToggler from "@/components/ui/searchBoxToggler";
 
+import { setOpenSearchbar } from "../search/store";
 import HeaderDesktopNavigation from "./headerDesktopNavigation";
 import HeaderMobileNavigation from "./headerMobileNavigation";
 
@@ -18,7 +19,7 @@ const MainHeader = () => {
       <HeaderDesktopNavigation />
       <HeaderMobileNavigation />
       <div className="max-md:flex-1 flex items-center justify-end">
-        <SearchBoxToggler />
+        <SearchBoxToggler onClick={setOpenSearchbar} />
       </div>
     </div>
   );

@@ -44,6 +44,32 @@ export const getPublishedProducts = async (limitAndOffset?: LimitAndOffset) => {
   return normalProducts;
 };
 
+export const searchPublishedProducts = async (
+  query: string,
+  limitAndOffset?: LimitAndOffset,
+) => {
+  "use cache";
+
+  cacheTag(CacheKeys.product, `${CacheKeys.product}-${query}`);
+  const products = await productRepo.findPublishedProductsByNameSearch({
+    search: query,
+    config: limitAndOffset,
+  });
+  const normalProducts: Product[] = [];
+
+  for (const product of products) {
+    const { thumbnail } = product;
+
+    if (thumbnail) {
+      thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+    }
+
+    normalProducts.push({ ...(product as Product), thumbnail });
+  }
+
+  return normalProducts;
+};
+
 export const getAllProducts = () => productRepo.findProducts();
 
 export const getDiscountedProducts = async () => {

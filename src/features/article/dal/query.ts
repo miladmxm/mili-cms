@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { OffsetAndLimit } from "@/repositories/types";
+import type { LimitAndOffset } from "@/services/type";
 
 import {
   dalDbOperation,
@@ -18,9 +18,20 @@ export const getArticles = async () => {
   );
 };
 
-export const getPublicArticles = async (options?: OffsetAndLimit) => {
+export const getPublicArticles = async (options?: LimitAndOffset) => {
   return dalVerifySuccess(
     await dalDbOperation(() => articleService.getPublishedArticles(options)),
+  );
+};
+
+export const searchArticles = async (
+  query: string,
+  config?: LimitAndOffset,
+) => {
+  return dalVerifySuccess(
+    await dalDbOperation(() =>
+      articleService.searchPublishedArticles(query, config),
+    ),
   );
 };
 

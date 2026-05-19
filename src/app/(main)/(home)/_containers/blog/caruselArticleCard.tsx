@@ -15,10 +15,9 @@ const CaruselArticleCard = ({ thumbnail, createdAt, title }: Article) => {
       </Link>
       <div className="flex min-w-max gap-6 flex-auto flex-col rounded-3xl mt-auto max-md:bg-white p-4 max-md:shadow-lg-gray dir-rtl">
         <div className="flex gap-4 justify-between font-semibold text-xs md:text-sm">
-          <span>
-            تاریخ
-            {Intl.DateTimeFormat("fa-ir").format(createdAt)}
-          </span>
+          <time dateTime={createdAt.toString()}>
+            تاریخ: {Intl.DateTimeFormat("fa-ir").format(createdAt)}
+          </time>
           <span>زمان مطالعه : ۵ دقیقه</span>
         </div>
         <Link href="#">
