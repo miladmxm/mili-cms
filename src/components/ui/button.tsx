@@ -7,7 +7,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "rounded-full block text-center transition-all duration-300",
+  "rounded-full block text-center transition-all duration-300 disabled:opacity-80 disabled:pointer-events-none",
   {
     variants: {
       variant: {

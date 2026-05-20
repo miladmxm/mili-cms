@@ -26,7 +26,7 @@
   --color-success: var(--success);
   --shadow-lg-gray: 0px 0px 30px -8px #0000002e;
   --shadow-xl-gray: 0px -24px 50px 0px #00000014;
-  --shadow-sm-gray:0px 0px 25px -4px #00000033;
+  --shadow-sm-gray: 0px 0px 25px -4px #00000033;
   --drop-shadow-xl-gray: 0px -24px 50px #00000014;
   --radius-4xl: 28px;
   --radius-5xl: 32px;
@@ -49,19 +49,19 @@
 :root {
   --primary-25: #fbfbfb;
   --primary-50: #f8f7f7;
-  --primary-200: #F1EFEF;
+  --primary-200: #f1efef;
   --primary-500: #dbd7d6;
-  --primary-600: #BEB9B8;
+  --primary-600: #beb9b8;
   --primary-900: #66605e;
   --secondary-500: #3a6ea5;
-  --secondary-600: #2E5884;
-  --secondary-800: #172C42;
+  --secondary-600: #2e5884;
+  --secondary-800: #172c42;
   --thready-800: #a18f7e;
   --thready-400: #e3ddd8;
   --thready-500: #efe8e2;
   --thready-200: #f9f6f3;
-  --thready-25: #FDFDFC;
-  --thready-900: #87715D;
+  --thready-25: #fdfdfc;
+  --thready-900: #87715d;
   --white: #ffffff;
   --black: #000000;
   --error: #ff4949;
@@ -102,9 +102,10 @@
       6px 6px 18px 0px #f1efef inset;
   }
 
-  .product-card-shadow{
-    box-shadow: 0px 1px 3px 0px #0000001A, 0px 1px 2px -1px #0000001A;
-   
+  .product-card-shadow {
+    box-shadow:
+      0px 1px 3px 0px #0000001a,
+      0px 1px 2px -1px #0000001a;
   }
   .embla__viewport {
     @apply overflow-hidden;
@@ -121,10 +122,10 @@
   }
 }
 @utility dir-rtl {
-  direction:rtl
+  direction: rtl;
 }
-@utility dir-ltr{
-  direction:ltr
+@utility dir-ltr {
+  direction: ltr;
 }
 @utility flex-size-* {
   flex: 0 0 calc(--value(integer) * 1%);
@@ -144,5 +145,3 @@
 @utility clip-path-url-* {
   clip-path: url(--value([*]));
 }
-
-

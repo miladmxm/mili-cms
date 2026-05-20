@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useRouter } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 
 import Close from "@/assets/icons/close.svg";
@@ -14,10 +15,12 @@ const ResetButton = () => {
       articles: store.articles,
     })),
   );
+  const router = useRouter();
   const isHaveResult = articles.length > 0 || products.length > 0;
 
   const handleReset = () => {
     setProductsAndArticles({ articles: [], products: [] });
+    router.push("?");
   };
 
   return (

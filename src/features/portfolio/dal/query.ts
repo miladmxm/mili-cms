@@ -1,4 +1,4 @@
-import type { OffsetAndLimit } from "@/repositories/types";
+import type { LimitAndOffset } from "@/services/type";
 
 import {
   dalDbOperation,
@@ -19,7 +19,7 @@ export const getPaginationPortfolio = async () => {
 };
 
 export const getPaginationPublicPortfolio = async (
-  options?: OffsetAndLimit,
+  options?: LimitAndOffset,
 ) => {
   return dalVerifySuccess(
     await dalDbOperation(() => portfolioService.getPortfolioByLimit(options)),

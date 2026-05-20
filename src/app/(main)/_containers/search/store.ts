@@ -21,3 +21,13 @@ export const setOpenSearchbar = () =>
   useSearchbarStore.setState({ open: true });
 export const setProductsAndArticles = (state: Omit<SearchbarStates, "open">) =>
   useSearchbarStore.setState({ ...state });
+
+export const addProductsAndArticles = (
+  state: Omit<SearchbarStates, "open">,
+) => {
+  const { articles, products } = useSearchbarStore.getState();
+  useSearchbarStore.setState({
+    products: [...products, ...state.products],
+    articles: [...articles, ...state.articles],
+  });
+};

@@ -1,17 +1,16 @@
 import { cacheTag } from "next/cache";
 
-import type { OffsetAndLimit } from "@/repositories/types";
-
 import { CacheKeys } from "@/constant/cacheKeys";
 import * as portfolioRepo from "@/repositories/portfolio.repo";
 
+import type { LimitAndOffset } from "../type";
 import type { CreatePortfolio, Portfolio } from "./type";
 
 import { checkMediaType } from "../media";
 import { DTOconvertMediaPathToRealUrl } from "../media/dto";
 
 // read
-export const getPortfolioByLimit = async (options?: OffsetAndLimit) => {
+export const getPortfolioByLimit = async (options?: LimitAndOffset) => {
   "use cache";
 
   cacheTag(CacheKeys.portfolio);

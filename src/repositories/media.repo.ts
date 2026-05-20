@@ -1,11 +1,11 @@
 import { and, desc, eq, inArray } from "drizzle-orm";
 
 import type { FileMeta, MediaTypes } from "@/services/media/type";
+import type { OffsetLimit } from "@/types/repo";
 
 import { media } from "@/db/drizzle/schemas";
 
 import type { Transaction } from ".";
-import type { OffsetAndLimit } from "./types";
 
 import { getDBorTX } from ".";
 
@@ -14,7 +14,7 @@ export const createMedia = (
   tx?: Transaction,
 ) => getDBorTX(tx).insert(media).values(data).returning();
 
-export const findMediaByLimit = (options?: OffsetAndLimit, tx?: Transaction) =>
+export const findMediaByLimit = (options?: OffsetLimit, tx?: Transaction) =>
   getDBorTX(tx).query.media.findMany({
     offset: options?.offset,
     limit: options?.limit,
@@ -42,7 +42,7 @@ export const findMediaByTypesAndLimit = (
     types,
     limit,
     offset,
-  }: OffsetAndLimit & {
+  }: OffsetLimit & {
     types: MediaTypes[];
   },
   tx?: Transaction,

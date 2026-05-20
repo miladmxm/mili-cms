@@ -1,8 +1,10 @@
 "use client";
 
+import Button from "@/components/ui/button";
 import SearchResultCard from "@/components/ui/searchResultCard";
 import SeparatorLine from "@/components/ui/separatorLine";
 
+import { useSearchResult } from "./hooks/useSearchResult";
 import { useSearchbarStore } from "./store";
 
 const ProductsResult = () => {
@@ -53,10 +55,14 @@ const ArticlesResult = () => {
 };
 
 const SearchResult = () => {
+  const { handleScroll, inViewRef, pending, isLoadEnded } = useSearchResult();
   return (
-    <div className="flex-auto overflow-y-auto relative">
+    <div
+      onScrollEnd={handleScroll}
+      className="flex-auto overflow-y-auto relative pb-10"
+    >
       <SeparatorLine
-        className="absolute inset-y-0 left-1/2 max-md:hidden"
+        className="absolute inset-y-0 left-1/2 max-md:hidden -z-10"
         variant="horizontal"
         size="2"
       />
@@ -69,6 +75,23 @@ const SearchResult = () => {
         />
         <ArticlesResult />
       </div>
+      <span ref={inViewRef} />
+      {!isLoadEnded && (
+        <Button
+          type="button"
+          variant="secondary"
+          className="max-w-fit mx-auto mt-10"
+          shadow="sm"
+          onClick={handleScroll}
+          disabled={pending}
+        >
+          {pending ? (
+            <span className="block animate-spin h-6 mx-auto aspect-square rounded-full border-2 border-dashed" />
+          ) : (
+            <span>بارگذاری</span>
+          )}
+        </Button>
+      )}
     </div>
   );
 };
