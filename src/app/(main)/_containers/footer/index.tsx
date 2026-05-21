@@ -1,3 +1,5 @@
+import PillowSVG from "@/components/ui/cropSVG/pillow";
+
 import FooterBackground from "./footerBackground";
 import FooterLogo from "./footerLogo";
 import FooterMainContent from "./mainContent";
@@ -11,6 +13,7 @@ const Footer = () => {
         <FooterMainContent />
         <SocialLinks />
       </FooterBackground>
+      <PillowSVG desktopId="pillow-desktop" mobileId="pillow-mobile" />
     </footer>
   );
 };

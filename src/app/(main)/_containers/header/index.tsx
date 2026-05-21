@@ -3,7 +3,7 @@ import MainHeader from "./mainHeader";
 
 const Header = () => {
   return (
-    <header className="container sticky top-2 z-30">
+    <header className="container sticky -top-8 z-30">
       <BeforeHeader />
       <MainHeader />
     </header>
