@@ -10,8 +10,8 @@ import InstallmentTerms from "./_containers/installmentTerms";
 import MoreProducts from "./_containers/moreProducts";
 import Portfolio from "./_containers/portfolio";
 import ProductDetails from "./_containers/productDetails";
+import ShopOptionsSection from "./_containers/shopOptions";
 import SpecialOffer from "./_containers/specialOffer";
-import ShopOptionsSection from "./_containers/supOptions";
 
 const Home = async () => {
   return (
