@@ -1,8 +1,26 @@
 import type { Product } from "@/services/product/type";
 
-export const calcDiscount = (metadata: Product["metadata"]) => {
-  const { discount, price } = metadata[0];
+type Metadata = Product["metadata"];
+
+export const getMaxDiscount = (metadata: Metadata): number => {
+  return Math.max(...metadata.map(({ discount }) => discount));
+};
+
+export const findMaxDiscountItem = (
+  metadata: Metadata,
+): Metadata[number] | undefined => {
+  return metadata.find((item) => item.discount === getMaxDiscount(metadata));
+};
+
+export const calcDiscount = (metadata: Metadata) => {
+  const maxDiscountItem = findMaxDiscountItem(metadata);
+  if (!maxDiscountItem) return metadata[0].price;
+  const { price, discount } = maxDiscountItem;
   if (discount === 0) return price;
   const finalPrice = (price / 100) * (100 - discount);
   return finalPrice;
+};
+
+export const haveDiscount = (metadata: Metadata): boolean => {
+  return !metadata.every(({ discount }) => discount === 0);
 };

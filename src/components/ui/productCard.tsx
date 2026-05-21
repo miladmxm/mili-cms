@@ -1,8 +1,10 @@
 "use client";
 
+import type { Route } from "next";
 import type { RefObject } from "react";
 
 import { hover, motion } from "motion/react";
+import Link from "next/link";
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 
 import type { Product } from "@/services/product/type";
@@ -11,6 +13,10 @@ import {
   DiscountedPrice,
   FormatedPrice,
 } from "@/features/product/components/ui/finalPrice";
+import {
+  getMaxDiscount,
+  haveDiscount,
+} from "@/features/product/utils/calcDiscount";
 
 import Button from "./button";
 import DefaultImage from "./defaultImage";
@@ -93,34 +99,50 @@ const ProductCardBackground = ({
   );
 };
 
+const Discount = ({ metadata }: { metadata: Product["metadata"] }) => {
+  const discounted = haveDiscount(metadata);
+  if (!discounted) return;
+  const discount = getMaxDiscount(metadata);
+  return (
+    <div className="flex items-center justify-between gap-1">
+      <small className="rounded-full text-xs text-white bg-thready-900 center px-2 py-1">
+        {discount}%
+      </small>
+      <del className="font-bold text-lg text-primary-600 before:bg-primary-600 before:h-0.5 before:w-full before:absolute before:start-0 before:top-[calc(50%-4px)] relative">
+        <FormatedPrice metadata={metadata} />
+      </del>
+    </div>
+  );
+};
+
 const ProductCard = ({ thumbnail, name, metadata }: Product) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const productLink: Route = "/";
   return (
     <div
       ref={containerRef}
       className="relative px-8 py-6 flex h-full flex-col gap-6"
     >
-      <DefaultImage
-        className=" mx-auto rounded-6xl aspect-[300/214] object-cover"
-        image={thumbnail}
-      />
+      <Link href={productLink}>
+        <DefaultImage
+          className="mx-auto rounded-6xl aspect-[300/214] object-cover"
+          image={thumbnail}
+        />
+      </Link>
       <ProductCardBackground containerRef={containerRef} />
-      <h4 className="text-primary-900 md:text-lg font-bold">{name}</h4>
-      <div className="flex items-center justify-between gap-1">
-        <small className="rounded-full text-xs text-white bg-thready-900 center px-2 py-1">
-          {metadata[0].discount}%
-        </small>
-        <del className="font-bold text-lg text-primary-600 before:bg-primary-600 before:h-0.5 before:w-full before:absolute before:start-0 before:top-[calc(50%-2px)] relative">
-          <FormatedPrice metadata={metadata} />
-        </del>
-      </div>
+      <h4 className="text-primary-900 md:text-lg font-bold">
+        <Link href={productLink}>{name}</Link>
+      </h4>
+      <Discount metadata={metadata} />
       <div className="text-2xl font-bold text-primary-900 flex justify-between">
         <strong>قیمت:</strong>
         <strong>
           <DiscountedPrice metadata={metadata} />
         </strong>
       </div>
-      <Button variant="outline">خرید</Button>
+      <Button href={productLink} variant="outline" className="mt-auto">
+        خرید
+      </Button>
     </div>
   );
 };
