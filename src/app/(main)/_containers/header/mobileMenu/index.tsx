@@ -109,6 +109,7 @@ const MobileMenu = ({ children }: PropsWithChildren) => {
           <MenuItemAccordion title="دسته بندی محصولات">
             <MenuItems productCategories={productCategories} />
           </MenuItemAccordion>
+          <MenuItemLink href="/shop">همه محصولات</MenuItemLink>
           {children}
         </ul>
       </div>

@@ -166,7 +166,7 @@ const Menu = () => {
 };
 
 const MegaMenu = () => {
-  const productsItemInNavRef = useRef<HTMLSpanElement>(null);
+  const productsItemInNavRef = useRef<HTMLAnchorElement>(null);
   const top = useMotionValue(10);
 
   const setTop = useEffectEvent((t: number) => top.set(t));
@@ -178,9 +178,13 @@ const MegaMenu = () => {
   }, []);
   return (
     <li className="cursor-pointer product-nav-trigger">
-      <span className="flex h-full items-center" ref={productsItemInNavRef}>
+      <Link
+        href="/shop"
+        className="flex h-full items-center"
+        ref={productsItemInNavRef}
+      >
         محصولات
-      </span>
+      </Link>
       <motion.div
         style={{ top }}
         className="mega-menu pt-4 container w-full fixed inset-x-0 top-20 transition-all duration-300 invisible pointer-events-none opacity-0 translate-y-10 -z-10"
