@@ -8,7 +8,7 @@ import {
   productGallery,
   productMeta,
   productToCategory,
-  productToOptionItem,
+  productVariables,
 } from "@/db/drizzle/schemas";
 import {
   productOption,
@@ -26,7 +26,7 @@ export const findProductById = async (id: string, tx?: Transaction) => {
       categories: { columns: { categoryId: true } },
       thumbnail: true,
       gallery: { with: { media: true } },
-      optionItems: {
+      variables: {
         with: { optionItem: true },
       },
       metadata: { with: { thumbnail: true } },
@@ -125,7 +125,7 @@ export const findProductByIdForUpdate = async (
       categories: { columns: { categoryId: true } },
 
       gallery: { columns: { mediaId: true } },
-      optionItems: {
+      variables: {
         columns: { optionItemId: true },
       },
       metadata: { columns: { optionItemIds: true } },
@@ -139,7 +139,7 @@ export const findProductByIdForUpdate = async (
   const metadataOptioItemIds = findedProduct.metadata.map(
     ({ optionItemIds }) => optionItemIds,
   );
-  const optionItemIds = findedProduct.optionItems.map(
+  const optionItemIds = findedProduct.variables.map(
     ({ optionItemId }) => optionItemId,
   );
   return {
@@ -186,7 +186,7 @@ export const findProductByIdWithAll = (id: string, tx?: Transaction) =>
       categories: true,
       comments: true,
       gallery: true,
-      optionItems: true,
+      variables: true,
       metadata: true,
       rates: true,
       thumbnail: true,
@@ -411,32 +411,31 @@ export const deleteOptionItemsByIds = (ids: string[], tx?: Transaction) =>
     .delete(productOptionItem)
     .where(inArray(productOptionItem.id, ids));
 
-export const createProductToOptionItem = (
-  data: (typeof productToOptionItem.$inferInsert)[],
+export const createProductVariable = (
+  data: (typeof productVariables.$inferInsert)[],
   tx?: Transaction,
-) =>
-  getDBorTX(tx).insert(productToOptionItem).values(data).onConflictDoNothing();
+) => getDBorTX(tx).insert(productVariables).values(data).onConflictDoNothing();
 
-export const deleteProductToOptionItem = (
-  { optionItemId, productId }: typeof productToOptionItem.$inferInsert,
+export const deleteProductVariable = (
+  { optionItemId, productId }: typeof productVariables.$inferInsert,
   tx?: Transaction,
 ) =>
   getDBorTX(tx)
-    .delete(productToOptionItem)
+    .delete(productVariables)
     .where(
       and(
-        eq(productToOptionItem.productId, productId),
-        eq(productToOptionItem.optionItemId, optionItemId),
+        eq(productVariables.productId, productId),
+        eq(productVariables.optionItemId, optionItemId),
       ),
     );
 
-export const deleteAllProductToOptionItemByProductId = (
+export const deleteAllProductVariablesByProductId = (
   productId: string,
   tx?: Transaction,
 ) =>
   getDBorTX(tx)
-    .delete(productToOptionItem)
-    .where(eq(productToOptionItem.productId, productId));
+    .delete(productVariables)
+    .where(eq(productVariables.productId, productId));
 
 export const deleteProductById = (id: string, tx?: Transaction) =>
   getDBorTX(tx)

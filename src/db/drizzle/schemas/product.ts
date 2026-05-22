@@ -106,8 +106,8 @@ export const productToRate = RelationSchema.table(
   (table) => [primaryKey({ columns: [table.productId, table.rateId] })],
 );
 
-export const productToOptionItem = RelationSchema.table(
-  "product_to_option_item",
+export const productVariables = RelationSchema.table(
+  "product_variables",
   {
     productId: uuid("product_id")
       .references(() => product.id, { onDelete: "cascade" })

@@ -903,7 +903,7 @@ export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
               defaultItems={
                 product
                   ? (Object.groupBy(
-                      product.optionItems,
+                      product.variables,
                       ({ optionId }) => optionId,
                     ) as SelectOptionState)
                   : undefined

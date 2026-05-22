@@ -154,13 +154,13 @@ export const getProduct = async (id: string) => {
     });
   }
 
-  const optionItems = product.optionItems.map(({ optionItem }) => optionItem);
+  const variables = product.variables.map(({ optionItem }) => optionItem);
   return {
     ...product,
     thumbnail,
     gallery,
     metadata: productMetadata,
-    optionItems,
+    variables,
   } as unknown as Product;
 };
 
@@ -214,7 +214,7 @@ export const createProduct = async (productData: CreateProduct) => {
         ),
       );
 
-      await productRepo.createProductToOptionItem(
+      await productRepo.createProductVariable(
         optionIds.map((id) => ({ optionItemId: id, productId: product.id })),
         tx,
       );
@@ -418,28 +418,25 @@ export const updateProduct = async (
 
     // remove option item
     const deleteOptionItemPromises: ReturnType<
-      typeof productRepo.deleteProductToOptionItem
+      typeof productRepo.deleteProductVariable
     >[] = [];
     removeOptionItem.forEach((optionItemId) => {
       deleteOptionItemPromises.push(
-        productRepo.deleteProductToOptionItem({ optionItemId, productId }, tx),
+        productRepo.deleteProductVariable({ optionItemId, productId }, tx),
       );
     });
     await Promise.all(deleteOptionItemPromises);
     // add option item
 
     if (addOptionItem.length > 0) {
-      await productRepo.createProductToOptionItem(
+      await productRepo.createProductVariable(
         addOptionItem.map((optionItemId) => ({ optionItemId, productId })),
         tx,
       );
     }
     if (productData.type === "default") {
       if (product.type === "variable") {
-        await productRepo.deleteAllProductToOptionItemByProductId(
-          productId,
-          tx,
-        );
+        await productRepo.deleteAllProductVariablesByProductId(productId, tx);
         await productRepo.deleteAllProductMetadataByProductId(productId, tx);
       }
 

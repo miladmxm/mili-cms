@@ -81,7 +81,7 @@ interface ProductBase {
     categoryId: string;
   }[];
   gallery: Media[];
-  optionItems: OptionItem[];
+  variables: OptionItem[];
 }
 
 export type Product =
