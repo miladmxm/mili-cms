@@ -23,6 +23,7 @@ export const useCreateProduct = () => {
       type: "default",
       metadata: {},
       categoryIds: [],
+      optionItemIds: [],
     },
   });
   const [isPending, startTransition] = useTransition();

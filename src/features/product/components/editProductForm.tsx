@@ -22,6 +22,7 @@ import {
   ProductGallery,
   ProductMeta,
   ProductName,
+  ProductOptions,
   ProductSlug,
   ProductStatus,
   ProductThumbnail,
@@ -51,6 +52,7 @@ const EditProductForm = ({
                   <ProductSlug />
                   <ProductExcerpt />
                   <ProductCategories categories={categories} />
+                  <ProductOptions options={options} />
                   <ProductThumbnail />
                   <ProductGallery />
                   <div className="flex gap-2 lg:sticky lg:bottom-2 backdrop-blur-xs flex-wrap">

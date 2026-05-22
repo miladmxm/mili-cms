@@ -168,6 +168,43 @@ export const ProductCategories = ({
   );
 };
 
+export const ProductOptions = ({ options }: { options: Promise<Option[]> }) => {
+  const { control, setValue } = useProductFormContext();
+  const optionsData = use(options);
+  console.log(optionsData);
+  return (
+    <Controller
+      name="optionItemIds"
+      control={control}
+      render={({ fieldState, field: { value, name } }) => (
+        <Field aria-invalid={fieldState.invalid}>
+          <FieldLabel htmlFor={name}>انتخاب ویژگی ها</FieldLabel>
+          <Suspense fallback={<SelectMultipleCategoriesSkeleton />}>
+            <SelectMultipleOptionItem
+              selectedItems={value}
+              triggerId={name}
+              onSelect={({ id }) => {
+                if (value.includes(id)) {
+                  setValue(
+                    "optionItemIds",
+                    value.filter((i) => i !== id),
+                    { shouldDirty: true },
+                  );
+                } else {
+                  setValue("optionItemIds", [...value, id], {
+                    shouldDirty: true,
+                  });
+                }
+              }}
+              options={optionsData}
+            />
+          </Suspense>
+        </Field>
+      )}
+    />
+  );
+};
+
 export const ProductGallery = () => {
   const { control, setValue } = useProductFormContext();
   const sheetControllerRef = useRef<SheetController>(null);

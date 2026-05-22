@@ -11,11 +11,11 @@ import { EditProductSchema } from "../validations/product.schema";
 
 export const useEditProduct = () => {
   const { product } = useEditProductContextRequire();
-  console.log("product:", product);
   const form = useForm({
     resolver: valibotResolver(EditProductSchema),
     defaultValues: {
       ...product,
+      optionItemIds: product.optionItems.map(({ id }) => id),
       metadata:
         product.type === "variable"
           ? product.metadata.reduce(
@@ -29,9 +29,6 @@ export const useEditProduct = () => {
     },
   });
   const [isPending, startTransition] = useTransition();
-
-  console.log("error:", form.formState.errors);
-  console.log("default values:", form.formState.defaultValues);
 
   const onSubmit = (data: UpdateProductOutput) => {
     startTransition(async () => {

@@ -30,17 +30,21 @@ export const findProductById = async (id: string, tx?: Transaction) => {
       variables: {
         with: { optionItem: true },
       },
+      optionItems: { with: { optionItem: true } },
       metadata: { with: { thumbnail: true } },
     },
   });
   if (!findedProduct) return findedProduct;
-
+  const optionItems = findedProduct.optionItems.map(
+    ({ optionItem }) => optionItem,
+  );
   const categoryIds = findedProduct.categories.map(
     ({ categoryId }) => categoryId,
   );
   return {
     ...findedProduct,
     categoryIds,
+    optionItems,
   };
 };
 

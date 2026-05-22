@@ -49,6 +49,7 @@ export const CreateProductBaseSchema = v.object({
   status: StatusSchema,
   thumbnail: ThumbnailSchema,
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),
+  optionItemIds: v.array(v.pipe(v.string(), v.nonEmpty())),
   gallery: v.pipe(v.optional(v.array(ThumbnailNotNullSchema), [])),
 });
 

@@ -81,6 +81,7 @@ interface ProductBase {
   categories: {
     categoryId: string;
   }[];
+  optionItems: OptionItem[];
   gallery: Media[];
   variables: OptionItem[];
 }
