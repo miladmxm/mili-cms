@@ -31,6 +31,7 @@ interface CreateProductBaseData {
   categoryIds: string[];
   gallery?: string[];
   type: ProductType;
+  optionItemIds: string[];
 }
 
 export type CreateProduct =

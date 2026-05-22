@@ -43,109 +43,6 @@ const verifyGalleryIds = async (galleryIds: CreateProduct["gallery"]) => {
   return await filterMediaIdsByTypes(galleryIds || [], ["image"]);
 };
 
-const addProductCategories = async ({
-  categoryIds,
-  productId,
-  tx,
-}: {
-  categoryIds: CreateProduct["categoryIds"];
-  tx: Transaction;
-  productId: string;
-}) => {
-  const categories = await productRepo.findCategoriesByIds(categoryIds, tx);
-  if (categories.length)
-    await productRepo.addProductToCategories(
-      categories.map(({ id }) => ({ categoryId: id, productId })),
-      tx,
-    );
-};
-
-const createProductAndReturnId = async ({
-  productData,
-  tx,
-}: {
-  productData: CreateProduct;
-  tx: Transaction;
-}) => {
-  const slug = await fixSlugConflict(productData.slug);
-  const product = (
-    await productRepo.createProduct({ ...productData, slug }, tx)
-  )[0];
-  if (!product)
-    throw new ThrowableDalError({
-      type: "unknown-error",
-      error: { message: "DB error to create product" },
-    });
-  return product.id;
-};
-
-const createProductVariables = async ({
-  productData,
-  productId,
-  tx,
-}: {
-  productData: CreateProduct;
-  tx: Transaction;
-  productId: string;
-}) => {
-  if (productData.type === "variable") {
-    const optionIds = Array.from(
-      new Set(
-        productData.metadata
-          .map(({ optionItemIds }) =>
-            optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR),
-          )
-          .flat(),
-      ),
-    );
-
-    await productRepo.createProductVariable(
-      optionIds.map((id) => ({ optionItemId: id, productId })),
-      tx,
-    );
-  }
-};
-
-const createProductMetadata = async ({
-  metadata,
-  productId,
-  tx,
-}: {
-  tx: Transaction;
-  productId: string;
-  metadata: CreateProduct["metadata"];
-}) => {
-  await productRepo.createProductMetadata(
-    metadata.map((metadataItem) => ({
-      ...metadataItem,
-      productId,
-    })),
-    tx,
-  );
-};
-
-const createProductGallery = async ({
-  galleryIds,
-  productId,
-  tx,
-}: {
-  galleryIds: CreateProduct["gallery"];
-  productId: string;
-  tx: Transaction;
-}) => {
-  const filteredGalleryByAcceptionType = await verifyGalleryIds(galleryIds);
-
-  if (filteredGalleryByAcceptionType.length > 0) {
-    await productRepo.addMediaToProductGallery(
-      filteredGalleryByAcceptionType.map((mediaId) => ({
-        mediaId,
-        productId,
-      })),
-      tx,
-    );
-  }
-};
-
 // * READ
 export const getPaginationProduct = async (limitAndOffset?: LimitAndOffset) => {
   "use cache";
@@ -299,6 +196,126 @@ export const getProduct = async (id: string) => {
 
 // * CREATE
 
+const addProductCategories = async ({
+  categoryIds,
+  productId,
+  tx,
+}: {
+  categoryIds: CreateProduct["categoryIds"];
+  tx: Transaction;
+  productId: string;
+}) => {
+  const categories = await productRepo.findCategoriesByIds(categoryIds, tx);
+  if (categories.length)
+    await productRepo.addProductToCategories(
+      categories.map(({ id }) => ({ categoryId: id, productId })),
+      tx,
+    );
+};
+
+const createProductAndReturnId = async ({
+  productData,
+  tx,
+}: {
+  productData: CreateProduct;
+  tx: Transaction;
+}) => {
+  const slug = await fixSlugConflict(productData.slug);
+  const product = (
+    await productRepo.createProduct({ ...productData, slug }, tx)
+  )[0];
+  if (!product)
+    throw new ThrowableDalError({
+      type: "unknown-error",
+      error: { message: "DB error to create product" },
+    });
+  return product.id;
+};
+
+const createProductVariables = async ({
+  productData,
+  productId,
+  tx,
+}: {
+  productData: CreateProduct;
+  tx: Transaction;
+  productId: string;
+}) => {
+  if (productData.type === "variable") {
+    const optionIds = Array.from(
+      new Set(
+        productData.metadata
+          .map(({ optionItemIds }) =>
+            optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR),
+          )
+          .flat(),
+      ),
+    );
+
+    await productRepo.createProductVariable(
+      optionIds.map((id) => ({ optionItemId: id, productId })),
+      tx,
+    );
+  }
+};
+
+const createProductMetadata = async ({
+  metadata,
+  productId,
+  tx,
+}: {
+  tx: Transaction;
+  productId: string;
+  metadata: CreateProduct["metadata"];
+}) => {
+  await productRepo.createProductMetadata(
+    metadata.map((metadataItem) => ({
+      ...metadataItem,
+      productId,
+    })),
+    tx,
+  );
+};
+
+const createProductGallery = async ({
+  galleryIds,
+  productId,
+  tx,
+}: {
+  galleryIds: CreateProduct["gallery"];
+  productId: string;
+  tx: Transaction;
+}) => {
+  const filteredGalleryByAcceptionType = await verifyGalleryIds(galleryIds);
+
+  if (filteredGalleryByAcceptionType.length > 0) {
+    await productRepo.addMediaToProductGallery(
+      filteredGalleryByAcceptionType.map((mediaId) => ({
+        mediaId,
+        productId,
+      })),
+      tx,
+    );
+  }
+};
+
+const createProductOptionItems = async ({
+  optionItemIds,
+  productId,
+  tx,
+}: {
+  productId: string;
+  tx: Transaction;
+  optionItemIds: CreateProduct["optionItemIds"];
+}) => {
+  if (optionItemIds.length > 0) {
+    await productRepo.addProductToProductOptionItem(
+      optionItemIds.map((optionItemId) => ({ optionItemId, productId })),
+      tx,
+    );
+  }
+};
+
 export const createProduct = async (productData: CreateProduct) => {
   await checkProductImage(productData.thumbnailId);
 
@@ -324,7 +341,11 @@ export const createProduct = async (productData: CreateProduct) => {
       productId,
       tx,
     });
-
+    await createProductOptionItems({
+      optionItemIds: productData.optionItemIds,
+      productId,
+      tx,
+    });
     return productId;
   });
   return resultId;
@@ -378,6 +399,59 @@ const updateProductCategory = async ({
   });
 
   await addProductCategories({ categoryIds: addCategoryIds, productId, tx });
+};
+
+const deleteProductOptionItem = async ({
+  optionItemIds,
+  productId,
+  tx,
+}: {
+  optionItemIds: string[];
+  productId: string;
+  tx: Transaction;
+}) => {
+  const deletOptionItemPromises: ReturnType<
+    (typeof productRepo)["deleteProductToOptionItem"]
+  >[] = [];
+  optionItemIds.forEach((optionItemId) => {
+    deletOptionItemPromises.push(
+      productRepo.deleteProductToOptionItem({ productId, optionItemId }, tx),
+    );
+  });
+  await Promise.all(deletOptionItemPromises);
+};
+
+const updateProductOptionIte = async ({
+  newOptionItemIds,
+  oldOptionItemIds,
+  productId,
+  tx,
+}: {
+  newOptionItemIds: string[];
+  oldOptionItemIds: string[];
+  productId: string;
+  tx: Transaction;
+}) => {
+  const prevOptionItemIdsSet = new Set(oldOptionItemIds);
+  const newOptionItemIdsSet = new Set(newOptionItemIds);
+  const addOptionItemIds = newOptionItemIds.filter(
+    (id) => !prevOptionItemIdsSet.has(id),
+  );
+  const removeOptionItemIds = oldOptionItemIds.filter(
+    (id) => !newOptionItemIdsSet.has(id),
+  );
+
+  await deleteProductOptionItem({
+    optionItemIds: removeOptionItemIds,
+    productId,
+    tx,
+  });
+
+  await createProductOptionItems({
+    optionItemIds: addOptionItemIds,
+    productId,
+    tx,
+  });
 };
 
 const removeProductGallery = async ({
@@ -685,7 +759,6 @@ const updateProductVariables = async ({
     );
   });
   await Promise.all(deleteOptionItemPromises);
-  // add option item
 
   if (addOptionItem.length > 0) {
     await productRepo.createProductVariable(
@@ -752,7 +825,12 @@ export const updateProduct = async (
       productId,
       tx,
     });
-
+    await updateProductOptionIte({
+      newOptionItemIds: productData.optionItemIds,
+      oldOptionItemIds: product.optionItemIds,
+      productId,
+      tx,
+    });
     await cleanupMetadata({
       oldType: product.type,
       newType: productData.type,
@@ -768,7 +846,7 @@ export const updateProduct = async (
 
     await updateProductVariables({
       metadataOptionItemIds: currentOptionItemIds,
-      oldOptionItemIds: product.optionItemIds,
+      oldOptionItemIds: product.variableOptionItemIds,
       productId,
       tx,
     });

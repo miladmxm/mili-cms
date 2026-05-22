@@ -8,6 +8,7 @@ import {
   productGallery,
   productMeta,
   productToCategory,
+  productToOptionItem,
   productVariables,
 } from "@/db/drizzle/schemas";
 import {
@@ -123,7 +124,7 @@ export const findProductByIdForUpdate = async (
     where: eq(product.id, id),
     with: {
       categories: { columns: { categoryId: true } },
-
+      optionItems: { columns: { optionItemId: true } },
       gallery: { columns: { mediaId: true } },
       variables: {
         columns: { optionItemId: true },
@@ -135,18 +136,22 @@ export const findProductByIdForUpdate = async (
   const categoryIds = findedProduct.categories.map(
     ({ categoryId }) => categoryId,
   );
+  const optionItemIds = findedProduct.optionItems.map(
+    ({ optionItemId }) => optionItemId,
+  );
   const galleryIds = findedProduct.gallery.map(({ mediaId }) => mediaId);
   const metadataOptioItemIds = findedProduct.metadata.map(
-    ({ optionItemIds }) => optionItemIds,
+    ({ optionItemIds: variableOptionItemIds }) => variableOptionItemIds,
   );
-  const optionItemIds = findedProduct.variables.map(
-    ({ optionItemId }) => optionItemId,
+  const variableOptionItemIds = findedProduct.variables.map(
+    ({ optionItemId: variableOptionItemId }) => variableOptionItemId,
   );
   return {
     ...findedProduct,
     galleryIds,
     categoryIds,
     metadataOptioItemIds,
+    variableOptionItemIds,
     optionItemIds,
   };
 };
@@ -259,6 +264,18 @@ export const deleteProductToCategories = (
         eq(productToCategory.productId, productId),
       ),
     );
+export const deleteProductToOptionItem = (
+  { optionItemId, productId }: typeof productToOptionItem.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .delete(productToOptionItem)
+    .where(
+      and(
+        eq(productToOptionItem.optionItemId, optionItemId),
+        eq(productToOptionItem.productId, productId),
+      ),
+    );
 
 export const createProductMetadata = (
   metadata: (typeof productMeta.$inferInsert)[],
@@ -303,6 +320,11 @@ export const addMediaToProductGallery = (
   data: (typeof productGallery.$inferInsert)[],
   tx?: Transaction,
 ) => getDBorTX(tx).insert(productGallery).values(data);
+
+export const addProductToProductOptionItem = (
+  data: (typeof productToOptionItem.$inferInsert)[],
+  tx?: Transaction,
+) => getDBorTX(tx).insert(productToOptionItem).values(data);
 
 export const deleteMediaToProductGallery = (
   { mediaId, productId }: typeof productGallery.$inferInsert,

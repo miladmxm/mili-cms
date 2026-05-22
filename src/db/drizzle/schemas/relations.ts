@@ -17,6 +17,7 @@ import {
   productMeta,
   productToCategory,
   productToComments,
+  productToOptionItem,
   productToRate,
   productVariables,
 } from "./product";
@@ -127,6 +128,7 @@ export const productRelations = relations(product, ({ many, one }) => ({
   }),
   comments: many(productToComments),
   categories: many(productToCategory),
+  optionItems: many(productToOptionItem),
   rates: many(productToRate),
   gallery: many(productGallery),
   variables: many(productVariables),
@@ -235,6 +237,20 @@ export const productVariablesRelation = relations(
     }),
     product: one(product, {
       fields: [productVariables.productId],
+      references: [product.id],
+    }),
+  }),
+);
+
+export const productToOptionItemRelation = relations(
+  productToOptionItem,
+  ({ one }) => ({
+    optionItem: one(productOptionItem, {
+      fields: [productToOptionItem.optionItemId],
+      references: [productOptionItem.id],
+    }),
+    product: one(product, {
+      fields: [productToOptionItem.productId],
       references: [product.id],
     }),
   }),
