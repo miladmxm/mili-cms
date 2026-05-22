@@ -419,6 +419,70 @@ const updateProductGallery = async ({
   await createProductGallery({ galleryIds: addGalleryIds, productId, tx });
 };
 
+const cleanupMetadata = async ({
+  productId,
+  tx,
+  oldType,
+  newType,
+}: {
+  tx: Transaction;
+  productId: string;
+  oldType: Product["type"];
+  newType: CreateProduct["type"];
+}) => {
+  if (oldType !== newType) {
+    await productRepo.deleteAllProductMetadataByProductId(productId, tx);
+    await productRepo.deleteAllProductVariablesByProductId(productId, tx);
+  }
+};
+
+const updateMetadata = ({
+  productData,
+  metadataOptioItemIds,
+  productId,
+  tx,
+}: {
+  productData: CreateProduct;
+  metadataOptioItemIds: string[];
+  tx: Transaction;
+  productId: string;
+}) => {
+  let updateMetadataIds: string[] = [];
+  let addMetadataIds: string[] = [];
+  let removeMetadataIds: string[] = [];
+  const metadataByOptionItemIds = new Map<
+    string,
+    (typeof productData)["metadata"][number]
+  >();
+
+  if (productData.type === "variable") {
+    const newMetadataOptionItemIds = productData.metadata.map(
+      ({ optionItemIds }) => optionItemIds,
+    );
+    const oldMetadataOptionItemIds = metadataOptioItemIds.filter(
+      (id) => id !== null,
+    );
+    const prevMetadataIdsSet = new Set(oldMetadataOptionItemIds);
+    const newMetadataIdsSet = new Set(newMetadataOptionItemIds);
+
+    updateMetadataIds = oldMetadataOptionItemIds.filter((id) =>
+      newMetadataIdsSet.has(id),
+    );
+
+    addMetadataIds = newMetadataOptionItemIds.filter(
+      (id) => !prevMetadataIdsSet.has(id),
+    );
+
+    removeMetadataIds = oldMetadataOptionItemIds.filter(
+      (id) => !newMetadataIdsSet.has(id),
+    );
+
+    for (const metadata of productData.metadata) {
+      metadataByOptionItemIds.set(metadata.optionItemIds, metadata);
+    }
+  }
+};
+
 // eslint-disable-next-line max-lines-per-function
 export const updateProduct = async (
   productId: string,
@@ -498,11 +562,12 @@ export const updateProduct = async (
     });
 
     // remove metadata
-    if (productData.type === "variable") {
-      if (product.type === "default") {
-        await productRepo.deleteAllProductMetadataByProductId(productId, tx);
-      }
-    }
+    await cleanupMetadata({
+      oldType: product.type,
+      newType: productData.type,
+      tx,
+      productId,
+    });
 
     const deletMetadataPromises: ReturnType<
       typeof productRepo.deleteProductMetadataByOptionItemIds
@@ -574,11 +639,6 @@ export const updateProduct = async (
     }
 
     if (productData.type === "default") {
-      if (product.type === "variable") {
-        await productRepo.deleteAllProductVariablesByProductId(productId, tx);
-        await productRepo.deleteAllProductMetadataByProductId(productId, tx);
-      }
-
       const prevMetadata = await productRepo.findFirstProductMeta(
         productId,
         tx,
