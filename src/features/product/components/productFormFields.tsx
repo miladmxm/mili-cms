@@ -49,7 +49,7 @@ import {
 import { Textarea } from "@/components/dashboard/ui/textarea";
 import { CURRENCY } from "@/constant/appData";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
-import { convertToSlug } from "@/lib/slug";
+import { convertCorrectToSlug } from "@/lib/slug";
 import { cn } from "@/lib/utils";
 import { StatusDictionary } from "@/services/product/type";
 
@@ -98,7 +98,7 @@ export const ProductSlug = () => {
             {...field}
             onFocus={(e) => {
               if (!e.target.value) {
-                setValue("slug", convertToSlug(getValues("name")), {
+                setValue("slug", convertCorrectToSlug(getValues("name")), {
                   shouldDirty: true,
                   shouldValidate: true,
                 });

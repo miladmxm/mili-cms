@@ -16,7 +16,7 @@ import { Field, FieldError, FieldLabel } from "@/components/dashboard/ui/field";
 import { Input } from "@/components/dashboard/ui/input";
 import { Textarea } from "@/components/dashboard/ui/textarea";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
-import { convertToSlug } from "@/lib/slug";
+import { convertCorrectToSlug } from "@/lib/slug";
 import { StatusDictionary } from "@/services/article/types";
 
 import type { CreateArticleInput } from "../validations/article.schema";
@@ -61,7 +61,7 @@ export const ArticleSlug = () => {
             {...field}
             onFocus={(e) => {
               if (!e.target.value) {
-                setValue("slug", convertToSlug(getValues("title")), {
+                setValue("slug", convertCorrectToSlug(getValues("title")), {
                   shouldDirty: true,
                 });
               }

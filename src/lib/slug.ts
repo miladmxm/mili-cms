@@ -2,7 +2,7 @@ import transliterate from "@sindresorhus/transliterate";
 
 export const slugRegex = /^[-0-9a-z]+$/g;
 
-export const convertToSlug = (text: string): string => {
+export const convertCorrectToSlug = (text: string): string => {
   return transliterate(text.toLowerCase().trim()).replace(/[^-0-9a-z]/g, "-");
 };
 

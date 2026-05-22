@@ -5,7 +5,7 @@ import type { Transaction } from "@/repositories";
 import { CacheKeys } from "@/constant/cacheKeys";
 import { ThrowableDalError } from "@/dal/types";
 import { OPTION_ITEM_IDS_SEPARATOR } from "@/features/product/constant";
-import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
+import { convertCorrectToSlug, generateUniqueSlug } from "@/lib/slug";
 import { withTransaction } from "@/repositories";
 import * as productRepo from "@/repositories/product.repo";
 
@@ -23,12 +23,18 @@ const checkProductImage = async (thumbnailId: CreateProduct["thumbnailId"]) => {
 };
 
 const fixSlugConflict = async (productSlug: string) => {
-  let slug: string = convertToSlug(productSlug);
-  const existingArticleBySlug =
+  let slug: string = convertCorrectToSlug(productSlug);
+  const isHaveThisSlug = await productRepo.findProductIdBySlug(slug);
+
+  if (!isHaveThisSlug || !isHaveThisSlug.id) {
+    return slug;
+  }
+
+  const existingProductBySlug =
     await productRepo.findProductByStartedSlugWith(slug);
   slug = generateUniqueSlug(
     slug,
-    existingArticleBySlug.map((a) => a.slug),
+    existingProductBySlug.map((a) => a.slug),
   );
   return slug;
 };
@@ -436,63 +442,72 @@ const cleanupMetadata = async ({
   }
 };
 
-const updateMetadata = async ({
-  productData,
-  oldMetadataOptioItemIds,
+const updateDefaultTypeMetadata = async ({
+  metadata,
+  tx,
+  productId,
+}: {
+  metadata: CreateProduct["metadata"];
+  productId: string;
+  tx: Transaction;
+}) => {
+  const prevMetadata = await productRepo.findFirstProductMeta(productId, tx);
+  const newMetadata = { ...metadata[0], productId };
+
+  if (prevMetadata) {
+    await productRepo.updateProductMetadatById(
+      { id: prevMetadata.id, metadata: newMetadata },
+      tx,
+    );
+  } else {
+    await productRepo.createProductMetadata([newMetadata], tx);
+  }
+};
+
+type MetadataMapByOptionItemIds = Map<
+  string,
+  CreateProduct["metadata"][number]
+>;
+
+const createMetadataInUpdateProduct = async ({
+  addMetadataIds,
+  metadataByOptionItemIds,
   productId,
   tx,
 }: {
-  productData: CreateProduct;
-  oldMetadataOptioItemIds: (string | null)[];
-  tx: Transaction;
+  addMetadataIds: string[];
+  metadataByOptionItemIds: MetadataMapByOptionItemIds;
   productId: string;
+  tx: Transaction;
 }) => {
-  let updateMetadataIds: string[] = [];
-  let addMetadataIds: string[] = [];
-  let removeMetadataIds: string[] = [];
-  const metadataByOptionItemIds = new Map<
-    string,
-    (typeof productData)["metadata"][number]
-  >();
+  const addMetadata: Parameters<
+    (typeof productRepo)["createProductMetadata"]
+  >[0] = [];
 
-  if (productData.type === "variable") {
-    const newMetadataOptionItemIds = productData.metadata.map(
-      ({ optionItemIds }) => optionItemIds,
-    );
-    const oldMetadataOptionItemIds = oldMetadataOptioItemIds.filter(
-      (id) => id !== null,
-    );
-    const prevMetadataIdsSet = new Set(oldMetadataOptionItemIds);
-    const newMetadataIdsSet = new Set(newMetadataOptionItemIds);
+  for (const id of addMetadataIds) {
+    const metadata = metadataByOptionItemIds.get(id);
 
-    updateMetadataIds = oldMetadataOptionItemIds.filter((id) =>
-      newMetadataIdsSet.has(id),
-    );
-
-    addMetadataIds = newMetadataOptionItemIds.filter(
-      (id) => !prevMetadataIdsSet.has(id),
-    );
-
-    removeMetadataIds = oldMetadataOptionItemIds.filter(
-      (id) => !newMetadataIdsSet.has(id),
-    );
-
-    for (const metadata of productData.metadata) {
-      metadataByOptionItemIds.set(metadata.optionItemIds, metadata);
+    if (metadata) {
+      addMetadata.push({ ...metadata, productId });
     }
   }
 
-  const deletMetadataPromises: ReturnType<
-    typeof productRepo.deleteProductMetadataByOptionItemIds
-  >[] = [];
-  removeMetadataIds.forEach((id) => {
-    deletMetadataPromises.push(
-      productRepo.deleteProductMetadataByOptionItemIds(id, tx),
-    );
-  });
-  await Promise.all(deletMetadataPromises);
+  if (addMetadata.length > 0) {
+    await productRepo.createProductMetadata(addMetadata, tx);
+  }
+};
 
-  //update metadata
+const updateMetadataToNewData = async ({
+  updateMetadataIds,
+  metadataByOptionItemIds,
+  productId,
+  tx,
+}: {
+  updateMetadataIds: string[];
+  metadataByOptionItemIds: MetadataMapByOptionItemIds;
+  productId: string;
+  tx: Transaction;
+}) => {
   const updateMetadataPromises: ReturnType<
     typeof productRepo.updateProductMetadataByOptionItemIds
   >[] = [];
@@ -514,36 +529,121 @@ const updateMetadata = async ({
   }
 
   await Promise.all(updateMetadataPromises);
+};
 
-  //add new metadata
-  const addMetadata: Parameters<
-    (typeof productRepo)["createProductMetadata"]
-  >[0] = [];
+const deleteMetadata = async ({
+  removeMetadataIds,
+  tx,
+}: {
+  removeMetadataIds: string[];
+  tx: Transaction;
+}) => {
+  const deletMetadataPromises: ReturnType<
+    typeof productRepo.deleteProductMetadataByOptionItemIds
+  >[] = [];
+  removeMetadataIds.forEach((id) => {
+    deletMetadataPromises.push(
+      productRepo.deleteProductMetadataByOptionItemIds(id, tx),
+    );
+  });
+  await Promise.all(deletMetadataPromises);
+};
 
-  for (const id of addMetadataIds) {
-    const metadata = metadataByOptionItemIds.get(id);
+const getDifferenceBetweenOldAndNewMetadata = ({
+  productData,
+  oldMetadataOptioItemIds,
+}: {
+  productData: CreateProduct;
+  oldMetadataOptioItemIds: (string | null)[];
+}) => {
+  let updateMetadataIds: string[] = [];
+  let addMetadataIds: string[] = [];
+  let removeMetadataIds: string[] = [];
+  const metadataByOptionItemIds: MetadataMapByOptionItemIds = new Map();
+  if (productData.type === "default")
+    return {
+      removeMetadataIds,
+      addMetadataIds,
+      updateMetadataIds,
+      metadataByOptionItemIds: new Map(),
+    };
 
-    if (metadata) {
-      addMetadata.push({ ...metadata, productId });
-    }
+  const newMetadataOptionItemIds = productData.metadata.map(
+    ({ optionItemIds }) => optionItemIds,
+  );
+  const oldMetadataOptionItemIds = oldMetadataOptioItemIds.filter(
+    (id) => id !== null,
+  );
+  const prevMetadataIdsSet = new Set(oldMetadataOptionItemIds);
+  const newMetadataIdsSet = new Set(newMetadataOptionItemIds);
+
+  updateMetadataIds = oldMetadataOptionItemIds.filter((id) =>
+    newMetadataIdsSet.has(id),
+  );
+
+  addMetadataIds = newMetadataOptionItemIds.filter(
+    (id) => !prevMetadataIdsSet.has(id),
+  );
+
+  removeMetadataIds = oldMetadataOptionItemIds.filter(
+    (id) => !newMetadataIdsSet.has(id),
+  );
+
+  for (const metadata of productData.metadata) {
+    metadataByOptionItemIds.set(metadata.optionItemIds, metadata);
   }
 
-  if (addMetadata.length > 0) {
-    await productRepo.createProductMetadata(addMetadata, tx);
-  }
+  return {
+    removeMetadataIds,
+    addMetadataIds,
+    updateMetadataIds,
+    metadataByOptionItemIds,
+  };
+};
+
+const updateMetadata = async ({
+  productData,
+  oldMetadataOptioItemIds,
+  productId,
+  tx,
+}: {
+  productData: CreateProduct;
+  oldMetadataOptioItemIds: (string | null)[];
+  tx: Transaction;
+  productId: string;
+}) => {
+  const {
+    addMetadataIds,
+    metadataByOptionItemIds,
+    removeMetadataIds,
+    updateMetadataIds,
+  } = getDifferenceBetweenOldAndNewMetadata({
+    oldMetadataOptioItemIds,
+    productData,
+  });
+
+  await deleteMetadata({ removeMetadataIds, tx });
+
+  await updateMetadataToNewData({
+    metadataByOptionItemIds,
+    productId,
+    tx,
+    updateMetadataIds,
+  });
+
+  await createMetadataInUpdateProduct({
+    addMetadataIds,
+    metadataByOptionItemIds,
+    productId,
+    tx,
+  });
 
   if (productData.type === "default") {
-    const prevMetadata = await productRepo.findFirstProductMeta(productId, tx);
-    const metadata = { ...productData.metadata[0], productId };
-
-    if (prevMetadata) {
-      await productRepo.updateProductMetadatById(
-        { id: prevMetadata.id, metadata },
-        tx,
-      );
-    } else {
-      await productRepo.createProductMetadata([metadata], tx);
-    }
+    await updateDefaultTypeMetadata({
+      metadata: productData.metadata,
+      productId,
+      tx,
+    });
   }
 
   const metadataOptionItemIds = addMetadataIds.concat(updateMetadataIds);
@@ -608,7 +708,7 @@ const updateProductAndReturnId = async ({
 }) => {
   let { slug } = productData;
 
-  if (oldSlug === slug) {
+  if (oldSlug !== slug) {
     slug = await fixSlugConflict(productData.slug);
   }
 

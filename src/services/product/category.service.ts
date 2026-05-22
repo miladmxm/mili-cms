@@ -1,7 +1,7 @@
 import { cacheTag } from "next/cache";
 
 import { CacheKeys } from "@/constant/cacheKeys";
-import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
+import { convertCorrectToSlug, generateUniqueSlug } from "@/lib/slug";
 import * as productRepo from "@/repositories/product.repo";
 
 import type { Category, CreateCategory } from "./type";
@@ -52,7 +52,7 @@ export const createCategory = async (data: CreateCategory) => {
     await checkMediaType(data.vectorId, "image");
   }
 
-  let slug: string = convertToSlug(data.slug);
+  let slug: string = convertCorrectToSlug(data.slug);
   const existingArticleBySlug =
     await productRepo.findCategoryByStartedSlugWith(slug);
   slug = generateUniqueSlug(
@@ -77,7 +77,7 @@ export const updateCategory = async (
     await checkMediaType(data.vectorId, "image");
   }
   if (data.slug) {
-    data.slug = convertToSlug(data.slug);
+    data.slug = convertCorrectToSlug(data.slug);
     const existingArticleBySlug =
       await productRepo.findCategoryByStartedSlugWith(data.slug);
     data.slug = generateUniqueSlug(

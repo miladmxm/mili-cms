@@ -9,7 +9,7 @@ import type {
 } from "@/services/article/types";
 
 import { CacheKeys } from "@/constant/cacheKeys";
-import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
+import { convertCorrectToSlug, generateUniqueSlug } from "@/lib/slug";
 import { withTransaction } from "@/repositories";
 import * as articleRepo from "@/repositories/article.repo";
 
@@ -136,7 +136,7 @@ export const createArticle = async (data: CreateArticle) => {
   }
 
   const categories = await articleRepo.findCategoriesByIds(data.categoryIds);
-  let slug: string = convertToSlug(data.slug);
+  let slug: string = convertCorrectToSlug(data.slug);
   const existingArticleBySlug =
     await articleRepo.findArticleByStartedSlugWith(slug);
   slug = generateUniqueSlug(
@@ -161,7 +161,7 @@ export const createCategory = async (data: CreateCategory) => {
     await checkMediaType(data.thumbnail, "image");
   }
 
-  let slug: string = convertToSlug(data.slug);
+  let slug: string = convertCorrectToSlug(data.slug);
   const existingArticleBySlug =
     await articleRepo.findCategoryByStartedSlugWith(slug);
   slug = generateUniqueSlug(
@@ -211,7 +211,7 @@ export const updateArticle = async (
     );
   }
   if (data.slug) {
-    data.slug = convertToSlug(data.slug);
+    data.slug = convertCorrectToSlug(data.slug);
     const existingArticleBySlug =
       await articleRepo.findArticleByStartedSlugWith(data.slug);
     data.slug = generateUniqueSlug(
@@ -263,7 +263,7 @@ export const updateCategory = async (
   const data = input;
 
   if (data.slug) {
-    data.slug = convertToSlug(data.slug);
+    data.slug = convertCorrectToSlug(data.slug);
     const existingArticleBySlug =
       await articleRepo.findCategoryByStartedSlugWith(data.slug);
     data.slug = generateUniqueSlug(

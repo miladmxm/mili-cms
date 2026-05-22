@@ -11,7 +11,7 @@ import { Field, FieldError, FieldLabel } from "@/components/dashboard/ui/field";
 import { Input } from "@/components/dashboard/ui/input";
 import { Textarea } from "@/components/dashboard/ui/textarea";
 import MediaPickerSheet from "@/features/media/components/mediaPickerSheet";
-import { convertToSlug } from "@/lib/slug";
+import { convertCorrectToSlug } from "@/lib/slug";
 
 import type { CreateCategoryInput } from "../../validations/category.schema";
 
@@ -50,7 +50,7 @@ export const CategorySlugField = () => {
             id="slug"
             onFocus={(e) => {
               if (!e.target.value) {
-                setValue("slug", convertToSlug(getValues("name")));
+                setValue("slug", convertCorrectToSlug(getValues("name")));
               }
             }}
             placeholder="learn"

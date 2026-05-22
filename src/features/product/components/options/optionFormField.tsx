@@ -7,7 +7,7 @@ import { Button } from "@/components/dashboard/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/dashboard/ui/field";
 import { Input } from "@/components/dashboard/ui/input";
 import { Textarea } from "@/components/dashboard/ui/textarea";
-import { convertToSlug } from "@/lib/slug";
+import { convertCorrectToSlug } from "@/lib/slug";
 
 import type { CreateOptionInput } from "../../validations/option.schema";
 
@@ -46,7 +46,7 @@ export const OptionSlug = () => {
             {...field}
             onFocus={(e) => {
               if (!e.target.value) {
-                setValue("slug", convertToSlug(getValues("name")), {
+                setValue("slug", convertCorrectToSlug(getValues("name")), {
                   shouldDirty: true,
                 });
               }

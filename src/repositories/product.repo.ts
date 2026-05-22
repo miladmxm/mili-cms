@@ -193,6 +193,12 @@ export const findProductByIdWithAll = (id: string, tx?: Transaction) =>
     },
   });
 
+export const findProductIdBySlug = async (slug: string, tx?: Transaction) =>
+  getDBorTX(tx).query.product.findFirst({
+    where: eq(product.slug, slug),
+    columns: { id: true },
+  });
+
 export const findProductByStartedSlugWith = async (
   slug: string,
   tx?: Transaction,

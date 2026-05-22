@@ -1,7 +1,7 @@
 import { cacheTag } from "next/cache";
 
 import { CacheKeys } from "@/constant/cacheKeys";
-import { convertToSlug, generateUniqueSlug } from "@/lib/slug";
+import { convertCorrectToSlug, generateUniqueSlug } from "@/lib/slug";
 import { withTransaction } from "@/repositories";
 import * as productRepo from "@/repositories/product.repo";
 
@@ -34,7 +34,7 @@ export const createOption = async (optionData: CreateOption) => {
   const { items, name, description } = optionData;
 
   const result = await withTransaction(async (tx) => {
-    let slug: string = convertToSlug(optionData.slug);
+    let slug: string = convertCorrectToSlug(optionData.slug);
     const existingArticleBySlug = await productRepo.findOptionByStartedSlugWith(
       slug,
       tx,
@@ -86,7 +86,7 @@ export const updateOption = async (id: string, input: UpdateOption) => {
   const data = input;
 
   if (data.slug) {
-    data.slug = convertToSlug(data.slug);
+    data.slug = convertCorrectToSlug(data.slug);
     const existingArticleBySlug = await productRepo.findOptionByStartedSlugWith(
       data.slug,
     );
