@@ -1,5 +1,7 @@
 import { cacheTag } from "next/cache";
 
+import type { Transaction } from "@/repositories";
+
 import { CacheKeys } from "@/constant/cacheKeys";
 import { ThrowableDalError } from "@/dal/types";
 import { OPTION_ITEM_IDS_SEPARATOR } from "@/features/product/constant";
@@ -12,6 +14,76 @@ import type { CreateProduct, Product, ProductStatus } from "./type";
 
 import { checkMediaType, filterMediaIdsByTypes } from "../media";
 import { DTOconvertMediaPathToRealUrl } from "../media/dto";
+
+// * UTILS
+const checkProductImage = async (thumbnailId: CreateProduct["thumbnailId"]) => {
+  if (thumbnailId) {
+    await checkMediaType(thumbnailId, "image");
+  }
+};
+
+const fixSlugConflict = async (productSlug: string) => {
+  let slug: string = convertToSlug(productSlug);
+  const existingArticleBySlug =
+    await productRepo.findProductByStartedSlugWith(slug);
+  slug = generateUniqueSlug(
+    slug,
+    existingArticleBySlug.map((a) => a.slug),
+  );
+  return slug;
+};
+
+const verifyGalleryIds = async (galleryIds: CreateProduct["gallery"]) => {
+  return await filterMediaIdsByTypes(galleryIds || [], ["image"]);
+};
+
+const addProductCategories = async ({
+  categoryIds,
+  productId,
+  tx,
+}: {
+  categoryIds: CreateProduct["categoryIds"];
+  tx: Transaction;
+  productId: string;
+}) => {
+  const categories = await productRepo.findCategoriesByIds(categoryIds, tx);
+  if (categories.length)
+    await productRepo.addProductToCategories(
+      categories.map(({ id }) => ({ categoryId: id, productId })),
+      tx,
+    );
+};
+
+const createProductAndReturnId = async (
+  productData: CreateProduct,
+  tx: Transaction,
+) => {
+  const product = (await productRepo.createProduct({ ...productData }, tx))[0];
+  if (!product)
+    throw new ThrowableDalError({
+      type: "unknown-error",
+      error: { message: "DB error to create product" },
+    });
+  return product.id;
+};
+
+const createProductMetadata = async ({
+  metadata,
+  productId,
+  tx,
+}: {
+  tx: Transaction;
+  productId: string;
+  metadata: CreateProduct["metadata"];
+}) => {
+  await productRepo.createProductMetadata(
+    metadata.map((metadataItem) => ({
+      ...metadataItem,
+      productId,
+    })),
+    tx,
+  );
+};
 
 // * READ
 export const getPaginationProduct = async (limitAndOffset?: LimitAndOffset) => {
@@ -167,41 +239,31 @@ export const getProduct = async (id: string) => {
 // * CREATE
 
 export const createProduct = async (productData: CreateProduct) => {
-  if (productData.thumbnailId) {
-    await checkMediaType(productData.thumbnailId, "image");
-  }
+  await checkProductImage(productData.thumbnailId);
 
-  const categories = await productRepo.findCategoriesByIds(
-    productData.categoryIds,
+  const slug = await fixSlugConflict(productData.slug);
+
+  const filteredGalleryByAcceptionType = await verifyGalleryIds(
+    productData.gallery,
   );
-  let slug: string = convertToSlug(productData.slug);
-  const existingArticleBySlug =
-    await productRepo.findProductByStartedSlugWith(slug);
-  slug = generateUniqueSlug(
-    slug,
-    existingArticleBySlug.map((a) => a.slug),
-  );
-  const filteredGalleryByAcceptionType = await filterMediaIdsByTypes(
-    productData.gallery || [],
-    ["image"],
-  );
+
   const resultId = await withTransaction(async (tx) => {
-    const product = (
-      await productRepo.createProduct({ ...productData, slug }, tx)
-    )[0];
-    if (!product) throw new Error("DB error to create article");
-    if (categories.length)
-      await productRepo.addProductToCategories(
-        categories.map(({ id }) => ({ categoryId: id, productId: product.id })),
-        tx,
-      );
-    await productRepo.createProductMetadata(
-      productData.metadata.map((metadata) => ({
-        ...metadata,
-        productId: product.id,
-      })),
+    const productId = await createProductAndReturnId(
+      { ...productData, slug },
       tx,
     );
+
+    await addProductCategories({
+      categoryIds: productData.categoryIds,
+      tx,
+      productId,
+    });
+
+    await createProductMetadata({
+      metadata: productData.metadata,
+      productId,
+      tx,
+    });
 
     if (productData.type === "variable") {
       const optionIds = Array.from(
@@ -215,7 +277,7 @@ export const createProduct = async (productData: CreateProduct) => {
       );
 
       await productRepo.createProductVariable(
-        optionIds.map((id) => ({ optionItemId: id, productId: product.id })),
+        optionIds.map((id) => ({ optionItemId: id, productId })),
         tx,
       );
     }
@@ -223,13 +285,13 @@ export const createProduct = async (productData: CreateProduct) => {
       await productRepo.addMediaToProductGallery(
         filteredGalleryByAcceptionType.map((mediaId) => ({
           mediaId,
-          productId: product.id,
+          productId,
         })),
         tx,
       );
     }
 
-    return product;
+    return productId;
   });
   return resultId;
 };
