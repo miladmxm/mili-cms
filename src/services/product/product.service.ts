@@ -54,17 +54,50 @@ const addProductCategories = async ({
     );
 };
 
-const createProductAndReturnId = async (
-  productData: CreateProduct,
-  tx: Transaction,
-) => {
-  const product = (await productRepo.createProduct({ ...productData }, tx))[0];
+const createProductAndReturnId = async ({
+  productData,
+  tx,
+}: {
+  productData: CreateProduct;
+  tx: Transaction;
+}) => {
+  const slug = await fixSlugConflict(productData.slug);
+  const product = (
+    await productRepo.createProduct({ ...productData, slug }, tx)
+  )[0];
   if (!product)
     throw new ThrowableDalError({
       type: "unknown-error",
       error: { message: "DB error to create product" },
     });
   return product.id;
+};
+
+const createProductVariables = async ({
+  productData,
+  productId,
+  tx,
+}: {
+  productData: CreateProduct;
+  tx: Transaction;
+  productId: string;
+}) => {
+  if (productData.type === "variable") {
+    const optionIds = Array.from(
+      new Set(
+        productData.metadata
+          .map(({ optionItemIds }) =>
+            optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR),
+          )
+          .flat(),
+      ),
+    );
+
+    await productRepo.createProductVariable(
+      optionIds.map((id) => ({ optionItemId: id, productId })),
+      tx,
+    );
+  }
 };
 
 const createProductMetadata = async ({
@@ -83,6 +116,28 @@ const createProductMetadata = async ({
     })),
     tx,
   );
+};
+
+const createProductGallery = async ({
+  galleryIds,
+  productId,
+  tx,
+}: {
+  galleryIds: CreateProduct["gallery"];
+  productId: string;
+  tx: Transaction;
+}) => {
+  const filteredGalleryByAcceptionType = await verifyGalleryIds(galleryIds);
+
+  if (filteredGalleryByAcceptionType.length > 0) {
+    await productRepo.addMediaToProductGallery(
+      filteredGalleryByAcceptionType.map((mediaId) => ({
+        mediaId,
+        productId,
+      })),
+      tx,
+    );
+  }
 };
 
 // * READ
@@ -241,17 +296,8 @@ export const getProduct = async (id: string) => {
 export const createProduct = async (productData: CreateProduct) => {
   await checkProductImage(productData.thumbnailId);
 
-  const slug = await fixSlugConflict(productData.slug);
-
-  const filteredGalleryByAcceptionType = await verifyGalleryIds(
-    productData.gallery,
-  );
-
   const resultId = await withTransaction(async (tx) => {
-    const productId = await createProductAndReturnId(
-      { ...productData, slug },
-      tx,
-    );
+    const productId = await createProductAndReturnId({ productData, tx });
 
     await addProductCategories({
       categoryIds: productData.categoryIds,
@@ -265,31 +311,13 @@ export const createProduct = async (productData: CreateProduct) => {
       tx,
     });
 
-    if (productData.type === "variable") {
-      const optionIds = Array.from(
-        new Set(
-          productData.metadata
-            .map(({ optionItemIds }) =>
-              optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR),
-            )
-            .flat(),
-        ),
-      );
+    await createProductVariables({ productData, productId, tx });
 
-      await productRepo.createProductVariable(
-        optionIds.map((id) => ({ optionItemId: id, productId })),
-        tx,
-      );
-    }
-    if (filteredGalleryByAcceptionType.length > 0) {
-      await productRepo.addMediaToProductGallery(
-        filteredGalleryByAcceptionType.map((mediaId) => ({
-          mediaId,
-          productId,
-        })),
-        tx,
-      );
-    }
+    await createProductGallery({
+      galleryIds: productData.gallery,
+      productId,
+      tx,
+    });
 
     return productId;
   });
@@ -297,6 +325,100 @@ export const createProduct = async (productData: CreateProduct) => {
 };
 
 // * UPDATE
+const deleteProductCategory = async ({
+  categoryIds,
+  productId,
+  tx,
+}: {
+  categoryIds: string[];
+  tx: Transaction;
+  productId: string;
+}) => {
+  const deletCategoryPromises: ReturnType<
+    typeof productRepo.deleteProductToCategories
+  >[] = [];
+  categoryIds.forEach((id) => {
+    deletCategoryPromises.push(
+      productRepo.deleteProductToCategories({ productId, categoryId: id }, tx),
+    );
+  });
+  await Promise.all(deletCategoryPromises);
+};
+
+const updateProductCategory = async ({
+  newCategoryIds,
+  oldCategoryIds,
+  productId,
+  tx,
+}: {
+  oldCategoryIds: string[];
+  newCategoryIds: string[];
+  productId: string;
+  tx: Transaction;
+}) => {
+  const prevCategoryIdsSet = new Set(oldCategoryIds);
+  const newCategoryIdsSet = new Set(newCategoryIds);
+  const addCategoryIds = newCategoryIds.filter(
+    (id) => !prevCategoryIdsSet.has(id),
+  );
+  const removeCategoryIds = oldCategoryIds.filter(
+    (id) => !newCategoryIdsSet.has(id),
+  );
+
+  await deleteProductCategory({
+    categoryIds: removeCategoryIds,
+    productId,
+    tx,
+  });
+
+  await addProductCategories({ categoryIds: addCategoryIds, productId, tx });
+};
+
+const removeProductGallery = async ({
+  galleryIds,
+  productId,
+  tx,
+}: {
+  galleryIds: string[];
+  productId: string;
+  tx: Transaction;
+}) => {
+  const deletGalleryPromises: ReturnType<
+    typeof productRepo.deleteMediaToProductGallery
+  >[] = [];
+  galleryIds.forEach((id) => {
+    deletGalleryPromises.push(
+      productRepo.deleteMediaToProductGallery({ productId, mediaId: id }, tx),
+    );
+  });
+  await Promise.all(deletGalleryPromises);
+};
+
+const updateProductGallery = async ({
+  newGalleryIds,
+  oldGalleryIds,
+  productId,
+  tx,
+}: {
+  oldGalleryIds: string[];
+  newGalleryIds?: string[];
+  tx: Transaction;
+  productId: string;
+}) => {
+  const prevGalleryIdsSet = new Set(oldGalleryIds);
+  const newGalleryIdsSet = new Set(newGalleryIds);
+  const addGalleryIds = newGalleryIds?.filter(
+    (id) => !prevGalleryIdsSet.has(id),
+  );
+  const removeGalleryIds = oldGalleryIds.filter(
+    (id) => !newGalleryIdsSet.has(id),
+  );
+
+  await removeProductGallery({ galleryIds: removeGalleryIds, productId, tx });
+
+  await createProductGallery({ galleryIds: addGalleryIds, productId, tx });
+};
+
 // eslint-disable-next-line max-lines-per-function
 export const updateProduct = async (
   productId: string,
@@ -308,31 +430,7 @@ export const updateProduct = async (
       type: "not-found",
     });
 
-  if (productData.thumbnailId) {
-    await checkMediaType(productData.thumbnailId, "image");
-  }
-
-  const prevCategoryIdsSet = new Set(product.categoryIds);
-  const newCategoryIdsSet = new Set(productData.categoryIds);
-  const addCategoryIds = productData.categoryIds.filter(
-    (id) => !prevCategoryIdsSet.has(id),
-  );
-  const removeCategoryIds = product.categoryIds.filter(
-    (id) => !newCategoryIdsSet.has(id),
-  );
-
-  const prevGalleryIdsSet = new Set(product.galleryIds);
-  const newGalleryIdsSet = new Set(productData.gallery);
-  const addGalleryIds = productData.gallery?.filter(
-    (id) => !prevGalleryIdsSet.has(id),
-  );
-  const removeGalleryIds = product.galleryIds.filter(
-    (id) => !newGalleryIdsSet.has(id),
-  );
-  const filteredGalleryByAcceptionType = await filterMediaIdsByTypes(
-    addGalleryIds || [],
-    ["image"],
-  );
+  await checkProductImage(productData.thumbnailId);
 
   let updateMetadataIds: string[] = [];
   let addMetadataIds: string[] = [];
@@ -385,49 +483,27 @@ export const updateProduct = async (
     (id) => !oldOptionItemIdsSet.has(id),
   );
   const resultId = await withTransaction(async (tx) => {
-    // delete category
-    const deletCategoryPromises: ReturnType<
-      typeof productRepo.deleteProductToCategories
-    >[] = [];
-    removeCategoryIds.forEach((id) => {
-      deletCategoryPromises.push(
-        productRepo.deleteProductToCategories(
-          { productId, categoryId: id },
-          tx,
-        ),
-      );
+    await updateProductCategory({
+      newCategoryIds: productData.categoryIds,
+      oldCategoryIds: product.categoryIds,
+      productId,
+      tx,
     });
-    await Promise.all(deletCategoryPromises);
 
-    // add category
-    if (addCategoryIds.length)
-      await productRepo.addProductToCategories(
-        addCategoryIds.map((id) => ({ categoryId: id, productId: product.id })),
-        tx,
-      );
-
-    // remove gallery item
-    const deletGalleryPromises: ReturnType<
-      typeof productRepo.deleteMediaToProductGallery
-    >[] = [];
-    removeGalleryIds.forEach((id) => {
-      deletGalleryPromises.push(
-        productRepo.deleteMediaToProductGallery({ productId, mediaId: id }, tx),
-      );
+    await updateProductGallery({
+      oldGalleryIds: product.galleryIds,
+      newGalleryIds: productData.gallery,
+      productId,
+      tx,
     });
-    await Promise.all(deletGalleryPromises);
-
-    if (filteredGalleryByAcceptionType.length > 0) {
-      await productRepo.addMediaToProductGallery(
-        filteredGalleryByAcceptionType.map((mediaId) => ({
-          mediaId,
-          productId: product.id,
-        })),
-        tx,
-      );
-    }
 
     // remove metadata
+    if (productData.type === "variable") {
+      if (product.type === "default") {
+        await productRepo.deleteAllProductMetadataByProductId(productId, tx);
+      }
+    }
+
     const deletMetadataPromises: ReturnType<
       typeof productRepo.deleteProductMetadataByOptionItemIds
     >[] = [];
@@ -496,6 +572,7 @@ export const updateProduct = async (
         tx,
       );
     }
+
     if (productData.type === "default") {
       if (product.type === "variable") {
         await productRepo.deleteAllProductVariablesByProductId(productId, tx);
