@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useMotionValue } from "motion/react";
+import { AnimatePresence, hover, motion, useMotionValue } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useEffectEvent, useRef } from "react";
@@ -168,13 +168,14 @@ const Menu = () => {
 const MegaMenu = () => {
   const productsItemInNavRef = useRef<HTMLAnchorElement>(null);
   const top = useMotionValue(10);
-
   const setTop = useEffectEvent((t: number) => top.set(t));
   useEffect(() => {
-    if (productsItemInNavRef.current) {
-      const { bottom } = productsItemInNavRef.current.getBoundingClientRect();
-      setTop(bottom);
-    }
+    hover(productsItemInNavRef.current, () => {
+      if (productsItemInNavRef.current) {
+        const { bottom } = productsItemInNavRef.current.getBoundingClientRect();
+        setTop(bottom);
+      }
+    });
   }, []);
   return (
     <li className="cursor-pointer product-nav-trigger">
