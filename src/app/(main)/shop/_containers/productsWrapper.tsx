@@ -4,9 +4,11 @@ const ProductsWrapper = ({
   children,
 }: PropsWithChildren<{ className?: string }>) => {
   return (
-    <section className="bg-white rounded-4xl md:rounded-7xl container p-8 z-10 relative shadow-blur">
-      {children}
-    </section>
+    <div className="container">
+      <div className="bg-white rounded-4xl md:rounded-7xl p-8 z-10 relative shadow-blur">
+        {children}
+      </div>
+    </div>
   );
 };
 

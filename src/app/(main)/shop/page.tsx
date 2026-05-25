@@ -1,19 +1,14 @@
 import ShopOptions from "@/components/ui/shopOptions";
 
 import FAQsection from "../_containers/fag";
-import CategoryLinks from "./_containers/categories";
 import HeroShop from "./_containers/hero";
-import Products from "./_containers/products";
-import ProductsWrapper from "./_containers/productsWrapper";
+import MainContent from "./_containers/mainContent";
 
 const ShopPage = () => {
   return (
     <main>
       <HeroShop />
-      <ProductsWrapper>
-        <CategoryLinks />
-        <Products />
-      </ProductsWrapper>
+      <MainContent />
       <section className="py-20 container">
         <ShopOptions />
       </section>
