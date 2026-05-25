@@ -134,7 +134,7 @@ const ProductCard = ({ thumbnail, name, metadata }: Product) => {
         <Link href={productLink}>{name}</Link>
       </h4>
       <Discount metadata={metadata} />
-      <div className="text-2xl font-bold text-primary-900 flex justify-between">
+      <div className="text-lg md:text-2xl font-bold text-primary-900 flex justify-between">
         <strong>قیمت:</strong>
         <strong>
           <DiscountedPrice metadata={metadata} />
