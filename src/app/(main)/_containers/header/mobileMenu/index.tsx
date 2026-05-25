@@ -4,6 +4,8 @@ import type { ComponentProps, PropsWithChildren } from "react";
 
 import { motion } from "motion/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useEffectEvent } from "react";
 
 import type { CategoryTree } from "@/services/product/type";
 
@@ -79,6 +81,16 @@ const MenuItems = ({
 };
 
 const CloseMenuButton = () => {
+  const isOpen = useMobileMenuStore((state) => state.open);
+  const router = usePathname();
+  const closeIfRouteChangeEvent = useEffectEvent(() => {
+    if (isOpen) {
+      setClose();
+    }
+  });
+  useEffect(() => {
+    closeIfRouteChangeEvent();
+  }, [router]);
   return (
     <button
       className="size-4 ms-2 text-secondary-500"
