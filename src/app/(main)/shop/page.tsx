@@ -4,11 +4,11 @@ import FAQsection from "../_containers/fag";
 import HeroShop from "./_containers/hero";
 import MainContent from "./_containers/mainContent";
 
-const ShopPage = () => {
+const ShopPage = ({ searchParams }: PageProps<"/shop">) => {
   return (
     <main>
       <HeroShop />
-      <MainContent />
+      <MainContent searchParams={searchParams} />
       <section className="py-20 container">
         <ShopOptions />
       </section>

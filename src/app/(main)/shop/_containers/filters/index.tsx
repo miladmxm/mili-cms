@@ -10,9 +10,11 @@ const ShopFilters = () => {
   return (
     <motion.aside
       animate={{ width: isOpen ? "30%" : "0" }}
-      className="w-0 overflow-hidden bg-primary-25 rounded-7xl px-8 py-6"
+      className="w-0 overflow-hidden"
     >
-      <FilterByPrice />
+      <div className="bg-primary-25 rounded-7xl px-8 py-6">
+        <FilterByPrice />
+      </div>
     </motion.aside>
   );
 };

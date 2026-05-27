@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<LayoutProps<"/">>) {
+  // todo: change to promise and cache function
   const productCategories = buildCategoryTree(await getPublicCategories());
   return (
     <html dir="rtl" lang="fa">
