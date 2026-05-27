@@ -10,7 +10,6 @@ import {
 import * as productCategoryService from "@/services/product/category.service";
 import * as optionService from "@/services/product/option.service";
 import * as productService from "@/services/product/product.service";
-import { delay } from "@/utils/delay";
 
 export const getProducts = async () => {
   return dalRequireAuth(
@@ -22,7 +21,6 @@ export const getProducts = async () => {
 };
 
 export const getPublishedProducts = async (config?: LimitAndOffset) => {
-  await delay(4000);
   return dalVerifySuccess(
     await dalDbOperation(() => productService.getPublishedProducts(config)),
   );

@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import ShopOptions from "@/components/ui/shopOptions";
 
 import FAQsection from "../_containers/fag";
@@ -8,7 +10,9 @@ const ShopPage = ({ searchParams }: PageProps<"/shop">) => {
   return (
     <main>
       <HeroShop />
-      <MainContent searchParams={searchParams} />
+      <Suspense>
+        <MainContent searchParams={searchParams} />
+      </Suspense>
       <section className="py-20 container">
         <ShopOptions />
       </section>

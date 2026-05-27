@@ -1,4 +1,17 @@
-import { and, asc, desc, eq, ilike, inArray, like, ne } from "drizzle-orm";
+import type { SQL } from "drizzle-orm";
+
+import {
+  and,
+  asc,
+  between,
+  desc,
+  eq,
+  ilike,
+  inArray,
+  like,
+  ne,
+  or,
+} from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
@@ -86,6 +99,27 @@ export const findPublishedProductsByNameSearch = (
     columns: { createdAt: true, slug: true, name: true },
   });
 
+const removeDuplicationProductIds = (
+  productMetas: {
+    productId: string;
+  }[],
+  limit?: number,
+) => {
+  const removeDuplication = new Set<string>();
+  const productIds = productMetas
+    .filter(({ productId }) => {
+      if (!removeDuplication.has(productId)) {
+        if (limit && limit <= removeDuplication.size) return false;
+        removeDuplication.add(productId);
+        return true;
+      }
+
+      return false;
+    })
+    .map(({ productId }) => productId);
+  return productIds;
+};
+
 export const findProductsOrderByPrice = async (
   options?: OffsetLimit,
   tx?: Transaction,
@@ -94,20 +128,7 @@ export const findProductsOrderByPrice = async (
     orderBy: asc(productMeta.price),
     columns: { productId: true },
   });
-  const removeDuplication = new Set<string>();
-  const productIds = productMetas
-    .filter(({ productId }) => {
-      if (!removeDuplication.has(productId)) {
-        if (options?.limit && options.limit <= removeDuplication.size)
-          return false;
-        removeDuplication.add(productId);
-        return true;
-      }
-
-      return false;
-    })
-    .map(({ productId }) => productId);
-
+  const productIds = removeDuplicationProductIds(productMetas, options?.limit);
   return getDBorTX(tx).query.product.findMany({
     where: and(
       inArray(product.id, productIds),
@@ -169,6 +190,73 @@ export const findProductsByLimitAndOffset = (
     limit: options?.limit,
     offset: options?.offset,
   });
+
+interface Filters {
+  price?: { min: number; max: number };
+  optionItems?: { slug: string };
+  discount?: boolean;
+}
+
+export const findPublishedProductByFilters = async (
+  {
+    filters,
+    config,
+  }: {
+    filters: Filters;
+    config?: OffsetLimit;
+  },
+  tx?: Transaction,
+) => {
+  let where: SQL | undefined;
+
+  if (filters.price) {
+    where = between(productMeta.price, filters.price.min, filters.price.max);
+  }
+  if (filters.discount) {
+    where = ne(productMeta.discount, 0);
+  }
+  if (filters.price && filters.discount) {
+    where = and(
+      between(productMeta.price, filters.price.min, filters.price.max),
+      ne(productMeta.discount, 0),
+    );
+  }
+
+  const productMetas = await getDBorTX(tx).query.productMeta.findMany({
+    where,
+    columns: { productId: true },
+  });
+
+  const productIds = removeDuplicationProductIds(productMetas, config?.limit);
+  const filterOptionItems: Record<string, string> = filters.optionItems || {};
+  const options = await getDBorTX(tx).query.productOption.findMany({
+    where: inArray(productOption.slug, Object.keys(filterOptionItems)),
+    columns: { id: true, slug: true },
+  });
+
+  const queryDataForOptionItems: { id: string; slug: string; value: string }[] =
+    [];
+
+  for (const eachOption of options) {
+    queryDataForOptionItems.push({
+      id: eachOption.id,
+      slug: eachOption.slug,
+      value: filterOptionItems[eachOption.slug] || "",
+    });
+  }
+
+  const optionItems = await getDBorTX(tx).query.productOptionItem.findMany({
+    where: or(
+      ...queryDataForOptionItems.map(({ id, value }) =>
+        and(
+          eq(productOptionItem.optionId, id),
+          eq(productOptionItem.value, value),
+        ),
+      ),
+    ),
+    columns: { id: true },
+  });
+};
 
 export const findPublishedProductsByLimitAndOffset = (
   options?: OffsetLimit,

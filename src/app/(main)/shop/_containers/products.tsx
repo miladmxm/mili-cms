@@ -1,10 +1,12 @@
+"use client";
+
 import type { PropsWithChildren } from "react";
 
-import type { SearchParams } from "@/types/type";
+import { use } from "react";
+
+import type { Product } from "@/services/product/type";
 
 import ProductCard, { ProductCardSkeleton } from "@/components/ui/productCard";
-import { getPublishedProducts } from "@/features/product/dal/query";
-import { getPageRenderItemCounterByOffsetInSearchParams } from "@/utils/getFromSearchParams";
 
 const ProductsContainer = ({ children }: PropsWithChildren) => {
   return (
@@ -25,19 +27,12 @@ export const ProductsSkeleton = () => {
   );
 };
 
-const Products = async ({
-  searchParams,
+const Products = ({
+  productsPromise,
 }: {
-  searchParams: Promise<SearchParams>;
+  productsPromise: Promise<Product[]>;
 }) => {
-  const limit = await getPageRenderItemCounterByOffsetInSearchParams(
-    searchParams,
-    3,
-  );
-  const products = await getPublishedProducts({
-    limit,
-    offset: 0,
-  });
+  const products = use(productsPromise);
   return (
     <ProductsContainer>
       {products.map((product) => (
