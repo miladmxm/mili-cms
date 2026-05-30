@@ -26,6 +26,17 @@ export const getPublishedProducts = async (config?: LimitAndOffset) => {
   );
 };
 
+export const getPublishedProductsWithFilter = async (
+  filters: Parameters<typeof productService.getPublishedProductsWithFilter>[0],
+  config?: LimitAndOffset,
+) => {
+  return dalVerifySuccess(
+    await dalDbOperation(() =>
+      productService.getPublishedProductsWithFilter(filters, config),
+    ),
+  );
+};
+
 export const getProduct = async (id: string) => {
   return dalRequireAuth(
     () => dalDbOperation(() => productService.getProduct(id)),

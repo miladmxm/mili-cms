@@ -10,7 +10,7 @@ export const FormatedPrice = ({
 }: {
   metadata: Product["metadata"];
 }) => {
-  return <>{formatNumber(convertMetadataToIRT(metadata))}</>;
+  return <>{formatNumber(Math.round(convertMetadataToIRT(metadata)))}</>;
 };
 
 export const DiscountedPrice = ({
@@ -18,5 +18,5 @@ export const DiscountedPrice = ({
 }: {
   metadata: Product["metadata"];
 }) => {
-  return <>{formatNumber(calcDiscount(metadata) / 10)} تومان</>;
+  return <>{formatNumber(Math.round(calcDiscount(metadata) / 10))} تومان</>;
 };

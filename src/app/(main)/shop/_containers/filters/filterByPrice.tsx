@@ -6,17 +6,17 @@ import { cn } from "@/lib/utils";
 
 interface Filter {
   title: string;
-  amount: { from: string; to: string };
+  amount: { min: string; max: string };
 }
 
 const FilterPriceItem = ({ amount, title }: Filter) => {
   const { applyParams, searchParams, isPendding } = useSetParams();
-  const priceFrom = searchParams.get("price-from");
-  const priceTo = searchParams.get("price-to");
-  const isActive = amount.from === priceFrom && amount.to === priceTo;
+  const priceMin = searchParams.get("price-min");
+  const priceMax = searchParams.get("price-max");
+  const isActive = amount.min === priceMin && amount.max === priceMax;
 
   const applyFilter = () => {
-    applyParams({ "price-from": amount.from, "price-to": amount.to });
+    applyParams({ "price-min": amount.min, "price-max": amount.max });
   };
 
   return (
@@ -36,13 +36,13 @@ const FilterPriceItem = ({ amount, title }: Filter) => {
 };
 
 const FILTERS: Filter[] = [
-  { title: "تا ۲۰ میلیون", amount: { from: "0", to: "20" } },
+  { title: "تا ۲۰ میلیون", amount: { min: "0", max: "20" } },
   {
-    amount: { from: "20", to: "40" },
+    amount: { min: "20", max: "40" },
     title: "۲۰ تا ۴۰ میلیون",
   },
-  { title: "۴۰ تا ۶۰ میلیون", amount: { from: "40", to: "60" } },
-  { title: "۶۰ تا ۸۰ میلیون", amount: { from: "60", to: "80" } },
+  { title: "۴۰ تا ۶۰ میلیون", amount: { min: "40", max: "60" } },
+  { title: "۶۰ تا ۸۰ میلیون", amount: { min: "60", max: "80" } },
 ];
 
 const FilterPriceItems = () => {

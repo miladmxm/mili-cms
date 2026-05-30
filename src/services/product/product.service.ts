@@ -52,6 +52,39 @@ export const getPaginationProduct = async (limitAndOffset?: LimitAndOffset) => {
   return productRepo.findProductsByLimitAndOffset(limitAndOffset);
 };
 
+export const getPublishedProductsWithFilter = async (
+  filters: Parameters<
+    typeof productRepo.findPublishedProductByFilters
+  >[0]["filters"],
+  limitAndOffset?: LimitAndOffset,
+) => {
+  "use cache";
+
+  cacheTag(
+    CacheKeys.product,
+    `${CacheKeys.product}-${JSON.stringify(filters)}`,
+    `${CacheKeys.product}-${JSON.stringify(limitAndOffset)}`,
+  );
+
+  const products = await productRepo.findPublishedProductByFilters({
+    filters,
+    config: limitAndOffset,
+  });
+  const normalProducts: Product[] = [];
+
+  for (const product of products) {
+    const { thumbnail } = product;
+
+    if (thumbnail) {
+      thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+    }
+
+    normalProducts.push({ ...(product as Product), thumbnail });
+  }
+
+  return normalProducts;
+};
+
 export const getPublishedProducts = async (limitAndOffset?: LimitAndOffset) => {
   "use cache";
 
@@ -59,6 +92,13 @@ export const getPublishedProducts = async (limitAndOffset?: LimitAndOffset) => {
 
   const products =
     await productRepo.findPublishedProductsByLimitAndOffset(limitAndOffset);
+  await productRepo.findPublishedProductByFilters({
+    filters: {
+      price: { max: 4, min: 0 },
+      discount: true,
+      optionItems: { color: "red", size: "md" },
+    },
+  });
   const normalProducts: Product[] = [];
 
   for (const product of products) {

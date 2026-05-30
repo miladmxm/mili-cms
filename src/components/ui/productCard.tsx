@@ -109,7 +109,7 @@ const Discount = ({ metadata }: { metadata: Product["metadata"] }) => {
       <small className="rounded-full text-xs text-white bg-thready-900 center px-2 py-1">
         {discount}%
       </small>
-      <del className="font-bold text-lg text-primary-600 before:bg-primary-600 before:h-0.5 before:w-full before:absolute before:start-0 before:top-[calc(50%-4px)] relative">
+      <del className="font-bold text-lg text-primary-600 before:bg-primary-600 before:h-0.5 before:w-full before:absolute before:inset-s-0 before:top-[calc(50%-4px)] relative">
         <FormatedPrice metadata={metadata} />
       </del>
     </div>
@@ -119,7 +119,7 @@ const Discount = ({ metadata }: { metadata: Product["metadata"] }) => {
 export const ProductCardSkeleton = () => {
   return (
     <div className="relative px-8 py-6 flex h-full flex-col gap-6">
-      <Skeleton className="mx-auto rounded-6xl w-full aspect-[300/214] object-cover" />
+      <Skeleton className="mx-auto rounded-6xl w-full aspect-300/214 object-cover" />
       <Skeleton className="absolute inset-x-0 bottom-0 -z-10 product-card-shadow h-3/4 w-full rounded-7xl" />
       <Skeleton className="w-1/3 h-4" />
       <div className="text-lg md:text-2xl font-bold text-primary-900 flex justify-between">
@@ -141,7 +141,7 @@ const ProductCard = ({ thumbnail, name, metadata }: Product) => {
     >
       <Link href={productLink}>
         <DefaultImage
-          className="mx-auto rounded-6xl aspect-[300/214] object-cover"
+          className="mx-auto rounded-6xl aspect-300/214 object-cover"
           image={thumbnail}
         />
       </Link>
