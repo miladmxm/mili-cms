@@ -45,5 +45,13 @@ export const useSetParams = () => {
     replace(`${pathname}?${params.toString()}`, config);
   };
 
-  return { applyParams, searchParams, isPendding };
+  const deleteParams = (key: string, config?: NavigateOptions) => {
+    const params = new URLSearchParams(searchParams);
+    if (!params.has(key)) return;
+    setIsPendding(true);
+    params.delete(key);
+    replace(`${pathname}?${params.toString()}`, config);
+  };
+
+  return { applyParams, searchParams, isPendding, deleteParams };
 };
