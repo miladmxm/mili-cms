@@ -1,9 +1,13 @@
 import { Suspense } from "react";
 
+import type { Option } from "@/services/product/type";
 import type { SearchParams } from "@/types/type";
 
 import { UI_SETTING } from "@/constant/uiSetting";
-import { getPublishedProductsWithFilter } from "@/features/product/dal/query";
+import {
+  getPublicOptions,
+  getPublishedProductsWithFilter,
+} from "@/features/product/dal/query";
 import {
   getItemFromSearchParam,
   getPageRenderItemCounterByOffsetInSearchParams,
@@ -35,11 +39,36 @@ const getMinMaxPriceFilter = (
   return { min, max };
 };
 
+const getOptionsFilterFromSearchParams = ({
+  options,
+  searchParams,
+}: {
+  options: Option[];
+  searchParams: SearchParams;
+}) => {
+  const opt: Record<string, string> = {};
+
+  for (const option of options) {
+    const value = getItemFromSearchParam({
+      defaultValue: "",
+      selectorKey: option.slug,
+      searchParams,
+    });
+
+    if (value) {
+      opt[option.slug] = value;
+    }
+  }
+
+  return opt;
+};
+
 const MainContent = async ({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) => {
+  const options = await getPublicOptions();
   const limit = await getPageRenderItemCounterByOffsetInSearchParams(
     searchParams,
     UI_SETTING.shop_products_limit,
@@ -54,6 +83,10 @@ const MainContent = async ({
     {
       discount: !!discount,
       price: getMinMaxPriceFilter(awatedSearchParams),
+      optionItems: getOptionsFilterFromSearchParams({
+        options,
+        searchParams: awatedSearchParams,
+      }),
     },
     {
       limit,
@@ -66,7 +99,7 @@ const MainContent = async ({
       <FilterAndSort />
       <div className="flex gap-4">
         <Suspense>
-          <ShopFilters />
+          <ShopFilters options={options} />
         </Suspense>
         <div className="@container flex-auto">
           <Suspense fallback={<ProductsSkeleton />}>

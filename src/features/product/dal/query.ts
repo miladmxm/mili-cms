@@ -89,6 +89,12 @@ export const getOptions = async () => {
   );
 };
 
+export const getPublicOptions = async () => {
+  return dalVerifySuccess(
+    await dalDbOperation(optionService.getOptionsWithItems),
+  );
+};
+
 export const getOption = async (id: string) => {
   return dalVerifySuccess(
     await dalRequireAuth(
