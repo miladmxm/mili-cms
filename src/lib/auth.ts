@@ -41,16 +41,10 @@ export const hasAccess = async (
   userId: (typeof auth.$Infer)["Session"]["user"]["id"],
   permissions: Partial<Permissions>,
 ) => {
-  try {
-    return await auth.api.userHasPermission({
-      body: {
-        userId,
-        permissions,
-      },
-    });
-  } catch (error) {
-    // ! error for validation body
-    console.log("body error", error);
-    return { success: true };
-  }
+  return await auth.api.userHasPermission({
+    body: {
+      userId,
+      permissions,
+    },
+  });
 };
