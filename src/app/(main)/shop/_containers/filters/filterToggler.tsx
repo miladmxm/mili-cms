@@ -1,10 +1,22 @@
 "use client";
 
-import { setOpenFilter } from "./store";
+import { cn } from "@/lib/utils";
+
+import { toggleFilterBox, useFilterMenuStore } from "./store";
 
 const FilterToggler = () => {
+  const isOpen = useFilterMenuStore((state) => state.open);
   return (
-    <button type="button" onClick={setOpenFilter}>
+    <button
+      className={cn(
+        "text-thready-800 transition-all text-xl font-bold px-6 py-1.5 block rounded-full bg-white",
+        {
+          "shadow-blur-sm": isOpen,
+        },
+      )}
+      type="button"
+      onClick={toggleFilterBox}
+    >
       فیلتر ها
     </button>
   );

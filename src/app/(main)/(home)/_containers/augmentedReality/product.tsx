@@ -46,7 +46,7 @@ const ARproduct = () => {
     >
       <Image src={arProduct} alt="ar product" className="size-full" />
       <div className="absolute w-0 opacity-0 max-md:hidden md:group-hover:w-[84%] group-hover:opacity-100 transition-all right-[8%] top-0 -z-10 h-[120%] perspective-normal">
-        <div className="size-full border-4 rotate-x-[55deg] rounded-6xl border-secondary-500" />
+        <div className="size-full border-4 rotate-x-55 rounded-6xl border-secondary-500" />
       </div>
     </motion.div>
   );
