@@ -10,13 +10,19 @@ interface Filter {
 }
 
 const FilterPriceItem = ({ amount, title }: Filter) => {
-  const { applyParams, searchParams, isPendding } = useSetParams();
+  const { applyParams, searchParams, isPendding, deleteParams } =
+    useSetParams();
   const priceMin = searchParams.get("price-min");
   const priceMax = searchParams.get("price-max");
   const isActive = amount.min === priceMin && amount.max === priceMax;
 
   const applyFilter = () => {
-    applyParams({ "price-min": amount.min, "price-max": amount.max });
+    if (isActive) {
+      deleteParams("price-min");
+      deleteParams("price-max");
+    } else {
+      applyParams({ "price-min": amount.min, "price-max": amount.max });
+    }
   };
 
   return (
