@@ -22,7 +22,7 @@ const ParentMenuItem = ({ name, id, thumbnail }: Category) => {
       <AnimatePresence>
         {isActive && (
           <motion.div
-            className="bg-gradient-to-r from-transparent from-10% to-90% via-45% via-thready-400/50 to-transparent absolute inset-y-0 -z-10"
+            className="bg-linear-to-r from-transparent from-10% to-90% via-45% via-thready-400/50 to-transparent absolute inset-y-0 -z-10"
             exit={{ opacity: 0, insetInline: "100%" }}
             initial={{ opacity: 0, insetInline: "100%" }}
             animate={{ opacity: 1, insetInline: "0" }}
@@ -89,7 +89,7 @@ const SubCategoryLinks = ({ categories }: { categories: CategoryTree[] }) => {
         <li key={slug}>
           <Link
             className="text-primary-900 hover:text-secondary-500 w-full block py-2 px-4"
-            href={`#${slug}`}
+            href={`/products/${slug}`}
           >
             {name}
           </Link>
@@ -147,7 +147,7 @@ const ChildMenu = () => {
             src={heroCategoryBackground}
             className="size-full rounded-3xl opacity-25"
           />
-          <motion.div layout className="absolute -bottom-5 end-0 w-1/3">
+          <motion.div layout className="absolute -bottom-5 inset-e-0 w-1/3">
             <DefaultImage image={activeCategory.thumbnail} />
           </motion.div>
         </div>

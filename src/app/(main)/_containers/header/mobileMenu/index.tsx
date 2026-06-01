@@ -40,7 +40,7 @@ const MenuItemAccordion = ({
   return (
     <li>
       <Accordion>
-        <AccordionTrigger className="[.opened]:via-thready-400 w-full p-4 text-start transition-all bg-gradient-to-r from-transparent to-transparent via-transparent flex justify-between">
+        <AccordionTrigger className="[.opened]:via-thready-400 w-full p-4 text-start transition-all bg-linear-to-r from-transparent to-transparent via-transparent flex justify-between">
           {title}
           <ArrowDown className="size-3 group-[.opened]:text-secondary-500 group-[.opened]:rotate-180 transition-transform duration-300 text-primary-900" />
         </AccordionTrigger>
@@ -64,7 +64,7 @@ const MenuItems = ({
       {productCategories.map(({ children, name, slug }) => {
         if (!children || children.length === 0) {
           return (
-            <MenuItemLink key={slug} href={`#${slug}`}>
+            <MenuItemLink key={slug} href={`/products/${slug}`}>
               {name}
             </MenuItemLink>
           );

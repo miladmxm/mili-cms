@@ -2,9 +2,9 @@ import { Suspense } from "react";
 
 import ShopOptions from "@/components/ui/shopOptions";
 
-import FAQsection from "../_containers/fag";
-import HeroShop from "./_containers/hero";
-import MainContent from "./_containers/mainContent";
+import HeroShop from "../_containers/hero";
+import MainContent from "../_containers/mainContent";
+import FAQsection from "../../_containers/fag";
 
 const ShopPage = ({ searchParams }: PageProps<"/shop">) => {
   return (
