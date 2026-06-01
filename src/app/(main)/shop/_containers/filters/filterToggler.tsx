@@ -9,7 +9,7 @@ const FilterToggler = () => {
   return (
     <button
       className={cn(
-        "text-thready-800 transition-all text-xl font-bold px-6 py-1.5 block rounded-full bg-white",
+        "text-thready-800 transition-all w-fit text-xl font-bold px-6 py-1.5 block rounded-full bg-white",
         {
           "shadow-blur-sm": isOpen,
         },

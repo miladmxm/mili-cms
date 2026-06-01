@@ -1,5 +1,6 @@
 const Sort = () => {
-  return <div>sort</div>;
+  // comming sone
+  return null;
 };
 
 export default Sort;

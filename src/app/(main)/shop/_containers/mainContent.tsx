@@ -74,19 +74,21 @@ const MainContent = async ({
     UI_SETTING.shop_products_limit,
   );
   const awatedSearchParams = await searchParams;
-  const discount = getItemFromSearchParam({
+  const discountFilter = !!getItemFromSearchParam({
     defaultValue: "",
     selectorKey: "discount",
     searchParams: awatedSearchParams,
   });
+  const priceFilter = getMinMaxPriceFilter(awatedSearchParams);
+  const optionsFilter = getOptionsFilterFromSearchParams({
+    options,
+    searchParams: awatedSearchParams,
+  });
   const products = await getPublishedProductsWithFilter(
     {
-      discount: !!discount,
-      price: getMinMaxPriceFilter(awatedSearchParams),
-      optionItems: getOptionsFilterFromSearchParams({
-        options,
-        searchParams: awatedSearchParams,
-      }),
+      discount: discountFilter,
+      price: priceFilter,
+      optionItems: optionsFilter,
     },
     {
       limit,
@@ -94,7 +96,15 @@ const MainContent = async ({
     },
   );
   return (
-    <ProductsWrapper>
+    <ProductsWrapper
+      contextValue={{
+        options,
+        products,
+        discountFilter,
+        priceFilter,
+        optionsFilter,
+      }}
+    >
       <CategoryLinks />
       <FilterAndSort />
       <div className="flex gap-4">
