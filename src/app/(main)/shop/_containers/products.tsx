@@ -1,8 +1,4 @@
-"use client";
-
 import type { PropsWithChildren } from "react";
-
-import { use } from "react";
 
 import type { Product } from "@/services/product/type";
 
@@ -27,12 +23,7 @@ export const ProductsSkeleton = () => {
   );
 };
 
-const Products = ({
-  productsPromise,
-}: {
-  productsPromise: Promise<Product[]>;
-}) => {
-  const products = use(productsPromise);
+const Products = ({ products }: { products: Product[] }) => {
   return (
     <ProductsContainer>
       {products.map((product) => (

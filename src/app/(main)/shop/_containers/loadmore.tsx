@@ -1,7 +1,5 @@
 "use client";
 
-import { use } from "react";
-
 import type { Product } from "@/services/product/type";
 
 import Button from "@/components/ui/button";
@@ -9,12 +7,7 @@ import Spiner from "@/components/ui/spiner";
 import { UI_SETTING } from "@/constant/uiSetting";
 import { useSetParams } from "@/hooks/useSetParams";
 
-const Loadmore = ({
-  productsPromise,
-}: {
-  productsPromise: Promise<Product[]>;
-}) => {
-  const products = use(productsPromise);
+const Loadmore = ({ products }: { products: Product[] }) => {
   const { applyParams, searchParams, isPendding } = useSetParams();
   const page = +(searchParams.get("page") || 1);
 

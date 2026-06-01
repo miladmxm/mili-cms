@@ -35,7 +35,7 @@ const getMinMaxPriceFilter = (
   });
   const min = parseInt(priceMin, 10) * 10_000_000;
   const max = parseInt(priceMax, 10) * 10_000_000;
-  if (!min || !max || isNaN(min) || isNaN(max)) return undefined;
+  if (isNaN(min) || isNaN(max)) return undefined;
   return { min, max };
 };
 
@@ -79,7 +79,7 @@ const MainContent = async ({
     selectorKey: "discount",
     searchParams: awatedSearchParams,
   });
-  const products = getPublishedProductsWithFilter(
+  const products = await getPublishedProductsWithFilter(
     {
       discount: !!discount,
       price: getMinMaxPriceFilter(awatedSearchParams),
@@ -103,8 +103,8 @@ const MainContent = async ({
         </Suspense>
         <div className="@container flex-auto">
           <Suspense fallback={<ProductsSkeleton />}>
-            <Products productsPromise={products} />
-            <Loadmore productsPromise={products} />
+            <Products products={products} />
+            <Loadmore products={products} />
           </Suspense>
         </div>
       </div>
