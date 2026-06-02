@@ -89,7 +89,7 @@ const MainContent = async ({
     options,
     searchParams: awatedSearchParams,
   });
-  const products = await getPublishedProductsWithFilter(
+  const products = getPublishedProductsWithFilter(
     {
       discount: discountFilter,
       price: priceFilter,

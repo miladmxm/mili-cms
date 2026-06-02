@@ -521,11 +521,20 @@ export const findCategories = async (tx?: Transaction) => {
   return categories;
 };
 
+export const findCategoryBySlugWithThumbnail = async (
+  slug: string,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).query.productCategory.findFirst({
+    where: eq(productCategory.slug, slug),
+    with: { thumbnail: true },
+  });
+
 export const findCategoryByStartedSlugWith = async (
   slug: string,
   tx?: Transaction,
 ) =>
-  getDBorTX(tx).query.articleCategory.findMany({
+  getDBorTX(tx).query.productCategory.findMany({
     where: like(productCategory.slug, `${slug}%`),
   });
 export const deleteProductCategoryById = (id: string, tx?: Transaction) =>

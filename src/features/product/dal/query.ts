@@ -61,6 +61,11 @@ export const getDiscountedProducts = async () =>
 export const getLowPriceProducts = async () =>
   dalVerifySuccess(await dalDbOperation(productService.getLowPriceProducts));
 
+export const getProductCategoryBySlug = async (slug: string) =>
+  dalVerifySuccess(
+    await dalDbOperation(() => productCategoryService.getCategoryBySlug(slug)),
+  );
+
 export const getCategories = async () => {
   const categories = dalVerifySuccess(
     await dalRequireAuth(

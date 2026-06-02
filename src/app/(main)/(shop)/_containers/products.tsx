@@ -23,7 +23,12 @@ export const ProductsSkeleton = () => {
   );
 };
 
-const Products = ({ products }: { products: Product[] }) => {
+const Products = async ({
+  products: asyncProducts,
+}: {
+  products: Promise<Product[]>;
+}) => {
+  const products = await asyncProducts;
   return (
     <ProductsContainer>
       {products.map((product) => (

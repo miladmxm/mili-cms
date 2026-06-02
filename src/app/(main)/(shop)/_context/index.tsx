@@ -7,7 +7,7 @@ import { createContext, use, useMemo } from "react";
 import type { Option, Product } from "@/services/product/type";
 
 export interface FilterParamsState {
-  products: Product[];
+  products: Promise<Product[]>;
   options: Option[];
   optionsFilter?: Record<string, string>;
   priceFilter?: {

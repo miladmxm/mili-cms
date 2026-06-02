@@ -43,6 +43,24 @@ export const getCategoriesWithThumbnail = async () => {
   return categoriesWithThumbnail;
 };
 
+export const getCategoryBySlug = async (slug: string) => {
+  "use cache";
+
+  cacheTag(
+    CacheKeys.productCategories,
+    `${CacheKeys.productCategories}-${slug}`,
+  );
+  const category = await productRepo.findCategoryBySlugWithThumbnail(slug);
+  if (!category) return category;
+  const { thumbnail } = category;
+
+  if (thumbnail) {
+    thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+  }
+
+  return { ...category, thumbnail };
+};
+
 // * CREATE
 export const createCategory = async (data: CreateCategory) => {
   if (data.thumbnailId) {

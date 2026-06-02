@@ -12,8 +12,8 @@ const CategoryPage = async ({
 }: PageProps<"/products/[slug]">) => {
   return (
     <main>
-      <HeroShop />
-      <Suspense fallback="hleo">
+      <Suspense>
+        <HeroShop categorySlug={params} />
         <MainContent categorySlug={params} searchParams={searchParams} />
       </Suspense>
       <section className="py-20 container">
