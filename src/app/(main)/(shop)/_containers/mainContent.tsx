@@ -109,6 +109,7 @@ const MainContent = async ({
         discountFilter,
         priceFilter,
         optionsFilter,
+        slug,
       }}
     >
       <CategoryLinks />

@@ -1,21 +1,36 @@
 "use client";
 
-import Link from "next/link";
+import type { PropsWithChildren } from "react";
+
+import Link, { useLinkStatus } from "next/link";
 
 import type { Category } from "@/services/product/type";
 
 import SeparatorLine from "@/components/ui/separatorLine";
+import { cn } from "@/lib/utils";
 
+import { useFilterParams } from "../_context";
 import { useMainLayoutContext } from "../../_context";
 
+const CategoryLinkItemText = ({ children }: PropsWithChildren) => {
+  const { pending } = useLinkStatus();
+  return <span className={cn({ "animate-pulse": pending })}>{children}</span>;
+};
+
 const CategoryLinkItem = ({ name, slug }: Category) => {
+  const { slug: activeSlug } = useFilterParams();
   return (
     <li>
       <Link
-        className="text-thready-800 text-nowrap hover:text-secondary-500 transition-colors"
+        className={cn(
+          "text-thready-800 text-nowrap hover:text-secondary-500 transition-colors",
+          {
+            "text-secondary-500": activeSlug === slug,
+          },
+        )}
         href={`/products/${slug}`}
       >
-        {name}
+        <CategoryLinkItemText>{name}</CategoryLinkItemText>
       </Link>
     </li>
   );

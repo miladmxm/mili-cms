@@ -14,6 +14,7 @@ export interface FilterParamsState {
     min: number;
     max: number;
   };
+  slug?: string;
   discountFilter?: boolean;
 }
 
