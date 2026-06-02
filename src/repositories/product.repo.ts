@@ -11,7 +11,6 @@ import {
   inArray,
   like,
   ne,
-  or,
   sql,
 } from "drizzle-orm";
 
@@ -223,7 +222,7 @@ interface Filters {
   categorySlug?: string;
 }
 
-export const findPublishedProductByFiltersExist = async (
+export const findPublishedProductByFilters = async (
   {
     filters,
     config,
@@ -319,97 +318,6 @@ export const findPublishedProductByFiltersExist = async (
 
   if (productIds.length === 0) {
     return [];
-  }
-
-  return getDBorTX(tx).query.product.findMany({
-    where: and(
-      eq(product.status, "published"),
-      inArray(product.id, productIds),
-    ),
-    with: { thumbnail: true, metadata: true },
-    offset: config?.offset,
-    limit: config?.limit,
-    orderBy: [desc(product.createdAt)],
-  });
-};
-
-export const findPublishedProductByFilters = async (
-  {
-    filters,
-    config,
-  }: {
-    filters: Filters;
-    config?: OffsetLimit;
-  },
-  tx?: Transaction,
-) => {
-  let where: SQL | undefined;
-
-  if (filters.price) {
-    where = between(productMeta.price, filters.price.min, filters.price.max);
-  }
-  if (filters.discount) {
-    where = ne(productMeta.discount, 0);
-  }
-  if (filters.price && filters.discount) {
-    where = and(
-      between(productMeta.price, filters.price.min, filters.price.max),
-      ne(productMeta.discount, 0),
-    );
-  }
-
-  const productMetas = await getDBorTX(tx).query.productMeta.findMany({
-    where,
-    // columns: { productId: true },
-  });
-
-  let productIds = removeDuplicationProductIds(productMetas);
-  const filterOptionItems: Record<string, string> = filters.optionItems || {};
-  const options = await getDBorTX(tx).query.productOption.findMany({
-    where: inArray(productOption.slug, Object.keys(filterOptionItems)),
-    columns: { id: true, slug: true },
-  });
-  const queryDataForOptionItems: { id: string; slug: string; value: string }[] =
-    [];
-
-  for (const eachOption of options) {
-    queryDataForOptionItems.push({
-      id: eachOption.id,
-      slug: eachOption.slug,
-      value: filterOptionItems[eachOption.slug] || "",
-    });
-  }
-
-  const optionItems =
-    queryDataForOptionItems.length > 0
-      ? await getDBorTX(tx).query.productOptionItem.findMany({
-          where: or(
-            ...queryDataForOptionItems.map(({ id, value }) =>
-              and(
-                eq(productOptionItem.optionId, id),
-                eq(productOptionItem.value, value),
-              ),
-            ),
-          ),
-          columns: { id: true },
-        })
-      : [];
-
-  const productsFromOptionFilter = await getDBorTX(
-    tx,
-  ).query.productToOptionItem.findMany({
-    where: and(
-      inArray(
-        productToOptionItem.optionItemId,
-        optionItems.map(({ id }) => id),
-      ),
-      inArray(productToOptionItem.productId, productIds),
-    ),
-    columns: { optionItemId: false, productId: true },
-  });
-
-  if (queryDataForOptionItems.length > 0) {
-    productIds = removeDuplicationProductIds(productsFromOptionFilter);
   }
 
   return getDBorTX(tx).query.product.findMany({
