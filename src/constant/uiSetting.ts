@@ -1,3 +1,3 @@
 export const UI_SETTING = {
-  shop_products_limit: 3,
+  shop_products_limit: 9,
 };

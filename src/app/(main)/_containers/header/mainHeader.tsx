@@ -1,5 +1,7 @@
 "use client";
 
+import { Suspense } from "react";
+
 import MainLogo from "@/components/ui/mainLogo";
 import MobileMenuToggler from "@/components/ui/mobileMenuToggler";
 import SearchBoxToggler from "@/components/ui/searchBoxToggler";
@@ -16,8 +18,10 @@ const MainHeader = () => {
       </div>
 
       <MainLogo className="w-10 md:w-20 object-contain" />
-      <HeaderDesktopNavigation />
-      <HeaderMobileNavigation />
+      <Suspense fallback={<div className="flex-auto" />}>
+        <HeaderDesktopNavigation />
+        <HeaderMobileNavigation />
+      </Suspense>
       <div className="max-md:flex-1 flex items-center justify-end">
         <SearchBoxToggler onClick={setOpenSearchbar} />
       </div>
