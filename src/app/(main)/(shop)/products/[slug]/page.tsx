@@ -7,13 +7,14 @@ import MainContent from "../../_containers/mainContent";
 import FAQsection from "../../../_containers/fag";
 
 const CategoryPage = async ({
+  params,
   searchParams,
 }: PageProps<"/products/[slug]">) => {
   return (
     <main>
       <HeroShop />
       <Suspense fallback="hleo">
-        <MainContent searchParams={searchParams} />
+        <MainContent categorySlug={params} searchParams={searchParams} />
       </Suspense>
       <section className="py-20 container">
         <ShopOptions />

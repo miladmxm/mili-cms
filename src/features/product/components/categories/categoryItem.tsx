@@ -44,9 +44,11 @@ const CategoryItem = ({
           )}
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>{name}</ItemTitle>
+          <ItemTitle>
+            <Link href={`/admin/products/categories/${id}`}>{name}</Link>
+          </ItemTitle>
           <ItemDescription>
-            <Link className="" href="/" target="_blank">
+            <Link className="" href={`/products/${slug}`} target="_blank">
               {slug}
             </Link>
           </ItemDescription>

@@ -65,8 +65,12 @@ const getOptionsFilterFromSearchParams = ({
 
 const MainContent = async ({
   searchParams,
+  categorySlug,
 }: {
   searchParams: Promise<SearchParams>;
+  categorySlug?: Promise<{
+    slug: string;
+  }>;
 }) => {
   const options = await getPublicOptions();
   const limit = await getPageRenderItemCounterByOffsetInSearchParams(
@@ -79,6 +83,7 @@ const MainContent = async ({
     selectorKey: "discount",
     searchParams: awatedSearchParams,
   });
+  const slug = categorySlug ? (await categorySlug)?.slug : undefined;
   const priceFilter = getMinMaxPriceFilter(awatedSearchParams);
   const optionsFilter = getOptionsFilterFromSearchParams({
     options,
@@ -89,6 +94,7 @@ const MainContent = async ({
       discount: discountFilter,
       price: priceFilter,
       optionItems: optionsFilter,
+      categorySlug: slug,
     },
     {
       limit,

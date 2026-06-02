@@ -46,14 +46,21 @@ export const columns: ColumnDef<ProductTable>[] = [
   {
     accessorKey: "name",
     header: ProductDictionary["name"],
-    cell: ({ row }) => (
-      <div className="capitalize space-y-1">
-        <h6>{row.getValue("name")}</h6>
-        <small className="text-card-foreground/70 text-xs">
-          {row.original.slug}
-        </small>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const { id, slug } = row.original;
+      return (
+        <div className="capitalize space-y-1">
+          <h6>
+            <Link href={`/admin/products/${id}`}>{row.getValue("name")}</Link>
+          </h6>
+          <Link target="_blank" href={`#${slug}`}>
+            <small className="text-card-foreground/70 text-xs">
+              {row.original.slug}
+            </small>
+          </Link>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "status",

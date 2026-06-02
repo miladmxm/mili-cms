@@ -65,7 +65,16 @@ export const getPublishedProductsWithFilter = async (
     `${CacheKeys.product}-${JSON.stringify(filters)}`,
     `${CacheKeys.product}-${JSON.stringify(limitAndOffset)}`,
   );
-
+  console.log(
+    await productRepo.findPublishedProductByFiltersExist({
+      filters: {
+        categorySlug: "tkht-khwab",
+        optionItems: { color: "red" },
+        price: { min: 2, max: 11000000 },
+        discount: false,
+      },
+    }),
+  );
   const products = await productRepo.findPublishedProductByFilters({
     filters,
     config: limitAndOffset,

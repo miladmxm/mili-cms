@@ -6,11 +6,13 @@ import {
   between,
   desc,
   eq,
+  exists,
   ilike,
   inArray,
   like,
   ne,
   or,
+  sql,
 } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
@@ -191,11 +193,145 @@ export const findProductsByLimitAndOffset = (
     offset: options?.offset,
   });
 
+const findRecersiveCategoryIdsBySlug = async (
+  slug: string,
+  tx?: Transaction,
+): Promise<string[]> => {
+  const result = await getDBorTX(tx).execute(sql`
+    WITH RECURSIVE category_tree AS (
+      SELECT id
+      FROM product_category
+      WHERE slug = ${slug}
+
+      UNION ALL
+
+      SELECT c.id
+      FROM product_category c
+      INNER JOIN category_tree ct
+        ON c.parent_id = ct.id
+    )
+    SELECT id
+    FROM category_tree
+  `);
+  return result.rows.map((row) => row.id as string);
+};
+
 interface Filters {
   price?: { min: number; max: number };
   optionItems?: Record<string, string>;
   discount?: boolean;
+  categorySlug?: string;
 }
+
+export const findPublishedProductByFiltersExist = async (
+  {
+    filters,
+    config,
+  }: {
+    filters: Filters;
+    config?: OffsetLimit;
+  },
+  tx?: Transaction,
+) => {
+  const conditions: SQL<unknown>[] = [];
+
+  if (filters.categorySlug) {
+    const categoryIds = await findRecersiveCategoryIdsBySlug(
+      filters.categorySlug,
+      tx,
+    );
+    const categoryCondition = exists(
+      getDBorTX(tx)
+        .select()
+        .from(productToCategory)
+        .where(
+          and(
+            eq(productToCategory.productId, product.id),
+            inArray(productToCategory.categoryId, categoryIds),
+          ),
+        ),
+    );
+    conditions.push(categoryCondition);
+  }
+  if (filters.discount || filters.price) {
+    let where: SQL | undefined;
+
+    if (filters.discount) {
+      where = and(
+        eq(productMeta.productId, product.id),
+        ne(productMeta.discount, 0),
+      );
+    }
+
+    if (filters.price) {
+      where = and(
+        eq(productMeta.productId, product.id),
+        between(productMeta.price, filters.price.min, filters.price.max),
+      );
+    }
+
+    if (filters.price && filters.discount) {
+      where = and(
+        eq(productMeta.productId, product.id),
+        between(productMeta.price, filters.price.min, filters.price.max),
+        ne(productMeta.discount, 0),
+      );
+    }
+
+    conditions.push(
+      exists(getDBorTX(tx).select().from(productMeta).where(where)),
+    );
+  }
+  if (filters.optionItems) {
+    if (filters.optionItems) {
+      for (const [slug, value] of Object.entries(filters.optionItems)) {
+        conditions.push(
+          exists(
+            getDBorTX(tx)
+              .select({ id: productToOptionItem.productId })
+              .from(productToOptionItem)
+              .innerJoin(
+                productOptionItem,
+                eq(productOptionItem.id, productToOptionItem.optionItemId),
+              )
+              .innerJoin(
+                productOption,
+                eq(productOption.id, productOptionItem.optionId),
+              )
+              .where(
+                and(
+                  eq(productToOptionItem.productId, product.id),
+                  eq(productOption.slug, slug),
+                  eq(productOptionItem.value, value),
+                ),
+              ),
+          ),
+        );
+      }
+    }
+  }
+
+  const filteredProducts = await getDBorTX(tx)
+    .select({ id: product.id })
+    .from(product)
+    .where(and(...conditions));
+  const productIds = filteredProducts.map(({ id }) => id);
+
+  if (productIds.length === 0) {
+    return [];
+  }
+
+  return getDBorTX(tx).query.product.findMany({
+    where: and(
+      eq(product.status, "published"),
+      inArray(product.id, productIds),
+    ),
+    with: { thumbnail: true, metadata: true },
+    offset: config?.offset,
+    limit: config?.limit,
+    orderBy: [desc(product.createdAt)],
+  });
+};
 
 export const findPublishedProductByFilters = async (
   {
