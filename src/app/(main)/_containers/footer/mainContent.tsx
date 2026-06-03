@@ -86,13 +86,13 @@ const QuickAccess = () => {
       content={
         <ul className="gap-4 flex flex-col">
           <li>
-            <Link href="#">صفحه اصلی</Link>
+            <Link href="/">صفحه اصلی</Link>
           </li>
           <li>
             <Link href="#">مقالات</Link>
           </li>
           <li>
-            <Link href="#">فروشگاه</Link>
+            <Link href="/shop">فروشگاه</Link>
           </li>
           <li>
             <Link href="#">تماس با ما</Link>
@@ -113,7 +113,7 @@ const ProductCategories = () => {
         <ul className="gap-4 flex flex-col">
           {productCategories.map((productCategory) => (
             <li key={productCategory.slug}>
-              <Link href={`#${productCategory.slug}`}>
+              <Link href={`/products/${productCategory.slug}`}>
                 {productCategory.name}
               </Link>
             </li>

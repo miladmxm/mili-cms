@@ -45,6 +45,7 @@ const HeroTextContent = () => {
           shadow="sm"
           className="max-w-full max-md:w-1/2 max-md:min-w-max"
           variant="secondary"
+          href="/shop"
         >
           خرید
         </Button>

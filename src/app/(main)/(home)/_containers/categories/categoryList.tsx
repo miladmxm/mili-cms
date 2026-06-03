@@ -10,7 +10,7 @@ import DefaultImage from "@/components/ui/defaultImage";
 
 const CategoryCard = ({ slug, vector, name }: Category) => {
   return (
-    <Link href={`#${slug}`}>
+    <Link href={`/products/${slug}`}>
       <motion.div
         whileHover={{
           backgroundImage:

@@ -1,3 +1,7 @@
+import type { Route } from "next";
+
+import Link from "next/link";
+
 import type { Product } from "@/services/product/type";
 
 import { DiscountedPrice } from "@/features/product/components/ui/finalPrice";
@@ -13,6 +17,7 @@ const SimpleProductCard = ({
   thumbnail,
   className,
 }: Product & { className?: string }) => {
+  const productLink: Route = `/product/${slug}`;
   return (
     <div
       className={cn(
@@ -20,10 +25,12 @@ const SimpleProductCard = ({
         className,
       )}
     >
-      <DefaultImage
-        image={thumbnail}
-        className="rounded-7xl w-full aspect-[300/214]"
-      />
+      <Link href={productLink}>
+        <DefaultImage
+          image={thumbnail}
+          className="rounded-7xl w-full aspect-300/214"
+        />
+      </Link>
       <div className="p-6 flex-auto flex flex-col gap-4">
         <h6 className="text-gray-500">{name}</h6>
         <div className="flex gap-1 justify-between items-center">
@@ -35,7 +42,7 @@ const SimpleProductCard = ({
         <ButtonWithArrow
           containerClassName="mt-auto"
           variant="light"
-          href={`#${slug}`}
+          href={productLink}
         >
           مشاهده
         </ButtonWithArrow>

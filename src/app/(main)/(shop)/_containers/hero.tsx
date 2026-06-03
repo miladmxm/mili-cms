@@ -13,7 +13,6 @@ const HeroShop = async ({
 }) => {
   const slug = categorySlug ? (await categorySlug).slug : "";
   const category = await getProductCategoryBySlug(slug);
-  console.log(category);
   return (
     <section className="text-gray-500 justify-between gap-4 items-center pt-12 container flex">
       <div className="flex flex-col gap-4">

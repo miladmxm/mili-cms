@@ -131,9 +131,9 @@ export const ProductCardSkeleton = () => {
   );
 };
 
-const ProductCard = ({ thumbnail, name, metadata }: Product) => {
+const ProductCard = ({ thumbnail, name, metadata, slug }: Product) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const productLink: Route = "/";
+  const productLink: Route = `/product/${slug}`;
   return (
     <div
       ref={containerRef}

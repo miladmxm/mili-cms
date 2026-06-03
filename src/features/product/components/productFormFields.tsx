@@ -171,7 +171,6 @@ export const ProductCategories = ({
 export const ProductOptions = ({ options }: { options: Promise<Option[]> }) => {
   const { control, setValue } = useProductFormContext();
   const optionsData = use(options);
-  console.log(optionsData);
   return (
     <Controller
       name="optionItemIds"

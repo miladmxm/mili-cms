@@ -36,7 +36,6 @@ const BlockFormat = () => {
     const block = BLOCKITEMS[e as keyof typeof BLOCKITEMS];
 
     if (block.attributes) {
-      console.log(block);
       editor.chain().focus()[block.operation](block.attributes).run();
     } else {
       editor.chain().focus()[block.operation]().run();
