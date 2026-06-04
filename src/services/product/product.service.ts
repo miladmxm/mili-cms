@@ -13,7 +13,10 @@ import type { LimitAndOffset } from "../type";
 import type { CreateProduct, Product, ProductStatus } from "./type";
 
 import { checkMediaType, filterMediaIdsByTypes } from "../media";
-import { DTOconvertMediaPathToRealUrl } from "../media/dto";
+import {
+  DTOconvertMediaPathToRealUrl,
+  DTOconvertMediaToRealUrlMedia,
+} from "../media/dto";
 
 // * UTILS
 const checkProductImage = async (thumbnailId: CreateProduct["thumbnailId"]) => {
@@ -186,7 +189,7 @@ export const getLowPriceProducts = async () => {
   return normalProducts;
 };
 
-export const getProduct = async (id: string) => {
+export const getProduct = async (id: string): Promise<Product | undefined> => {
   "use cache";
 
   cacheTag(`${CacheKeys.product}-${id}`);
@@ -201,12 +204,7 @@ export const getProduct = async (id: string) => {
   let gallery = product.gallery.map(({ media }) => media);
 
   if (gallery && gallery.length > 0) {
-    gallery = gallery.map((img) => {
-      return {
-        ...img,
-        url: DTOconvertMediaPathToRealUrl(img.url),
-      };
-    });
+    gallery = DTOconvertMediaToRealUrlMedia(gallery);
   }
 
   let productMetadata = product.metadata;
@@ -231,7 +229,7 @@ export const getProduct = async (id: string) => {
     gallery,
     metadata: productMetadata,
     variables,
-  } as unknown as Product;
+  } as Product;
 };
 
 // * CREATE
