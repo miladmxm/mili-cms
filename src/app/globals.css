@@ -150,3 +150,15 @@
 @utility clip-path-url-* {
   clip-path: url(--value([*]));
 }
+
+@utility clip-path-inset-e-* {
+  clip-path: inset(
+    0 0 0
+    calc(--value(integer) * 1%)
+  );
+
+  clip-path: inset(
+    0 0 0
+    calc(--value([*]) * 1%)
+  );
+}
