@@ -1,3 +1,4 @@
+import EmblaClassName from "embla-carousel-class-names";
 import useEmblaCarousel from "embla-carousel-react";
 import { useEffect, useEffectEvent, useState } from "react";
 
@@ -5,7 +6,7 @@ import { useCaruselContext } from "./context";
 
 export interface CaruselInitParams {
   config?: Parameters<typeof useEmblaCarousel>[0];
-  plugin?: Parameters<typeof useEmblaCarousel>[1];
+  plugin?: { classNames: boolean };
 }
 
 export const useCarusel = (params?: CaruselInitParams) => {
@@ -15,7 +16,7 @@ export const useCarusel = (params?: CaruselInitParams) => {
       direction: "rtl",
       ...params?.config,
     },
-    params?.plugin,
+    [EmblaClassName({ active: !!params?.plugin?.classNames })],
   );
   return { emblaApi, emblaRef };
 };

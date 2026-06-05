@@ -83,6 +83,7 @@
     "drizzle-valibot": "0.4.2",
     "embla-carousel-auto-height": "8.6.0",
     "embla-carousel-autoplay": "8.6.0",
+    "embla-carousel-class-names": "^8.6.0",
     "embla-carousel-react": "8.6.0",
     "emoji-picker-react": "4.17.1",
     "filesize": "11.0.13",

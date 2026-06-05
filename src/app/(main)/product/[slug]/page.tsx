@@ -1,7 +1,15 @@
-const ProductPage = async ({ params }: PageProps<"/product/[slug]">) => {
-  console.log(await params);
+import { Suspense } from "react";
 
-  return <div>product</div>;
+import MainContent from "./_containers/main";
+
+const ProductPage = async (props: PageProps<"/product/[slug]">) => {
+  return (
+    <main>
+      <Suspense>
+        <MainContent {...props} />
+      </Suspense>
+    </main>
+  );
 };
 
 export default ProductPage;

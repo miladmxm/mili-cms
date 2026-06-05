@@ -62,6 +62,37 @@ export const findProductById = async (id: string, tx?: Transaction) => {
   };
 };
 
+export const findPublishedProductBySlug = async (
+  slug: string,
+  tx?: Transaction,
+) => {
+  const findedProduct = await getDBorTX(tx).query.product.findFirst({
+    where: and(eq(product.slug, slug), eq(product.status, "published")),
+    with: {
+      categories: { columns: { categoryId: true } },
+      thumbnail: true,
+      gallery: { with: { media: true } },
+      variables: {
+        with: { optionItem: true },
+      },
+      optionItems: { with: { optionItem: true } },
+      metadata: { with: { thumbnail: true } },
+    },
+  });
+  if (!findedProduct) return findedProduct;
+  const optionItems = findedProduct.optionItems.map(
+    ({ optionItem }) => optionItem,
+  );
+  const categoryIds = findedProduct.categories.map(
+    ({ categoryId }) => categoryId,
+  );
+  return {
+    ...findedProduct,
+    categoryIds,
+    optionItems,
+  };
+};
+
 export const findDiscountedProducts = async (
   options?: OffsetLimit,
   tx?: Transaction,

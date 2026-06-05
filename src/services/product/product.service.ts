@@ -232,6 +232,50 @@ export const getProduct = async (id: string): Promise<Product | undefined> => {
   } as Product;
 };
 
+export const getPublishedProduct = async (
+  slug: string,
+): Promise<Product | undefined> => {
+  "use cache";
+
+  cacheTag(`${CacheKeys.product}-${slug}`);
+  const product = await productRepo.findPublishedProductBySlug(slug);
+  if (!product) return product;
+  const { thumbnail } = product;
+
+  if (thumbnail) {
+    thumbnail.url = DTOconvertMediaPathToRealUrl(thumbnail.url);
+  }
+
+  let gallery = product.gallery.map(({ media }) => media);
+
+  if (gallery && gallery.length > 0) {
+    gallery = DTOconvertMediaToRealUrlMedia(gallery);
+  }
+
+  let productMetadata = product.metadata;
+
+  if (productMetadata && productMetadata.length > 0) {
+    productMetadata = productMetadata.map((meta) => {
+      if (!meta.thumbnail) return meta;
+      return {
+        ...meta,
+        thumbnail: {
+          ...meta.thumbnail,
+          url: DTOconvertMediaPathToRealUrl(meta.thumbnail.url),
+        },
+      };
+    });
+  }
+
+  const variables = product.variables.map(({ optionItem }) => optionItem);
+  return {
+    ...product,
+    thumbnail,
+    gallery,
+    metadata: productMetadata,
+    variables,
+  } as Product;
+};
 // * CREATE
 
 const addProductCategories = async ({

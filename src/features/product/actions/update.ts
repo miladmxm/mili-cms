@@ -59,6 +59,7 @@ export const updateProductAction = async (
     } as CreateProduct);
     updateTag(CacheKeys.product);
     updateTag(`${CacheKeys.product}-${id}`);
+    updateTag(`${CacheKeys.product}-${output.slug}`);
     return { success, message: "ویرایش انجام شد" };
   } catch (error) {
     console.log(error);
