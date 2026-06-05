@@ -62,6 +62,7 @@ export const createOption = async (optionData: CreateOption) => {
 // * UPDATE
 const sliceUpdatingOptionItemsWithNewOptionItems = (
   items: UpdateOption["items"],
+  optionId: string,
 ) => {
   const update: OptionItem[] = [];
   const create: CreateOptionItem[] = [];
@@ -72,7 +73,7 @@ const sliceUpdatingOptionItemsWithNewOptionItems = (
       update.push({
         ...item,
         id: item.id,
-        optionId: "",
+        optionId,
       });
     } else {
       create.push(item);
@@ -105,6 +106,7 @@ export const updateOption = async (id: string, input: UpdateOption) => {
       >[] = [];
       const { create, update } = sliceUpdatingOptionItemsWithNewOptionItems(
         data.items,
+        id,
       );
 
       for (const itemData of update) {
