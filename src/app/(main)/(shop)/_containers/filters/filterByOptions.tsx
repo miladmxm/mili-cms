@@ -1,7 +1,6 @@
-import * as motion from "motion/react-client";
-
 import type { Option, OptionItem } from "@/services/product/type";
 
+import Radio from "@/components/ui/radio";
 import { useSetParams } from "@/hooks/useSetParams";
 
 const FilterOptionItem = ({
@@ -13,10 +12,9 @@ const FilterOptionItem = ({
   const key = `${optionSlug}-${value}`;
   const isChecked = searchParams.get(optionSlug) === value;
   return (
-    <li className="flex gap-2 text-sm">
-      <input
-        className="sr-only"
-        type="radio"
+    <li>
+      <Radio
+        className="flex gap-2 text-sm"
         id={key}
         checked={isChecked}
         name={optionSlug}
@@ -25,20 +23,11 @@ const FilterOptionItem = ({
             applyParams({ [optionSlug]: value }, { scroll: false });
           }
         }}
-      />
-      <label
-        className="size-4 rounded-full bg-white border cursor-pointer border-primary-500 center p-0.5"
-        htmlFor={key}
       >
-        {" "}
-        <motion.span
-          animate={{ height: isChecked ? "100%" : "0" }}
-          className="block aspect-square rounded-full bg-secondary-500"
-        />
-      </label>
-      <label className="cursor-pointer" htmlFor={key}>
-        {label}
-      </label>
+        <label className="cursor-pointer" htmlFor={key}>
+          {label}
+        </label>
+      </Radio>
     </li>
   );
 };
