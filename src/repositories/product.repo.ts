@@ -73,7 +73,7 @@ export const findPublishedProductBySlug = async (
       thumbnail: true,
       gallery: { with: { media: true } },
       variables: {
-        with: { optionItem: true },
+        with: { optionItem: { with: { option: true } } },
       },
       optionItems: { with: { optionItem: true } },
       metadata: { with: { thumbnail: true } },
