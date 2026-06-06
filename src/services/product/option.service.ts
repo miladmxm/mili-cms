@@ -13,6 +13,14 @@ import type {
 } from "./type";
 
 // * READ
+export const getOptions = async () => {
+  "use cache";
+
+  cacheTag(CacheKeys.productOption);
+
+  return productRepo.findOptions();
+};
+
 export const getOptionsWithItems = async () => {
   "use cache";
 

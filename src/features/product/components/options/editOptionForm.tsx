@@ -2,7 +2,7 @@
 
 import { FormProvider } from "react-hook-form";
 
-import type { Option } from "@/services/product/type";
+import type { OptionWithItems } from "@/services/product/type";
 
 import { Button } from "@/components/dashboard/ui/button";
 import {
@@ -23,7 +23,7 @@ import {
   OptionSlug,
 } from "./optionFormField";
 
-const EditOptionForm = ({ option }: { option: Option }) => {
+const EditOptionForm = ({ option }: { option: OptionWithItems }) => {
   const { form, onSubmit, isPending } = useEditOption(option);
   return (
     <FormProvider {...form}>

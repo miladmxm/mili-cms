@@ -83,7 +83,7 @@ interface ProductBase {
   }[];
   optionItems: OptionItem[];
   gallery: Media[];
-  variables: (OptionItem & { option: Option })[];
+  variables: OptionItem[];
 }
 
 export type Product =
@@ -137,10 +137,17 @@ export interface UpdateOption extends Partial<CreateOption> {
   }[];
 }
 
-export interface Option {
+export interface OptionWithItems {
   id: string;
   name: string;
   slug: string;
   description?: string;
   items: OptionItem[];
+}
+
+export interface Option {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
 }

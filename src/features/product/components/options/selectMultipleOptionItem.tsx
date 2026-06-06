@@ -2,7 +2,7 @@ import type { FC } from "react";
 
 import { CheckIcon, ChevronsUpDownIcon, XIcon } from "lucide-react";
 
-import type { Option } from "@/services/product/type";
+import type { OptionWithItems } from "@/services/product/type";
 
 import { Badge } from "@/components/dashboard/ui/badge";
 import { Button } from "@/components/dashboard/ui/button";
@@ -26,7 +26,7 @@ export const SelectMultipleCategoriesSkeleton = () => {
 };
 
 const SelectMultipleOptionItem: FC<{
-  options: Option[];
+  options: OptionWithItems[];
   onSelect: (selected: {
     id: string;
     value: string;

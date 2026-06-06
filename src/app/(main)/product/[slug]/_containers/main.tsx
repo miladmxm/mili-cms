@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 
-import { getPublishedProduct } from "@/features/product/dal/query";
+import {
+  getPublicOptions,
+  getPublishedProduct,
+} from "@/features/product/dal/query";
 
 import GallerySlider from "../_components/gallerySlider";
 import TopContents from "./topContents";
@@ -12,6 +15,8 @@ const MainContent = async ({
   const { slug } = await params;
   const product = await getPublishedProduct(slug);
 
+  const options = await getPublicOptions();
+
   if (!product) {
     redirect("/shop");
   }
@@ -19,7 +24,7 @@ const MainContent = async ({
   return (
     <section className="grid md:grid-cols-2 gap-8 container pb-8 pt-22">
       <GallerySlider gallery={product.gallery} />
-      <TopContents {...product} />
+      <TopContents {...product} options={options} />
     </section>
   );
 };

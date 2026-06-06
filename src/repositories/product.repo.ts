@@ -591,6 +591,8 @@ export const findOptionsWithItems = (tx?: Transaction) =>
   getDBorTX(tx).query.productOption.findMany({
     with: { items: true },
   });
+export const findOptions = (tx?: Transaction) =>
+  getDBorTX(tx).query.productOption.findMany();
 
 export const createOption = (
   data: typeof productOption.$inferInsert,

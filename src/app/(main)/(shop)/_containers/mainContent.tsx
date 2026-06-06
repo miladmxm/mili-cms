@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 
-import type { Option } from "@/services/product/type";
+import type { OptionWithItems } from "@/services/product/type";
 import type { SearchParams } from "@/types/type";
 
 import { UI_SETTING } from "@/constant/uiSetting";
 import {
-  getPublicOptions,
+  getPublicOptionsWithItems,
   getPublishedProductsWithFilter,
 } from "@/features/product/dal/query";
 import {
@@ -43,7 +43,7 @@ const getOptionsFilterFromSearchParams = ({
   options,
   searchParams,
 }: {
-  options: Option[];
+  options: OptionWithItems[];
   searchParams: SearchParams;
 }) => {
   const opt: Record<string, string> = {};
@@ -72,7 +72,7 @@ const MainContent = async ({
     slug: string;
   }>;
 }) => {
-  const options = await getPublicOptions();
+  const options = await getPublicOptionsWithItems();
   const limit = await getPageRenderItemCounterByOffsetInSearchParams(
     searchParams,
     UI_SETTING.shop_products_limit,

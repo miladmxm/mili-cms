@@ -12,7 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/dashboard/ui/field";
 import { Spinner } from "@/components/dashboard/ui/spinner";
 
-import type { Category, Option } from "../../../services/product/type";
+import type { Category, OptionWithItems } from "../../../services/product/type";
 
 import { useEditProduct } from "../hooks/useEditProduct";
 import {
@@ -32,7 +32,7 @@ const EditProductForm = ({
   categories,
   options,
 }: {
-  options: Promise<Option[]>;
+  options: Promise<OptionWithItems[]>;
   categories: Promise<Category[]>;
 }) => {
   const { isPending, submit, form } = useEditProduct();

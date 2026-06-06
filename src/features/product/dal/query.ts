@@ -100,9 +100,15 @@ export const getOptions = async () => {
   );
 };
 
+export const getPublicOptionsWithItems = async () => {
+  return dalVerifySuccess(
+    await dalDbOperation(() => optionService.getOptionsWithItems()),
+  );
+};
+
 export const getPublicOptions = async () => {
   return dalVerifySuccess(
-    await dalDbOperation(optionService.getOptionsWithItems),
+    await dalDbOperation(() => optionService.getOptions()),
   );
 };
 

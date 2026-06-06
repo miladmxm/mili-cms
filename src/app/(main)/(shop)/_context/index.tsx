@@ -4,11 +4,11 @@ import type { PropsWithChildren } from "react";
 
 import { createContext, use, useMemo } from "react";
 
-import type { Option, Product } from "@/services/product/type";
+import type { OptionWithItems, Product } from "@/services/product/type";
 
 export interface FilterParamsState {
   products: Promise<Product[]>;
-  options: Option[];
+  options: OptionWithItems[];
   optionsFilter?: Record<string, string>;
   priceFilter?: {
     min: number;

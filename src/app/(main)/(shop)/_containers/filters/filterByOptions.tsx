@@ -1,4 +1,4 @@
-import type { Option, OptionItem } from "@/services/product/type";
+import type { OptionItem, OptionWithItems } from "@/services/product/type";
 
 import Radio from "@/components/ui/radio";
 import { useSetParams } from "@/hooks/useSetParams";
@@ -48,7 +48,7 @@ const FilterOptionItems = ({
   );
 };
 
-const FilterOptions = ({ options }: { options: Option[] }) => {
+const FilterOptions = ({ options }: { options: OptionWithItems[] }) => {
   return (
     <>
       {options.map(({ name, slug, items }) => (
@@ -64,7 +64,7 @@ const FilterOptions = ({ options }: { options: Option[] }) => {
   );
 };
 
-const FilterByOptions = ({ options }: { options: Option[] }) => {
+const FilterByOptions = ({ options }: { options: OptionWithItems[] }) => {
   return (
     <div className="bg-white rounded-4xl px-6 pb-8 mt-6">
       <div className="center w-full bg-primary-200 py-2 -translate-y-1/2 rounded-full">

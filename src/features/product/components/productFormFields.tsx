@@ -18,7 +18,7 @@ import { Controller, useFormContext, useWatch } from "react-hook-form";
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 import type {
   Category,
-  Option,
+  OptionWithItems,
   ProductType,
   ProductVariableMeta,
 } from "@/services/product/type";
@@ -168,7 +168,11 @@ export const ProductCategories = ({
   );
 };
 
-export const ProductOptions = ({ options }: { options: Promise<Option[]> }) => {
+export const ProductOptions = ({
+  options,
+}: {
+  options: Promise<OptionWithItems[]>;
+}) => {
   const { control, setValue } = useProductFormContext();
   const optionsData = use(options);
   return (
@@ -827,7 +831,7 @@ const ProductVariableMetaFieldGroup = ({
   options,
   defaultItems,
 }: {
-  options: Option[];
+  options: OptionWithItems[];
   defaultItems?: SelectOptionState;
 }) => {
   const {
@@ -902,7 +906,11 @@ const ProductVariableMetaFieldGroup = ({
   );
 };
 
-export const ProductMeta = ({ options }: { options: Promise<Option[]> }) => {
+export const ProductMeta = ({
+  options,
+}: {
+  options: Promise<OptionWithItems[]>;
+}) => {
   const { product } = useEditProductContext();
   const optionsData = use(options);
   const { control, setValue } = useProductFormContext();

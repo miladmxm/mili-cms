@@ -3,7 +3,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import type { Option, OptionItem } from "@/services/product/type";
+import type { OptionItem, OptionWithItems } from "@/services/product/type";
 
 import type { CreateOptionInput } from "../validations/option.schema";
 
@@ -23,7 +23,7 @@ export const useEditOption = ({
   items,
   name,
   slug,
-}: Option) => {
+}: OptionWithItems) => {
   const [isPending, startTransition] = useTransition();
   const form = useForm({
     resolver: valibotResolver(CreateOptionSchema),

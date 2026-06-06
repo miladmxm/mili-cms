@@ -2,7 +2,7 @@
 
 import { FormProvider } from "react-hook-form";
 
-import type { Option } from "@/services/product/type";
+import type { OptionWithItems } from "@/services/product/type";
 
 import { Button } from "@/components/dashboard/ui/button";
 import {
@@ -35,7 +35,7 @@ const CreateProductForm = ({
   options,
 }: {
   categories: Promise<Category[]>;
-  options: Promise<Option[]>;
+  options: Promise<OptionWithItems[]>;
 }) => {
   const { form, isPending, submit } = useCreateProduct();
   return (

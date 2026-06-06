@@ -1,13 +1,22 @@
 import type { CSSProperties } from "react";
 
-import type { Product } from "@/services/product/type";
+import type { Option, Product } from "@/services/product/type";
 
-const ColorVariables = ({ variables }: { variables: Product["variables"] }) => {
+const ColorVariables = ({
+  variables,
+  options,
+}: {
+  variables: Product["variables"];
+  options: Option[];
+}) => {
   const byOptionId = Object.groupBy(variables, ({ optionId }) => optionId);
-  const variableOptions = variables.map(({ option }) => option);
+  const variableOptions = options.filter(({ id }) =>
+    Object.keys(byOptionId).includes(id),
+  );
   const colorIndex = variableOptions.findIndex(({ slug }) =>
     slug.includes("color"),
   );
+
   const colorOptionId = variableOptions[colorIndex].id;
   return (
     <div>

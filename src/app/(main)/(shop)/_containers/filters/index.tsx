@@ -3,7 +3,7 @@
 import { motion, useAnimate } from "motion/react";
 import { useEffect } from "react";
 
-import type { Option } from "@/services/product/type";
+import type { OptionWithItems } from "@/services/product/type";
 
 import Close from "@/assets/icons/close.svg";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -14,7 +14,7 @@ import FilterByPrice from "./filterByPrice";
 import FilterDiscounted from "./filterDiscounted";
 import { setCloseFilter, useFilterMenuStore } from "./store";
 
-const ShopFilters = ({ options }: { options: Option[] }) => {
+const ShopFilters = ({ options }: { options: OptionWithItems[] }) => {
   const isOpen = useFilterMenuStore((state) => state.open);
   const isMobile = useIsMobile();
   const [sidebarRef, animate] = useAnimate<HTMLDivElement>();

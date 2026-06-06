@@ -1,7 +1,7 @@
 import { Edit2, OptionIcon } from "lucide-react";
 import Link from "next/link";
 
-import type { Option, OptionItem } from "@/services/product/type";
+import type { OptionItem, OptionWithItems } from "@/services/product/type";
 
 import EmptyPlaceholder from "@/components/dashboard/empty";
 import { IconLinkLoading } from "@/components/dashboard/link-loading";
@@ -83,7 +83,13 @@ const OptionItemsAccordion = ({
   );
 };
 
-const OptionCard = ({ name, description, slug, items, id }: Option) => {
+const OptionCard = ({
+  name,
+  description,
+  slug,
+  items,
+  id,
+}: OptionWithItems) => {
   return (
     <Card className="h-max">
       <CardHeader>
@@ -111,7 +117,7 @@ const OptionCard = ({ name, description, slug, items, id }: Option) => {
   );
 };
 
-const OptionList = ({ options }: { options: Option[] }) => {
+const OptionList = ({ options }: { options: OptionWithItems[] }) => {
   if (options.length === 0) {
     return (
       <EmptyPlaceholder
