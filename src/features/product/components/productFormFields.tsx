@@ -3,7 +3,7 @@
 import type { ComponentProps, PropsWithChildren } from "react";
 import type { FieldPath, FieldPathValue } from "react-hook-form";
 
-import { ChevronDown, Plus, Trash } from "lucide-react";
+import { ChevronDown, Plus, Trash, X } from "lucide-react";
 import Image from "next/image";
 import {
   Suspense,
@@ -13,7 +13,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { Controller, useFormContext, useWatch } from "react-hook-form";
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from "react-hook-form";
 
 import type { SheetController } from "@/features/media/components/mediaPickerSheet";
 import type {
@@ -126,6 +131,62 @@ export const ProductExcerpt = () => {
         </Field>
       )}
     />
+  );
+};
+
+export const ProductProperties = () => {
+  const { control } = useProductFormContext();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "properties",
+  });
+  return (
+    <div className="flex flex-col gap-6">
+      {fields.map(({ id }, i) => (
+        <FieldGroup key={id} className="flex-row gap-2">
+          <Controller
+            control={control}
+            name={`properties.${i}.key`}
+            render={({ field, fieldState }) => (
+              <Field>
+                <Input {...field} placeholder="عنوان" />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={control}
+            name={`properties.${i}.value`}
+            render={({ field, fieldState }) => (
+              <Field>
+                <Input {...field} placeholder="مقدار" />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Button
+            onClick={() => remove(i)}
+            size="icon"
+            type="button"
+            variant="destructive"
+          >
+            <X />
+          </Button>
+        </FieldGroup>
+      ))}
+      <Button
+        variant="outline"
+        type="button"
+        onClick={() => append({ key: "", value: "" })}
+      >
+        افزودن ویژگی
+        <Plus />
+      </Button>
+    </div>
   );
 };
 
@@ -257,7 +318,7 @@ export const ProductGallery = () => {
                 <div className="relative group" key={id}>
                   <Button
                     size="icon-sm"
-                    className="absolute end-1.5 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:scale-100 opacity-0 invisible pointer-events-none scale-75 transition-all top-1.5 z-20 text-destructive backdrop-blur-xs "
+                    className="absolute inset-e-1.5 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:scale-100 opacity-0 invisible pointer-events-none scale-75 transition-all top-1.5 z-20 text-destructive backdrop-blur-xs "
                     variant="outline"
                     onClick={() => removeItem(id)}
                   >
@@ -350,7 +411,7 @@ const SingleImagePicker = ({
                 {value && (
                   <Button
                     size="icon-sm"
-                    className="absolute end-2 top-2 z-20 text-destructive backdrop-blur-xs"
+                    className="absolute inset-e-2 top-2 z-20 text-destructive backdrop-blur-xs"
                     variant="outline"
                     onClick={() =>
                       setValue(name, null, {
@@ -566,7 +627,7 @@ const ProductDiscount = ({
           <FieldLabel htmlFor={field.name}>تخفیف</FieldLabel>
           <div className="relative">
             <Input {...field} id={field.name} placeholder="33" />
-            <span className="absolute end-3 text-xl top-1">%</span>
+            <span className="absolute inset-e-3 text-xl top-1">%</span>
           </div>
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>

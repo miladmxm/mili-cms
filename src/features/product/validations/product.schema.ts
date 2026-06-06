@@ -46,6 +46,12 @@ export const CreateProductBaseSchema = v.object({
   excerpt: v.pipe(v.string(), v.nonEmpty("خلاصه ای از مقاله بنویسید")),
   content: ProseMirrorSchema,
   slug: v.pipe(v.string(), v.nonEmpty("مقدار slug را وارد کنید")),
+  properties: v.array(
+    v.object({
+      key: v.pipe(v.string(), v.nonEmpty("نمی‌تواند خالی باشد")),
+      value: v.pipe(v.string(), v.nonEmpty("نمی‌تواند خالی باشد")),
+    }),
+  ),
   status: StatusSchema,
   thumbnail: ThumbnailSchema,
   categoryIds: v.array(v.pipe(v.string(), v.nonEmpty())),

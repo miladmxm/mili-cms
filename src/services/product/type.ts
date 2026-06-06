@@ -4,6 +4,7 @@ import type { Media } from "../media/type";
 
 export type ProductType = "default" | "variable";
 export type ProductStatus = "archived" | "draft" | "published";
+export type ProductProperties = { key: string; value: string }[];
 export const StatusDictionary: Record<ProductStatus, string> = {
   archived: "آرشیو",
   draft: "پیش‌نویس",
@@ -23,6 +24,7 @@ export interface VariableCreateProductMetadata extends CreateProductMetadata {
 interface CreateProductBaseData {
   name: string;
   content: ProseMirror;
+  properties: ProductProperties;
   slug: string;
   excerpt: string;
   thumbnailId?: string | null | undefined;
@@ -68,6 +70,7 @@ interface ProductBase {
   thumbnail: Media | null;
   thumbnailId: string | null;
   categoryIds: string[];
+  properties: ProductProperties;
   id: string;
   type: ProductType;
   name: string;

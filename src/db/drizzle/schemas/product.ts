@@ -9,7 +9,11 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type { ProductStatus, ProductType } from "@/services/product/type";
+import type {
+  Product,
+  ProductStatus,
+  ProductType,
+} from "@/services/product/type";
 import type { ProseMirror } from "@/types/type";
 
 import { articleStatus } from "./article";
@@ -29,6 +33,10 @@ export const product = MainSchema.table(
     content: jsonb("content").$type<ProseMirror>().notNull().default({}),
     slug: varchar("slug", { length: 255 }).notNull().unique(),
     excerpt: text("excerpt").notNull(),
+    properties: jsonb("properties")
+      .$type<Product["properties"]>()
+      .default([])
+      .notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()

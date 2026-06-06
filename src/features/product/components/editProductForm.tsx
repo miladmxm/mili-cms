@@ -23,6 +23,7 @@ import {
   ProductMeta,
   ProductName,
   ProductOptions,
+  ProductProperties,
   ProductSlug,
   ProductStatus,
   ProductThumbnail,
@@ -79,6 +80,14 @@ const EditProductForm = ({
               </CardHeader>
               <CardContent>
                 <ProductMeta options={options} />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>ویژگی های منحصربفرد محصول</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProductProperties />
               </CardContent>
             </Card>
             <ProductContent key="create" />
