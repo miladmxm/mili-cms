@@ -6,6 +6,7 @@ import {
 } from "@/features/product/dal/query";
 
 import GallerySlider from "../_components/gallerySlider";
+import PriceAndAddToCart from "./priceAndAddToCart";
 import TopContents from "./topContents";
 
 const MainContent = async ({
@@ -22,10 +23,13 @@ const MainContent = async ({
   }
 
   return (
-    <section className="grid md:grid-cols-2 gap-8 container pb-8 pt-22">
-      <GallerySlider gallery={product.gallery} />
-      <TopContents {...product} options={options} />
-    </section>
+    <>
+      <section className="grid md:grid-cols-2 gap-8 container pb-8 pt-22">
+        <GallerySlider gallery={product.gallery} />
+        <TopContents {...product} options={options} />
+      </section>
+      <PriceAndAddToCart metadata={product.metadata} />
+    </>
   );
 };
 
