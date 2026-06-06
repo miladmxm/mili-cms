@@ -5,7 +5,7 @@ import type { Option, Product } from "@/services/product/type";
 import RateStars from "@/components/ui/rateStars";
 
 import ColorVariables from "../_components/colorVariables";
-import Options from "../_components/options";
+import Properties from "../_components/properties";
 import ShortDescription from "../_components/shortDescription";
 import Variables from "../_components/variables";
 
@@ -13,7 +13,7 @@ const TopContents = ({
   name,
   variables,
   excerpt,
-  optionItems,
+  properties,
   options,
 }: Product & { options: Option[] }) => {
   return (
@@ -23,7 +23,7 @@ const TopContents = ({
       <ColorVariables variables={variables} options={options} />
       <ShortDescription description={excerpt} />
       <Variables variables={variables} options={options} />
-      <Options optionItems={optionItems} options={options} />
+      <Properties properties={properties} />
     </div>
   );
 };
