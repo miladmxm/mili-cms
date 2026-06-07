@@ -5,13 +5,17 @@ import { useState } from "react";
 
 import Negative from "@/assets/icons/negative.svg";
 import Positive from "@/assets/icons/positive.svg";
+import { cn } from "@/lib/utils";
 
-const Counter = () => {
+const Counter = ({ className }: { className?: string }) => {
   const [count, setCount] = useState(1);
   return (
     <motion.div
       layout
-      className="flex divide-x divide-primary-200 px-2 rounded-full max-w-fit bg-white py-4 text-gray-500"
+      className={cn(
+        "flex divide-x divide-primary-200 px-2 rounded-full max-w-fit bg-white py-4 text-gray-500",
+        className,
+      )}
     >
       <button
         className="px-3"

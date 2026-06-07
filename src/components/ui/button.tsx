@@ -18,6 +18,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "p-3 w-full font-bold text-xl",
+        base: "p-3 w-full font-bold",
       },
       shadow: {
         default: "",

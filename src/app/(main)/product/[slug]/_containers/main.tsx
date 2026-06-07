@@ -7,6 +7,7 @@ import {
 
 import GallerySlider from "../_components/gallerySlider";
 import PriceAndAddToCart from "./priceAndAddToCart";
+import Thumbnail from "./thumbnail";
 import TopContents from "./topContents";
 
 const MainContent = async ({
@@ -29,6 +30,7 @@ const MainContent = async ({
         <TopContents {...product} options={options} />
       </section>
       <PriceAndAddToCart metadata={product.metadata} />
+      <Thumbnail thumbnail={product.thumbnail || undefined} />
     </>
   );
 };
