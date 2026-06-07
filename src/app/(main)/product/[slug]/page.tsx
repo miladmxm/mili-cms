@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 
-import MainContent from "./_containers/main";
+import Product from "./_containers/main";
 
 const ProductPage = async (props: PageProps<"/product/[slug]">) => {
   return (
     <main>
       <Suspense>
-        <MainContent {...props} />
+        <Product {...props} />
       </Suspense>
     </main>
   );

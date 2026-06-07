@@ -1,16 +1,18 @@
 import { redirect } from "next/navigation";
 
+import FAQsection from "@/app/(main)/_containers/fag";
 import {
   getPublicOptions,
   getPublishedProduct,
 } from "@/features/product/dal/query";
 
 import GallerySlider from "../_components/gallerySlider";
+import Contents from "./contents";
 import PriceAndAddToCart from "./priceAndAddToCart";
 import Thumbnail from "./thumbnail";
 import TopContents from "./topContents";
 
-const MainContent = async ({
+const Product = async ({
   params,
   searchParams,
 }: PageProps<"/product/[slug]">) => {
@@ -31,8 +33,10 @@ const MainContent = async ({
       </section>
       <PriceAndAddToCart metadata={product.metadata} />
       <Thumbnail thumbnail={product.thumbnail || undefined} />
+      <Contents content={product.content} />
+      <FAQsection />
     </>
   );
 };
 
-export default MainContent;
+export default Product;

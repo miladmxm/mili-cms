@@ -10,7 +10,6 @@ const Radio = ({
   children,
   ...props
 }: ComponentProps<"input"> & { id: string; children?: ReactNode }) => {
-  console.log(id);
   return (
     <div className={cn("group", className)}>
       <input className="sr-only" type="radio" {...props} id={id} />
