@@ -13,6 +13,8 @@ export const user = MainSchema.table("user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  phoneNumber: text("phone_number").unique(),
+  phoneNumberVerified: boolean("phone_number_verified"),
   role: text("role"),
   banned: boolean("banned").default(false),
   banReason: text("ban_reason"),

@@ -1,5 +1,4 @@
 import { IconLogout } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 import { Button } from "@/components/dashboard/ui/button";
@@ -14,15 +13,15 @@ import {
   DialogTrigger,
 } from "@/components/dashboard/ui/dialog";
 import { Spinner } from "@/components/dashboard/ui/spinner";
-import { signOut } from "@/lib/auth-client";
+
+import { logoutAction } from "../actions/logout";
 
 const SignoutButton = () => {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleSignOut = () => {
     startTransition(async () => {
-      await signOut(() => router.push("/admin/login"));
+      await logoutAction();
     });
   };
 

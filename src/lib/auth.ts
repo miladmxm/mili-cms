@@ -1,7 +1,7 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
-import { admin } from "better-auth/plugins";
+import { admin, phoneNumber } from "better-auth/plugins";
 import { headers } from "next/headers";
 
 import { db } from "@/db/drizzle/db";
@@ -24,13 +24,27 @@ export const auth = betterAuth({
     throw: true,
   },
   plugins: [
-    nextCookies(),
+    phoneNumber({
+      sendOTP: ({ phoneNumber: pn, code }, ctx) => {
+        console.log(pn, code);
+      },
+      signUpOnVerification: {
+        getTempEmail: (pn) => {
+          return `${pn}@yatak.com`;
+        },
+
+        getTempName: (pn) => {
+          return pn;
+        },
+      },
+    }),
     admin({
       ac,
       roles,
       defaultRole: "user",
       adminRoles: ["admin"],
     }),
+    nextCookies(),
   ],
 });
 
