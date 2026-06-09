@@ -5,6 +5,7 @@ import { getPublicCategories } from "@/features/product/dal/query";
 import { buildCategoryTree } from "@/features/product/utils/buildCategoryTree";
 import { FontMain } from "@/lib/fonts";
 
+import AuthContainer from "./_containers/auth/auth";
 import Footer from "./_containers/footer";
 import Header from "./_containers/header";
 import Searchbar from "./_containers/search";
@@ -27,6 +28,7 @@ export default async function RootLayout({
           <Header />
           {children}
           <Searchbar />
+          <AuthContainer />
           <Footer />
         </body>
       </MainLayoutContextProvider>
