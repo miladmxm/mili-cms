@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/no-array-index-key */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 "use client";
 
@@ -6,17 +7,25 @@ import type { ReactNode } from "react";
 
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { OTPInput } from "input-otp";
+import { useRouter } from "next/navigation";
 import { Activity } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as v from "valibot";
 
 import Close from "@/assets/icons/close.svg";
 import Button from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
 import type { AuthSteps } from "../../_store/auth";
 
-import { closeAuthDialog, setAuthStep, useAuthStore } from "../../_store/auth";
+import {
+  closeAuthDialog,
+  resetAuth,
+  setAuthStep,
+  setPhonenNumber,
+  useAuthStore,
+} from "../../_store/auth";
 
 const formClasses = "flex flex-col gap-4 p-6";
 
@@ -32,9 +41,13 @@ const PhoneNumber = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // onClick={() => setAuthStep("password")}
+  const onSubmit = async ({ phoneNumber }: { phoneNumber: string }) => {
+    const { data } = await authClient.phoneNumber.sendOtp({ phoneNumber });
+
+    if (data?.message) {
+      setPhonenNumber(phoneNumber);
+      setAuthStep("password");
+    }
   };
 
   return (
@@ -65,17 +78,46 @@ const PhoneNumber = () => {
 };
 
 const Password = () => {
+  const { control } = useForm({
+    resolver: valibotResolver(
+      v.object({
+        password: v.pipe(v.string(), v.nonEmpty()),
+      }),
+    ),
+    defaultValues: {
+      password: "",
+    },
+  });
+
+  const onSubmit = ({ password }: { password: string }) => {
+    console.log(password);
+    setAuthStep("verify");
+  };
+
   return (
-    <>
-      <input
-        placeholder="رمز عبور"
-        className="rounded-full border border-primary-500 p-4 outline-none"
+    <form onSubmit={control.handleSubmit(onSubmit)} className={formClasses}>
+      <Controller
+        control={control}
+        name="password"
+        render={({ field, fieldState }) => (
+          <div
+            aria-invalid={fieldState.invalid}
+            className="flex flex-col gap-4"
+          >
+            <input
+              {...field}
+              placeholder="رمز عبور"
+              className="rounded-full text-end placeholder:text-start border border-primary-500 p-4 outline-none"
+            />
+            <span>{fieldState.error?.message}</span>
+          </div>
+        )}
       />
-      <Button variant="secondary" onClick={() => setAuthStep("verify")}>
+      <Button variant="secondary" type="submit">
         {" "}
         ورود یا ثبت نام
       </Button>
-    </>
+    </form>
   );
 };
 
@@ -94,17 +136,48 @@ function Slot(props: SlotProps) {
 }
 
 const Verify = () => {
+  const phoneNumber = useAuthStore((state) => state.phoneNumber);
+  const router = useRouter();
+  const { control, handleSubmit } = useForm({
+    resolver: valibotResolver(
+      v.object({
+        code: v.pipe(v.string(), v.nonEmpty(), v.minLength(6), v.maxLength(6)),
+      }),
+    ),
+    defaultValues: {
+      code: "",
+    },
+  });
+
+  const onSubmit = async ({ code }: { code: string }) => {
+    console.log(code);
+    const { data, error } = await authClient.phoneNumber.verify({
+      phoneNumber,
+      code: String(code),
+    });
+    resetAuth();
+    router.refresh();
+    console.log(data, error);
+  };
+
   return (
-    <>
-      <OTPInput
-        maxLength={5}
-        containerClassName="group dir-ltr center has-[:disabled]:opacity-30 rounded-full border border-primary-500 p-4 outline-none"
-        render={({ slots }) => (
-          <div className="flex">
-            {slots.map((slot, idx) => (
-              <Slot key={idx} {...slot} />
-            ))}
-          </div>
+    <form className={formClasses} onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        control={control}
+        name="code"
+        render={({ field }) => (
+          <OTPInput
+            {...field}
+            maxLength={6}
+            containerClassName="group dir-ltr center has-[:disabled]:opacity-30 rounded-full border border-primary-500 p-4 outline-none"
+            render={({ slots }) => (
+              <div className="flex gap-0.5">
+                {slots.map((slot, idx) => (
+                  <Slot key={idx} {...slot} />
+                ))}
+              </div>
+            )}
+          />
         )}
       />
       <button
@@ -118,7 +191,7 @@ const Verify = () => {
         {" "}
         ورود یا ثبت نام
       </Button>
-    </>
+    </form>
   );
 };
 
