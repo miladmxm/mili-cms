@@ -4,11 +4,11 @@ import type { ComponentProps } from "react";
 
 import { useState } from "react";
 
-import CloseEye from "@/assets/icons/close.svg";
-import OpenEye from "@/assets/icons/open.svg";
+import CloseEye from "@/assets/icons/closeEye.svg";
+import OpenEye from "@/assets/icons/openEye.svg";
 import { cn } from "@/lib/utils";
 
-const Password = ({ className, ...props }: ComponentProps<"input">) => {
+const PasswordField = ({ className, ...props }: ComponentProps<"input">) => {
   const [isShowPassword, setisShowPassword] = useState(false);
   return (
     <div
@@ -17,11 +17,16 @@ const Password = ({ className, ...props }: ComponentProps<"input">) => {
         className,
       )}
     >
-      <input {...props} placeholder="رمز عبور" className="p-4 size-full" />
+      <input
+        {...props}
+        type={isShowPassword ? "text" : "password"}
+        placeholder="رمز عبور"
+        className="p-4 size-full outline-none"
+      />
       <button
         type="button"
         onClick={() => setisShowPassword((prev) => !prev)}
-        className="absolute inset-e-2 *:size-4 inset-y-0 z-10"
+        className="absolute inset-e-4 *:size-6 inset-y-0 z-10"
       >
         {isShowPassword ? <CloseEye /> : <OpenEye />}
       </button>
@@ -29,4 +34,4 @@ const Password = ({ className, ...props }: ComponentProps<"input">) => {
   );
 };
 
-export default Password;
+export default PasswordField;

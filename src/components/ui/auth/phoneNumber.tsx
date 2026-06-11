@@ -2,17 +2,22 @@ import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
 
-const PhoneNumber = ({ className, ...props }: ComponentProps<"input">) => {
+const PhoneNumberField = ({ className, ...props }: ComponentProps<"input">) => {
   return (
-    <input
-      placeholder="شماره موبایل"
+    <div
       className={cn(
-        "rounded-full text-end placeholder:text-start border border-primary-500 p-4 outline-none",
+        "rounded-full border border-primary-500  has-[input:focus]:before:hidden flex relative items-center",
         className,
       )}
-      {...props}
-    />
+    >
+      <input
+        placeholder="شماره تلفن"
+        className="flex-auto dir-ltr placeholder:text-end outline-none p-4"
+        {...props}
+      />
+      <span className="me-4">09</span>
+    </div>
   );
 };
 
-export default PhoneNumber;
+export default PhoneNumberField;

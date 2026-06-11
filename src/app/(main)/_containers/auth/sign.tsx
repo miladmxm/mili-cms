@@ -23,103 +23,10 @@ import {
   closeAuthDialog,
   resetAuth,
   setAuthStep,
-  setPhonenNumber,
   useAuthStore,
 } from "../../_store/auth";
 
 const formClasses = "flex flex-col gap-4 p-6";
-
-const PhoneNumber = () => {
-  const { control } = useForm({
-    resolver: valibotResolver(
-      v.object({
-        phoneNumber: v.pipe(v.string(), v.nonEmpty(), v.startsWith("09")),
-      }),
-    ),
-    defaultValues: {
-      phoneNumber: "",
-    },
-  });
-
-  const onSubmit = async ({ phoneNumber }: { phoneNumber: string }) => {
-    const { data } = await authClient.phoneNumber.sendOtp({ phoneNumber });
-
-    if (data?.message) {
-      setPhonenNumber(phoneNumber);
-      setAuthStep("password");
-    }
-  };
-
-  return (
-    <form onSubmit={control.handleSubmit(onSubmit)} className={formClasses}>
-      <Controller
-        control={control}
-        name="phoneNumber"
-        render={({ field, fieldState }) => (
-          <div
-            aria-invalid={fieldState.invalid}
-            className="flex flex-col gap-4"
-          >
-            <input
-              {...field}
-              placeholder="شماره موبایل"
-              className="rounded-full text-end placeholder:text-start border border-primary-500 p-4 outline-none"
-            />
-            <span>{fieldState.error?.message}</span>
-          </div>
-        )}
-      />
-      <Button variant="secondary" type="submit">
-        {" "}
-        ورود یا ثبت نام
-      </Button>
-    </form>
-  );
-};
-
-const Password = () => {
-  const { control } = useForm({
-    resolver: valibotResolver(
-      v.object({
-        password: v.pipe(v.string(), v.nonEmpty()),
-      }),
-    ),
-    defaultValues: {
-      password: "",
-    },
-  });
-
-  const onSubmit = ({ password }: { password: string }) => {
-    console.log(password);
-    setAuthStep("verify");
-  };
-
-  return (
-    <form onSubmit={control.handleSubmit(onSubmit)} className={formClasses}>
-      <Controller
-        control={control}
-        name="password"
-        render={({ field, fieldState }) => (
-          <div
-            aria-invalid={fieldState.invalid}
-            className="flex flex-col gap-4"
-          >
-            <input
-              {...field}
-              placeholder="رمز عبور"
-              className="rounded-full text-end placeholder:text-start border border-primary-500 p-4 outline-none"
-            />
-            <span>{fieldState.error?.message}</span>
-          </div>
-        )}
-      />
-      <Button variant="secondary" type="submit">
-        {" "}
-        ورود یا ثبت نام
-      </Button>
-    </form>
-  );
-};
 
 function Slot(props: SlotProps) {
   return (

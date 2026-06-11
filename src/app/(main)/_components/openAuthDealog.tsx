@@ -1,8 +1,7 @@
 "use client";
 
 import Profile from "@/assets/icons/profile.svg";
-
-import { openAuthDialog } from "../_store/auth";
+import { openAuthDialog } from "@/features/auth/customer/store/auth";
 
 const OpenAuthDealog = () => {
   return (

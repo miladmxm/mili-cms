@@ -20,7 +20,7 @@ const Slot = (props: SlotProps) => {
   );
 };
 
-const OTP = ({
+const OTPfield = ({
   maxLength,
   ...props
 }: ControllerRenderProps & { maxLength?: number }) => {
@@ -40,4 +40,4 @@ const OTP = ({
   );
 };
 
-export default OTP;
+export default OTPfield;

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 import "@/app/globals.css";
+import AuthContainer from "@/features/auth/customer/containers/auth";
 import { getPublicCategories } from "@/features/product/dal/query";
 import { buildCategoryTree } from "@/features/product/utils/buildCategoryTree";
 import { FontMain } from "@/lib/fonts";
 
-import AuthContainer from "./_containers/auth/auth";
 import Footer from "./_containers/footer";
 import Header from "./_containers/header";
 import Searchbar from "./_containers/search";
