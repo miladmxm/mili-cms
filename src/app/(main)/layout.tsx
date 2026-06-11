@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "@/app/globals.css";
+import Toaster from "@/components/ui/toaster";
 import AuthContainer from "@/features/auth/customer/containers/auth";
 import { getPublicCategories } from "@/features/product/dal/query";
 import { buildCategoryTree } from "@/features/product/utils/buildCategoryTree";
@@ -29,6 +30,7 @@ export default async function RootLayout({
           {children}
           <Searchbar />
           <AuthContainer />
+          <Toaster position="top-right" />
           <Footer />
         </body>
       </MainLayoutContextProvider>

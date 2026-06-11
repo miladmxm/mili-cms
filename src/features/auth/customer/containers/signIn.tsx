@@ -4,11 +4,13 @@ import type { AuthSteps } from "../store/auth";
 
 import PasswordSignIn from "../components/passwordSignIn";
 import PhoneNumberSignIn from "../components/phoneNumberSignIn";
+import VerifySignIn from "../components/verifySignIn";
 import { useAuthStore } from "../store/auth";
 
 const steps: Partial<Record<AuthSteps, ReactNode>> = {
   phoneNumber: <PhoneNumberSignIn />,
   password: <PasswordSignIn />,
+  verify: <VerifySignIn />,
 };
 
 const SignIn = () => {
