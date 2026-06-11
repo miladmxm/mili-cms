@@ -67,7 +67,6 @@ const PasswordSignIn = () => {
           تغییر شماره
         </SmallTextButton>
         <SmallTextButton onClick={requestForOTP}>
-          {/* todo send code before set step */}
           ورود از طریق پیامک
         </SmallTextButton>
       </div>

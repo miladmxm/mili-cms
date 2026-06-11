@@ -5,6 +5,7 @@ import { admin, phoneNumber } from "better-auth/plugins";
 import { headers } from "next/headers";
 
 import { db } from "@/db/drizzle/db";
+import { createFakeFrutiAndColorName } from "@/utils/faker";
 
 import type { Permissions } from "./permisions";
 
@@ -33,8 +34,8 @@ export const auth = betterAuth({
           return `${pn}@yatak.com`;
         },
 
-        getTempName: (pn) => {
-          return pn;
+        getTempName: () => {
+          return createFakeFrutiAndColorName();
         },
       },
     }),

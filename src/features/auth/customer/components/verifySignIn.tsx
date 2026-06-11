@@ -8,9 +8,10 @@ import { toast } from "sonner";
 import AuthFormWrapper from "@/components/ui/auth/form";
 import OTPfield from "@/components/ui/auth/OTP";
 import Button from "@/components/ui/button";
+import SmallTextButton from "@/components/ui/smallTextButton";
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
-import { resetAuth, useAuthStore } from "../store/auth";
+import { resetAuth, setAuthStep, useAuthStore } from "../store/auth";
 import { VerifyOTPschema } from "../validation/auth.schema";
 
 const VerifySignIn = () => {
@@ -27,6 +28,7 @@ const VerifySignIn = () => {
     const { error } = await authClient.phoneNumber.verify({
       phoneNumber,
       code,
+      updatePhoneNumber: false,
     });
 
     if (error) {
@@ -45,10 +47,12 @@ const VerifySignIn = () => {
         name="code"
         render={({ field }) => <OTPfield {...field} />}
       />
-
+      <SmallTextButton onClick={() => setAuthStep("phoneNumber")}>
+        تغییر شماره
+      </SmallTextButton>
       <Button variant="secondary" type="submit">
         {" "}
-        ورود یا ثبت نام
+        ورود
       </Button>
     </AuthFormWrapper>
   );

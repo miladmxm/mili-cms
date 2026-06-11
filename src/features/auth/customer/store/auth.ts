@@ -38,5 +38,5 @@ export const resetAuth = () => {
 
 export const changeMode = (mode: AuthStoreState["mode"]) => {
   resetAuth();
-  useAuthStore.setState({ mode });
+  useAuthStore.setState({ mode, isOpenAuthDialog: true });
 };
