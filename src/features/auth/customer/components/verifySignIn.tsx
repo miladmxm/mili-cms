@@ -13,6 +13,7 @@ import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { resetAuth, setAuthStep, useAuthStore } from "../store/auth";
 import { VerifyOTPschema } from "../validation/auth.schema";
+import ResendCode from "./resendCode";
 
 const VerifySignIn = () => {
   const phoneNumber = useAuthStore((state) => state.phoneNumber);
@@ -40,6 +41,13 @@ const VerifySignIn = () => {
     router.refresh();
   };
 
+  const resend = async () => {
+    const res = await authClient.phoneNumber.sendOtp({
+      phoneNumber,
+    });
+    console.log(res);
+  };
+
   return (
     <AuthFormWrapper onSubmit={handleSubmit(onSubmit)}>
       <Controller
@@ -47,9 +55,12 @@ const VerifySignIn = () => {
         name="code"
         render={({ field }) => <OTPfield {...field} />}
       />
-      <SmallTextButton onClick={() => setAuthStep("phoneNumber")}>
-        تغییر شماره
-      </SmallTextButton>
+      <div className="flex justify-between">
+        <SmallTextButton onClick={() => setAuthStep("phoneNumber")}>
+          تغییر شماره
+        </SmallTextButton>
+        <ResendCode onClick={resend} />
+      </div>
       <Button variant="secondary" type="submit">
         {" "}
         ورود
