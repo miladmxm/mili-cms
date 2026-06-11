@@ -11,6 +11,7 @@ const PhoneNumberField = ({ className, ...props }: ComponentProps<"input">) => {
       )}
     >
       <input
+        autoComplete="phoneNumber"
         placeholder="شماره تلفن"
         className="flex-auto dir-ltr placeholder:text-end outline-none p-4"
         {...props}

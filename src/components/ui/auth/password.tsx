@@ -18,6 +18,7 @@ const PasswordField = ({ className, ...props }: ComponentProps<"input">) => {
       )}
     >
       <input
+        autoComplete="password"
         {...props}
         type={isShowPassword ? "text" : "password"}
         placeholder="رمز عبور"

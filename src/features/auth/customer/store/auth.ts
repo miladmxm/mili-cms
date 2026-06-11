@@ -8,7 +8,6 @@ interface AuthStoreState {
   isOpenAuthDialog: boolean;
   step: AuthSteps;
   phoneNumber: string;
-  mode: "signIn" | "signUp";
 }
 
 export const useAuthStore = create<AuthStoreState>()(
@@ -17,7 +16,6 @@ export const useAuthStore = create<AuthStoreState>()(
       isOpenAuthDialog: false,
       step: "phoneNumber",
       phoneNumber: "",
-      mode: "signIn",
     }),
     { name: "auth-sign" },
   ),
@@ -34,9 +32,4 @@ export const setPhonenNumber = (phoneNumber: string) =>
 export const resetAuth = () => {
   useAuthStore.setState(useAuthStore.getInitialState());
   useAuthStore.persist.clearStorage();
-};
-
-export const changeMode = (mode: AuthStoreState["mode"]) => {
-  resetAuth();
-  useAuthStore.setState({ mode, isOpenAuthDialog: true });
 };
