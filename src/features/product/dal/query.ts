@@ -8,6 +8,7 @@ import {
   dalVerifySuccess,
 } from "@/dal/helpers";
 import * as productCategoryService from "@/services/product/category.service";
+import * as commentService from "@/services/product/comment.service";
 import * as optionService from "@/services/product/option.service";
 import * as productService from "@/services/product/product.service";
 
@@ -23,6 +24,17 @@ export const getProducts = async () => {
 export const getPublishedProducts = async (config?: LimitAndOffset) => {
   return dalVerifySuccess(
     await dalDbOperation(() => productService.getPublishedProducts(config)),
+  );
+};
+
+export const getApprovedProductComments = async (
+  productId: string,
+  config?: LimitAndOffset,
+) => {
+  return dalVerifySuccess(
+    await dalDbOperation(async () =>
+      commentService.getApprovedProductComments(productId, config),
+    ),
   );
 };
 

@@ -17,11 +17,13 @@ import {
 import type { OffsetLimit } from "@/types/repo";
 
 import {
+  comment,
   product,
   productCategory,
   productGallery,
   productMeta,
   productToCategory,
+  productToComments,
   productToOptionItem,
   productVariables,
 } from "@/db/drizzle/schemas";
@@ -678,3 +680,60 @@ export const deleteProductById = (id: string, tx?: Transaction) =>
     .delete(product)
     .where(eq(product.id, id))
     .returning({ id: product.id });
+
+export const findProductCommentsApproved = async (
+  {
+    productId,
+    options,
+  }: {
+    productId: string;
+    options?: OffsetLimit;
+  },
+  tx?: Transaction,
+) => {
+  const productIdCondition = exists(
+    getDBorTX(tx)
+      .select()
+      .from(productToComments)
+      .where(
+        and(
+          eq(productToComments.productId, productId),
+          eq(productToComments.commentId, comment.id),
+        ),
+      ),
+  );
+  const commentIds = (
+    await getDBorTX(tx)
+      .select({ id: comment.id })
+      .from(comment)
+      .where(productIdCondition)
+  ).map(({ id }) => id);
+  console.log(commentIds);
+  return getDBorTX(tx).query.comment.findMany({
+    where: and(
+      inArray(comment.id, commentIds),
+      eq(comment.status, "approved"),
+      eq(comment.type, "default"),
+    ),
+    offset: options?.offset,
+    limit: options?.limit,
+  });
+};
+
+export const createComment = (
+  commentData: typeof comment.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .insert(comment)
+    .values(commentData)
+    .returning({ id: comment.id });
+
+export const createProductToComment = (
+  data: typeof productToComments.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .insert(productToComments)
+    .values(data)
+    .returning({ id: productToComments.commentId });

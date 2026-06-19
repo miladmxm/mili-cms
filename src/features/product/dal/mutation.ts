@@ -4,12 +4,14 @@ import type {
   CreateCategory,
   CreateOption,
   CreateProduct,
+  CreateProductComment,
   ProductStatus,
   UpdateOption,
 } from "@/services/product/type";
 
 import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
 import * as categoryService from "@/services/product/category.service";
+import * as commentService from "@/services/product/comment.service";
 import * as optionService from "@/services/product/option.service";
 import * as productService from "@/services/product/product.service";
 
@@ -87,3 +89,9 @@ export const deleteCategory = (id: string) => {
     { product: ["delete"] },
   );
 };
+
+export const createComment = (comment: CreateProductComment) =>
+  dalRequireAuth(
+    () => dalDbOperation(() => commentService.createDefaultComment(comment)),
+    { comment: ["create"] },
+  );

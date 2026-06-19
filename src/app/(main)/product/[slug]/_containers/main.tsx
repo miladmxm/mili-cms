@@ -2,28 +2,30 @@ import { redirect } from "next/navigation";
 
 import FAQsection from "@/app/(main)/_containers/fag";
 import {
+  getApprovedProductComments,
   getPublicOptions,
   getPublishedProduct,
 } from "@/features/product/dal/query";
 
 import GallerySlider from "../_components/gallerySlider";
+import TabContentProvider from "../store/tabContent";
 import Contents from "./contents";
 import PriceAndAddToCart from "./priceAndAddToCart";
 import Thumbnail from "./thumbnail";
 import TopContents from "./topContents";
 
-const Product = async ({
-  params,
-  searchParams,
-}: PageProps<"/product/[slug]">) => {
+const Product = async ({ params }: PageProps<"/product/[slug]">) => {
   const { slug } = await params;
   const product = await getPublishedProduct(slug);
-
   const options = await getPublicOptions();
 
   if (!product) {
     redirect("/shop");
   }
+
+  const productComments = await getApprovedProductComments(product.id);
+
+  console.log(productComments);
 
   return (
     <>
@@ -33,7 +35,9 @@ const Product = async ({
       </section>
       <PriceAndAddToCart metadata={product.metadata} />
       <Thumbnail thumbnail={product.thumbnail || undefined} />
-      <Contents content={product.content} />
+      <TabContentProvider>
+        <Contents content={product.content} />
+      </TabContentProvider>
       <FAQsection />
     </>
   );

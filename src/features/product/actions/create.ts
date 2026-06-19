@@ -12,10 +12,17 @@ import { renameObjectItemInArray } from "@/utils/renameObjectitem";
 import { validator } from "@/validations";
 
 import type { CreateCategoryOutput } from "../validations/category.schema";
+import type { CreateProductCommentInput } from "../validations/comment.schema";
 import type { CreateOptionInput } from "../validations/option.schema";
 
-import { createCategory, createOption, createProduct } from "../dal/mutation";
+import {
+  createCategory,
+  createComment,
+  createOption,
+  createProduct,
+} from "../dal/mutation";
 import { CreateCategorySchema } from "../validations/category.schema";
+import { CreateProductCommentSchema } from "../validations/comment.schema";
 import { CreateOptionSchema } from "../validations/option.schema";
 import { CreateProductSchema } from "../validations/product.schema";
 
@@ -104,6 +111,29 @@ export const createOptionAction = async (
 
   try {
     const { success } = await createOption(output);
+    if (!success) return { success, message: "خطا در ایجاد ویژگی" };
+    updateTag(CacheKeys.productOption);
+    return { success: true, message: "ویژگی با موفقیت ایجاد شد" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "خطا در ایجاد ویژگی" };
+  }
+};
+
+export const createProductComment = async (
+  productId: string,
+  inputData: unknown,
+): Promise<ActionResult<CreateProductCommentInput>> => {
+  const {
+    errors,
+    output,
+    success: isSuccessValidation,
+  } = validator(CreateProductCommentSchema, inputData);
+  if (!isSuccessValidation)
+    return { success: false, errors, message: "خطای اعتبار سنجی" };
+
+  try {
+    const { success } = await createComment({ ...output, productId });
     if (!success) return { success, message: "خطا در ایجاد ویژگی" };
     updateTag(CacheKeys.productOption);
     return { success: true, message: "ویژگی با موفقیت ایجاد شد" };

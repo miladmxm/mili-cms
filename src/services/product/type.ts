@@ -154,3 +154,9 @@ export interface Option {
   slug: string;
   description?: string;
 }
+
+export interface CreateProductComment {
+  content: string;
+  authorId: string;
+  productId: string;
+}

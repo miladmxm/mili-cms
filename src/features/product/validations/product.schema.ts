@@ -122,6 +122,7 @@ export const EditProductSchema = v.variant("type", [
     }),
   }),
 ]);
+
 export type UpdateProductOutput = v.InferOutput<typeof EditProductSchema>;
 
 export const UpdateStatusSchema = v.object({
