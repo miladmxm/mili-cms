@@ -7,6 +7,7 @@ import {
   dalRequireAuth,
   dalVerifySuccess,
 } from "@/dal/helpers";
+import { getSession } from "@/lib/auth";
 import * as productCategoryService from "@/services/product/category.service";
 import * as commentService from "@/services/product/comment.service";
 import * as optionService from "@/services/product/option.service";
@@ -32,9 +33,13 @@ export const getApprovedProductComments = async (
   config?: LimitAndOffset,
 ) => {
   return dalVerifySuccess(
-    await dalDbOperation(async () =>
-      commentService.getApprovedProductComments(productId, config),
-    ),
+    await dalDbOperation(async () => {
+      const user = await getSession();
+      return commentService.getApprovedProductComments(
+        { productId, userId: user?.user.id },
+        config,
+      );
+    }),
   );
 };
 

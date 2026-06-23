@@ -6,4 +6,5 @@ export const CacheKeys = {
   productOption: "product_option",
   media: "media",
   portfolio: "portfolio",
+  productComment: "product_comment",
 };

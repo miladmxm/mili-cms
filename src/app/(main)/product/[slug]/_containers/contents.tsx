@@ -12,7 +12,13 @@ import type { ProductContentTabKeys } from "../store/tabContent";
 import { ProductContentTabs, useTabContext } from "../store/tabContent";
 import ProductComments from "./productComments";
 
-const Contents = ({ content }: { content: Product["content"] }) => {
+const Contents = ({
+  content,
+  productId,
+}: {
+  content: Product["content"];
+  productId: string;
+}) => {
   const { setActiveTab, activeTab } = useTabContext(
     useShallow((state) => ({
       setActiveTab: state.setActiveTab,
@@ -41,7 +47,7 @@ const Contents = ({ content }: { content: Product["content"] }) => {
         {activeTab === "content" ? (
           <ProseMirrorRenderer content={content} />
         ) : activeTab === "comments" ? (
-          <ProductComments />
+          <ProductComments productId={productId} />
         ) : null}
       </div>
     </section>

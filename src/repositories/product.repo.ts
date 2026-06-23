@@ -11,6 +11,7 @@ import {
   inArray,
   like,
   ne,
+  or,
   sql,
 } from "drizzle-orm";
 
@@ -685,9 +686,11 @@ export const findProductCommentsApproved = async (
   {
     productId,
     options,
+    userId,
   }: {
     productId: string;
     options?: OffsetLimit;
+    userId?: string;
   },
   tx?: Transaction,
 ) => {
@@ -708,11 +711,12 @@ export const findProductCommentsApproved = async (
       .from(comment)
       .where(productIdCondition)
   ).map(({ id }) => id);
-  console.log(commentIds);
   return getDBorTX(tx).query.comment.findMany({
     where: and(
       inArray(comment.id, commentIds),
-      eq(comment.status, "approved"),
+      userId
+        ? or(eq(comment.status, "approved"), eq(comment.authorId, userId))
+        : eq(comment.status, "approved"),
       eq(comment.type, "default"),
     ),
     offset: options?.offset,

@@ -15,14 +15,19 @@ const TopContents = ({
   excerpt,
   properties,
   options,
+  type,
 }: Product & { options: Option[] }) => {
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-gray-500 md:text-xl font-bold">{name}</h1>
       <RateStars rate={12} className="w-44" />
-      <ColorVariables variables={variables} options={options} />
+      {type === "variable" && (
+        <ColorVariables variables={variables} options={options} />
+      )}
       <ShortDescription description={excerpt} />
-      <Variables variables={variables} options={options} />
+      {type === "variable" && (
+        <Variables variables={variables} options={options} />
+      )}
       <Properties properties={properties} />
     </div>
   );

@@ -1,10 +1,8 @@
 import * as v from "valibot";
 
-export const CreateProductCommentSchema = v.object({
-  content: v.pipe(v.string(), v.nonEmpty()),
-  authorId: v.pipe(v.string(), v.nonEmpty()),
+export const ProductCommentContentSchema = v.object({
+  content: v.pipe(v.string(), v.nonEmpty("این مورد نمی‌تواند خالی باشد")),
 });
-
-export type CreateProductCommentInput = v.InferInput<
-  typeof CreateProductCommentSchema
+export type ProductCommentContentOutput = v.InferOutput<
+  typeof ProductCommentContentSchema
 >;

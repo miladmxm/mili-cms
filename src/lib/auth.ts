@@ -26,7 +26,7 @@ export const auth = betterAuth({
   },
   plugins: [
     phoneNumber({
-      sendOTP: ({ phoneNumber: pn, code }, ctx) => {
+      sendOTP: ({ phoneNumber: pn, code }) => {
         console.log(pn, code);
       },
       signUpOnVerification: {
@@ -42,7 +42,7 @@ export const auth = betterAuth({
     admin({
       ac,
       roles,
-      defaultRole: "user",
+      defaultRole: "customer",
       adminRoles: ["admin"],
     }),
     nextCookies(),

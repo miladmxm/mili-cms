@@ -2,6 +2,7 @@
 import type { ProductProperties } from "@/services/product/type";
 
 const Properties = ({ properties }: { properties: ProductProperties }) => {
+  if (!Array.isArray(properties)) return;
   return (
     <div className="grid grid-cols-4 gap-6">
       {properties.map(({ key, value }, i) => (

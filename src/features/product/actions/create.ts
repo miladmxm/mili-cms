@@ -12,7 +12,7 @@ import { renameObjectItemInArray } from "@/utils/renameObjectitem";
 import { validator } from "@/validations";
 
 import type { CreateCategoryOutput } from "../validations/category.schema";
-import type { CreateProductCommentInput } from "../validations/comment.schema";
+import type { ProductCommentContentOutput } from "../validations/comment.schema";
 import type { CreateOptionInput } from "../validations/option.schema";
 
 import {
@@ -22,7 +22,7 @@ import {
   createProduct,
 } from "../dal/mutation";
 import { CreateCategorySchema } from "../validations/category.schema";
-import { CreateProductCommentSchema } from "../validations/comment.schema";
+import { ProductCommentContentSchema } from "../validations/comment.schema";
 import { CreateOptionSchema } from "../validations/option.schema";
 import { CreateProductSchema } from "../validations/product.schema";
 
@@ -123,22 +123,33 @@ export const createOptionAction = async (
 export const createProductComment = async (
   productId: string,
   inputData: unknown,
-): Promise<ActionResult<CreateProductCommentInput>> => {
+): Promise<ActionResult<ProductCommentContentOutput>> => {
+  const session = await getSession();
+  if (!session) redirect("/");
   const {
     errors,
     output,
     success: isSuccessValidation,
-  } = validator(CreateProductCommentSchema, inputData);
+  } = validator(ProductCommentContentSchema, inputData);
   if (!isSuccessValidation)
     return { success: false, errors, message: "خطای اعتبار سنجی" };
 
   try {
-    const { success } = await createComment({ ...output, productId });
-    if (!success) return { success, message: "خطا در ایجاد ویژگی" };
+    const createdComment = await createComment({
+      ...output,
+      productId,
+      authorId: session?.user.id,
+    });
+
+    if (!createdComment.success) {
+      console.log(createdComment);
+      return { success: false, message: "خطا در ایجاد نظر" };
+    }
+
     updateTag(CacheKeys.productOption);
-    return { success: true, message: "ویژگی با موفقیت ایجاد شد" };
+    return { success: true, message: "نظر شما با موفقیت ثبت شد" };
   } catch (error) {
     console.log(error);
-    return { success: false, message: "خطا در ایجاد ویژگی" };
+    return { success: false, message: "خطا در ثبت نظر" };
   }
 };
