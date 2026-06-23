@@ -17,7 +17,7 @@ const ColorVariables = ({
     slug.includes("color"),
   );
 
-  const colorOptionId = variableOptions[colorIndex]?.id;
+  const colorOptionId = variableOptions[colorIndex].id;
   return (
     <div>
       {colorIndex !== -1 && (
