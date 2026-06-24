@@ -1,5 +1,6 @@
 import type { SearchParams } from "@/types/type";
 
+import { CommentTable } from "../components/table";
 import { getComments } from "../dal/query";
 
 const AllComments = async ({
@@ -8,8 +9,11 @@ const AllComments = async ({
   searchParams?: SearchParams;
 }) => {
   const comments = await getComments();
-  console.log(comments);
-  return <div />;
+  return (
+    <section>
+      <CommentTable data={comments} />
+    </section>
+  );
 };
 
 export default AllComments;

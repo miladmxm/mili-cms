@@ -1,26 +1,22 @@
 import type { ColumnDef } from "@tanstack/react-table";
 
-import { Eye, MoreHorizontal, Pen } from "lucide-react";
 import Link from "next/link";
+
+import type {
+  CommentAdminAccess,
+  CommentStatus,
+  CommentType,
+} from "@/services/comment/type";
 
 import { Button } from "@/components/dashboard/ui/button";
 import { Checkbox } from "@/components/dashboard/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/dashboard/ui/dropdown-menu";
+import { fullDateNumberFormat } from "@/utils/fullDateWithFormat";
 
-import type { ProductTable } from "./type";
-
+import { CommentTypeDictionary } from "../../types";
 import ChangeStatusDropdown from "../changeStatusDropdown";
-import DeleteProduct from "../deleteProduct";
 import { ProductDictionary } from "./type";
 
-export const columns: ColumnDef<ProductTable>[] = [
+export const columns: ColumnDef<CommentAdminAccess>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -44,79 +40,89 @@ export const columns: ColumnDef<ProductTable>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: ProductDictionary["name"],
+    accessorKey: "author",
+    header: ProductDictionary["author"],
     cell: ({ row }) => {
-      const { id, slug } = row.original;
+      const {
+        author: { name, phoneNumber, email },
+      } = row.original;
       return (
         <div className="capitalize space-y-1">
-          <h6>
-            <Link href={`/admin/products/${id}`}>{row.getValue("name")}</Link>
-          </h6>
-          <Link target="_blank" href={`#${slug}`}>
-            <small className="text-card-foreground/70 text-xs">
-              {row.original.slug}
-            </small>
-          </Link>
+          <h6>{name}</h6>
+          <small className="text-card-foreground/70 text-xs dir-ltr">
+            {phoneNumber || email}
+          </small>
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "content",
+    header: ProductDictionary["content"],
+    cell: ({ row }) => {
+      return <p className="truncate">{row.getValue("content")}</p>;
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: ProductDictionary["createdAt"],
+    cell: ({ row }) => {
+      return <time>{fullDateNumberFormat(row.getValue("createdAt"))}</time>;
     },
   },
   {
     accessorKey: "status",
     header: ProductDictionary["status"],
     cell: ({ row }) => {
-      const { id } = row.original;
       return (
-        <div className="capitalize">
-          <ChangeStatusDropdown active={row.getValue("status")} id={id} />
-        </div>
+        <ChangeStatusDropdown
+          active={row.getValue("status") as CommentStatus}
+          id={row.original.id}
+        />
       );
+    },
+  },
+  {
+    accessorKey: "type",
+    header: ProductDictionary["type"],
+    cell: ({ row }) => {
+      return (
+        <small>
+          {CommentTypeDictionary[row.getValue("type") as CommentType]}
+        </small>
+      );
+    },
+  },
+  {
+    id: "relation",
+    header: "مربوط به",
+    cell: ({ row }) => {
+      const { article, product } = row.original;
+      const isArticle = !!article;
+      const isProduct = !!product;
+
+      if (isArticle) {
+        return (
+          <Link href={`/admin/blog/${article.id}`}>مقاله: {article.title}</Link>
+        );
+      }
+      if (isProduct) {
+        return (
+          <Link href={`/admin/products/${product.id}`}>
+            محصول: {product.name}
+          </Link>
+        );
+      }
+
+      return <small>نامشخص</small>;
     },
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const { id, name } = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="h-8 w-8 p-0" variant="ghost">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            className="rtl:dir-rtl *:justify-between"
-          >
-            <DropdownMenuLabel>عملیات</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/" target="_blank">
-                مشاهده
-                <Eye />
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/products/${id}`}>
-                ویرایش
-                <Pen />
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <DeleteProduct
-                className="w-full text-destructive hover:text-destructive"
-                id={id}
-                name={name}
-              >
-                حذف
-              </DeleteProduct>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      const { id } = row.original;
+      return <Button variant="outline">نمایش </Button>;
     },
   },
 ];

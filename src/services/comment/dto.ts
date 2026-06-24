@@ -11,8 +11,8 @@ export const DTOtoAdminAccessComment = (
     const { article, product, ...more } = comment;
     comments.push({
       ...more,
-      product: product.product,
-      article: article.article,
+      product: product?.product,
+      article: article?.article,
     });
   }
 

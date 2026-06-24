@@ -17,6 +17,8 @@ import {
 import { ChevronDown } from "lucide-react";
 import * as React from "react";
 
+import type { CommentAdminAccess } from "@/services/comment/type";
+
 import { Button } from "@/components/dashboard/ui/button";
 import {
   DropdownMenu,
@@ -35,12 +37,9 @@ import {
 } from "@/components/dashboard/ui/table";
 import { useDirection } from "@/hooks/useDirection";
 
-import type { ProductTable } from "./type";
-
 import { columns } from "./cols";
-import { ProductDictionary } from "./type";
 
-export function ProductTable({ data }: { data: ProductTable[] }) {
+export function CommentTable({ data }: { data: CommentAdminAccess[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -74,11 +73,11 @@ export function ProductTable({ data }: { data: ProductTable[] }) {
       <div className="flex items-center py-4">
         <Input
           className="max-w-sm"
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("content")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          placeholder="جست و جو بر اساس عنوان ..."
+          placeholder="جست و جو بر اساس محتوا ..."
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -101,7 +100,8 @@ export function ProductTable({ data }: { data: ProductTable[] }) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {ProductDictionary[column.id as keyof ProductTable]}
+                    {column.id}
+                    {/* {ProductDictionary[column.id as keyof CommentAdminAccess]} */}
                   </DropdownMenuCheckboxItem>
                 );
               })}

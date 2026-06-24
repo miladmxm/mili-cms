@@ -7,4 +7,5 @@ export const CacheKeys = {
   media: "media",
   portfolio: "portfolio",
   productComment: "product_comment",
+  comment: "comment",
 };

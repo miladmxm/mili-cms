@@ -1,14 +1,7 @@
-import type { ProductStatus } from "../../../../services/product/type";
-
-export interface ProductTable {
-  id: string;
-  status: ProductStatus;
-  name: string;
-  slug: string;
-}
-export const ProductDictionary: Record<keyof ProductTable, string> = {
+export const ProductDictionary = {
+  author: "نویسنده",
+  content: "محتوا",
+  createdAt: "زمان ایجاد",
   status: "وضعیت",
-  id: "شناسه",
-  slug: "نشانی",
-  name: "نام",
-};
+  type: "نوع",
+} as const;

@@ -1,8 +1,8 @@
 import type { Rating } from "../type";
 
-type CommentStatus = "approved" | "pending" | "spam";
+export type CommentStatus = "approved" | "pending" | "spam";
 
-type CommentType = "default" | "qa";
+export type CommentType = "default" | "qa";
 
 export interface Comment {
   type: CommentType;
@@ -44,4 +44,10 @@ export interface CommentAdminAccess {
     name: string;
     phoneNumber: string | null;
   };
+}
+
+export interface UpdateCommentPayload {
+  content?: string;
+  status?: CommentStatus;
+  type?: CommentType;
 }

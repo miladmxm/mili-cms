@@ -3,11 +3,9 @@ import { toast } from "sonner";
 
 import type { ProductStatus } from "@/services/product/type";
 
-import type { ArticleStatus } from "../../../services/article/types";
-
 import { updateProductStatus } from "../actions/update";
 
-export const useChangeStatus = (id: string, defaultValue: ArticleStatus) => {
+export const useChangeStatus = (id: string, defaultValue: ProductStatus) => {
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState<ProductStatus>(defaultValue);
 

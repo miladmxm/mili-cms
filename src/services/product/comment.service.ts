@@ -20,7 +20,11 @@ export const getApprovedProductComments = async (
 ) => {
   "use cache";
 
-  cacheTag(`${CacheKeys.productComment}-${productId}`);
+  cacheTag(
+    CacheKeys.comment,
+    CacheKeys.productComment,
+    `${CacheKeys.productComment}-${productId}`,
+  );
   return productRepo.findProductCommentsApproved({
     productId,
     options: limitAndOffset,

@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 import type { OffsetLimit } from "@/types/repo";
 
@@ -25,3 +25,9 @@ export const findAllCommentsWithRelations = (
     offset: options?.offset,
   });
 };
+
+export const updateComment = (
+  { data, id }: { data: Partial<typeof comment.$inferInsert>; id: string },
+  tx?: Transaction,
+) =>
+  getDBorTX(tx).update(comment).set(data).where(eq(comment.id, id)).returning();
