@@ -11,7 +11,7 @@ import {
   IconSearch,
   IconSettings,
 } from "@tabler/icons-react";
-import { BaggageClaim, Image } from "lucide-react";
+import { BaggageClaim, Image, MessageCircle } from "lucide-react";
 
 import type { AdminNavMain } from "@/types/adminNavs";
 
@@ -76,6 +76,12 @@ export const navMain: AdminNavMain[] = [
         url: "/admin/products/options",
       },
     ],
+  },
+  {
+    title: "نظرات",
+    url: "/admin/comments",
+    icon: MessageCircle,
+    haveChild: false,
   },
   {
     haveChild: true,

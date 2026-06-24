@@ -47,11 +47,11 @@ const CommentCard = ({
 
 const CommentsList = () => {
   const { comments: commentsPromise } = useProductPageContext();
-  console.log(commentsPromise);
   const comments = use(commentsPromise);
+  console.log(comments.length);
 
   if (comments.length <= 0) {
-    <CommentsPlaceholder />;
+    return <CommentsPlaceholder />;
   }
 
   return (
