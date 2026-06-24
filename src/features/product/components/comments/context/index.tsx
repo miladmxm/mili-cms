@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import type { PropsWithChildren } from "react";
@@ -35,7 +36,6 @@ const AddCommentContextProvider = ({
 
   const value = useMemo(
     () => ({ isOpen: isOpen && isSigned, toggleIsOpen, productId }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isOpen, isSigned, openAuthDialog, toggleIsOpen, productId],
   );
   return <AddCommentContext value={value}>{children}</AddCommentContext>;

@@ -30,8 +30,14 @@ const CommentForm = ({ productId }: { productId: string }) => {
           </div>
         )}
       />
-      <Button disabled={isPending} type="submit" variant="secondary">
-        ثبت نظر
+      {/* <RateStarsInput /> */}
+      <Button
+        disabled={isPending}
+        type="submit"
+        variant="secondary"
+        className="flex items-center justify-center gap-2 flex-row"
+      >
+        <span>ثبت نظر</span>
         {isPending && <Spiner />}
       </Button>
     </form>

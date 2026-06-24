@@ -4,3 +4,10 @@ export const fullDateWithFormat = (d: Date, lang?: string): string => {
     timeStyle: "short",
   }).format(d);
 };
+
+export const fullDateNumberFormat = (
+  d: Date,
+  lang: string = "fa-ir",
+): string => {
+  return Intl.DateTimeFormat(lang).format(d);
+};

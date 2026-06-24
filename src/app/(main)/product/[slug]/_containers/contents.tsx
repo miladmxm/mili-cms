@@ -47,7 +47,7 @@ const Contents = ({
         {activeTab === "content" ? (
           <ProseMirrorRenderer content={content} />
         ) : activeTab === "comments" ? (
-          <ProductComments productId={productId} />
+          <ProductComments />
         ) : null}
       </div>
     </section>

@@ -1,5 +1,3 @@
-"use client";
-
 import type { Option, Product } from "@/services/product/type";
 
 import RateStars from "@/components/ui/rateStars";

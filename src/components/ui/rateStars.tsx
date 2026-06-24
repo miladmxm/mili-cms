@@ -2,9 +2,18 @@ import type { CSSProperties } from "react";
 
 import Image from "next/image";
 
+import Star from "@/assets/icons/star.svg";
 import stars from "@/assets/images/stars.png";
 import starsOutline from "@/assets/images/starsOutline.png";
 import { cn } from "@/lib/utils";
+
+export const RateStarsInput = ({ className }: { className?: string }) => {
+  return (
+    <button type="button" className={cn("relative", className)}>
+      <Star />
+    </button>
+  );
+};
 
 const RateStars = ({
   rate,

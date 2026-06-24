@@ -1,12 +1,21 @@
+"use client";
+
 import AddComment, {
   OpenCommentDialog,
 } from "@/features/product/components/comments/addComment";
 
-const ProductComments = ({ productId }: { productId: string }) => {
+import { useProductPageContext } from "../context";
+import CommentsList from "./commentsList";
+
+const ProductComments = () => {
+  const { product } = useProductPageContext();
   return (
-    <AddComment productId={productId}>
-      <OpenCommentDialog />
-    </AddComment>
+    <div className="flex flex-col gap-8">
+      <CommentsList />
+      <AddComment productId={product.id}>
+        <OpenCommentDialog />
+      </AddComment>
+    </div>
   );
 };
 

@@ -719,6 +719,8 @@ export const findProductCommentsApproved = async (
         : eq(comment.status, "approved"),
       eq(comment.type, "default"),
     ),
+    orderBy: desc(comment.createdAt),
+    with: { author: { columns: { role: true, name: true, image: true } } },
     offset: options?.offset,
     limit: options?.limit,
   });

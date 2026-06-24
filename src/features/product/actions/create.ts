@@ -142,11 +142,10 @@ export const createProductComment = async (
     });
 
     if (!createdComment.success) {
-      console.log(createdComment);
       return { success: false, message: "خطا در ایجاد نظر" };
     }
 
-    updateTag(CacheKeys.productOption);
+    updateTag(`${CacheKeys.productComment}-${productId}`);
     return { success: true, message: "نظر شما با موفقیت ثبت شد" };
   } catch (error) {
     console.log(error);

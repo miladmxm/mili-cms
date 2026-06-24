@@ -8,6 +8,7 @@ import {
 } from "@/features/product/dal/query";
 
 import GallerySlider from "../_components/gallerySlider";
+import ProductPageContextProvider from "../context";
 import TabContentProvider from "../store/tabContent";
 import Contents from "./contents";
 import PriceAndAddToCart from "./priceAndAddToCart";
@@ -23,12 +24,10 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
     redirect("/shop");
   }
 
-  const productComments = await getApprovedProductComments(product.id);
-
-  console.log(productComments);
+  const productComments = getApprovedProductComments(product.id);
 
   return (
-    <>
+    <ProductPageContextProvider comments={productComments} product={product}>
       <section className="grid md:grid-cols-2 gap-8 container pb-8 pt-22">
         <GallerySlider gallery={product.gallery} />
         <TopContents {...product} options={options} />
@@ -39,7 +38,7 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
         <Contents content={product.content} productId={product.id} />
       </TabContentProvider>
       <FAQsection />
-    </>
+    </ProductPageContextProvider>
   );
 };
 

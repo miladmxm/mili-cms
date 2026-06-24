@@ -11,7 +11,11 @@ import AddCommentContextProvider, { useAddCommentContext } from "./context";
 export const OpenCommentDialog = () => {
   const { toggleIsOpen } = useAddCommentContext();
   return (
-    <Button onClick={toggleIsOpen} variant="secondary">
+    <Button
+      onClick={toggleIsOpen}
+      variant="secondary"
+      className="max-w-xl mx-auto"
+    >
       نظرتان را ثبت کنید
     </Button>
   );
