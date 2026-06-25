@@ -154,7 +154,7 @@ export const columns: ColumnDef<CommentAdminAccess>[] = [
             </DropdownMenuItem>
             {type === "qa" && (
               <DropdownMenuItem asChild>
-                <ReplyTrigger />
+                <ReplyTrigger id={id} />
               </DropdownMenuItem>
             )}
             <DropdownMenuItem asChild>

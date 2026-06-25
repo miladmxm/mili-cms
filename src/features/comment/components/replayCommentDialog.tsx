@@ -3,14 +3,15 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/dashboard/ui/dialog";
 
 import { useCommentStore } from "../store";
-import EditComment from "./editComment";
+import ReplayForm from "./replayForm";
 
-const CommentDetailsDialog = () => {
+const ReplayCommentDialog = () => {
   const id = useCommentStore((store) => store.activeCommentId);
   const comments = useCommentStore((store) => store.comments);
   const mode = useCommentStore((store) => store.mode);
@@ -23,19 +24,21 @@ const CommentDetailsDialog = () => {
   };
 
   const activeComment = comments.find((comment) => comment.id === id);
-  const isOpen = !!id && !!activeComment && mode === "edit";
+  console.log(activeComment);
+  const isOpen = !!id && !!activeComment && mode === "replay";
   return (
     <Dialog modal open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>محتوای نظر</DialogTitle>
+          <DialogTitle>پاسخ به نظر</DialogTitle>
+          <DialogDescription>{activeComment?.content}</DialogDescription>
         </DialogHeader>
         <div>
-          <EditComment comment={activeComment} />
+          <ReplayForm comment={activeComment} />
         </div>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default CommentDetailsDialog;
+export default ReplayCommentDialog;

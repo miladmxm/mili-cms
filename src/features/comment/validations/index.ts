@@ -11,3 +11,9 @@ export const UpdateCommentValidation = v.object({
 });
 
 export type UpdateCommentOutput = v.InferOutput<typeof UpdateCommentValidation>;
+
+export const ReplayCommentValidation = v.object({
+  content: v.pipe(v.string(), v.nonEmpty("محتوا نباید خالی باشد")),
+});
+
+export type ReplayCommentOutput = v.InferOutput<typeof ReplayCommentValidation>;

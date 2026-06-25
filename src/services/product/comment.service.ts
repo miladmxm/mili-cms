@@ -60,3 +60,7 @@ export const createDefaultComment = async ({
   });
   return resultId;
 };
+
+export const createReplayComment = async () => {
+  // todo create replay comment
+};

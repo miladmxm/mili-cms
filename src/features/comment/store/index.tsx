@@ -10,11 +10,13 @@ import type { CommentAdminAccess } from "@/services/comment/type";
 
 interface CommentAction {
   setActiveCommentId: (activeCommentId?: string) => void;
+  setMode: (mode?: "edit" | "replay") => void;
 }
 
 interface CommentStates {
   comments: CommentAdminAccess[];
   activeCommentId?: string;
+  mode?: "edit" | "replay";
 }
 
 type CommentStore = CommentAction & CommentStates;
@@ -32,6 +34,7 @@ const CommentStoreProvider = ({
     storeRef.current = createStore<CommentStore>((set) => ({
       comments,
       setActiveCommentId: (activeCommentId) => set({ activeCommentId }),
+      setMode: (mode) => set({ mode }),
     }));
   }
 

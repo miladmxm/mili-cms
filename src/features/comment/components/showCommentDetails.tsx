@@ -9,9 +9,16 @@ const ShowCommentDetails = ({ id }: { id: string }) => {
   const setCommentActiveId = useCommentStore(
     (store) => store.setActiveCommentId,
   );
+  const setMode = useCommentStore((store) => store.setMode);
+
+  const handleClick = () => {
+    setCommentActiveId(id);
+    setMode("edit");
+  };
+
   return (
     <Button
-      onClick={() => setCommentActiveId(id)}
+      onClick={handleClick}
       variant="ghost"
       size="sm"
       className={cn("w-full")}
