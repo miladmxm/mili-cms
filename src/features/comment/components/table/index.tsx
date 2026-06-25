@@ -38,6 +38,7 @@ import {
 import { useDirection } from "@/hooks/useDirection";
 
 import { columns } from "./cols";
+import { CommentColsDictionary } from "./type";
 
 export function CommentTable({ data }: { data: CommentAdminAccess[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -75,7 +76,7 @@ export function CommentTable({ data }: { data: CommentAdminAccess[] }) {
           className="max-w-sm"
           value={(table.getColumn("content")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("content")?.setFilterValue(event.target.value)
           }
           placeholder="جست و جو بر اساس محتوا ..."
         />
@@ -100,8 +101,11 @@ export function CommentTable({ data }: { data: CommentAdminAccess[] }) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
-                    {/* {ProductDictionary[column.id as keyof CommentAdminAccess]} */}
+                    {
+                      CommentColsDictionary[
+                        column.id as keyof typeof CommentColsDictionary
+                      ]
+                    }
                   </DropdownMenuCheckboxItem>
                 );
               })}

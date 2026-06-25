@@ -12,9 +12,9 @@ import { Button } from "@/components/dashboard/ui/button";
 import { Checkbox } from "@/components/dashboard/ui/checkbox";
 import { fullDateNumberFormat } from "@/utils/fullDateWithFormat";
 
-import { CommentTypeDictionary } from "../../types";
 import ChangeStatusDropdown from "../changeStatusDropdown";
-import { ProductDictionary } from "./type";
+import ChangeTypeDropdown from "../changeTypeDropdown";
+import { CommentColsDictionary } from "./type";
 
 export const columns: ColumnDef<CommentAdminAccess>[] = [
   {
@@ -41,7 +41,7 @@ export const columns: ColumnDef<CommentAdminAccess>[] = [
   },
   {
     accessorKey: "author",
-    header: ProductDictionary["author"],
+    header: CommentColsDictionary["author"],
     cell: ({ row }) => {
       const {
         author: { name, phoneNumber, email },
@@ -58,21 +58,21 @@ export const columns: ColumnDef<CommentAdminAccess>[] = [
   },
   {
     accessorKey: "content",
-    header: ProductDictionary["content"],
+    header: CommentColsDictionary["content"],
     cell: ({ row }) => {
       return <p className="truncate">{row.getValue("content")}</p>;
     },
   },
   {
     accessorKey: "createdAt",
-    header: ProductDictionary["createdAt"],
+    header: CommentColsDictionary["createdAt"],
     cell: ({ row }) => {
       return <time>{fullDateNumberFormat(row.getValue("createdAt"))}</time>;
     },
   },
   {
     accessorKey: "status",
-    header: ProductDictionary["status"],
+    header: CommentColsDictionary["status"],
     cell: ({ row }) => {
       return (
         <ChangeStatusDropdown
@@ -84,12 +84,13 @@ export const columns: ColumnDef<CommentAdminAccess>[] = [
   },
   {
     accessorKey: "type",
-    header: ProductDictionary["type"],
+    header: CommentColsDictionary["type"],
     cell: ({ row }) => {
       return (
-        <small>
-          {CommentTypeDictionary[row.getValue("type") as CommentType]}
-        </small>
+        <ChangeTypeDropdown
+          active={row.getValue("type") as CommentType}
+          id={row.original.id}
+        />
       );
     },
   },
