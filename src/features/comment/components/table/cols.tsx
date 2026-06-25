@@ -8,12 +8,12 @@ import type {
   CommentType,
 } from "@/services/comment/type";
 
-import { Button } from "@/components/dashboard/ui/button";
 import { Checkbox } from "@/components/dashboard/ui/checkbox";
 import { fullDateNumberFormat } from "@/utils/fullDateWithFormat";
 
 import ChangeStatusDropdown from "../changeStatusDropdown";
 import ChangeTypeDropdown from "../changeTypeDropdown";
+import ShowCommentDetails from "../showCommentDetails";
 import { CommentColsDictionary } from "./type";
 
 export const columns: ColumnDef<CommentAdminAccess>[] = [
@@ -60,7 +60,7 @@ export const columns: ColumnDef<CommentAdminAccess>[] = [
     accessorKey: "content",
     header: CommentColsDictionary["content"],
     cell: ({ row }) => {
-      return <p className="truncate">{row.getValue("content")}</p>;
+      return <p className="truncate max-w-28">{row.getValue("content")}</p>;
     },
   },
   {
@@ -123,7 +123,7 @@ export const columns: ColumnDef<CommentAdminAccess>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const { id } = row.original;
-      return <Button variant="outline">نمایش </Button>;
+      return <ShowCommentDetails id={id} />;
     },
   },
 ];

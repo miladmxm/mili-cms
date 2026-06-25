@@ -18,7 +18,7 @@ import { useDirection } from "@/hooks/useDirection";
 import { CommentTypeDictionary } from "../types";
 
 interface TypeDropdownProps {
-  value: CommentType;
+  value?: CommentType;
   onChange: (v: CommentType) => void;
   label?: string;
 }

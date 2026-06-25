@@ -9,3 +9,5 @@ export const UpdateCommentValidation = v.object({
   type: v.optional(v.picklist<CommentType[]>(["default", "qa"])),
   content: v.optional(v.pipe(v.string(), v.nonEmpty("محتوا نباید خالی باشد"))),
 });
+
+export type UpdateCommentOutput = v.InferOutput<typeof UpdateCommentValidation>;

@@ -18,7 +18,7 @@ import { useDirection } from "@/hooks/useDirection";
 import { StatusDictionary } from "../types";
 
 interface StatusDropdownProps {
-  value: CommentStatus;
+  value?: CommentStatus;
   onChange: (v: CommentStatus) => void;
   label?: string;
 }
