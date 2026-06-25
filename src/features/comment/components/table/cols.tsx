@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 
+import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 
 import type {
@@ -8,11 +9,22 @@ import type {
   CommentType,
 } from "@/services/comment/type";
 
+import { Button } from "@/components/dashboard/ui/button";
 import { Checkbox } from "@/components/dashboard/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/dashboard/ui/dropdown-menu";
 import { fullDateNumberFormat } from "@/utils/fullDateWithFormat";
 
 import ChangeStatusDropdown from "../changeStatusDropdown";
 import ChangeTypeDropdown from "../changeTypeDropdown";
+import DeleteComment from "../deleteComment";
+import ReplyTrigger from "../replayTrigger";
 import ShowCommentDetails from "../showCommentDetails";
 import { CommentColsDictionary } from "./type";
 
@@ -122,8 +134,40 @@ export const columns: ColumnDef<CommentAdminAccess>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const { id } = row.original;
-      return <ShowCommentDetails id={id} />;
+      const { id, type } = row.original;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="h-8 w-8 p-0" variant="ghost">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="start"
+            className="rtl:dir-rtl *:justify-between"
+          >
+            <DropdownMenuLabel>عملیات</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <ShowCommentDetails id={id} />
+            </DropdownMenuItem>
+            {type === "qa" && (
+              <DropdownMenuItem asChild>
+                <ReplyTrigger />
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem asChild>
+              <DeleteComment
+                className="w-full text-destructive hover:text-destructive"
+                id={id}
+              >
+                حذف
+              </DeleteComment>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];

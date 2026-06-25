@@ -17,4 +17,8 @@ export const getAllComments = async (options?: LimitAndOffset) => {
 export const updateComment = async (id: string, data: UpdateCommentPayload) => {
   return commentsRepo.updateComment({ data, id });
 };
+
 // * DELETE
+export const deleteComment = async (id: string) => {
+  return commentsRepo.deleteCommentById(id);
+};

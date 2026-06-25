@@ -11,3 +11,10 @@ export const updateComment = async (id: string, data: UpdateCommentPayload) => {
     { comment: ["update"] },
   );
 };
+
+export const deleteComment = async (id: string) => {
+  return dalRequireAuth(
+    () => dalDbOperation(() => commentService.deleteComment(id)),
+    { comment: ["delete"] },
+  );
+};

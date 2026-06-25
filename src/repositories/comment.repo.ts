@@ -31,3 +31,6 @@ export const updateComment = (
   tx?: Transaction,
 ) =>
   getDBorTX(tx).update(comment).set(data).where(eq(comment.id, id)).returning();
+
+export const deleteCommentById = (id: string, tx?: Transaction) =>
+  getDBorTX(tx).delete(comment).where(eq(comment.id, id)).returning();
