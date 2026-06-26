@@ -11,6 +11,7 @@ import type { ProductContentTabKeys } from "../store/tabContent";
 
 import { ProductContentTabs, useTabContext } from "../store/tabContent";
 import ProductComments from "./productComments";
+import ProductQA from "./productQA";
 
 const Contents = ({
   content,
@@ -48,6 +49,8 @@ const Contents = ({
           <ProseMirrorRenderer content={content} />
         ) : activeTab === "comments" ? (
           <ProductComments />
+        ) : activeTab === "qa" ? (
+          <ProductQA />
         ) : null}
       </div>
     </section>

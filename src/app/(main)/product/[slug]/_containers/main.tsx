@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import FAQsection from "@/app/(main)/_containers/fag";
 import {
   getApprovedProductComments,
+  getApprovedProductQAwithReply,
   getPublicOptions,
   getPublishedProduct,
 } from "@/features/product/dal/query";
@@ -25,9 +26,14 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
   }
 
   const productComments = getApprovedProductComments(product.id);
+  const productQAComments = getApprovedProductQAwithReply(product.id);
 
   return (
-    <ProductPageContextProvider comments={productComments} product={product}>
+    <ProductPageContextProvider
+      comments={productComments}
+      qaComments={productQAComments}
+      product={product}
+    >
       <section className="grid md:grid-cols-2 gap-8 container pb-8 pt-22">
         <GallerySlider gallery={product.gallery} />
         <TopContents {...product} options={options} />

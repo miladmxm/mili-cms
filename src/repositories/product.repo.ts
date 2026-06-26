@@ -9,6 +9,7 @@ import {
   exists,
   ilike,
   inArray,
+  isNull,
   like,
   ne,
   or,
@@ -734,3 +735,70 @@ export const createProductToComment = (
     .insert(productToComments)
     .values(data)
     .returning({ id: productToComments.commentId });
+
+export const findProductQACommentsWithReplies = async (
+  {
+    productId,
+    options,
+    userId,
+  }: {
+    productId: string;
+    options?: OffsetLimit;
+    userId?: string;
+  },
+  tx?: Transaction,
+) => {
+  const productIdCondition = exists(
+    getDBorTX(tx)
+      .select()
+      .from(productToComments)
+      .where(
+        and(
+          eq(productToComments.productId, productId),
+          eq(productToComments.commentId, comment.id),
+        ),
+      ),
+  );
+  const rootCommentIds = (
+    await getDBorTX(tx)
+      .select({ id: comment.id })
+      .from(comment)
+      .where(productIdCondition)
+  ).map(({ id }) => id);
+
+  const qaComments = await getDBorTX(tx).query.comment.findMany({
+    where: and(
+      inArray(comment.id, rootCommentIds),
+      userId
+        ? or(eq(comment.status, "approved"), eq(comment.authorId, userId))
+        : eq(comment.status, "approved"),
+      eq(comment.type, "qa"),
+      isNull(comment.parentId),
+    ),
+    orderBy: desc(comment.createdAt),
+    with: { author: { columns: { role: true, name: true, image: true } } },
+    offset: options?.offset,
+    limit: options?.limit,
+  });
+  // Fetch replies for each Q&A comment
+  const qaWithReplies = await Promise.all(
+    qaComments.map(async (qa) => {
+      const replies = await getDBorTX(tx).query.comment.findMany({
+        where: and(
+          eq(comment.parentId, qa.id),
+          userId
+            ? or(eq(comment.status, "approved"), eq(comment.authorId, userId))
+            : eq(comment.status, "approved"),
+        ),
+        orderBy: asc(comment.createdAt),
+        with: { author: { columns: { role: true, name: true, image: true } } },
+      });
+      return {
+        ...qa,
+        replies,
+      };
+    }),
+  );
+
+  return qaWithReplies;
+};

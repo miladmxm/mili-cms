@@ -43,6 +43,21 @@ export const getApprovedProductComments = async (
   );
 };
 
+export const getApprovedProductQAwithReply = async (
+  productId: string,
+  config?: LimitAndOffset,
+) => {
+  return dalVerifySuccess(
+    await dalDbOperation(async () => {
+      const user = await getSession();
+      return commentService.getApprovedProductQAwithReply(
+        { productId, userId: user?.user.id },
+        config,
+      );
+    }),
+  );
+};
+
 export const getPublishedProduct = async (slug: string) => {
   return dalVerifySuccess(
     await dalDbOperation(() => productService.getPublishedProduct(slug)),

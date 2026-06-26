@@ -33,6 +33,30 @@ export const getApprovedProductComments = async (
   });
 };
 
+export const getApprovedProductQAwithReply = async (
+  {
+    productId,
+    userId,
+  }: {
+    productId: string;
+    userId?: string;
+  },
+  limitAndOffset?: LimitAndOffset,
+) => {
+  "use cache";
+
+  cacheTag(
+    CacheKeys.comment,
+    CacheKeys.productComment,
+    `${CacheKeys.productComment}-${productId}`,
+  );
+  return productRepo.findProductQACommentsWithReplies({
+    productId,
+    options: limitAndOffset,
+    userId,
+  });
+};
+
 // * CREATE
 export const createDefaultComment = async ({
   authorId,

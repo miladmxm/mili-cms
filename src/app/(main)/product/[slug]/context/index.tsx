@@ -7,9 +7,14 @@ import { createContext, use, useMemo } from "react";
 import type { Comment } from "@/services/comment/type";
 import type { Product } from "@/services/product/type";
 
+type QACommentWithReplies = Comment & {
+  replies: Comment[];
+};
+
 interface ProductPageState {
   product: Product;
   comments: Promise<Comment[]>;
+  qaComments: Promise<QACommentWithReplies[]>;
 }
 
 const ProductPageContext = createContext<ProductPageState | undefined>(
@@ -19,12 +24,13 @@ ProductPageContext.displayName = "ProductPageContext";
 
 const ProductPageContextProvider = ({
   comments,
+  qaComments,
   product,
   children,
 }: PropsWithChildren<ProductPageState>) => {
   const value = useMemo<ProductPageState>(
-    () => ({ comments, product }),
-    [comments, product],
+    () => ({ comments, qaComments, product }),
+    [comments, qaComments, product],
   );
   return <ProductPageContext value={value}>{children}</ProductPageContext>;
 };
