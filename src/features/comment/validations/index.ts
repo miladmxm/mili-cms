@@ -2,7 +2,7 @@ import * as v from "valibot";
 
 import type { CommentStatus, CommentType } from "@/services/comment/type";
 
-export const UpdateCommentValidation = v.object({
+export const UpdateCommentSchema = v.object({
   status: v.optional(
     v.picklist<CommentStatus[]>(["pending", "approved", "spam"]),
   ),
@@ -10,10 +10,11 @@ export const UpdateCommentValidation = v.object({
   content: v.optional(v.pipe(v.string(), v.nonEmpty("محتوا نباید خالی باشد"))),
 });
 
-export type UpdateCommentOutput = v.InferOutput<typeof UpdateCommentValidation>;
+export type UpdateCommentOutput = v.InferOutput<typeof UpdateCommentSchema>;
 
-export const ReplayCommentValidation = v.object({
+export const ReplayCommentSchema = v.object({
   content: v.pipe(v.string(), v.nonEmpty("محتوا نباید خالی باشد")),
+  parentId: v.pipe(v.string(), v.nonEmpty()),
 });
 
-export type ReplayCommentOutput = v.InferOutput<typeof ReplayCommentValidation>;
+export type ReplayCommentOutput = v.InferOutput<typeof ReplayCommentSchema>;

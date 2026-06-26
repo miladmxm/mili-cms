@@ -26,6 +26,19 @@ export const findAllCommentsWithRelations = (
   });
 };
 
+export const findCommentByIdWithRelations = (id: string, tx?: Transaction) => {
+  return getDBorTX(tx).query.comment.findFirst({
+    where: eq(comment.id, id),
+    with: {
+      author: {
+        columns: { name: true, email: true, phoneNumber: true, id: true },
+      },
+      product: { with: { product: { columns: { name: true, id: true } } } },
+      article: { with: { article: { columns: { title: true, id: true } } } },
+    },
+  });
+};
+
 export const updateComment = (
   { data, id }: { data: Partial<typeof comment.$inferInsert>; id: string },
   tx?: Transaction,
@@ -34,3 +47,12 @@ export const updateComment = (
 
 export const deleteCommentById = (id: string, tx?: Transaction) =>
   getDBorTX(tx).delete(comment).where(eq(comment.id, id)).returning();
+
+export const createComment = (
+  commentData: typeof comment.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .insert(comment)
+    .values(commentData)
+    .returning({ id: comment.id });

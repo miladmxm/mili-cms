@@ -23,6 +23,13 @@ const ReplayForm = ({ comment }: { comment?: CommentAdminAccess }) => {
             </Field>
           )}
         />
+        <Controller
+          control={control}
+          name="parentId"
+          render={({ field }) => (
+            <input {...field} className="sr-only" type="hidden" />
+          )}
+        />
         <Button type="submit" disabled={isPending}>
           ثبت پاسخ
         </Button>

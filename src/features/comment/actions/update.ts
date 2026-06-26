@@ -9,7 +9,7 @@ import { CacheKeys } from "@/constant/cacheKeys";
 import { validator } from "@/validations";
 
 import { updateComment as updateCommentDAL } from "../dal/mutation";
-import { UpdateCommentValidation } from "../validations";
+import { UpdateCommentSchema } from "../validations";
 
 export const updateComment = async (
   id: string,
@@ -19,7 +19,7 @@ export const updateComment = async (
     success: validationSuccess,
     errors,
     output,
-  } = validator(UpdateCommentValidation, data);
+  } = validator(UpdateCommentSchema, data);
 
   if (!validationSuccess) {
     return {
@@ -30,8 +30,8 @@ export const updateComment = async (
   }
 
   try {
-    updateTag(CacheKeys.comment);
     const { success } = await updateCommentDAL(id, output);
+    updateTag(CacheKeys.comment);
     return {
       success,
       message: success

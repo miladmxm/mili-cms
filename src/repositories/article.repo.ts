@@ -6,6 +6,7 @@ import {
   article,
   articleCategory,
   articleToCategory,
+  articleToComments,
 } from "@/db/drizzle/schemas";
 
 import type { Transaction } from ".";
@@ -157,3 +158,12 @@ export const deleteRelatedCategoryByArticleId = (
         inArray(articleToCategory.categoryId, categoryIds),
       ),
     );
+
+export const createArticleToComment = (
+  data: typeof articleToComments.$inferInsert,
+  tx?: Transaction,
+) =>
+  getDBorTX(tx)
+    .insert(articleToComments)
+    .values(data)
+    .returning({ id: articleToComments.commentId });

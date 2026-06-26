@@ -51,3 +51,10 @@ export interface UpdateCommentPayload {
   status?: CommentStatus;
   type?: CommentType;
 }
+
+export interface CreateReplayComment {
+  authorId: string;
+  content: string;
+  parentId: string;
+  role: string;
+}

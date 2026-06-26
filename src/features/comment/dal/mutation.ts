@@ -1,6 +1,9 @@
 import "server-only";
 
-import type { UpdateCommentPayload } from "@/services/comment/type";
+import type {
+  CreateReplayComment,
+  UpdateCommentPayload,
+} from "@/services/comment/type";
 
 import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
 import * as commentService from "@/services/comment";
@@ -16,5 +19,21 @@ export const deleteComment = async (id: string) => {
   return dalRequireAuth(
     () => dalDbOperation(() => commentService.deleteComment(id)),
     { comment: ["delete"] },
+  );
+};
+
+export const createReplayComment = (
+  data: Pick<CreateReplayComment, "content" | "parentId">,
+) => {
+  return dalRequireAuth(
+    ({ role, id }) =>
+      dalDbOperation(() =>
+        commentService.createReplayComment({
+          role: role || "customer",
+          authorId: id,
+          ...data,
+        }),
+      ),
+    { comment: ["create"] },
   );
 };

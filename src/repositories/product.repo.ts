@@ -726,15 +726,6 @@ export const findProductCommentsApproved = async (
   });
 };
 
-export const createComment = (
-  commentData: typeof comment.$inferInsert,
-  tx?: Transaction,
-) =>
-  getDBorTX(tx)
-    .insert(comment)
-    .values(commentData)
-    .returning({ id: comment.id });
-
 export const createProductToComment = (
   data: typeof productToComments.$inferInsert,
   tx?: Transaction,

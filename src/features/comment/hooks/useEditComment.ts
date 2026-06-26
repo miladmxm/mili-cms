@@ -8,12 +8,12 @@ import type { CommentAdminAccess } from "@/services/comment/type";
 import type { UpdateCommentOutput } from "../validations";
 
 import { updateComment } from "../actions/update";
-import { UpdateCommentValidation } from "../validations";
+import { UpdateCommentSchema } from "../validations";
 
 export const useEditComment = (comment?: CommentAdminAccess) => {
   const [isPending, startTransition] = useTransition();
   const form = useForm({
-    resolver: valibotResolver(UpdateCommentValidation),
+    resolver: valibotResolver(UpdateCommentSchema),
     defaultValues: {
       ...comment,
     },

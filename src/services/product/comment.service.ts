@@ -2,6 +2,7 @@ import { cacheTag } from "next/cache";
 
 import { CacheKeys } from "@/constant/cacheKeys";
 import { withTransaction } from "@/repositories";
+import * as commentRepo from "@/repositories/comment.repo";
 import * as productRepo from "@/repositories/product.repo";
 
 import type { LimitAndOffset } from "../type";
@@ -38,9 +39,8 @@ export const createDefaultComment = async ({
   content,
   productId,
 }: CreateProductComment) => {
-  console.log("creatcomment", authorId, content, productId);
   const resultId = await withTransaction(async (tx) => {
-    const [{ id: commentId }] = await productRepo.createComment(
+    const [{ id: commentId }] = await commentRepo.createComment(
       {
         authorId,
         content,
@@ -59,8 +59,4 @@ export const createDefaultComment = async ({
     return id;
   });
   return resultId;
-};
-
-export const createReplayComment = async () => {
-  // todo create replay comment
 };
