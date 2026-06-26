@@ -21,6 +21,25 @@ export const OpenCommentDialog = () => {
   );
 };
 
+export const OpenQACommentDialog = ({
+  parentId,
+  children,
+}: PropsWithChildren<{ parentId: string }>) => {
+  const { toggleIsOpen, setType, setParentId } = useAddCommentContext();
+
+  const handleClick = () => {
+    setType("qa");
+    setParentId(parentId);
+    toggleIsOpen();
+  };
+
+  return (
+    <button onClick={handleClick} type="button" className="max-w-xl mx-auto">
+      {children}
+    </button>
+  );
+};
+
 const AddCommentDialog = ({ productId }: { productId: string }) => {
   const { isOpen, toggleIsOpen } = useAddCommentContext();
   return (
