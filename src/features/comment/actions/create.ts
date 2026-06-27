@@ -20,7 +20,6 @@ export const replayCommentAction = async (
     errors,
     output,
   } = validator(ReplayCommentSchema, data);
-  console.log(data, errors);
   if (!validationSuccess)
     return { success: false, errors, message: "خطای اعتبارسنجی" };
 

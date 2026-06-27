@@ -61,6 +61,10 @@ export const createReplayComment = async ({
       );
     }
 
+    await commentsRepo.updateComment(
+      { data: { status: "approved" }, id: parentId },
+      tx,
+    );
     return id;
   });
 };
