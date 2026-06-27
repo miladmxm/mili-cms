@@ -13,8 +13,10 @@ interface AddCommentState {
   toggleIsOpen: () => void;
   productId: string;
   commentType: "comment" | "qa";
+  content?: string;
+  setContent: (content?: string) => void;
   parentId?: string;
-  setParentId: (id: string) => void;
+  setParentId: (id?: string) => void;
   setType: (type: "comment" | "qa") => void;
 }
 
@@ -30,6 +32,7 @@ const AddCommentContextProvider = ({
   const [commentType, setCommentType] = useState<"comment" | "qa">("comment");
   const { data } = useSession();
   const isSigned = !!data?.session?.id;
+  const [content, setContent] = useState<string | undefined>(undefined);
 
   const toggleIsOpen = () => {
     if (!isSigned) {
@@ -56,8 +59,10 @@ const AddCommentContextProvider = ({
       parentId,
       commentType,
       setType,
+      setContent,
+      content,
     }),
-    [isOpen, isSigned, productId, parentId, commentType],
+    [isOpen, isSigned, productId, parentId, commentType, content],
   );
   return <AddCommentContext value={value}>{children}</AddCommentContext>;
 };

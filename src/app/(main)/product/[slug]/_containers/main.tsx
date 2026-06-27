@@ -41,7 +41,7 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
       <PriceAndAddToCart metadata={product.metadata} />
       <Thumbnail thumbnail={product.thumbnail || undefined} />
       <TabContentProvider>
-        <Contents content={product.content} productId={product.id} />
+        <Contents content={product.content} />
       </TabContentProvider>
       <FAQsection />
     </ProductPageContextProvider>

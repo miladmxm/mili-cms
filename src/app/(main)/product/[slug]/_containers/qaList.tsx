@@ -6,6 +6,7 @@ import type { Comment } from "@/services/comment/type";
 
 import Pen from "@/assets/icons/pen.svg";
 import SeparatorLine from "@/components/ui/separatorLine";
+import { OpenQACommentDialog } from "@/features/product/components/comments/addComment";
 import { fullDateNumberFormat } from "@/utils/fullDateWithFormat";
 
 import { useProductPageContext } from "../context";
@@ -31,29 +32,30 @@ const ReplyCard = ({
   return (
     <article className="flex flex-col gap-5 mt-2 ps-4">
       <div className="flex items-center gap-3 justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex max-md:flex-col items-center gap-3">
           {role === "admin" ? (
             <span className="block rounded-full bg-success px-3 py-0.5 text-gray-900 text-xs">
               پاسخ رسمی
             </span>
           ) : (
-            <span className="bg-primary-25 rounded-full block p-2">
-              پاسخ از
-              <h6 className="font-semibold text-sm">{name}</h6>
+            <span className="bg-primary-25 rounded-full block p-2 font-semibold text-xs">
+              {name}
             </span>
           )}
 
           {status === "pending" && (
-            <span className="block rounded-full bg-warning px-3 py-0.5 text-gray-400">
+            <span className="block rounded-full bg-warning px-3 py-0.5 text-gray-400 text-xs">
               در انتظار برای تایید
             </span>
           )}
-          <p>{content}</p>
+          <p className="max-md:hidden">{content}</p>
         </div>
         <time className="text-xs">
           {fullDateNumberFormat(createdAt, "fa-ir")}
         </time>
       </div>
+
+      <p className="md:hidden">{content}</p>
     </article>
   );
 };
@@ -64,11 +66,12 @@ const QACard = ({
   status,
   createdAt,
   replies,
+  id,
 }: QACommentWithReplies) => {
   return (
     <article className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex max-md:flex-col items-center gap-3">
           <h6 className="font-semibold text-sm">{name}</h6>
           {status === "pending" && (
             <span className="block rounded-full bg-warning px-3 py-0.5 text-gray-400">
@@ -83,19 +86,20 @@ const QACard = ({
       <p className="font-bold">{content}</p>
 
       {replies && replies.length > 0 && (
-        <div className="mt-6">
+        <div className="mt-6 flex flex-col gap-4">
           {replies.map((reply) => (
             <ReplyCard key={reply.id} {...reply} />
           ))}
         </div>
       )}
-      <button
-        type="button"
+      <OpenQACommentDialog
+        content={content}
+        parentId={id}
         className="text-secondary-500 flex gap-1.5 items-center w-fit mt-4"
       >
         ثبت پاسخ
         <Pen className="size-4" />
-      </button>
+      </OpenQACommentDialog>
       <SeparatorLine size="3" className="my-2" />
     </article>
   );

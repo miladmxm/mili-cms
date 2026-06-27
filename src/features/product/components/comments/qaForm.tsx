@@ -31,7 +31,7 @@ const QaForm = ({
                 { "border-error": fieldState.invalid },
               )}
               rows={6}
-              placeholder="نظر خود را وارد کنید..."
+              placeholder="متن پرس خود را بنویسید"
               {...field}
             />
             {fieldState.invalid && (
@@ -46,7 +46,7 @@ const QaForm = ({
         variant="secondary"
         className="flex items-center justify-center gap-2 flex-row"
       >
-        <span>ثبت نظر</span>
+        <span>ثبت پرسش</span>
         {isPending && <Spiner />}
       </Button>
     </form>
