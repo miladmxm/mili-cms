@@ -13,13 +13,7 @@ import { ProductContentTabs, useTabContext } from "../store/tabContent";
 import ProductComments from "./productComments";
 import ProductQA from "./productQA";
 
-const Contents = ({
-  content,
-  productId,
-}: {
-  content: Product["content"];
-  productId: string;
-}) => {
+const Contents = ({ content }: { content: Product["content"] }) => {
   const { setActiveTab, activeTab } = useTabContext(
     useShallow((state) => ({
       setActiveTab: state.setActiveTab,
