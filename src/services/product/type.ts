@@ -1,6 +1,7 @@
 import type { Currency, ProseMirror } from "@/types/type";
 
 import type { Media } from "../media/type";
+import type { Rating } from "../type";
 
 export type ProductType = "default" | "variable";
 export type ProductStatus = "archived" | "draft" | "published";
@@ -157,6 +158,9 @@ export interface Option {
 
 export interface CreateProductComment {
   content: string;
+  rate?: Rating;
+  isQA?: boolean;
   authorId: string;
   productId: string;
+  parentId?: string;
 }

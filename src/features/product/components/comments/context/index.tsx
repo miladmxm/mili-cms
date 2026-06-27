@@ -8,17 +8,17 @@ import { createContext, use, useMemo, useState } from "react";
 import { openAuthDialog } from "@/features/auth/customer/store/auth";
 import { useSession } from "@/hooks/useSession";
 
-const AddCommentContext = createContext<
-  | {
-      isOpen: boolean;
-      toggleIsOpen: () => void;
-      productId: string;
-      commentType: "comment" | "qa";
-      setParentId: (id: string | null) => void;
-      setType: (type: "comment" | "qa") => void;
-    }
-  | undefined
->(undefined);
+interface AddCommentState {
+  isOpen: boolean;
+  toggleIsOpen: () => void;
+  productId: string;
+  commentType: "comment" | "qa";
+  parentId?: string;
+  setParentId: (id: string) => void;
+  setType: (type: "comment" | "qa") => void;
+}
+
+const AddCommentContext = createContext<AddCommentState | undefined>(undefined);
 AddCommentContext.displayName = "AddCommentContext";
 
 const AddCommentContextProvider = ({
@@ -26,7 +26,7 @@ const AddCommentContextProvider = ({
   productId,
 }: PropsWithChildren<{ productId: string }>) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [parentId, setParentIdState] = useState<string | null>(null);
+  const [parentId, setParentIdState] = useState<string | undefined>(undefined);
   const [commentType, setCommentType] = useState<"comment" | "qa">("comment");
   const { data } = useSession();
   const isSigned = !!data?.session?.id;
@@ -39,7 +39,7 @@ const AddCommentContextProvider = ({
     setIsOpen((prev) => !prev);
   };
 
-  const setParentId = (id: string | null) => {
+  const setParentId = (id?: string) => {
     setParentIdState(id);
   };
 
@@ -47,7 +47,7 @@ const AddCommentContextProvider = ({
     setCommentType(type);
   };
 
-  const value = useMemo(
+  const value = useMemo<AddCommentState>(
     () => ({
       isOpen: isOpen && isSigned,
       toggleIsOpen,

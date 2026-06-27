@@ -10,7 +10,15 @@ import { createProductComment } from "../actions/create";
 import { useAddCommentContext } from "../components/comments/context";
 import { ProductCommentContentSchema } from "../validations/comment.schema";
 
-export const useAddComment = (productId: string) => {
+export const useAddComment = ({
+  productId,
+  parentId,
+  isQA,
+}: {
+  productId: string;
+  parentId?: string;
+  isQA?: boolean;
+}) => {
   const [isPending, startTransition] = useTransition();
   const { toggleIsOpen } = useAddCommentContext();
   const router = useRouter();
@@ -23,7 +31,10 @@ export const useAddComment = (productId: string) => {
 
   const onSubmit = (data: ProductCommentContentOutput) => {
     startTransition(async () => {
-      const { success, message } = await createProductComment(productId, data);
+      const { success, message } = await createProductComment(
+        { productId, isQA, parentId },
+        data,
+      );
 
       if (!success) toast.error(message);
       else {

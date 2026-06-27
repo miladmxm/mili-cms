@@ -61,15 +61,20 @@ export const getApprovedProductQAwithReply = async (
 export const createDefaultComment = async ({
   authorId,
   content,
+  rate,
   productId,
+  isQA,
+  parentId,
 }: CreateProductComment) => {
   const resultId = await withTransaction(async (tx) => {
     const [{ id: commentId }] = await commentRepo.createComment(
       {
         authorId,
         content,
+        rate,
         status: "pending",
-        type: "default",
+        type: isQA ? "qa" : "default",
+        parentId: parentId && isQA ? parentId : null,
       },
       tx,
     );

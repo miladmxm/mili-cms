@@ -7,6 +7,7 @@ import Dialog from "@/components/ui/dialog";
 
 import CommentForm from "./commentForm";
 import AddCommentContextProvider, { useAddCommentContext } from "./context";
+import QaForm from "./qaForm";
 
 export const OpenCommentDialog = () => {
   const { toggleIsOpen } = useAddCommentContext();
@@ -41,10 +42,14 @@ export const OpenQACommentDialog = ({
 };
 
 const AddCommentDialog = ({ productId }: { productId: string }) => {
-  const { isOpen, toggleIsOpen } = useAddCommentContext();
+  const { isOpen, toggleIsOpen, commentType } = useAddCommentContext();
   return (
     <Dialog isOpen={isOpen} onClose={toggleIsOpen} title="نظر خود را وارد کنید">
-      <CommentForm productId={productId} />
+      {commentType === "qa" ? (
+        <QaForm productId={productId} />
+      ) : (
+        <CommentForm productId={productId} />
+      )}
     </Dialog>
   );
 };

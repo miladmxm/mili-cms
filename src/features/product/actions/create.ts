@@ -4,6 +4,7 @@ import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import type { CreateProduct } from "@/services/product/type";
+import type { Rating } from "@/services/type";
 import type { ActionResult } from "@/types/actions";
 
 import { CacheKeys } from "@/constant/cacheKeys";
@@ -121,7 +122,11 @@ export const createOptionAction = async (
 };
 
 export const createProductComment = async (
-  productId: string,
+  {
+    productId,
+    isQA,
+    parentId,
+  }: { productId: string; isQA?: boolean; parentId?: string },
   inputData: unknown,
 ): Promise<ActionResult<ProductCommentContentOutput>> => {
   const session = await getSession();
@@ -136,19 +141,31 @@ export const createProductComment = async (
 
   try {
     const createdComment = await createComment({
-      ...output,
+      content: output.content,
+      rate: isQA ? (output.rate as Rating | undefined) : undefined,
       productId,
       authorId: session?.user.id,
+      isQA,
+      parentId,
     });
 
     if (!createdComment.success) {
-      return { success: false, message: "خطا در ایجاد نظر" };
+      return {
+        success: false,
+        message: isQA ? "خطا در ایجاد سوال" : "خطا در ایجاد نظر",
+      };
     }
 
     updateTag(`${CacheKeys.productComment}-${productId}`);
-    return { success: true, message: "نظر شما با موفقیت ثبت شد" };
+    return {
+      success: true,
+      message: isQA ? "سوال شما با موفقیت ثبت شد" : "نظر شما با موفقیت ثبت شد",
+    };
   } catch (error) {
     console.log(error);
-    return { success: false, message: "خطا در ثبت نظر" };
+    return {
+      success: false,
+      message: isQA ? "خطا در ثبت سوال" : "خطا در ثبت نظر",
+    };
   }
 };

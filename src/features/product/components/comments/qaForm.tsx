@@ -6,8 +6,18 @@ import { cn } from "@/lib/utils";
 
 import { useAddComment } from "../../hooks/useAddComment";
 
-const QaForm = ({ productId }: { productId: string }) => {
-  const { control, handleSubmit, isPending } = useAddComment(productId);
+const QaForm = ({
+  productId,
+  parentId,
+}: {
+  productId: string;
+  parentId?: string;
+}) => {
+  const { control, handleSubmit, isPending } = useAddComment({
+    productId,
+    parentId,
+    isQA: true,
+  });
   return (
     <form onSubmit={handleSubmit} className="p-4 flex flex-col gap-5">
       <Controller

@@ -33,7 +33,7 @@ const CommentForm = ({ productId }: { productId: string }) => {
       />
       <Controller
         control={control}
-        name="rating"
+        name="rate"
         render={({ field, fieldState }) => (
           <div>
             <div className="flex gap-4 items-center">
