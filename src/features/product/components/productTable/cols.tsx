@@ -53,7 +53,7 @@ export const columns: ColumnDef<ProductTable>[] = [
           <h6>
             <Link href={`/admin/products/${id}`}>{row.getValue("name")}</Link>
           </h6>
-          <Link target="_blank" href={`#${slug}`}>
+          <Link target="_blank" href={`/product/${slug}`}>
             <small className="text-card-foreground/70 text-xs">
               {row.original.slug}
             </small>
