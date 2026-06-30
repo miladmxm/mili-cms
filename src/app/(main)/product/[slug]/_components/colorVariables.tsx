@@ -1,6 +1,6 @@
-import type { CSSProperties } from "react";
-
 import type { Option, Product } from "@/services/product/type";
+
+import ColorVariableItem from "./colorVariable";
 
 const ColorVariables = ({
   variables,
@@ -22,23 +22,8 @@ const ColorVariables = ({
     <div>
       {colorIndex !== -1 && (
         <div className="flex flex-wrap gap-3">
-          {byOptionId[colorOptionId]?.map(({ label, value }) => (
-            <div key={value}>
-              <input
-                type="radio"
-                className="sr-only peer"
-                id={value}
-                name={colorOptionId}
-              />
-              <label
-                htmlFor={value}
-                title={label}
-                className="rounded-full block bg-(--variable-color) transition-all size-8 peer-checked:ring-2 cursor-pointer ring-gray-500"
-                style={{ "--variable-color": value } as CSSProperties}
-              >
-                {" "}
-              </label>
-            </div>
+          {byOptionId[colorOptionId]?.map((variable) => (
+            <ColorVariableItem key={variable.value} {...variable} />
           ))}
         </div>
       )}
