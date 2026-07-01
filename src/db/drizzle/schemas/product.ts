@@ -4,7 +4,6 @@ import {
   primaryKey,
   text,
   timestamp,
-  uniqueIndex,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -25,42 +24,36 @@ import { productCategory } from "./productCategory";
 import { productOptionItem } from "./productOptions";
 import { rate } from "./rate";
 
-export const product = MainSchema.table(
-  "product",
-  {
-    id: uuid("id").notNull().primaryKey().defaultRandom(),
-    name: text("name").notNull(),
-    content: jsonb("content").$type<ProseMirror>().notNull().default({}),
-    slug: varchar("slug", { length: 255 }).notNull().unique(),
-    excerpt: text("excerpt").notNull(),
-    properties: jsonb("properties")
-      .$type<Product["properties"]>()
-      .default([])
-      .notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
-    thumbnailId: uuid("thumbnail_id").references(() => media.id, {
-      onDelete: "set null",
-    }),
-    authorId: text("author_id")
-      .references(() => user.id)
-      .notNull(),
-    status: articleStatus("status")
-      .notNull()
-      .$type<ProductStatus>()
-      .default("draft"),
-    type: text({ enum: ["default", "variable"] })
-      .notNull()
-      .$type<ProductType>()
-      .default("default"),
-  },
-  (table) => ({
-    slugUnique: uniqueIndex("product_slug_unique").on(table.slug),
+export const product = MainSchema.table("product", {
+  id: uuid("id").notNull().primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  content: jsonb("content").$type<ProseMirror>().notNull().default({}),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  excerpt: text("excerpt").notNull(),
+  properties: jsonb("properties")
+    .$type<Product["properties"]>()
+    .default([])
+    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  thumbnailId: uuid("thumbnail_id").references(() => media.id, {
+    onDelete: "set null",
   }),
-);
+  authorId: text("author_id")
+    .references(() => user.id)
+    .notNull(),
+  status: articleStatus("status")
+    .notNull()
+    .$type<ProductStatus>()
+    .default("draft"),
+  type: text({ enum: ["default", "variable"] })
+    .notNull()
+    .$type<ProductType>()
+    .default("default"),
+});
 export const productToComments = RelationSchema.table(
   "product_to_comments",
   {

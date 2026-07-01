@@ -4,7 +4,6 @@ import {
   primaryKey,
   text,
   timestamp,
-  uniqueIndex,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -25,36 +24,30 @@ export const articleStatus = MainSchema.enum("article_status", [
   "archived",
 ]);
 
-export const article = MainSchema.table(
-  "article",
-  {
-    id: uuid("id").primaryKey().notNull().defaultRandom(),
-    title: varchar("title", { length: 255 }).notNull(),
-    content: jsonb("content").$type<ProseMirror>().notNull().default({}),
-    slug: varchar("slug", { length: 255 }).notNull().unique(),
-    excerpt: text("excerpt").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
-    thumbnail: uuid("thumbnail").references(() => media.id, {
-      onDelete: "set null",
-    }),
-    authorId: text("author_id")
-      .references(() => user.id)
-      .notNull(),
-    status: articleStatus("status")
-      .notNull()
-      .$type<ArticleStatus>()
-      .default("draft"),
-    readingTime: integer("reading_time"),
-    views: integer("vires").default(0).notNull(),
-  },
-  (table) => ({
-    slugUnique: uniqueIndex("article_slug_unique").on(table.slug),
+export const article = MainSchema.table("article", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  title: varchar("title", { length: 255 }).notNull(),
+  content: jsonb("content").$type<ProseMirror>().notNull().default({}),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  excerpt: text("excerpt").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  thumbnail: uuid("thumbnail").references(() => media.id, {
+    onDelete: "set null",
   }),
-);
+  authorId: text("author_id")
+    .references(() => user.id)
+    .notNull(),
+  status: articleStatus("status")
+    .notNull()
+    .$type<ArticleStatus>()
+    .default("draft"),
+  readingTime: integer("reading_time"),
+  views: integer("vires").default(0).notNull(),
+});
 
 export const articleToComments = RelationSchema.table(
   "article_to_comments",
