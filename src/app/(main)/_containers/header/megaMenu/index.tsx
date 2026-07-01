@@ -68,7 +68,7 @@ const ParentMenu = () => {
   const { productCategories } = useMainLayoutContext();
   const setActiveIndex = useMegaMenuStore((store) => store.setActiveIndex);
   const setFirstItem = useEffectEvent(() =>
-    setActiveIndex(productCategories[0].id),
+    setActiveIndex(productCategories[0]?.id),
   );
   useEffect(() => {
     setFirstItem();
