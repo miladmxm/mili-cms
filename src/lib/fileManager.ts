@@ -23,6 +23,29 @@ const s3 = new S3Client({
   },
   forcePathStyle: true,
 });
+
+const applyPublicReadPolicy = async (bucketName: string) => {
+  const bucketPolicy = {
+    Version: "2012-10-17",
+    Statement: [
+      {
+        Sid: "PublicRead",
+        Effect: "Allow",
+        Principal: "*",
+        Action: ["s3:GetObject"],
+        Resource: [`arn:aws:s3:::${bucketName}/*`],
+      },
+    ],
+  };
+
+  await s3.send(
+    new PutBucketPolicyCommand({
+      Bucket: bucketName,
+      Policy: JSON.stringify(bucketPolicy),
+    }),
+  );
+};
+
 interface WriteFileParameters {
   file: File;
   dir: string;
@@ -41,41 +64,22 @@ export const ensureBucket = async () => {
       }),
     );
 
-    const bucketPolicy = {
-      Version: "2012-10-17",
-      Statement: [
-        {
-          Sid: "PublicRead",
-          Effect: "Allow",
-          Principal: "*",
-          Action: ["s3:GetObject"],
-          Resource: [`arn:aws:s3:::${env.S3_BUCKET}/*`],
-        },
-      ],
-    };
-
-    await s3.send(
-      new PutBucketPolicyCommand({
-        Bucket: bucketName,
-        Policy: JSON.stringify(bucketPolicy),
-      }),
-    );
     await waitUntilBucketExists(
       {
         client: s3,
-        maxWaitTime: 0,
+        maxWaitTime: 10,
       },
       { Bucket: bucketName },
     );
+    await applyPublicReadPolicy(bucketName);
     console.log(`Bucket created with location ${Location}`);
   } catch (caught) {
-    if (caught instanceof BucketAlreadyExists) {
-      console.error(
+    if (caught instanceof BucketAlreadyOwnedByYou) {
+      await applyPublicReadPolicy(bucketName);
+      console.log(`Bucket "${bucketName}" already exists.`);
+    } else if (caught instanceof BucketAlreadyExists) {
+      throw new Error(
         `The bucket "${bucketName}" already exists in another AWS account. Bucket names must be globally unique.`,
-      );
-    } else if (caught instanceof BucketAlreadyOwnedByYou) {
-      console.error(
-        `The bucket "${bucketName}" already exists in this AWS account.`,
       );
     } else {
       throw caught;
