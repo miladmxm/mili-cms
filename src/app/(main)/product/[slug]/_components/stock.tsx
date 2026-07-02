@@ -4,32 +4,6 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { useGetMetadata } from "../_hooks/useGetMetadata";
 
-const StockContent = () => {
-  const { stock } = useGetMetadata();
-
-  if (stock === -1) {
-    return null;
-  }
-
-  return (
-    <motion.div
-      exit={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.4 }}
-      className="flex gap-2"
-    >
-      {stock === 0 ? (
-        <span>ناموجود</span>
-      ) : (
-        <>
-          <span>تعداد موجودی</span>
-          {stock}
-        </>
-      )}
-    </motion.div>
-  );
-};
-
 const Stock = () => {
   const { stock } = useGetMetadata();
 
@@ -47,7 +21,14 @@ const Stock = () => {
           ) : (
             <>
               <span>تعداد موجودی</span>
-              {stock}
+              <motion.span
+                key={stock}
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: "spring", duration: 0.4 }}
+              >
+                {stock.toLocaleString("fa")}
+              </motion.span>
             </>
           )}
         </motion.div>

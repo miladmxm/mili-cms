@@ -28,7 +28,6 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
 
   const productComments = getApprovedProductComments(product.id);
   const productQAComments = getApprovedProductQAwithReply(product.id);
-  console.log(product);
   return (
     <ProductPageContextProvider
       comments={productComments}

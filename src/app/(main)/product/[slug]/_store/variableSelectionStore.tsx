@@ -9,10 +9,12 @@ import { createStore, useStore } from "zustand";
 
 interface SelectVariableAction {
   setSelectedVariables: (variable: Record<string, string>) => void;
+  setShowError: (showError: boolean) => void;
 }
 
 interface SelectVariableStates extends SelectVariableAction {
   selectedVariables: Record<string, string>;
+  showError: boolean;
 }
 
 const SelectVariableContext =
@@ -25,6 +27,8 @@ const SelectVariableProvider = ({ children }: PropsWithChildren) => {
   if (storeRef.current === null) {
     storeRef.current = createStore<SelectVariableStates>((set) => ({
       selectedVariables: {},
+      showError: true,
+      setShowError: (showError) => set({ showError }),
       setSelectedVariables: (variable) =>
         set((state) => ({
           selectedVariables: { ...state.selectedVariables, ...variable },

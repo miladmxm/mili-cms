@@ -1,6 +1,7 @@
 import type { Option, Product } from "@/services/product/type";
 
 import ColorVariableItem from "./colorVariable";
+import ErrorMessage from "./errorMessage";
 
 const ColorVariables = ({
   variables,
@@ -18,15 +19,15 @@ const ColorVariables = ({
   );
 
   const colorOptionId = variableOptions[colorIndex].id;
+  if (colorIndex === -1) return null;
   return (
     <div>
-      {colorIndex !== -1 && (
-        <div className="flex flex-wrap gap-3">
-          {byOptionId[colorOptionId]?.map((variable) => (
-            <ColorVariableItem key={variable.value} {...variable} />
-          ))}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-3">
+        {byOptionId[colorOptionId]?.map((variable) => (
+          <ColorVariableItem key={variable.value} {...variable} />
+        ))}
+      </div>
+      <ErrorMessage optionId={colorOptionId} />
     </div>
   );
 };

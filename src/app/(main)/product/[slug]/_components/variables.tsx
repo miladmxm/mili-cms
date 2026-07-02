@@ -2,6 +2,7 @@ import type { PropsWithChildren } from "react";
 
 import type { Option, Product } from "@/services/product/type";
 
+import ErrorMessage from "./errorMessage";
 import VariableItem from "./variableItem";
 
 const VariableContainer = ({ children }: PropsWithChildren) => {
@@ -22,6 +23,26 @@ const VarableItems = ({
       {variableItems.map((item) => (
         <VariableItem key={item.id} {...item} />
       ))}
+    </div>
+  );
+};
+
+const EachVariableItem = ({
+  optionId,
+  variableOption,
+  variableItems,
+}: {
+  variableOption: Option;
+  optionId: string;
+  variableItems: Product["variables"];
+}) => {
+  return (
+    <div>
+      <VariableContainer>
+        <h5 className="text-gray-500 font-bold">{variableOption.name} :</h5>
+        <VarableItems variableItems={variableItems} />
+      </VariableContainer>
+      <ErrorMessage optionId={optionId} />
     </div>
   );
 };
@@ -51,10 +72,12 @@ const Variables = ({
         if (!variableOption || !variableItems || optionId === colorOptionId)
           return null;
         return (
-          <VariableContainer key={optionId}>
-            <h5 className="text-gray-500 font-bold">{variableOption.name} :</h5>
-            <VarableItems variableItems={variableItems} />
-          </VariableContainer>
+          <EachVariableItem
+            key={optionId}
+            optionId={optionId}
+            variableOption={variableOption}
+            variableItems={variableItems}
+          />
         );
       })}
     </div>
