@@ -10,7 +10,8 @@ import {
 
 import GallerySlider from "../_components/gallerySlider";
 import ProductPageContextProvider from "../context";
-import TabContentProvider from "../store/tabContent";
+import TabContentProvider from "../store/tabStore";
+import SelectVariableProvider from "../store/variableSelectionStore";
 import Contents from "./contents";
 import PriceAndAddToCart from "./priceAndAddToCart";
 import Thumbnail from "./thumbnail";
@@ -27,18 +28,20 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
 
   const productComments = getApprovedProductComments(product.id);
   const productQAComments = getApprovedProductQAwithReply(product.id);
-
+  console.log(product);
   return (
     <ProductPageContextProvider
       comments={productComments}
       qaComments={productQAComments}
       product={product}
     >
-      <section className="grid md:grid-cols-2 gap-8 container pb-8 pt-22">
-        <GallerySlider gallery={product.gallery} />
-        <TopContents {...product} options={options} />
-      </section>
-      <PriceAndAddToCart metadata={product.metadata} />
+      <SelectVariableProvider>
+        <section className="grid md:grid-cols-2 gap-8 container pb-8 pt-22">
+          <GallerySlider gallery={product.gallery} />
+          <TopContents {...product} options={options} />
+        </section>
+        <PriceAndAddToCart />
+      </SelectVariableProvider>
       <Thumbnail thumbnail={product.thumbnail || undefined} />
       <TabContentProvider>
         <Contents content={product.content} />
