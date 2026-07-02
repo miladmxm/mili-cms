@@ -1,32 +1,19 @@
-import type { Option, Product } from "@/services/product/type";
+import type { Product } from "@/services/product/type";
 
 import ColorVariableItem from "./colorVariable";
+import ErrorMessage from "./errorMessage";
 
-const ColorVariables = ({
-  variables,
-  options,
-}: {
-  variables: Product["variables"];
-  options: Option[];
-}) => {
-  const byOptionId = Object.groupBy(variables, ({ optionId }) => optionId);
-  const variableOptions = options.filter(({ id }) =>
-    Object.keys(byOptionId).includes(id),
-  );
-  const colorIndex = variableOptions.findIndex(({ slug }) =>
-    slug.includes("color"),
-  );
-
-  const colorOptionId = variableOptions[colorIndex].id;
+const ColorVariables = ({ variables }: { variables: Product["variables"] }) => {
+  const findColorVariable = variables.find(({ slug }) => slug === "color");
+  if (!findColorVariable) return;
   return (
     <div>
-      {colorIndex !== -1 && (
-        <div className="flex flex-wrap gap-3">
-          {byOptionId[colorOptionId]?.map((variable) => (
-            <ColorVariableItem key={variable.value} {...variable} />
-          ))}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-3">
+        {findColorVariable.items.map((item) => (
+          <ColorVariableItem key={item.value} {...item} />
+        ))}
+      </div>
+      <ErrorMessage optionId={findColorVariable.id} />
     </div>
   );
 };

@@ -7,9 +7,9 @@ import type { Product } from "@/services/product/type";
 import { ProseMirrorRenderer } from "@/components/ui/proseMirrorRenderer";
 import SeparatorLine from "@/components/ui/separatorLine";
 
-import type { ProductContentTabKeys } from "../store/tabStore";
+import type { ProductContentTabKeys } from "../_store/tabStore";
 
-import { ProductContentTabs, useTabContext } from "../store/tabStore";
+import { ProductContentTabs, useTabContext } from "../_store/tabStore";
 import ProductComments from "./productComments";
 import ProductQA from "./productQA";
 

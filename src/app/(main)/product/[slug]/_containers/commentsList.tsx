@@ -8,7 +8,7 @@ import RateStars from "@/components/ui/rateStars";
 import SeparatorLine from "@/components/ui/separatorLine";
 import { fullDateNumberFormat } from "@/utils/fullDateWithFormat";
 
-import { useProductPageContext } from "../context";
+import { useProductPageContext } from "../_context";
 
 const CommentsPlaceholder = () => {
   return (
@@ -19,7 +19,7 @@ const CommentsPlaceholder = () => {
 };
 
 const CommentCard = ({
-  author: { name, role },
+  author: { name },
   content,
   status,
   createdAt,

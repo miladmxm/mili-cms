@@ -9,7 +9,7 @@ import SeparatorLine from "@/components/ui/separatorLine";
 import { OpenQACommentDialog } from "@/features/product/components/comments/addComment";
 import { fullDateNumberFormat } from "@/utils/fullDateWithFormat";
 
-import { useProductPageContext } from "../context";
+import { useProductPageContext } from "../_context";
 
 type QACommentWithReplies = Comment & {
   replies: Comment[];

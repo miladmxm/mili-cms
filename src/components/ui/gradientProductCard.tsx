@@ -8,7 +8,7 @@ import ButtonWithArrow from "./buttonWithArrow";
 import DefaultImage from "./defaultImage";
 
 const GradientProductCard = ({ name, slug, thumbnail, metadata }: Product) => {
-  const productLink: Route = `/product/${slug}`;
+  const productLink: Route = `/product/${slug}` as Route;
   return (
     <div className="rounded-8xl aspect-256/348 overflow-hidden isolate p-8 relative flex flex-col gap-4 justify-end">
       <DefaultImage

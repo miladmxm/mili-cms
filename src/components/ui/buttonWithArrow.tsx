@@ -42,7 +42,7 @@ const ButtonWithArrow = ({
       {props.href ? (
         <Link
           className={cn(
-            "flex gap-0 group items-stretch w-full",
+            "flex gap-0 group items-stretch w-full disabled:opacity-80 disabled:pointer-events-none",
             containerClassName,
           )}
           {...props}
@@ -64,7 +64,7 @@ const ButtonWithArrow = ({
       ) : (
         <button
           className={cn(
-            "flex gap-0 group items-stretch w-full",
+            "flex gap-0 group items-stretch w-full disabled:opacity-80 disabled:pointer-events-none",
             containerClassName,
           )}
           type={props.type}

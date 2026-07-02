@@ -87,7 +87,7 @@ interface ProductBase {
   }[];
   optionItems: OptionItem[];
   gallery: Media[];
-  variables: OptionItem[];
+  variables: (Option & { items: OptionItem[] })[];
 }
 
 export type Product =

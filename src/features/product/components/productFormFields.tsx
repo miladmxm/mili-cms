@@ -1006,12 +1006,15 @@ export const ProductMeta = ({
             <ProductVariableMetaFieldGroup
               options={optionsData}
               defaultItems={
-                product
-                  ? (Object.groupBy(
-                      product.variables,
-                      ({ optionId }) => optionId,
-                    ) as SelectOptionState)
-                  : undefined
+                product?.variables &&
+                product.variables
+                  .map((v) => ({
+                    [v.id]: v.items.map((i) => ({
+                      id: i.id,
+                      label: i.label,
+                    })),
+                  }))
+                  .reduce((acc, curr) => ({ ...acc, ...curr }), {})
               }
             />
           </FieldGroup>

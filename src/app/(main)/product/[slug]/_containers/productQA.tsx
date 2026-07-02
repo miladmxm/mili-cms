@@ -4,7 +4,7 @@ import AddComment, {
   OpenQACommentDialog,
 } from "@/features/product/components/comments/addComment";
 
-import { useProductPageContext } from "../context";
+import { useProductPageContext } from "../_context";
 import QAList from "./qaList";
 
 const ProductQA = () => {

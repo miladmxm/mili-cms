@@ -1,4 +1,4 @@
-import type { Option, Product } from "@/services/product/type";
+import type { Product } from "@/services/product/type";
 
 import RateStars from "@/components/ui/rateStars";
 
@@ -12,20 +12,15 @@ const TopContents = ({
   variables,
   excerpt,
   properties,
-  options,
   type,
-}: Product & { options: Option[] }) => {
+}: Product) => {
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-gray-500 md:text-xl font-bold">{name}</h1>
       <RateStars rate={12} className="w-44" />
-      {type === "variable" && (
-        <ColorVariables variables={variables} options={options} />
-      )}
+      {type === "variable" && <ColorVariables variables={variables} />}
       <ShortDescription description={excerpt} />
-      {type === "variable" && (
-        <Variables variables={variables} options={options} />
-      )}
+      {type === "variable" && <Variables variables={variables} />}
       <Properties properties={properties} />
     </div>
   );

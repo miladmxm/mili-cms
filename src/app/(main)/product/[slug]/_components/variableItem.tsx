@@ -1,16 +1,12 @@
 "use client";
 
-import type { Product } from "@/services/product/type";
+import type { OptionItem } from "@/services/product/type";
 
 import Radio from "@/components/ui/radio";
 
-import { useSelectVariableContext } from "../store/variableSelectionStore";
+import { useSelectVariableContext } from "../_store/variableSelectionStore";
 
-const VariableItem = ({
-  id,
-  label,
-  optionId,
-}: Product["variables"][number]) => {
+const VariableItem = ({ id, label, optionId }: OptionItem) => {
   const selectedVariables = useSelectVariableContext(
     (store) => store.selectedVariables,
   );
