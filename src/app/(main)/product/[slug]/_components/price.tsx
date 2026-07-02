@@ -2,7 +2,10 @@
 
 import type { Product } from "@/services/product/type";
 
-import { DiscountedPrice } from "@/features/product/components/ui/finalPrice";
+import {
+  DiscountedPrice,
+  FormatedPrice,
+} from "@/features/product/components/ui/finalPrice";
 import { OPTION_ITEM_IDS_SEPARATOR } from "@/features/product/constant";
 import { cn } from "@/lib/utils";
 
@@ -33,6 +36,7 @@ const Price = ({ className }: { className?: string }) => {
     <div
       className={cn("text-xl font-bold text-gray-500 flex gap-4", className)}
     >
+      {metadata.discount > 0 && <FormatedPrice metadata={[metadata]} />}
       <span>قیمت:</span>
       <DiscountedPrice metadata={[metadata]} />
     </div>

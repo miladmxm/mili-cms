@@ -40,7 +40,7 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
           <GallerySlider gallery={product.gallery} />
           <TopContents {...product} options={options} />
         </section>
-        <PriceAndAddToCart metadata={product.metadata} />
+        <PriceAndAddToCart />
       </SelectVariableProvider>
       <Thumbnail thumbnail={product.thumbnail || undefined} />
       <TabContentProvider>
