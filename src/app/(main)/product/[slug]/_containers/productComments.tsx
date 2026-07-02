@@ -4,7 +4,7 @@ import AddComment, {
   OpenCommentDialog,
 } from "@/features/product/components/comments/addComment";
 
-import { useProductPageContext } from "../context";
+import { useProductPageContext } from "../_context";
 import CommentsList from "./commentsList";
 
 const ProductComments = () => {

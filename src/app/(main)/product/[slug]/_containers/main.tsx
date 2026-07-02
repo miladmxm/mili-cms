@@ -9,9 +9,9 @@ import {
 } from "@/features/product/dal/query";
 
 import GallerySlider from "../_components/gallerySlider";
-import ProductPageContextProvider from "../context";
-import TabContentProvider from "../store/tabStore";
-import SelectVariableProvider from "../store/variableSelectionStore";
+import ProductPageContextProvider from "../_context";
+import TabContentProvider from "../_store/tabStore";
+import SelectVariableProvider from "../_store/variableSelectionStore";
 import Contents from "./contents";
 import PriceAndAddToCart from "./priceAndAddToCart";
 import Thumbnail from "./thumbnail";
@@ -36,7 +36,7 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
       product={product}
     >
       <SelectVariableProvider>
-        <section className="grid md:grid-cols-2 gap-8 container pb-8 pt-22">
+        <section className="grid md:grid-cols-2 gap-8 container py-8 md:pb-8 md:pt-22">
           <GallerySlider gallery={product.gallery} />
           <TopContents {...product} options={options} />
         </section>

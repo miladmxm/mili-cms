@@ -4,7 +4,7 @@ import type { Product } from "@/services/product/type";
 
 import Radio from "@/components/ui/radio";
 
-import { useSelectVariableContext } from "../store/variableSelectionStore";
+import { useSelectVariableContext } from "../_store/variableSelectionStore";
 
 const VariableItem = ({
   id,

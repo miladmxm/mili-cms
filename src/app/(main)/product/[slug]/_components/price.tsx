@@ -1,44 +1,64 @@
 "use client";
 
+import type { Variants } from "motion/react";
+
+import { AnimatePresence, motion } from "motion/react";
+
 import type { Product } from "@/services/product/type";
 
 import {
   DiscountedPrice,
   FormatedPrice,
 } from "@/features/product/components/ui/finalPrice";
-import { OPTION_ITEM_IDS_SEPARATOR } from "@/features/product/constant";
 import { cn } from "@/lib/utils";
 
-import { useProductPageContext } from "../context";
-import { useSelectVariableContext } from "../store/variableSelectionStore";
+import { useGetMetadata } from "../_hooks/useGetMetadata";
+
+const DiscountedPriceVariants: Variants = {
+  hide: { scale: 0.5, opacity: 0 },
+  show: { scale: 1, opacity: 1 },
+};
+
+const DiscountPrice = ({
+  metadata,
+}: {
+  metadata: Product["metadata"][number];
+}) => {
+  return (
+    <AnimatePresence mode="sync">
+      {metadata.discount > 0 && (
+        <motion.del
+          exit="hide"
+          initial="hide"
+          animate="show"
+          variants={DiscountedPriceVariants}
+          className="font-light text-sm absolute inset-e-0 bottom-full"
+          transition={{ type: "spring", duration: 0.6 }}
+        >
+          <FormatedPrice metadata={[metadata]} />
+          تومان
+        </motion.del>
+      )}
+    </AnimatePresence>
+  );
+};
 
 const Price = ({ className }: { className?: string }) => {
-  const selectedVariables = useSelectVariableContext(
-    (store) => store.selectedVariables,
-  );
-  const { product } = useProductPageContext();
-  let metadata: Product["metadata"][number];
-
-  if (product.type === "variable") {
-    metadata =
-      product.metadata.find(
-        ({ optionItemIds }) =>
-          optionItemIds ===
-          Object.values(selectedVariables)
-            .sort()
-            .join(OPTION_ITEM_IDS_SEPARATOR),
-      ) || product.metadata[0];
-  } else {
-    metadata = product.metadata[0];
-  }
-
+  const metadata = useGetMetadata();
   return (
     <div
-      className={cn("text-xl font-bold text-gray-500 flex gap-4", className)}
+      className={cn(
+        "text-xl font-bold text-gray-500 flex gap-4 relative",
+        className,
+      )}
     >
-      {metadata.discount > 0 && <FormatedPrice metadata={[metadata]} />}
-      <span>قیمت:</span>
-      <DiscountedPrice metadata={[metadata]} />
+      <div className="w-fit relative">
+        <DiscountPrice metadata={metadata} />
+        <div>
+          <span>قیمت:</span>
+          <DiscountedPrice metadata={[metadata]} />
+        </div>
+      </div>
     </div>
   );
 };

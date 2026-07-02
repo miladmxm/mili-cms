@@ -4,7 +4,7 @@ import type { CSSProperties } from "react";
 
 import type { OptionItem } from "@/services/product/type";
 
-import { useSelectVariableContext } from "../store/variableSelectionStore";
+import { useSelectVariableContext } from "../_store/variableSelectionStore";
 
 const ColorVariableItem = ({ id, label, optionId, value }: OptionItem) => {
   const selectedVariables = useSelectVariableContext(
