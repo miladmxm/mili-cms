@@ -1,8 +1,15 @@
-import type { Comment } from "@/services/comment/type";
-
 import DefaultImage from "../defaultImage";
 
-const CommentCard = ({ author, content }: Comment) => {
+interface CommentCardProps {
+  content: string;
+  id: string;
+  author: {
+    name: string;
+    thumbnail?: { url: string; alt?: string; id: string };
+  };
+}
+
+const CommentCard = ({ author, content }: CommentCardProps) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-5">

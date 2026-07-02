@@ -19,7 +19,7 @@ const CommentsPlaceholder = () => {
 };
 
 const CommentCard = ({
-  author: { name, role },
+  author: { name },
   content,
   status,
   createdAt,

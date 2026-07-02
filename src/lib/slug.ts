@@ -17,6 +17,7 @@ export const generateUniqueSlug = (
   let max = 0;
 
   for (const slug of existing) {
+    // eslint-disable-next-line regexp/prefer-regexp-exec
     const match = slug.match(new RegExp(`^${baseSlug}-(\\d+)$`));
 
     if (match) {

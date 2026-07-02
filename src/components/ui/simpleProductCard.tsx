@@ -17,7 +17,7 @@ const SimpleProductCard = ({
   thumbnail,
   className,
 }: Product & { className?: string }) => {
-  const productLink: Route = `/product/${slug}`;
+  const productLink: Route = `/product/${slug}` as Route;
   return (
     <div
       className={cn(

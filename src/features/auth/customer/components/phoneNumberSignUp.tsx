@@ -5,9 +5,8 @@ import AuthFormWrapper from "@/components/ui/auth/form";
 import PhoneNumberField from "@/components/ui/auth/phoneNumber";
 import Button from "@/components/ui/button";
 import FormInputError from "@/components/ui/formInputError";
-import SmallTextButton from "@/components/ui/smallTextButton";
 
-import { changeMode, setAuthStep, setPhonenNumber } from "../store/auth";
+import { setAuthStep, setPhonenNumber } from "../store/auth";
 import { PhoneNumberSchemaObject } from "../validation/auth.schema";
 
 const PhoneNumberSignIn = () => {
@@ -38,9 +37,9 @@ const PhoneNumberSignIn = () => {
           </div>
         )}
       />
-      <SmallTextButton onClick={() => changeMode("signUp")}>
+      {/* <SmallTextButton onClick={() => changeMode("signUp")}>
         حساب کاربری ندارید؟ ایجاد کنید
-      </SmallTextButton>
+      </SmallTextButton> */}
       <Button variant="secondary" type="submit">
         {" "}
         بعدی

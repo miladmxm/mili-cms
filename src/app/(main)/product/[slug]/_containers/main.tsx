@@ -4,7 +4,6 @@ import FAQsection from "@/app/(main)/_containers/fag";
 import {
   getApprovedProductComments,
   getApprovedProductQAwithReply,
-  getPublicOptions,
   getPublishedProduct,
 } from "@/features/product/dal/query";
 
@@ -20,7 +19,6 @@ import TopContents from "./topContents";
 const Product = async ({ params }: PageProps<"/product/[slug]">) => {
   const { slug } = await params;
   const product = await getPublishedProduct(slug);
-  const options = await getPublicOptions();
 
   if (!product) {
     redirect("/shop");
@@ -37,7 +35,7 @@ const Product = async ({ params }: PageProps<"/product/[slug]">) => {
       <SelectVariableProvider>
         <section className="grid md:grid-cols-2 gap-8 container py-8 md:pb-8 md:pt-22">
           <GallerySlider gallery={product.gallery} />
-          <TopContents {...product} options={options} />
+          <TopContents {...product} />
         </section>
         <PriceAndAddToCart />
       </SelectVariableProvider>

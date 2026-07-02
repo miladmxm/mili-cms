@@ -133,7 +133,7 @@ export const ProductCardSkeleton = () => {
 
 const ProductCard = ({ thumbnail, name, metadata, slug }: Product) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const productLink: Route = `/product/${slug}`;
+  const productLink: Route = `/product/${slug}` as Route;
   return (
     <div
       ref={containerRef}

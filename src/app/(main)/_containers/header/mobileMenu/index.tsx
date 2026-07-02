@@ -1,5 +1,6 @@
 "use client";
 
+import type { Route } from "next";
 import type { ComponentProps, PropsWithChildren } from "react";
 
 import { motion } from "motion/react";
@@ -64,7 +65,7 @@ const MenuItems = ({
       {productCategories.map(({ children, name, slug }) => {
         if (!children || children.length === 0) {
           return (
-            <MenuItemLink key={slug} href={`/products/${slug}`}>
+            <MenuItemLink key={slug} href={`/products/${slug}` as Route}>
               {name}
             </MenuItemLink>
           );
