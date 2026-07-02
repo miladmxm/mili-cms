@@ -38,40 +38,47 @@ import type { Transaction } from ".";
 
 import { getDBorTX } from ".";
 
+const dtoProductVariables = (
+  variables: {
+    optionItem: {
+      value: string;
+      id: string;
+      label: string;
+      optionId: string;
+      option: {
+        id: string;
+        name: string;
+        slug: string;
+        description: string;
+      };
+    };
+  }[],
+) => {
+  const optionIds = new Set<string>();
+
+  const options = variables.map(({ optionItem: { option } }) => option);
+  const o: typeof options = [];
+
+  for (const option of options) {
+    if (optionIds.has(option.id)) continue;
+    o.push(option);
+    optionIds.add(option.id);
+  }
+
+  const a = Object.groupBy(
+    variables.map(({ optionItem: { option, ...more } }) => more),
+    ({ optionId }) => optionId,
+  );
+
+  return o.map((option) => ({
+    ...option,
+    items: a[option.id] || [],
+  }));
+};
+
 export const findProductById = async (id: string, tx?: Transaction) => {
   const findedProduct = await getDBorTX(tx).query.product.findFirst({
     where: eq(product.id, id),
-    with: {
-      categories: { columns: { categoryId: true } },
-      thumbnail: true,
-      gallery: { with: { media: true } },
-      variables: {
-        with: { optionItem: true },
-      },
-      optionItems: { with: { optionItem: true } },
-      metadata: { with: { thumbnail: true } },
-    },
-  });
-  if (!findedProduct) return findedProduct;
-  const optionItems = findedProduct.optionItems.map(
-    ({ optionItem }) => optionItem,
-  );
-  const categoryIds = findedProduct.categories.map(
-    ({ categoryId }) => categoryId,
-  );
-  return {
-    ...findedProduct,
-    categoryIds,
-    optionItems,
-  };
-};
-
-export const findPublishedProductBySlug = async (
-  slug: string,
-  tx?: Transaction,
-) => {
-  const findedProduct = await getDBorTX(tx).query.product.findFirst({
-    where: and(eq(product.slug, slug), eq(product.status, "published")),
     with: {
       categories: { columns: { categoryId: true } },
       thumbnail: true,
@@ -90,10 +97,46 @@ export const findPublishedProductBySlug = async (
   const categoryIds = findedProduct.categories.map(
     ({ categoryId }) => categoryId,
   );
+
   return {
     ...findedProduct,
     categoryIds,
     optionItems,
+    variables: dtoProductVariables(findedProduct.variables),
+  };
+};
+
+export const findPublishedProductBySlug = async (
+  slug: string,
+  tx?: Transaction,
+) => {
+  const findedProduct = await getDBorTX(tx).query.product.findFirst({
+    where: and(eq(product.slug, slug), eq(product.status, "published")),
+    with: {
+      categories: { columns: { categoryId: true } },
+      thumbnail: true,
+      gallery: { with: { media: true } },
+      variables: {
+        with: { optionItem: { with: { option: true } } },
+        columns: { optionItemId: false, productId: false },
+      },
+      optionItems: { with: { optionItem: true } },
+      metadata: { with: { thumbnail: true } },
+    },
+  });
+  if (!findedProduct) return findedProduct;
+  const optionItems = findedProduct.optionItems.map(
+    ({ optionItem }) => optionItem,
+  );
+  const categoryIds = findedProduct.categories.map(
+    ({ categoryId }) => categoryId,
+  );
+
+  return {
+    ...findedProduct,
+    categoryIds,
+    optionItems,
+    variables: dtoProductVariables(findedProduct.variables),
   };
 };
 

@@ -14,7 +14,6 @@ const AddToCart = () => {
   );
   const { product } = useProductPageContext();
   const { stock } = metadata;
-  console.log(selectedVariables, product, stock);
   const isDisabled =
     stock === 0 ||
     (product.type === "variable" &&

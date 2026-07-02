@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 
-import type { Option, Product } from "@/services/product/type";
+import type { OptionItem, Product } from "@/services/product/type";
 
 import ErrorMessage from "./errorMessage";
 import VariableItem from "./variableItem";
@@ -13,11 +13,7 @@ const VariableContainer = ({ children }: PropsWithChildren) => {
   );
 };
 
-const VarableItems = ({
-  variableItems,
-}: {
-  variableItems: Product["variables"];
-}) => {
+const VarableItems = ({ variableItems }: { variableItems: OptionItem[] }) => {
   return (
     <div className="flex gap-4 flex-auto justify-around">
       {variableItems.map((item) => (
@@ -29,17 +25,17 @@ const VarableItems = ({
 
 const EachVariableItem = ({
   optionId,
-  variableOption,
+  name,
   variableItems,
 }: {
-  variableOption: Option;
+  name: string;
   optionId: string;
-  variableItems: Product["variables"];
+  variableItems: OptionItem[];
 }) => {
   return (
     <div>
       <VariableContainer>
-        <h5 className="text-gray-500 font-bold">{variableOption.name} :</h5>
+        <h5 className="text-gray-500 font-bold">{name} :</h5>
         <VarableItems variableItems={variableItems} />
       </VariableContainer>
       <ErrorMessage optionId={optionId} />
@@ -47,36 +43,20 @@ const EachVariableItem = ({
   );
 };
 
-const Variables = ({
-  variables,
-  options,
-}: {
-  variables: Product["variables"];
-  options: Option[];
-}) => {
-  const byOptionId = Object.groupBy(variables, ({ optionId }) => optionId);
-  const variableOptions = options.filter(({ id }) =>
-    Object.keys(byOptionId).includes(id),
+const Variables = ({ variables }: { variables: Product["variables"] }) => {
+  const colorVariableIndex = variables.findIndex(
+    ({ slug }) => slug === "color",
   );
-  const colorIndex = variableOptions.findIndex(({ slug }) =>
-    slug.includes("color"),
-  );
-  const colorOptionId = variableOptions[colorIndex].id;
   return (
     <div className="flex flex-col gap-6">
-      {Object.keys(byOptionId).map((optionId) => {
-        const variableOption = variableOptions.find(
-          ({ id }) => id === optionId,
-        );
-        const variableItems = byOptionId[optionId];
-        if (!variableOption || !variableItems || optionId === colorOptionId)
-          return null;
+      {variables.map(({ items, id, name }, index) => {
+        if (colorVariableIndex === index) return null;
         return (
           <EachVariableItem
-            key={optionId}
-            optionId={optionId}
-            variableOption={variableOption}
-            variableItems={variableItems}
+            key={id}
+            name={name}
+            optionId={id}
+            variableItems={items}
           />
         );
       })}

@@ -222,13 +222,11 @@ export const getProduct = async (id: string): Promise<Product | undefined> => {
     });
   }
 
-  const variables = product.variables.map(({ optionItem }) => optionItem);
   return {
     ...product,
     thumbnail,
     gallery,
     metadata: productMetadata,
-    variables,
   } as Product;
 };
 
@@ -267,13 +265,11 @@ export const getPublishedProduct = async (
     });
   }
 
-  const variables = product.variables.map(({ optionItem }) => optionItem);
   return {
     ...product,
     thumbnail,
     gallery,
     metadata: productMetadata,
-    variables,
   } as Product;
 };
 // * CREATE

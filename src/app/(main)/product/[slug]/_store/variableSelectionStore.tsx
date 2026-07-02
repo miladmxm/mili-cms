@@ -27,7 +27,7 @@ const SelectVariableProvider = ({ children }: PropsWithChildren) => {
   if (storeRef.current === null) {
     storeRef.current = createStore<SelectVariableStates>((set) => ({
       selectedVariables: {},
-      showError: true,
+      showError: false,
       setShowError: (showError) => set({ showError }),
       setSelectedVariables: (variable) =>
         set((state) => ({

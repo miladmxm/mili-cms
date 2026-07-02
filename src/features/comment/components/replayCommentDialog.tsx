@@ -24,7 +24,6 @@ const ReplayCommentDialog = () => {
   };
 
   const activeComment = comments.find((comment) => comment.id === id);
-  console.log(activeComment);
   const isOpen = !!id && !!activeComment && mode === "replay";
   return (
     <Dialog modal open={isOpen} onOpenChange={handleOpenChange}>
