@@ -142,7 +142,7 @@ export const createProductComment = async (
   try {
     const createdComment = await createComment({
       content: output.content,
-      rate: isQA ? (output.rate as Rating | undefined) : undefined,
+      rate: isQA ? undefined : (output.rate as Rating | undefined),
       productId,
       authorId: session?.user.id,
       isQA,
