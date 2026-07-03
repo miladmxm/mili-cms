@@ -8,6 +8,7 @@ import {
 } from "./article";
 import { articleCategory } from "./articleCategory";
 import { account, session, user } from "./auth";
+import { cart, cartItem } from "./cart";
 import { comment } from "./comment";
 import { media } from "./media";
 import { portfolio } from "./portfolio";
@@ -276,13 +277,37 @@ export const portfolioRelation = relations(portfolio, ({ one }) => ({
 
 // * Better auth relations
 
-export const userRelations = relations(user, ({ many }) => ({
+export const cartRelations = relations(cart, ({ many, one }) => ({
+  user: one(user, {
+    fields: [cart.userId],
+    references: [user.id],
+  }),
+  items: many(cartItem),
+}));
+
+export const cartItemRelations = relations(cartItem, ({ one }) => ({
+  cart: one(cart, {
+    fields: [cartItem.cartId],
+    references: [cart.id],
+  }),
+  product: one(product, {
+    fields: [cartItem.productId],
+    references: [product.id],
+  }),
+  metadata: one(productMeta, {
+    fields: [cartItem.metadataId],
+    references: [productMeta.id],
+  }),
+}));
+
+export const userRelations = relations(user, ({ many, one }) => ({
   sessions: many(session),
   accounts: many(account),
   articles: many(article),
   comments: many(comment),
   rates: many(rate),
   product: many(product),
+  cart: one(cart),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

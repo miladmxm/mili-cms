@@ -1,14 +1,16 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useState } from "react";
 
+import { useQuantityContext } from "@/app/(main)/product/[slug]/_store/quantityStore";
 import Negative from "@/assets/icons/negative.svg";
 import Positive from "@/assets/icons/positive.svg";
 import { cn } from "@/lib/utils";
 
 const Counter = ({ className }: { className?: string }) => {
-  const [count, setCount] = useState(1);
+  const quantity = useQuantityContext((s) => s.quantity);
+  const increment = useQuantityContext((s) => s.increment);
+  const decrement = useQuantityContext((s) => s.decrement);
   return (
     <motion.div
       layout
@@ -17,23 +19,15 @@ const Counter = ({ className }: { className?: string }) => {
         className,
       )}
     >
-      <button
-        className="px-3"
-        type="button"
-        onClick={() => setCount((prev) => prev + 1)}
-      >
+      <button className="px-3" type="button" onClick={increment}>
         <Positive className="size-2" />
       </button>
       <div className="flex flex-col gap-2 overflow-hidden size-6 center">
-        <motion.span key={count} animate={{ y: [-20, 0] }}>
-          {count.toLocaleString("fa")}
+        <motion.span key={quantity} animate={{ y: [-20, 0] }}>
+          {quantity.toLocaleString("fa")}
         </motion.span>
       </div>
-      <button
-        className="px-3"
-        type="button"
-        onClick={() => setCount((prev) => prev - 1)}
-      >
+      <button className="px-3" type="button" onClick={decrement}>
         <Negative className="size-2" />
       </button>
     </motion.div>
