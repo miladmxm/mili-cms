@@ -14,8 +14,8 @@ const UserFastLinks = async () => {
 
   if (auth?.user?.id) {
     const cart = await getUserCart();
-    cartCount = cart?.items.length || 0;
     console.log(cart);
+    cartCount = cart?.items.length || 0;
   }
 
   return (

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import Button from "@/components/ui/button";
 import ButtonWithArrow from "@/components/ui/buttonWithArrow";
-import { addToCartAction } from "@/features/cart/actions/addToCart";
+import { addToCartAction } from "@/features/cart/actions/create";
 
 import { useProductPageContext } from "../_context";
 import { useGetMetadata } from "../_hooks/useGetMetadata";

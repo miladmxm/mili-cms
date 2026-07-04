@@ -15,10 +15,11 @@ import type {
 export const getCart = async (userId: string): Promise<Cart | undefined> => {
   "use cache";
 
-  cacheTag(`${CacheKeys.cart}-${userId}`);
+  cacheTag(CacheKeys.cart, `${CacheKeys.cart}-${userId}`);
 
   const userCart =
     await cartRepo.findCartByUserIdWithProductAndMetadata(userId);
+  console.log("from get cart:", userCart);
   if (!userCart) return undefined;
 
   const items: CartItem[] = userCart.items.map((item) => ({
@@ -49,10 +50,7 @@ export const addToCart = async ({
   metadataId,
 }: AddToCartPayload) => {
   return withTransaction(async (tx) => {
-    let userCart = await cartRepo.findCartByUserIdWithProductAndMetadata(
-      userId,
-      tx,
-    );
+    let userCart = await cartRepo.findCartByUserId(userId, tx);
 
     if (!userCart) {
       const [newCart] = await cartRepo.createCart(userId, tx);
@@ -63,7 +61,6 @@ export const addToCart = async ({
       {
         cartId: userCart!.id,
         productId,
-        userId,
         metadataId,
       },
       tx,

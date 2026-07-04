@@ -10,10 +10,8 @@ import { toast } from "sonner";
 
 import type { Cart } from "@/services/cart/type";
 
-import {
-  removeFromCart,
-  updateCartItemQuantity,
-} from "@/features/cart/actions/addToCart";
+import { removeFromCartAction } from "@/features/cart/actions/delete";
+import { updateCartItemQuantity } from "@/features/cart/actions/update";
 import { useCartStore } from "@/features/cart/store/cartStore";
 import { formatNumber } from "@/lib/formatNumber";
 
@@ -43,7 +41,7 @@ const CartPageClient = ({ cart }: { cart: Cart | undefined }) => {
 
   const handleRemove = async (itemId: string) => {
     removeItemOptimistic(itemId);
-    const result = await removeFromCart(itemId);
+    const result = await removeFromCartAction(itemId);
 
     if (!result.success) {
       toast.error(result.error);

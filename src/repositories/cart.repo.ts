@@ -1,10 +1,13 @@
-import { and, eq, exists, sql } from "drizzle-orm";
+import { and, eq, exists } from "drizzle-orm";
 
 import { cart, cartItem } from "@/db/drizzle/schemas";
 
 import type { Transaction } from ".";
 
 import { getDBorTX } from ".";
+
+export const findCartByUserId = (userId: string, tx?: Transaction) =>
+  getDBorTX(tx).query.cart.findFirst({ where: eq(cart.userId, userId) });
 
 export const findCartByUserIdWithProductAndMetadata = async (
   userId: string,
@@ -40,36 +43,20 @@ export const findCartItemByProduct = async (
   {
     cartId,
     metadataId,
-    userId,
     productId,
   }: {
     cartId: string;
-    userId: string;
     productId: string;
-    metadataId: string | null;
+    metadataId: string;
   },
   tx?: Transaction,
 ) => {
   const conditions = [
     eq(cartItem.cartId, cartId),
     eq(cartItem.productId, productId),
+    eq(cartItem.metadataId, metadataId),
   ];
 
-  if (metadataId) {
-    conditions.push(eq(cartItem.metadataId, metadataId));
-  } else {
-    conditions.push(sql`${cartItem.metadataId} IS NULL`);
-  }
-
-  conditions.push(
-    exists(
-      getDBorTX(tx)
-        .select()
-        .from(cart)
-        .where(and(eq(cart.userId, userId), eq(cartItem.cartId, cart.id)))
-        .limit(1),
-    ),
-  );
   return getDBorTX(tx).query.cartItem.findFirst({
     where: and(...conditions),
   });
