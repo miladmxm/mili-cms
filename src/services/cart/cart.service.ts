@@ -1,4 +1,5 @@
 import { cacheTag } from "next/cache";
+import "server-only";
 
 import { CacheKeys } from "@/constant/cacheKeys";
 import { withTransaction } from "@/repositories";
@@ -15,11 +16,11 @@ import type {
 export const getCart = async (userId: string): Promise<Cart | undefined> => {
   "use cache";
 
-  cacheTag(CacheKeys.cart, `${CacheKeys.cart}-${userId}`);
+  cacheTag(`${CacheKeys.cart}-${userId}`);
 
   const userCart =
     await cartRepo.findCartByUserIdWithProductAndMetadata(userId);
-  console.log("from get cart:", userCart);
+  console.log("from get cart:", userCart?.items);
   if (!userCart) return undefined;
 
   const items: CartItem[] = userCart.items.map((item) => ({
@@ -49,7 +50,7 @@ export const addToCart = async ({
   userId,
   metadataId,
 }: AddToCartPayload) => {
-  return withTransaction(async (tx) => {
+  const id = await withTransaction(async (tx) => {
     let userCart = await cartRepo.findCartByUserId(userId, tx);
 
     if (!userCart) {
@@ -94,6 +95,7 @@ export const addToCart = async ({
 
     return resultId;
   });
+  return id;
 };
 
 export const removeFromCart = async ({

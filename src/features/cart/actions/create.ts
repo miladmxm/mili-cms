@@ -27,8 +27,8 @@ export const addToCartAction = async (input: unknown) => {
   }
 
   try {
-    await cartMutation.addToCart(output);
-    console.log("from action add", CacheKeys.cart, session.user.id);
+    const result = await cartMutation.addToCart(output);
+    if (!result.success) return { success: false, error: "ددمین دردی" };
     updateTag(`${CacheKeys.cart}-${session.user.id}`);
     return { success: true };
   } catch (error) {

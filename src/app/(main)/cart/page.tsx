@@ -1,19 +1,11 @@
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { getSession } from "@/lib/auth";
-import { getCart } from "@/services/cart/cart.service";
+import { getUserCart } from "@/features/cart/dal/query";
 
 import CartPageClient from "./client";
 
 async function CartContent() {
-  const session = await getSession();
-
-  if (!session?.user?.id) {
-    redirect("/");
-  }
-
-  const cart = await getCart(session.user.id);
+  const cart = await getUserCart();
 
   return <CartPageClient cart={cart} />;
 }

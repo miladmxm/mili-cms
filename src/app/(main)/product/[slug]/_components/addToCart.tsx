@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import Button from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { useSelectVariableContext } from "../_store/variableSelectionStore";
 
 const AddToCart = () => {
   const metadata = useGetMetadata();
+  const router = useRouter();
   const quantity = useQuantityContext((s) => s.quantity);
   const selectedVariables = useSelectVariableContext(
     (store) => store.selectedVariables,
@@ -33,6 +35,7 @@ const AddToCart = () => {
 
     if (result.success) {
       toast.success("به سبد خرید اضافه شد");
+      router.refresh();
     } else {
       toast.error(result.error || "خطا در افزودن به سبد خرید");
     }

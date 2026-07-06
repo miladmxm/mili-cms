@@ -6,17 +6,16 @@ import type {
 import { dalDbOperation, dalRequireAuth } from "@/dal/helpers";
 import * as cartService from "@/services/cart/cart.service";
 
-export const addToCart = async (input: Omit<AddToCartPayload, "userId">) => {
+export const addToCart = async (input: Omit<AddToCartPayload, "userId">) =>
   dalRequireAuth(
-    async ({ id }) =>
+    ({ id }) =>
       dalDbOperation(() => cartService.addToCart({ ...input, userId: id })),
     { cart: ["add"] },
   );
-};
 
 export const updateCartItem = async (
   input: Omit<UpdateCartItemPayload, "userId">,
-) => {
+) =>
   dalRequireAuth(
     async ({ id }) =>
       dalDbOperation(() =>
@@ -24,12 +23,10 @@ export const updateCartItem = async (
       ),
     { cart: ["add"] },
   );
-};
 
-export const removeFromCart = async (itemId: string) => {
+export const removeFromCart = async (itemId: string) =>
   dalRequireAuth(
     async ({ id }) =>
       dalDbOperation(() => cartService.removeFromCart({ userId: id, itemId })),
     { cart: ["delete"] },
   );
-};
