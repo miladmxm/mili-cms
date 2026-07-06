@@ -1,5 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import type { ComponentProps } from "react";
+import type { ComponentProps, JSX } from "react";
 
 import { cva } from "class-variance-authority";
 import Link from "next/link";
@@ -23,6 +23,21 @@ const buttonVariants = cva(
   },
 );
 
+const Icon = ({
+  defaultIcon,
+  className,
+}: {
+  defaultIcon?: JSX.Element;
+  className?: string;
+}) => {
+  const icon = defaultIcon ? defaultIcon : <Arrow />;
+  return (
+    <span className={cn(className, "h-full aspect-square rotate-180 p-2")}>
+      {icon}
+    </span>
+  );
+};
+
 type LinkORButton =
   | (ComponentProps<"button"> & {
       href?: undefined;
@@ -34,9 +49,13 @@ const ButtonWithArrow = ({
   variant,
   children,
   containerClassName,
+  icon,
   ...props
 }: LinkORButton &
-  VariantProps<typeof buttonVariants> & { containerClassName?: string }) => {
+  VariantProps<typeof buttonVariants> & {
+    containerClassName?: string;
+    icon?: JSX.Element;
+  }) => {
   return (
     <>
       {props.href ? (
@@ -51,14 +70,6 @@ const ButtonWithArrow = ({
             className={cn(buttonVariants({ variant, className }), "flex-auto")}
           >
             {children}
-          </span>
-          <span
-            className={cn(
-              buttonVariants({ variant, className }),
-              "h-full aspect-square rotate-180 p-2",
-            )}
-          >
-            <Arrow />
           </span>
         </Link>
       ) : (
@@ -75,14 +86,10 @@ const ButtonWithArrow = ({
           >
             {children}
           </span>
-          <span
-            className={cn(
-              buttonVariants({ variant, className }),
-              "h-full aspect-square rotate-180 p-2",
-            )}
-          >
-            <Arrow />
-          </span>
+          <Icon
+            defaultIcon={icon}
+            className={buttonVariants({ variant, className })}
+          />
         </button>
       )}
     </>
