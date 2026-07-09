@@ -19,10 +19,12 @@ export const useAddToCartHandler = () => {
     quantity,
     metadataId: metadata.id,
   });
+  const isLargerThanStock = metadata.stock >= 0 && quantity > metadata.stock;
   const isDisabled =
     isPedding ||
     stock === 0 ||
+    isLargerThanStock ||
     (product.type === "variable" &&
       Object.keys(selectedVariables).length !== product.variables.length);
-  return { isDisabled, isPedding, handleAddToCart };
+  return { isDisabled, isPedding, handleAddToCart, isLargerThanStock };
 };

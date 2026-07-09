@@ -7,8 +7,11 @@ import Spiner from "@/components/ui/spiner";
 import { useAddToCartHandler } from "../_hooks/useAddToCartHandler";
 
 const AddToCart = () => {
-  const { handleAddToCart, isDisabled, isPedding } = useAddToCartHandler();
-
+  const { handleAddToCart, isDisabled, isPedding, isLargerThanStock } =
+    useAddToCartHandler();
+  const buttonTitle = isLargerThanStock
+    ? "بیشتر از موجودی انتخاب کردید"
+    : "افزودن به سبد خرید";
   return (
     <>
       <ButtonWithArrow
@@ -17,7 +20,7 @@ const AddToCart = () => {
         onClick={handleAddToCart}
         icon={isPedding ? <Spiner /> : undefined}
       >
-        افزودن به سبد خرید
+        {buttonTitle}
       </ButtonWithArrow>
       <Button
         className="md:hidden flex items-center justify-center gap-2"
@@ -26,7 +29,7 @@ const AddToCart = () => {
         disabled={isDisabled}
         onClick={handleAddToCart}
       >
-        افزودن به سبد خرید
+        {buttonTitle}
         {isPedding && <Spiner />}
       </Button>
     </>

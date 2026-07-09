@@ -13,7 +13,6 @@ const CounterHandler = () => {
       quantity={quantity}
       onIncrement={increment}
       onDecrement={decrement}
-      className="max-md:hidden"
     />
   );
 };

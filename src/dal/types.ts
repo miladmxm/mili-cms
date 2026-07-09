@@ -31,7 +31,8 @@ export type DalError =
   | {
       type: "unknown-error";
       error: unknown;
-    };
+    }
+  | { type: "validation"; message: string };
 
 export class ThrowableDalError extends Error {
   dalError: DalError;

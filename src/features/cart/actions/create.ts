@@ -28,7 +28,14 @@ export const addToCartAction = async (input: unknown) => {
 
   try {
     const result = await cartMutation.addToCart(output);
-    if (!result.success) return { success: false, error: "ددمین دردی" };
+    if (!result.success)
+      return {
+        success: false,
+        error:
+          result.error.type === "validation"
+            ? result.error.message
+            : "نتوانست به سبد خرید اضافه کند",
+      };
     updateTag(`${CacheKeys.cart}-${session.user.id}`);
     return { success: true };
   } catch (error) {
