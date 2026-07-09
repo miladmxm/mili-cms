@@ -2,15 +2,21 @@
 
 import { motion } from "motion/react";
 
-import { useQuantityContext } from "@/app/(main)/product/[slug]/_store/quantityStore";
 import Negative from "@/assets/icons/negative.svg";
 import Positive from "@/assets/icons/positive.svg";
 import { cn } from "@/lib/utils";
 
-const Counter = ({ className }: { className?: string }) => {
-  const quantity = useQuantityContext((s) => s.quantity);
-  const increment = useQuantityContext((s) => s.increment);
-  const decrement = useQuantityContext((s) => s.decrement);
+const Counter = ({
+  className,
+  quantity,
+  onDecrement,
+  onIncrement,
+}: {
+  className?: string;
+  quantity: number;
+  onIncrement?: () => void;
+  onDecrement?: () => void;
+}) => {
   return (
     <motion.div
       layout
@@ -19,7 +25,7 @@ const Counter = ({ className }: { className?: string }) => {
         className,
       )}
     >
-      <button className="px-3" type="button" onClick={increment}>
+      <button className="px-3" type="button" onClick={onIncrement}>
         <Positive className="size-2" />
       </button>
       <div className="flex flex-col gap-2 overflow-hidden size-6 center">
@@ -27,7 +33,7 @@ const Counter = ({ className }: { className?: string }) => {
           {quantity.toLocaleString("fa")}
         </motion.span>
       </div>
-      <button className="px-3" type="button" onClick={decrement}>
+      <button className="px-3" type="button" onClick={onDecrement}>
         <Negative className="size-2" />
       </button>
     </motion.div>

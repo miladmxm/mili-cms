@@ -5,6 +5,9 @@ import DefaultImage from "@/components/ui/defaultImage";
 import { DiscountedPrice } from "@/features/product/components/ui/finalPrice";
 import { OPTION_ITEM_IDS_SEPARATOR } from "@/features/product/constant";
 
+import QuantityCounter from "../_containers/quantityCounter";
+import RemoveFromCart from "./removeFromCart";
+
 const SelectedVariables = ({
   optionItemIds,
   variables,
@@ -32,10 +35,10 @@ const SelectedVariables = ({
   );
 };
 
-const CartCard = ({ product, metadata }: CartItem) => {
+const CartCard = ({ product, metadata, quantity, id }: CartItem) => {
   return (
     <div className="border border-primary-500 rounded-6xl flex p-6 gap-8">
-      <div className="w-55.5 h-33">
+      <div className="w-55.5 min-h-33 h-full">
         {product.type === "variable" ? (
           <DefaultImage
             className="rounded-3xl size-full object-cover"
@@ -65,6 +68,10 @@ const CartCard = ({ product, metadata }: CartItem) => {
             variables={product.variables as Product["variables"]}
           />
         )}
+      </div>
+      <div className="flex-auto flex flex-col justify-between items-end">
+        <RemoveFromCart id={id} />
+        <QuantityCounter id={id} quantity={quantity} />
       </div>
     </div>
   );
