@@ -19,23 +19,22 @@ export const findCartByUserIdWithProductAndMetadata = async (
       items: {
         with: {
           product: {
-            columns: { id: true, name: true, slug: true },
-            with: { thumbnail: true },
-          },
-          metadata: {
-            columns: {
-              id: true,
-              price: true,
-              stock: true,
-              discount: true,
-              optionItemIds: true,
+            columns: { id: true, name: true, slug: true, type: true },
+            with: {
+              thumbnail: true,
+              variables: {
+                with: { optionItem: { with: { option: true } } },
+                columns: { optionItemId: false, productId: false },
+              },
             },
           },
+          metadata: { with: { thumbnail: true } },
         },
         orderBy: (items, { desc }) => [desc(items.createdAt)],
       },
     },
   });
+
   return userCart;
 };
 

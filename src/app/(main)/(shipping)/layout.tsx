@@ -1,4 +1,4 @@
-import NavigationProgress from "./containers/navigationProgress";
+import NavigationProgress from "./_containers/navigationProgress";
 
 const ShippingLayout = ({ children }: LayoutProps<"/">) => {
   return (

@@ -38,7 +38,7 @@ import type { Transaction } from ".";
 
 import { getDBorTX } from ".";
 
-const dtoProductVariables = (
+export const dtoProductVariables = (
   variables: {
     optionItem: {
       value: string;

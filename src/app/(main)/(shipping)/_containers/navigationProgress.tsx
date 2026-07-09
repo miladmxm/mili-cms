@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 
+import SeparatorLine from "@/components/ui/separatorLine";
 import { cn } from "@/lib/utils";
 
 const NAVS = {
@@ -39,18 +40,23 @@ const NavListItem = ({
 };
 
 const NavigationProgressContainer = () => {
-  const activeIndex = 2;
+  const activeIndex = 1;
   return (
     <ul
       style={
         {
           "--cols": `repeat(${NAV_KEYS.length}, minmax(0, 1fr))`,
           "--before-width": `${EACH_ITEM_WIDTH * (activeIndex - 1)}%`,
+          "--before-max-width": `${100 - EACH_ITEM_WIDTH}%`,
           "--before-right": `${EACH_ITEM_WIDTH / 2}%`,
         } as CSSProperties
       }
-      className="grid grid-rows-1 grid-cols-(--cols) relative before:h-1 before:w-(--before-width) before:absolute before:top-5 before:-translate-y-1/2 before:right-(--before-right) before:bg-success before:-z-10 before:transition-all"
+      className="grid grid-rows-1 grid-cols-(--cols) isolate relative before:h-1 before:w-(--before-width) before:absolute before:top-5 before:-translate-y-1/2 before:right-(--before-right) before:bg-success before:-z-10 before:transition-all"
     >
+      <SeparatorLine
+        size="4"
+        className="absolute left-(--before-right) -z-20 w-(--before-max-width) top-5 -translate-y-1/2"
+      />
       {NAV_KEYS.map((key, i) => (
         <NavListItem
           active={i + 1 <= activeIndex}

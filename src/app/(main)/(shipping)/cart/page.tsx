@@ -1,23 +1,26 @@
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { getUserCart } from "@/features/cart/dal/query";
 
-import CartPageClient from "./client";
+import CartList from "./_containers/cartList";
 
 async function CartContent() {
   const cart = await getUserCart();
-
-  return <CartPageClient cart={cart} />;
+  if (!cart) redirect("/");
+  return <CartList {...cart} />;
 }
 
 export default function CartPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="container py-8 text-center">در حال بارگذاری...</div>
-      }
-    >
-      <CartContent />
-    </Suspense>
+    <main className="container">
+      <Suspense
+        fallback={
+          <div className="container py-8 text-center">در حال بارگذاری...</div>
+        }
+      >
+        <CartContent />
+      </Suspense>
+    </main>
   );
 }

@@ -47,7 +47,7 @@ export type CreateProduct =
       metadata: VariableCreateProductMetadata[];
     });
 
-interface ProductDefaultMeta {
+export interface ProductDefaultMeta {
   id: string;
   productId: string;
   price: number;

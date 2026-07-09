@@ -25,9 +25,11 @@ export const cartItem = MainSchema.table("cart_item", {
   productId: uuid("product_id")
     .notNull()
     .references(() => product.id, { onDelete: "cascade" }),
-  metadataId: uuid("metadata_id").references(() => productMeta.id, {
-    onDelete: "set null",
-  }),
+  metadataId: uuid("metadata_id")
+    .notNull()
+    .references(() => productMeta.id, {
+      onDelete: "cascade",
+    }),
   quantity: integer("quantity").notNull().default(1),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

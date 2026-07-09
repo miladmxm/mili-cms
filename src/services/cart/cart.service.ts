@@ -4,6 +4,7 @@ import "server-only";
 import { CacheKeys } from "@/constant/cacheKeys";
 import { withTransaction } from "@/repositories";
 import * as cartRepo from "@/repositories/cart.repo";
+import { dtoProductVariables } from "@/repositories/product.repo";
 import { DTOconvertMediaPathToRealUrl } from "@/services/media/dto";
 
 import type {
@@ -20,22 +21,32 @@ export const getCart = async (userId: string): Promise<Cart | undefined> => {
 
   const userCart =
     await cartRepo.findCartByUserIdWithProductAndMetadata(userId);
-  console.log("from get cart:", userCart?.items);
   if (!userCart) return undefined;
+  const userCardItems = userCart.items.filter(
+    ({ product, metadata }) => Boolean(product) || Boolean(metadata),
+  );
 
-  const items: CartItem[] = userCart.items.map((item) => ({
+  const items: CartItem[] = userCardItems.map((item) => ({
     ...item,
-    product: item.product
-      ? {
-          ...item.product,
-          thumbnail: item.product.thumbnail
-            ? {
-                ...item.product.thumbnail,
-                url: DTOconvertMediaPathToRealUrl(item.product.thumbnail.url),
-              }
-            : null,
-        }
-      : null,
+    metadata: {
+      ...item.metadata,
+      thumbnail: item.metadata.thumbnail
+        ? {
+            ...item.metadata.thumbnail,
+            url: DTOconvertMediaPathToRealUrl(item.metadata.thumbnail.url),
+          }
+        : null,
+    },
+    product: {
+      ...item.product,
+      variables: dtoProductVariables(item.product.variables),
+      thumbnail: item.product.thumbnail
+        ? {
+            ...item.product.thumbnail,
+            url: DTOconvertMediaPathToRealUrl(item.product.thumbnail.url),
+          }
+        : null,
+    },
   }));
 
   return {

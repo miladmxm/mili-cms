@@ -1,4 +1,5 @@
 import type { Media } from "../media/type";
+import type { Product } from "../product/type";
 
 export interface CartItem {
   id: string;
@@ -11,15 +12,11 @@ export interface CartItem {
     id: string;
     name: string;
     slug: string;
-    thumbnail: Media | null;
-  } | null;
-  metadata: {
-    id: string;
-    price: number;
-    stock: number;
-    discount: number;
-    optionItemIds: string | null;
-  } | null;
+    type: Product["type"];
+    thumbnail?: Media | null;
+    variables?: Product["variables"] | null;
+  };
+  metadata: Product["metadata"][number];
 }
 
 export interface Cart {
