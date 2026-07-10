@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { getUserCart } from "@/features/cart/dal/query";
 
 import CartList from "./_containers/cartList";
+import HandleNext from "./components/handleNext";
 
 async function CartContent() {
   const cart = await getUserCart();
@@ -19,6 +20,7 @@ export default function CartPage() {
       }
     >
       <CartContent />
+      <HandleNext />
     </Suspense>
   );
 }

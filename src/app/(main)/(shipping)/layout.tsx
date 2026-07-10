@@ -1,5 +1,5 @@
-import InvoiceTotalSidebar from "./_containers/invoiceTotalSidebar";
-import NavigationProgress from "./_containers/navigationProgress";
+import InvoiceTotalSidebar from "./_components/invoiceTotalSidebar";
+import NavigationProgress from "./_components/navigationProgress";
 
 const ShippingLayout = ({ children }: LayoutProps<"/">) => {
   return (
