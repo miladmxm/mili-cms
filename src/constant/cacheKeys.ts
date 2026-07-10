@@ -9,4 +9,5 @@ export const CacheKeys = {
   productComment: "product_comment",
   comment: "comment",
   cart: "cart",
+  address: "address",
 };

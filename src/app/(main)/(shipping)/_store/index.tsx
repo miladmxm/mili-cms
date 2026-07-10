@@ -4,11 +4,13 @@ export interface ShippingState {
   step: number;
   nextStepAction?: () => void;
   isDisabledNextAction: boolean;
+  nextButtonLabel: string;
 }
 
 export const useShippingStore = create<ShippingState>(() => ({
   step: 1,
   isDisabledNextAction: true,
+  nextButtonLabel: "ادامه فرایند خرید",
 }));
 
 export const setShippingStep = (step: number) =>

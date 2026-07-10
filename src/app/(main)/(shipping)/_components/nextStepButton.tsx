@@ -7,6 +7,7 @@ import { useShippingStore } from "../_store";
 const NextStepButton = () => {
   const action = useShippingStore((store) => store.nextStepAction);
   const disabled = useShippingStore((store) => store.isDisabledNextAction);
+  const label = useShippingStore((store) => store.nextButtonLabel);
   return (
     <Button
       disabled={disabled}
@@ -14,7 +15,7 @@ const NextStepButton = () => {
       variant="secondary"
       shadow="sm"
     >
-      ادامه فرایند خرید
+      {label}
     </Button>
   );
 };

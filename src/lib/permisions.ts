@@ -9,6 +9,7 @@ export const statements = {
   settings: ["read", "update"],
   media: ["read", "upload", "delete", "update"],
   cart: ["read", "add", "update", "delete"],
+  address: ["create", "read", "update", "delete"],
 } as const;
 
 export type KeyStatements = keyof typeof statements;
@@ -25,6 +26,7 @@ export const roles = {
     media: ["read"],
     portfolio: ["read"],
     cart: ["read", "add", "update", "delete"],
+    address: ["create", "read", "update", "delete"],
   }),
 
   moderator: ac.newRole({
@@ -36,6 +38,7 @@ export const roles = {
     media: ["read", "upload", "update"],
     portfolio: ["read", "update", "delete", "create"],
     cart: ["read", "add", "update", "delete"],
+    address: ["create", "read", "update", "delete"],
   }),
 
   admin: ac.newRole({
@@ -47,5 +50,6 @@ export const roles = {
     media: ["delete", "read", "upload", "update"],
     portfolio: ["read", "update", "delete", "create"],
     cart: ["read", "add", "update", "delete"],
+    address: ["create", "read", "update", "delete"],
   }),
 };

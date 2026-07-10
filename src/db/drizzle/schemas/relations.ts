@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 
+import { address } from "./address";
 import {
   article,
   articleToCategory,
@@ -274,7 +275,12 @@ export const portfolioRelation = relations(portfolio, ({ one }) => ({
     references: [media.id],
   }),
 }));
-
+export const addressRelation = relations(address, ({ one }) => ({
+  user: one(user, {
+    fields: [address.userId],
+    references: [user.id],
+  }),
+}));
 // * Better auth relations
 
 export const cartRelations = relations(cart, ({ many, one }) => ({
@@ -307,6 +313,7 @@ export const userRelations = relations(user, ({ many, one }) => ({
   comments: many(comment),
   rates: many(rate),
   product: many(product),
+  address: many(address),
   cart: one(cart),
 }));
 

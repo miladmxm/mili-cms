@@ -1,3 +1,4 @@
+export * from "./schemas/address";
 export * from "./schemas/article";
 export * from "./schemas/articleCategory";
 export * from "./schemas/auth";
