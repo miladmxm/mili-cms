@@ -13,14 +13,12 @@ async function CartContent() {
 
 export default function CartPage() {
   return (
-    <main className="container">
-      <Suspense
-        fallback={
-          <div className="container py-8 text-center">در حال بارگذاری...</div>
-        }
-      >
-        <CartContent />
-      </Suspense>
-    </main>
+    <Suspense
+      fallback={
+        <div className="container py-8 text-center">در حال بارگذاری...</div>
+      }
+    >
+      <CartContent />
+    </Suspense>
   );
 }

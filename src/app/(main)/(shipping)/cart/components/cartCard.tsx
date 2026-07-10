@@ -17,9 +17,8 @@ const SelectedVariables = ({
 }) => {
   const selectedItemIds = optionItemIds.split(OPTION_ITEM_IDS_SEPARATOR);
 
-  console.log(variables, selectedItemIds);
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-2 md:gap-4 max-md:flex-wrap">
       {variables.map(({ name, items, id }) => {
         const item = items.find(({ id: itemId }) =>
           selectedItemIds.includes(itemId),
@@ -37,8 +36,8 @@ const SelectedVariables = ({
 
 const CartCard = ({ product, metadata, quantity, id }: CartItem) => {
   return (
-    <div className="border border-primary-500 rounded-6xl flex p-6 gap-8">
-      <div className="w-55.5 min-h-33 h-full">
+    <div className="border border-primary-500 rounded-6xl grid grid-cols-2 auto-rows-auto md:flex p-6 gap-4 md:gap-8">
+      <div className="max-w-full w-55.5 min-h-33 h-full">
         {product.type === "variable" ? (
           <DefaultImage
             className="rounded-3xl size-full object-cover"
@@ -61,6 +60,11 @@ const CartCard = ({ product, metadata, quantity, id }: CartItem) => {
         <div>
           <strong>قیمت: </strong>
           <DiscountedPrice metadata={[metadata]} />
+          {metadata.discount > 0 && (
+            <small className="px-1">
+              (به همراه {metadata.discount}% تخفیف)
+            </small>
+          )}
         </div>
         {product.type === "variable" && (
           <SelectedVariables
@@ -69,7 +73,7 @@ const CartCard = ({ product, metadata, quantity, id }: CartItem) => {
           />
         )}
       </div>
-      <div className="flex-auto flex flex-col justify-between items-end">
+      <div className="flex-auto flex md:flex-col flex-row-reverse max-md:col-span-2 justify-between items-end">
         <RemoveFromCart id={id} />
         <QuantityCounter id={id} quantity={quantity} />
       </div>

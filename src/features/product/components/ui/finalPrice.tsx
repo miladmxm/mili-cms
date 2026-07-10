@@ -22,3 +22,16 @@ export const DiscountedPrice = ({
 }) => {
   return <>{formatNumber(Math.round(calcDiscount(metadata) / 10))} تومان</>;
 };
+
+export const TotalMetadataPriceWithDiscount = ({
+  metadata,
+}: {
+  metadata: Product["metadata"];
+}) => {
+  const totalPrice = metadata.reduce((acc, item) => {
+    const discountedPrice = calcDiscount([item]);
+    return acc + discountedPrice;
+  }, 0);
+
+  return <>{formatNumber(Math.round(totalPrice / 10))} تومان</>;
+};
