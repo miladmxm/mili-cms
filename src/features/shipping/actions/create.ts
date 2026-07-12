@@ -25,9 +25,10 @@ export const createAddressAction = async (
   }
 
   try {
-    const createdArticleOutput = await dalAddressMutation.createAddress(output);
+    const createdAddressOutput = await dalAddressMutation.createAddress(output);
+    console.log(createdAddressOutput);
 
-    if (!createdArticleOutput.success) {
+    if (!createdAddressOutput.success) {
       return { success: false, message: "خطا در ایجاد آدرس" };
     }
 

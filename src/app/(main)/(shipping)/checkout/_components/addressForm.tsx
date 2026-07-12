@@ -1,10 +1,12 @@
 "use client";
 
-import type { ComponentProps, PropsWithChildren } from "react";
+import type { ComponentProps, PropsWithChildren, RefObject } from "react";
 
 import { Controller } from "react-hook-form";
 
 import { useAddAddress } from "@/features/shipping/hooks/useAddAddress";
+
+import { setShippingStep } from "../../_store";
 
 const NormalTextInput = ({
   label,
@@ -49,7 +51,9 @@ const NormalTextarea = ({
 };
 
 const ErrorMessage = ({ message }: { message?: string }) => {
-  return <small className="ps-2 text-sm text-error">{message}</small>;
+  return (
+    <small className="ps-2 block pt-2 text-sm text-error">{message}</small>
+  );
 };
 
 const FieldGroup = ({ children }: PropsWithChildren) => {
@@ -60,8 +64,14 @@ const FieldGroup = ({ children }: PropsWithChildren) => {
   );
 };
 
-const AddressForm = () => {
-  const { control, onSubmit } = useAddAddress();
+const AddressForm = ({
+  submitButtonRef,
+}: {
+  submitButtonRef: RefObject<HTMLButtonElement | null>;
+}) => {
+  const { control, onSubmit } = useAddAddress(() => {
+    setShippingStep(3);
+  });
   return (
     <section className="border border-primary-500 bg-primary-25 py-4 px-8 rounded-4xl @container">
       <form onSubmit={onSubmit}>
@@ -171,6 +181,7 @@ const AddressForm = () => {
             )}
           />
         </FieldGroup>
+        <button type="submit" ref={submitButtonRef} className="sr-only" />
       </form>
     </section>
   );
