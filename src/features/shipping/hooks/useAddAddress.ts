@@ -8,7 +8,7 @@ import type { AddAddressOutput } from "../validations";
 import { createAddressAction } from "../actions/create";
 import { AddAddressSchema } from "../validations";
 
-export const useAddAddress = (cb?: () => void) => {
+export const useAddAddress = (cb?: (id: string) => void) => {
   const { control, handleSubmit } = useForm({
     resolver: valibotResolver(AddAddressSchema),
     defaultValues: {
@@ -24,15 +24,15 @@ export const useAddAddress = (cb?: () => void) => {
 
   const onSubmit = (data: AddAddressOutput) => {
     startTransition(async () => {
-      const { success, message } = await createAddressAction(data);
+      const addAddressResponse = await createAddressAction(data);
 
-      if (!success) {
-        toast.error(message);
+      if (!addAddressResponse.success) {
+        toast.error(addAddressResponse.message);
         return;
       }
 
-      toast.success(message);
-      if (cb) cb();
+      toast.success(addAddressResponse.message);
+      if (cb) cb(addAddressResponse.data || "");
     });
   };
 

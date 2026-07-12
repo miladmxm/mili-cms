@@ -1,21 +1,16 @@
-"use client";
-
-import { useRef } from "react";
+import { getUserAddress } from "@/features/shipping/dal/query";
 
 import SetShippingStoreOnMounted from "../_components/setShippingStoreOnMounted";
-import AddressForm from "./_components/addressForm";
+import CheckoutStepsHandler from "./_containers/checkoutStepsHandler";
+import CheckoutContextProvider from "./_contexts";
 
 const CheckoutPage = () => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const address = getUserAddress();
   return (
-    <div>
-      <SetShippingStoreOnMounted
-        step={2}
-        isDisabledNextAction={false}
-        nextStepAction={() => buttonRef.current?.click()}
-      />
-      <AddressForm submitButtonRef={buttonRef} />
-    </div>
+    <CheckoutContextProvider address={address}>
+      <SetShippingStoreOnMounted step={2} />
+      <CheckoutStepsHandler />
+    </CheckoutContextProvider>
   );
 };
 

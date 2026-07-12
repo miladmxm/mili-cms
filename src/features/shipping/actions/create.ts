@@ -13,7 +13,7 @@ import { AddAddressSchema } from "../validations";
 
 export const createAddressAction = async (
   inputData: unknown,
-): Promise<ActionResult<Partial<CreateAddress>>> => {
+): Promise<ActionResult<Partial<CreateAddress>, string>> => {
   const {
     errors,
     output,
@@ -26,7 +26,6 @@ export const createAddressAction = async (
 
   try {
     const createdAddressOutput = await dalAddressMutation.createAddress(output);
-    console.log(createdAddressOutput);
 
     if (!createdAddressOutput.success) {
       return { success: false, message: "خطا در ایجاد آدرس" };
@@ -36,6 +35,7 @@ export const createAddressAction = async (
     return {
       success: successValidation,
       message: "آدرس جدید با موفقیت ثبت شد",
+      data: createdAddressOutput.data,
     };
   } catch (error) {
     console.log(error);
