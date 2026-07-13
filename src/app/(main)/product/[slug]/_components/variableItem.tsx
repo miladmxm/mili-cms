@@ -15,7 +15,7 @@ const VariableItem = ({ id, label, optionId }: OptionItem) => {
   );
   return (
     <Radio
-      onChange={() => {
+      onChecked={() => {
         setSelectedVariables({ [optionId]: id });
       }}
       checked={selectedVariables[optionId] === id}

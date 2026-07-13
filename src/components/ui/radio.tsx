@@ -1,18 +1,39 @@
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
+import type { ChangeEvent, ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
 const Radio = ({
   className,
   id,
+  onChecked,
   children,
+  onChange,
   ...props
-}: ComponentProps<"input"> & { id: string; children?: ReactNode }) => {
+}: ComponentProps<"input"> & {
+  id: string;
+  children?: ReactNode;
+  onChecked?: () => void;
+}) => {
+  const handleChenge = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked && onChecked) {
+      onChecked();
+    }
+    if (onChange) {
+      onChange(e);
+    }
+  };
+
   return (
     <div className={cn("group", className)}>
-      <input className="sr-only" type="radio" {...props} id={id} />
+      <input
+        className="sr-only"
+        type="radio"
+        {...props}
+        onChange={handleChenge}
+        id={id}
+      />
       <label
         className="size-4 rounded-full bg-white border cursor-pointer border-primary-500 center p-0.5 group-has-[input:checked]:border-secondary-500/50 transition-colors"
         htmlFor={id}

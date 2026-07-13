@@ -3,6 +3,8 @@ import type { Address } from "@/services/shipping/type";
 import Radio from "@/components/ui/radio";
 import SeparatorLine from "@/components/ui/separatorLine";
 
+import { setAddressId, useShippingStore } from "../../_store";
+
 const AddressCard = ({
   province,
   city,
@@ -11,12 +13,18 @@ const AddressCard = ({
   fullname,
   id,
 }: Address) => {
+  const addressId = useShippingStore((store) => store.addressId);
   return (
     <label
       htmlFor={id}
       className="border cursor-pointer border-primary-500 rounded-6xl py-2 px-4 md:p-4 flex items-center gap-3"
     >
-      <Radio id={id} name="address" />
+      <Radio
+        id={id}
+        name="address"
+        onChecked={() => setAddressId(id)}
+        checked={id === addressId}
+      />
       <SeparatorLine variant="horizontal" />
       <div className="flex-auto">
         <div className="flex flex-wrap gap-4 justify-between ">

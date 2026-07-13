@@ -18,10 +18,8 @@ const FilterOptionItem = ({
         id={key}
         checked={isChecked}
         name={optionSlug}
-        onChange={(e) => {
-          if (e.target.checked) {
-            applyParams({ [optionSlug]: value }, { scroll: false });
-          }
+        onChecked={() => {
+          applyParams({ [optionSlug]: value }, { scroll: false });
         }}
       >
         <label className="cursor-pointer" htmlFor={key}>

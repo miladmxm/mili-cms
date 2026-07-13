@@ -4,6 +4,7 @@ export interface ShippingState {
   step: number;
   nextStepAction?: () => void;
   isDisabledNextAction: boolean;
+  addressId?: string;
   nextButtonLabel: string;
 }
 
@@ -22,3 +23,6 @@ export const setShippingNextStepAction = (
 
 export const setShippingNextActionDisable = (disabled: boolean) =>
   useShippingStore.setState({ isDisabledNextAction: disabled });
+
+export const setAddressId = (addressId: string) =>
+  useShippingStore.setState({ addressId });
