@@ -6,6 +6,7 @@ import type { CreateAddress } from "@/services/shipping/type";
 import type { ActionResult } from "@/types/actions";
 
 import { CacheKeys } from "@/constant/cacheKeys";
+import { getSession } from "@/lib/auth";
 import { validator } from "@/validations";
 
 import * as dalAddressMutation from "../dal/mutation";
@@ -19,7 +20,11 @@ export const createAddressAction = async (
     output,
     success: successValidation,
   } = validator(AddAddressSchema, inputData);
+  const session = await getSession();
 
+  if (!session?.user?.id) {
+    return { success: false, message: "لطفا ابتدا وارد حساب خود شوید" };
+  }
   if (!successValidation) {
     return { success: successValidation, message: "خطای اعتبارسنجی", errors };
   }
@@ -31,7 +36,7 @@ export const createAddressAction = async (
       return { success: false, message: "خطا در ایجاد آدرس" };
     }
 
-    updateTag(`${CacheKeys.address}-{userid}`);
+    updateTag(`${CacheKeys.address}-${session.user.id}`);
     return {
       success: successValidation,
       message: "آدرس جدید با موفقیت ثبت شد",

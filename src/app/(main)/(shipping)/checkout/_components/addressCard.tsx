@@ -3,7 +3,14 @@ import type { Address } from "@/services/shipping/type";
 import Radio from "@/components/ui/radio";
 import SeparatorLine from "@/components/ui/separatorLine";
 
-import { setAddressId, useShippingStore } from "../../_store";
+import {
+  setAddressId,
+  setIsAddAddress,
+  setShippingNextActionDisable,
+  setShippingNextStepAction,
+  setShippingStep,
+  useShippingStore,
+} from "../../_store";
 
 const AddressCard = ({
   province,
@@ -14,6 +21,14 @@ const AddressCard = ({
   id,
 }: Address) => {
   const addressId = useShippingStore((store) => store.addressId);
+
+  const handleSelectAddress = () => {
+    setAddressId(id);
+    setIsAddAddress(false);
+    setShippingNextActionDisable(false);
+    setShippingNextStepAction(() => setShippingStep(3));
+  };
+
   return (
     <label
       htmlFor={id}
@@ -22,7 +37,7 @@ const AddressCard = ({
       <Radio
         id={id}
         name="address"
-        onChecked={() => setAddressId(id)}
+        onChecked={handleSelectAddress}
         checked={id === addressId}
       />
       <SeparatorLine variant="horizontal" />

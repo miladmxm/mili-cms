@@ -2,10 +2,12 @@
 
 import { use, useRef } from "react";
 
+import SeparatorLine from "@/components/ui/separatorLine";
+
+import AddAddressToggler from "../_components/addAddressToggler";
 import AddressCard from "../_components/addressCard";
-import AddressForm from "../_components/addressForm";
+import RenderAddAddress from "../_components/renderAddAddress";
 import { useCheckoutContext } from "../_contexts";
-import SetShippingStoreOnMounted from "../../_components/setShippingStoreOnMounted";
 
 const AddressSelection = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -13,16 +15,15 @@ const AddressSelection = () => {
   const address = use(addressPromise);
   return (
     <div>
+      آدرس های پیشین شما:
       <div className="py-3 my-6 grid grid-cols-2 gap-4 auto-rows-auto">
         {address.map((item) => (
           <AddressCard key={item.id} {...item} />
         ))}
       </div>
-      <AddressForm submitButtonRef={buttonRef} />
-      <SetShippingStoreOnMounted
-        isDisabledNextAction={false}
-        nextStepAction={() => buttonRef.current?.click()}
-      />
+      <SeparatorLine size="4" />
+      <AddAddressToggler submitButtonRef={buttonRef} />
+      <RenderAddAddress submitButtonRef={buttonRef} />
     </div>
   );
 };

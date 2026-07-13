@@ -6,7 +6,7 @@ import { Controller } from "react-hook-form";
 
 import { useAddAddress } from "@/features/shipping/hooks/useAddAddress";
 
-import { setShippingStep } from "../../_store";
+import { setAddressId, setShippingStep } from "../../_store";
 
 const NormalTextInput = ({
   label,
@@ -64,12 +64,13 @@ const FieldGroup = ({ children }: PropsWithChildren) => {
   );
 };
 
-const AddressForm = ({
-  submitButtonRef,
-}: {
+export interface AddressFormProps {
   submitButtonRef: RefObject<HTMLButtonElement | null>;
-}) => {
-  const { control, onSubmit } = useAddAddress(() => {
+}
+
+const AddressForm = ({ submitButtonRef }: AddressFormProps) => {
+  const { control, onSubmit } = useAddAddress((id: string) => {
+    setAddressId(id);
     setShippingStep(3);
   });
   return (
