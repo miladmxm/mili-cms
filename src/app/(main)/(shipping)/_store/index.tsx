@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import type { SendingMethodKey } from "@/constant/appData";
+
 export interface ShippingState {
   step: number;
   nextStepAction?: () => void;
@@ -7,6 +9,7 @@ export interface ShippingState {
   addressId?: string;
   nextButtonLabel: string;
   isAddAddress: boolean;
+  sendingMethod: SendingMethodKey;
 }
 
 export const useShippingStore = create<ShippingState>(() => ({
@@ -14,6 +17,7 @@ export const useShippingStore = create<ShippingState>(() => ({
   isDisabledNextAction: true,
   nextButtonLabel: "ادامه فرایند خرید",
   isAddAddress: false,
+  sendingMethod: "storeSend",
 }));
 
 export const setShippingStep = (step: number) =>
@@ -31,3 +35,7 @@ export const setAddressId = (addressId: ShippingState["addressId"]) =>
 
 export const setIsAddAddress = (isAddAddress: boolean) =>
   useShippingStore.setState(() => ({ isAddAddress }));
+
+export const setSendignMethod = (
+  sendingMethod: ShippingState["sendingMethod"],
+) => useShippingStore.setState({ sendingMethod });
