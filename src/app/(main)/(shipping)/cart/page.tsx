@@ -1,15 +1,19 @@
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { getUserCart } from "@/features/cart/dal/query";
 
 import CartList from "./_containers/cartList";
 import { CartCardSkeleton } from "./components/cartCard";
+import HandleNext from "./components/handleNext";
 
 async function CartContent() {
   const cart = await getUserCart();
-  if (!cart) redirect("/");
-  return <CartList {...cart} />;
+  return (
+    <>
+      <HandleNext itemsLength={cart?.items.length || 0} />
+      <CartList items={cart?.items || []} />
+    </>
+  );
 }
 
 export default function CartPage() {

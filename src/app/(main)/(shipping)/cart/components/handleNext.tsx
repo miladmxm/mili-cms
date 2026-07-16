@@ -3,20 +3,35 @@
 import { useRouter } from "next/navigation";
 
 import SetShippingStoreOnMounted from "../../_components/setShippingStoreOnMounted";
-import { setShippingNextActionDisable } from "../../_store";
 
 const HandleNext = ({ itemsLength }: { itemsLength: number }) => {
   const router = useRouter();
-  return (
-    <SetShippingStoreOnMounted
-      step={1}
-      isDisabledNextAction={itemsLength === 0}
-      nextStepAction={() => {
-        setShippingNextActionDisable(true);
-        router.push("/checkout");
-      }}
-    />
-  );
+
+  if (itemsLength > 0) {
+    return (
+      <SetShippingStoreOnMounted
+        step={1}
+        key={itemsLength}
+        isDisabledNextAction={false}
+        nextStepAction={() => {
+          router.push("/checkout");
+        }}
+        nextButtonLabel="تکمیل فرایند خرید"
+      />
+    );
+  } else {
+    return (
+      <SetShippingStoreOnMounted
+        step={1}
+        key={itemsLength}
+        isDisabledNextAction={true}
+        nextButtonLabel="امکان ادامه خرید وجود ندارد"
+        nextStepAction={() => {
+          /* empty */
+        }}
+      />
+    );
+  }
 };
 
 export default HandleNext;
