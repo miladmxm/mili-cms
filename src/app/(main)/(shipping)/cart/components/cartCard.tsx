@@ -2,6 +2,7 @@ import type { CartItem } from "@/services/cart/type";
 import type { Product, ProductVariableMeta } from "@/services/product/type";
 
 import DefaultImage from "@/components/ui/defaultImage";
+import Skeleton from "@/components/ui/skeleton";
 import { DiscountedPrice } from "@/features/product/components/ui/finalPrice";
 import { OPTION_ITEM_IDS_SEPARATOR } from "@/features/product/constant";
 
@@ -30,6 +31,25 @@ const SelectedVariables = ({
           </div>
         );
       })}
+    </div>
+  );
+};
+
+export const CartCardSkeleton = () => {
+  return (
+    <div className="border border-primary-500 rounded-6xl grid grid-cols-2 auto-rows-auto md:flex p-6 gap-4 md:gap-8">
+      <div className="max-w-full w-55.5 h-33 ">
+        <Skeleton className="size-full rounded-4xl" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Skeleton className="w-40 h-4" />
+        <Skeleton className="w-40 h-4" />
+        <Skeleton className="w-40 h-4" />
+      </div>
+      <div className="flex-auto flex md:flex-col flex-row-reverse max-md:col-span-2 justify-between items-end">
+        <Skeleton className="rounded-full size-6" />
+        <Skeleton className="h-10 w-26 rounded-full" />
+      </div>
     </div>
   );
 };

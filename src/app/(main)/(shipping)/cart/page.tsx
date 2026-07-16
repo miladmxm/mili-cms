@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { getUserCart } from "@/features/cart/dal/query";
 
 import CartList from "./_containers/cartList";
-import HandleNext from "./components/handleNext";
+import { CartCardSkeleton } from "./components/cartCard";
 
 async function CartContent() {
   const cart = await getUserCart();
@@ -14,13 +14,10 @@ async function CartContent() {
 
 export default function CartPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="container py-8 text-center">در حال بارگذاری...</div>
-      }
-    >
-      <CartContent />
-      <HandleNext />
-    </Suspense>
+    <div className="flex flex-col gap-6 py-12">
+      <Suspense fallback={<CartCardSkeleton />}>
+        <CartContent />
+      </Suspense>
+    </div>
   );
 }

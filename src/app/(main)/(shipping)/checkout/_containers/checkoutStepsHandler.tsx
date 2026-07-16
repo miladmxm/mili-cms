@@ -1,7 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
-
 import { useShippingStore } from "../../_store";
 import AddressSelection from "./addressSelection";
 import SendignMethod from "./sendignMethod";
@@ -15,9 +13,9 @@ const CheckoutStepsHandler = () => {
     return <div>پرداخت</div>;
   } else {
     return (
-      <Suspense>
+      <section>
         <AddressSelection />
-      </Suspense>
+      </section>
     );
   }
 };

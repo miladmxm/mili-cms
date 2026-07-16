@@ -13,6 +13,7 @@ const NextStepButton = () => {
       disabled={disabled}
       onClick={action}
       variant="secondary"
+      className="mt-auto"
       shadow="sm"
     >
       {label}
