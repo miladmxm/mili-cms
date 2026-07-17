@@ -10,7 +10,7 @@ async function CartContent() {
   const cart = await getUserCart();
   return (
     <>
-      <HandleNext itemsLength={cart?.items.length || 0} />
+      <HandleNext />
       <CartList items={cart?.items || []} />
     </>
   );

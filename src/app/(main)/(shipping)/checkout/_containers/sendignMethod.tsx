@@ -8,6 +8,8 @@ import { useCheckoutContext } from "../_contexts";
 import SetShippingStoreOnMounted from "../../_components/setShippingStoreOnMounted";
 import {
   setSendignMethod,
+  setShippingNextActionDisable,
+  setShippingNextButtonLabel,
   setShippingStep,
   useShippingStore,
 } from "../../_store";
@@ -95,7 +97,13 @@ const SendignMethod = () => {
         </div>
         <SendingMethodDescription />
       </div>
-      <SetShippingStoreOnMounted nextStepAction={() => setShippingStep(4)} />
+      <SetShippingStoreOnMounted
+        nextStepAction={() => {
+          setShippingStep(4);
+          setShippingNextActionDisable(true);
+          setShippingNextButtonLabel("رفتن به درگاه پرداخت");
+        }}
+      />
     </section>
   );
 };

@@ -4,34 +4,19 @@ import { useRouter } from "next/navigation";
 
 import SetShippingStoreOnMounted from "../../_components/setShippingStoreOnMounted";
 
-const HandleNext = ({ itemsLength }: { itemsLength: number }) => {
+const HandleNext = () => {
   const router = useRouter();
 
-  if (itemsLength > 0) {
-    return (
-      <SetShippingStoreOnMounted
-        step={1}
-        key={itemsLength}
-        isDisabledNextAction={false}
-        nextStepAction={() => {
-          router.push("/checkout");
-        }}
-        nextButtonLabel="تکمیل فرایند خرید"
-      />
-    );
-  } else {
-    return (
-      <SetShippingStoreOnMounted
-        step={1}
-        key={itemsLength}
-        isDisabledNextAction={true}
-        nextButtonLabel="امکان ادامه خرید وجود ندارد"
-        nextStepAction={() => {
-          /* empty */
-        }}
-      />
-    );
-  }
+  return (
+    <SetShippingStoreOnMounted
+      step={1}
+      isDisabledNextAction={false}
+      nextStepAction={() => {
+        router.push("/checkout");
+      }}
+      nextButtonLabel="تکمیل فرایند خرید"
+    />
+  );
 };
 
 export default HandleNext;

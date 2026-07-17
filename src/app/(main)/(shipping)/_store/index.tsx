@@ -1,7 +1,6 @@
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
 
-import type { SendingMethodKey } from "@/constant/appData";
+import type { PaymentGatewayKeys, SendingMethodKey } from "@/constant/appData";
 
 export interface ShippingState {
   step: number;
@@ -11,17 +10,18 @@ export interface ShippingState {
   nextButtonLabel: string;
   isAddAddress: boolean;
   sendingMethod: SendingMethodKey;
+  isRulesAccepted: boolean;
+  selectedGateway?: PaymentGatewayKeys;
 }
 
-export const useShippingStore = create<ShippingState>()(
-  devtools(() => ({
-    step: 1,
-    isDisabledNextAction: true,
-    nextButtonLabel: "ادامه فرایند خرید",
-    isAddAddress: false,
-    sendingMethod: "storeSend",
-  })),
-);
+export const useShippingStore = create<ShippingState>(() => ({
+  step: 1,
+  isDisabledNextAction: true,
+  nextButtonLabel: "ادامه فرایند خرید",
+  isAddAddress: false,
+  sendingMethod: "storeSend",
+  isRulesAccepted: false,
+}));
 
 export const setShippingStep = (step: number) =>
   useShippingStore.setState({ step });
@@ -45,3 +45,9 @@ export const setIsAddAddress = (isAddAddress: boolean) =>
 export const setSendignMethod = (
   sendingMethod: ShippingState["sendingMethod"],
 ) => useShippingStore.setState({ sendingMethod });
+
+export const setSelectedGateway = (gateway: PaymentGatewayKeys) =>
+  useShippingStore.setState({ selectedGateway: gateway });
+
+export const setIsRulesAccepted = (isRulesAccepted: boolean) =>
+  useShippingStore.setState({ isRulesAccepted });

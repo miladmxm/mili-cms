@@ -9,7 +9,6 @@ import {
   setShippingNextButtonLabel,
   setShippingNextStepAction,
   setShippingStep,
-  useShippingStore,
 } from "../_store";
 
 const SetShippingStoreOnMounted = ({
@@ -18,7 +17,6 @@ const SetShippingStoreOnMounted = ({
   nextStepAction,
   nextButtonLabel,
 }: Partial<ShippingState>) => {
-  const dis = useShippingStore((store) => store.isDisabledNextAction);
   const handleSetStep = useEffectEvent(() => {
     if (step) setShippingStep(step);
     if (isDisabledNextAction !== undefined) {
@@ -30,7 +28,7 @@ const SetShippingStoreOnMounted = ({
   useEffect(() => {
     handleSetStep();
   }, []);
-  return <div>{dis ? "disabel" : "helo"}</div>;
+  return null;
 };
 
 export default SetShippingStoreOnMounted;

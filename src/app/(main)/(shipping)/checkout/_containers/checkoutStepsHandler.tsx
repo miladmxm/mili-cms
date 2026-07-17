@@ -1,6 +1,7 @@
 "use client";
 
 import { useShippingStore } from "../../_store";
+import AcceptAndPayment from "./acceptAndPayment";
 import AddressSelection from "./addressSelection";
 import SendignMethod from "./sendignMethod";
 
@@ -10,7 +11,7 @@ const CheckoutStepsHandler = () => {
   if (step === 3) {
     return <SendignMethod />;
   } else if (step === 4) {
-    return <div>پرداخت</div>;
+    return <AcceptAndPayment />;
   } else {
     return (
       <section>
