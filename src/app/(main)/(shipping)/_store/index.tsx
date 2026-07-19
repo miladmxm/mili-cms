@@ -51,3 +51,5 @@ export const setSelectedGateway = (gateway: PaymentGatewayKeys) =>
 
 export const setIsRulesAccepted = (isRulesAccepted: boolean) =>
   useShippingStore.setState({ isRulesAccepted });
+
+export const setShippingStoreState = useShippingStore.setState;
