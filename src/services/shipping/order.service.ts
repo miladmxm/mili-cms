@@ -8,7 +8,7 @@ import * as orderRepo from "@/repositories/order.repo";
 
 import type { CreateOrder } from "./type";
 
-import { discountCalculation } from "../product/product.service";
+import { discountCalculation } from "../product/utils";
 
 export const createOrder = async (data: CreateOrder) => {
   const { addressId, sendingMethod, paymentGateway, userId } = data;

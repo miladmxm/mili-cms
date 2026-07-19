@@ -1,6 +1,6 @@
 import type { Product } from "@/services/product/type";
 
-import { discountCalculation } from "@/services/product/product.service";
+import { discountCalculation } from "@/services/product/utils";
 
 type Metadata = Product["metadata"];
 
