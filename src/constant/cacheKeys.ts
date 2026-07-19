@@ -10,4 +10,5 @@ export const CacheKeys = {
   comment: "comment",
   cart: "cart",
   address: "address",
+  order: "order",
 };

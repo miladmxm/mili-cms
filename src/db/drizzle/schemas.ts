@@ -6,6 +6,7 @@ export * from "./schemas/cart";
 export * from "./schemas/comment";
 export * from "./schemas/main";
 export * from "./schemas/media";
+export * from "./schemas/order";
 export * from "./schemas/portfolio";
 export * from "./schemas/product";
 export * from "./schemas/productCategory";

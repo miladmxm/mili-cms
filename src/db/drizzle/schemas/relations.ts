@@ -12,6 +12,7 @@ import { account, session, user } from "./auth";
 import { cart, cartItem } from "./cart";
 import { comment } from "./comment";
 import { media } from "./media";
+import { order, orderItem } from "./order";
 import { portfolio } from "./portfolio";
 import {
   product,
@@ -306,6 +307,33 @@ export const cartItemRelations = relations(cartItem, ({ one }) => ({
   }),
 }));
 
+export const orderRelations = relations(order, ({ many, one }) => ({
+  user: one(user, {
+    fields: [order.userId],
+    references: [user.id],
+  }),
+  address: one(address, {
+    fields: [order.addressId],
+    references: [address.id],
+  }),
+  items: many(orderItem),
+}));
+
+export const orderItemRelations = relations(orderItem, ({ one }) => ({
+  order: one(order, {
+    fields: [orderItem.orderId],
+    references: [order.id],
+  }),
+  product: one(product, {
+    fields: [orderItem.productId],
+    references: [product.id],
+  }),
+  metadata: one(productMeta, {
+    fields: [orderItem.metadataId],
+    references: [productMeta.id],
+  }),
+}));
+
 export const userRelations = relations(user, ({ many, one }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -315,6 +343,7 @@ export const userRelations = relations(user, ({ many, one }) => ({
   product: many(product),
   address: many(address),
   cart: one(cart),
+  orders: many(order),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

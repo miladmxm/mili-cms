@@ -1,0 +1,88 @@
+import { cacheTag } from "next/cache";
+import "server-only";
+
+import { CacheKeys } from "@/constant/cacheKeys";
+import { withTransaction } from "@/repositories";
+import * as cartRepo from "@/repositories/cart.repo";
+import * as orderRepo from "@/repositories/order.repo";
+
+import type { CreateOrder } from "./type";
+
+import { discountCalculation } from "../product/product.service";
+
+export const createOrder = async (data: CreateOrder) => {
+  const { addressId, sendingMethod, paymentGateway, userId } = data;
+
+  const userCart =
+    await cartRepo.findCartByUserIdWithProductAndMetadata(userId);
+
+  if (!userCart || userCart.items.length === 0) {
+    throw new Error("سبد خرید شما خالی است");
+  }
+
+  const orderItems = userCart.items.map((item) => {
+    const unitPrice = item.metadata.price;
+    const { discount } = item.metadata;
+    const { quantity } = item;
+    const itemTotal =
+      discountCalculation({ price: unitPrice, discount }) * quantity;
+
+    return {
+      productId: item.productId,
+      metadataId: item.metadataId,
+      quantity,
+      unitPrice,
+      discount,
+      itemTotal,
+    };
+  });
+
+  const totalPrice = orderItems.reduce((sum, item) => sum + item.itemTotal, 0);
+
+  const orderItemsData = orderItems.map(({ itemTotal: _, ...rest }) => rest);
+
+  const orderId = await withTransaction(async (tx) => {
+    const [createdOrder] = await orderRepo.createOrder(
+      {
+        userId,
+        addressId,
+        totalPrice,
+        sendingMethod,
+        paymentGateway,
+      },
+      tx,
+    );
+
+    await orderRepo.createOrderItems(
+      orderItemsData.map((item) => ({
+        ...item,
+        orderId: createdOrder.id,
+      })),
+      tx,
+    );
+
+    await cartRepo.deleteAllCartItems({ cartId: userCart.id, userId }, tx);
+
+    return createdOrder.id;
+  });
+
+  return orderId;
+};
+
+export const getOrderById = async (orderId: string, userId: string) => {
+  const order = await orderRepo.findOrderById(orderId);
+
+  if (!order || order.userId !== userId) {
+    return null;
+  }
+
+  return order;
+};
+
+export const getUserOrders = async (userId: string) => {
+  "use cache";
+
+  cacheTag(`${CacheKeys.order}-${userId}`);
+
+  return orderRepo.findOrdersByUserId(userId);
+};

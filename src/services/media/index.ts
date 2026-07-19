@@ -9,6 +9,8 @@ import { getToDayString } from "@/utils/getToDayString";
 import type { LimitAndOffset } from "../type";
 import type { FileMeta, MediaTypes, SaveFile } from "./type";
 
+import "server-only";
+
 import { DTOconvertMediaToRealUrlMedia } from "./dto";
 
 // READ

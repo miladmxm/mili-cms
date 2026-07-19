@@ -25,6 +25,14 @@ const checkProductImage = async (thumbnailId: CreateProduct["thumbnailId"]) => {
   }
 };
 
+export const discountCalculation = ({
+  discount,
+  price,
+}: {
+  price: number;
+  discount: number;
+}) => (price / 100) * (100 - discount);
+
 const fixSlugConflict = async (productSlug: string) => {
   let slug: string = convertCorrectToSlug(productSlug);
   const isHaveThisSlug = await productRepo.findProductIdBySlug(slug);

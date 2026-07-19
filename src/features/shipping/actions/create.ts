@@ -2,7 +2,12 @@
 
 import { updateTag } from "next/cache";
 
-import type { CreateAddress } from "@/services/shipping/type";
+import type {
+  CreateAddress,
+  CreateOrder,
+  PaymentGateway,
+  SendingMethod,
+} from "@/services/shipping/type";
 import type { ActionResult } from "@/types/actions";
 
 import { CacheKeys } from "@/constant/cacheKeys";
@@ -10,7 +15,7 @@ import { getSession } from "@/lib/auth";
 import { validator } from "@/validations";
 
 import * as dalAddressMutation from "../dal/mutation";
-import { AddAddressSchema } from "../validations";
+import { AddAddressSchema, CreateOrderSchema } from "../validations";
 
 export const createAddressAction = async (
   inputData: unknown,
@@ -45,5 +50,50 @@ export const createAddressAction = async (
   } catch (error) {
     console.log(error);
     return { success: false, message: "خطا در ایجاد آدرس" };
+  }
+};
+
+export const createOrderAction = async (
+  inputData: unknown,
+): Promise<ActionResult<Record<string, never>, string>> => {
+  const {
+    errors,
+    output,
+    success: successValidation,
+  } = validator(CreateOrderSchema, inputData);
+  const session = await getSession();
+
+  if (!session?.user?.id) {
+    return { success: false, message: "لطفا ابتدا وارد حساب خود شوید" };
+  }
+  if (!successValidation) {
+    return { success: successValidation, message: "خطای اعتبارسنجی", errors };
+  }
+
+  try {
+    const orderData: Omit<CreateOrder, "userId"> = {
+      addressId: output.addressId,
+      sendingMethod: output.sendingMethod as SendingMethod,
+      paymentGateway: output.paymentGateway as PaymentGateway,
+    };
+
+    const createdOrderOutput = await dalAddressMutation.createOrder(orderData);
+
+    if (!createdOrderOutput.success) {
+      return { success: false, message: "خطا در ایجاد سفارش" };
+    }
+
+    updateTag(`${CacheKeys.cart}-${session.user.id}`);
+    updateTag(`${CacheKeys.order}-${session.user.id}`);
+    return {
+      success: true,
+      message: "سفارش شما با موفقیت ثبت شد",
+      data: createdOrderOutput.data,
+    };
+  } catch (error) {
+    console.log(error);
+    const message =
+      error instanceof Error ? error.message : "خطا در ایجاد سفارش";
+    return { success: false, message };
   }
 };

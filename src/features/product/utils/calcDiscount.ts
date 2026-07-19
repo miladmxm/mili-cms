@@ -1,5 +1,7 @@
 import type { Product } from "@/services/product/type";
 
+import { discountCalculation } from "@/services/product/product.service";
+
 type Metadata = Product["metadata"];
 
 export const getMaxDiscount = (metadata: Metadata): number => {
@@ -17,7 +19,7 @@ export const calcDiscount = (metadata: Metadata) => {
   if (!maxDiscountItem) return metadata[0].price;
   const { price, discount } = maxDiscountItem;
   if (discount === 0) return price;
-  const finalPrice = (price / 100) * (100 - discount);
+  const finalPrice = discountCalculation({ discount, price });
   return finalPrice;
 };
 

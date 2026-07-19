@@ -4,6 +4,7 @@ import {
   dalVerifySuccess,
 } from "@/dal/helpers";
 import * as addressService from "@/services/shipping/address.service";
+import "server-only";
 
 export const getUserAddress = async () =>
   dalVerifySuccess(

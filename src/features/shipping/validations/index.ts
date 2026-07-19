@@ -13,3 +13,11 @@ export const AddAddressSchema = v.object({
 });
 
 export type AddAddressOutput = v.InferOutput<typeof AddAddressSchema>;
+
+export const CreateOrderSchema = v.object({
+  addressId: v.pipe(v.string(), v.nonEmpty("آدرس تحویل گیرنده اجباری است")),
+  sendingMethod: v.pipe(v.string(), v.nonEmpty("روش ارسال اجباری است")),
+  paymentGateway: v.pipe(v.string(), v.nonEmpty("درگاه پرداخت اجباری است")),
+});
+
+export type CreateOrderOutput = v.InferOutput<typeof CreateOrderSchema>;
